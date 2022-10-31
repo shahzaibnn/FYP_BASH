@@ -17,7 +17,7 @@ const RegisterScreen = props => {
   const [userPassword, setUserPassword] = useState('');
   const [contactNo, setcontactNo] = useState('');
   const [course, setcourse] = useState('');
-  const [dateOfBirth, setdateOfBirth] = useState('');
+  const [dateOfBirth, setdateOfBirth] = useState('09-10-2020');
   const [city, setCity] = useState('');
 
   // const [userAge, setUserAge] = useState('');
