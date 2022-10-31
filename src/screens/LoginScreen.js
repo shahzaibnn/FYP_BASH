@@ -15,9 +15,14 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function LoginScreen() {
-  const [text, onChangeText] = useState('');
+  const [text, setText] = useState('');
 
-  const [password, onChangePassword] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(true);
+  const [eye, setEye] = useState('eye');
+
+  console.log(text);
+  console.log(password);
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -72,7 +77,7 @@ export default function LoginScreen() {
         />
         <TextInput
           style={{flex: 1}}
-          onChangeText={onChangeText}
+          onChangeText={setText}
           value={text}
           placeholder="UserName / ID"
         />
@@ -98,14 +103,24 @@ export default function LoginScreen() {
         />
         <TextInput
           style={{flex: 1}}
-          onChangeText={onChangePassword}
+          onChangeText={setPassword}
           value={password}
           placeholder="Password"
+          secureTextEntry={passwordVisible}
         />
 
-        <TouchableOpacity style={{marginRight: '8%'}}>
+        <TouchableOpacity
+          style={{marginRight: '8%'}}
+          onPress={() => {
+            setPasswordVisible(!passwordVisible);
+            if (passwordVisible) {
+              setEye('eye-off');
+            } else {
+              setEye('eye');
+            }
+          }}>
           <MaterialCommunityIcons
-            name="eye-off"
+            name={eye}
             size={20}
             color="#777777"
             style={
