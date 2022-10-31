@@ -27,11 +27,6 @@ const RegisterScreen = props => {
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
   const [visible, setVisibility] = React.useState(false);
 
-  const emailInputRef = createRef();
-  const ageInputRef = createRef();
-  const addressInputRef = createRef();
-  const passwordInputRef = createRef();
-
   // const handleSubmitButton = () => {
   //   setErrortext('');
   //   if (!userName) {
