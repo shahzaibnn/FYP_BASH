@@ -25,6 +25,7 @@ const RegisterScreen = props => {
   // const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
+  const [visible, setVisibility] = React.useState(false);
 
   const emailInputRef = createRef();
   const ageInputRef = createRef();
@@ -137,12 +138,15 @@ const RegisterScreen = props => {
           alignContent: 'center',
         }}>
         <View style={styles.Header}>
-          <FontAwesome
-            name="chevron-left"
-            style={styles.back}
-            size={20}
-            color="blacks"
-          />
+          <TouchableOpacity>
+            <FontAwesome
+              name="chevron-left"
+              style={styles.back}
+              size={20}
+              color="blacks"
+            />
+          </TouchableOpacity>
+
           <Text style={styles.titleText}>Teacher Sign Up</Text>
         </View>
         <KeyboardAvoidingView enabled>
@@ -185,8 +189,14 @@ const RegisterScreen = props => {
               placeholder="Enter Password"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
+              secureTextEntry={!visible}
             />
-            <FontAwesome name="eye-slash" style={styles.icon} size={15} />
+            <FontAwesome
+              name="eye-slash"
+              style={styles.icon}
+              size={15}
+              onPress={() => setVisibility(!visible)}
+            />
           </View>
           <View style={styles.SectionStyle}>
             <FontAwesome name="phone" style={styles.icon} size={15} />
@@ -237,7 +247,9 @@ const RegisterScreen = props => {
           </TouchableOpacity>
           <View style={styles.RegisteredUser}>
             <Text style={styles.registered_1}>Already have an account? </Text>
-            <Text style={styles.registered_2}>Login Here</Text>
+            <TouchableOpacity>
+              <Text style={styles.registered_2}>Login Here</Text>
+            </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
