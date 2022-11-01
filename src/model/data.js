@@ -29,3 +29,33 @@ export const jobs = [
     country: 'Pakistan',
   },
 ];
+
+export const posts = [
+  {
+    id: 0,
+    imageUrl:
+      'https://www.pngitem.com/pimgs/m/3-33423_baby-looney-tunes-png-transparent-png.png',
+    name: 'Benedict Cumberbatch',
+    title: 'BSCS Student',
+    datePosted: '25th October 2022',
+    images: [
+      'http://cdn.cnn.com/cnnnext/dam/assets/180426191525-restricted-burj-khalifa-dubai-som-3.jpg',
+      'https://www.visitdubai.com/-/media/gathercontent/poi/m/museum-of-the-future/fallback-image/museum-of-the-future-04-supplied.jpg?rev=0d7f319895354093968874ec77c12b19&cx=0.46&cy=0.2&cw=1180&ch=590',
+      'https://static.dezeen.com/uploads/2022/02/museum-of-the-future-killa-design-dubai_dezeen_2364_hero_6.jpg',
+    ],
+  },
+
+  {
+    id: 1,
+    imageUrl:
+      'https://www.pngitem.com/pimgs/m/3-33423_baby-looney-tunes-png-transparent-png.png',
+    name: 'Benedict Cumberbatch',
+    title: 'BSCS Student',
+    datePosted: '25th October 2022',
+    images: [
+      'http://cdn.cnn.com/cnnnext/dam/assets/180426191525-restricted-burj-khalifa-dubai-som-3.jpg',
+      'https://www.visitdubai.com/-/media/gathercontent/poi/m/museum-of-the-future/fallback-image/museum-of-the-future-04-supplied.jpg?rev=0d7f319895354093968874ec77c12b19&cx=0.46&cy=0.2&cw=1180&ch=590',
+      'https://static.dezeen.com/uploads/2022/02/museum-of-the-future-killa-design-dubai_dezeen_2364_hero_6.jpg',
+    ],
+  },
+];

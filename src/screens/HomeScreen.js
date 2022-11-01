@@ -9,9 +9,11 @@ import {
 } from 'react-native';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
-import {profile, jobs} from '../model/data';
+import {profile, jobs, posts} from '../model/data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import {SliderBox} from 'react-native-image-slider-box';
 
 export default function HomeScreen() {
   return (
@@ -143,7 +145,9 @@ export default function HomeScreen() {
                     paddingVertical: Dimensions.get('window').height * 0.01,
                     borderRadius: 16,
                   }}>
-                  <Text style={{color: '#ffffff'}}>Apply</Text>
+                  <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
+                    Apply
+                  </Text>
                 </TouchableOpacity>
 
                 <Text style={{color: '#469597', fontSize: 16}}>
@@ -153,6 +157,82 @@ export default function HomeScreen() {
             </View>
           )}
           keyExtractor={item => item.id}
+        />
+      </View>
+
+      <Text
+        style={{
+          color: '#000000',
+          marginHorizontal: '5%',
+          fontSize: 20,
+          fontWeight: 'bold',
+        }}>
+        News Feed
+      </Text>
+
+      <View>
+        <FlatList
+          data={posts}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
+            <View
+              style={{
+                elevation: 5,
+                backgroundColor: '#ffffff',
+                marginHorizontal: Dimensions.get('window').width * 0.05,
+                marginVertical: Dimensions.get('window').height * 0.02,
+                borderRadius: 16,
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <Image
+                  source={{uri: item.imageUrl}}
+                  style={{width: 60, height: 60, borderRadius: 64}}
+                />
+                <View
+                  style={{marginLeft: Dimensions.get('window').width * 0.05}}>
+                  <Text
+                    style={{
+                      color: '#5BA199',
+                      fontWeight: 'bold',
+                      marginBottom: Dimensions.get('window').height * 0.005,
+                      fontSize: 16,
+                    }}>
+                    {item.name}
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#5BA199',
+                      marginBottom: Dimensions.get('window').height * 0.005,
+                      fontSize: 12,
+                    }}>
+                    {item.title}
+                  </Text>
+                  <Text style={{color: '#777777', fontSize: 12}}>
+                    {item.datePosted}
+                  </Text>
+                </View>
+              </View>
+
+              <SliderBox
+                // onCurrentImagePressed={index => ImagePressed()}
+                parentWidth={Dimensions.get('window').width * 0.9}
+                ImageComponentStyle={{borderRadius: 16}}
+                // paginationBoxStyle={styles.sliderBoxPageStyle}
+                // ImageComponentStyle={styles.sliderBoxImageStyle}
+                // dotStyle={{
+                //   width: 10,
+                //   height: 10,
+                //   borderRadius: 5,
+                //   marginBottom: 20,
+                //   marginHorizontal: 0,
+                //   padding: 0,
+                //   margin: 0,
+                // }}
+                images={item.images}
+                // sliderBoxHeight={windowHeight * 0.4}
+              />
+            </View>
+          )}
         />
       </View>
     </ScrollView>
