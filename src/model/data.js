@@ -3,6 +3,7 @@ export const profile = [
     id: 0,
     name: 'Bash',
     pic: 'https://i.pinimg.com/736x/31/44/7e/31447e25b7bc3429f83520350ed13c15.jpg',
+    title: 'BSCS Student',
   },
 ];
 
@@ -39,10 +40,16 @@ export const posts = [
     title: 'BSCS Student',
     datePosted: '25th October 2022',
     images: [
-      'http://cdn.cnn.com/cnnnext/dam/assets/180426191525-restricted-burj-khalifa-dubai-som-3.jpg',
       'https://www.visitdubai.com/-/media/gathercontent/poi/m/museum-of-the-future/fallback-image/museum-of-the-future-04-supplied.jpg?rev=0d7f319895354093968874ec77c12b19&cx=0.46&cy=0.2&cw=1180&ch=590',
       'https://static.dezeen.com/uploads/2022/02/museum-of-the-future-killa-design-dubai_dezeen_2364_hero_6.jpg',
+      'http://cdn.cnn.com/cnnnext/dam/assets/180426191525-restricted-burj-khalifa-dubai-som-3.jpg',
     ],
+
+    descriptionText:
+      "The Architecture of Dubai has envisaged a rapid transformation from a fishing village in the past to the global business hub today. From low lying buildings in the past - to being home to world's tallest building and world's largest shopping mall.",
+
+    likedBy: ['Benedict', 'Tony', 'Bugs'],
+    commentedBy: ['Benedict', 'Tony', 'Bugs', 'Daffy', 'Silvester'],
   },
 
   {
@@ -53,9 +60,16 @@ export const posts = [
     title: 'BSCS Student',
     datePosted: '25th October 2022',
     images: [
-      'http://cdn.cnn.com/cnnnext/dam/assets/180426191525-restricted-burj-khalifa-dubai-som-3.jpg',
-      'https://www.visitdubai.com/-/media/gathercontent/poi/m/museum-of-the-future/fallback-image/museum-of-the-future-04-supplied.jpg?rev=0d7f319895354093968874ec77c12b19&cx=0.46&cy=0.2&cw=1180&ch=590',
       'https://static.dezeen.com/uploads/2022/02/museum-of-the-future-killa-design-dubai_dezeen_2364_hero_6.jpg',
+      'https://www.visitdubai.com/-/media/gathercontent/poi/m/museum-of-the-future/fallback-image/museum-of-the-future-04-supplied.jpg?rev=0d7f319895354093968874ec77c12b19&cx=0.46&cy=0.2&cw=1180&ch=590',
+
+      'http://cdn.cnn.com/cnnnext/dam/assets/180426191525-restricted-burj-khalifa-dubai-som-3.jpg',
     ],
+
+    descriptionText:
+      "The Architecture of Dubai has envisaged a rapid transformation from a fishing village in the past to the global business hub today. From low lying buildings in the past - to being home to world's tallest building and world's largest shopping mall.",
+
+    likedBy: ['Benedict', 'Bugs'],
+    commentedBy: ['Benedict', 'Tony', 'Bugs', 'Daffy'],
   },
 ];

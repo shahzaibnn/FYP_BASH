@@ -15,9 +15,15 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import {SliderBox} from 'react-native-image-slider-box';
 
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 export default function HomeScreen() {
+  const profileName = 'Tony';
   return (
-    <ScrollView style={{backgroundColor: '#E5E3E4'}}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={{backgroundColor: '#E5E3E4'}}>
       <View
         style={{flexDirection: 'row', marginTop: '3%', marginHorizontal: '5%'}}>
         <Image
@@ -77,7 +83,7 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
 
-      <View style={{marginLeft: '2%', marginVertical: '5%'}}>
+      <View style={{marginHorizontal: '3%', marginVertical: '4%'}}>
         <FlatList
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -88,7 +94,9 @@ export default function HomeScreen() {
                 backgroundColor: '#BBC6C8',
                 // padding: '3%',
                 borderRadius: 16,
-                marginLeft: Dimensions.get('window').width * 0.03,
+
+                marginHorizontal: Dimensions.get('window').width * 0.01,
+                // elevation: 5,
               }}>
               <View
                 style={{
@@ -97,7 +105,12 @@ export default function HomeScreen() {
                   marginHorizontal: Dimensions.get('window').width * 0.05,
                 }}>
                 <Image
-                  style={{height: 60, width: 60, borderRadius: 16}}
+                  style={{
+                    height: 60,
+                    width: 60,
+                    borderRadius: 16,
+                    // marginLeft: Dimensions.get('window').width * 0.1,
+                  }}
                   source={{
                     uri: item.postedByPic,
                   }}
@@ -172,67 +185,153 @@ export default function HomeScreen() {
 
       <View>
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={posts}
           keyExtractor={item => item.id}
-          renderItem={({item}) => (
-            <View
-              style={{
-                elevation: 5,
-                backgroundColor: '#ffffff',
-                marginHorizontal: Dimensions.get('window').width * 0.05,
-                marginVertical: Dimensions.get('window').height * 0.02,
-                borderRadius: 16,
-              }}>
-              <View style={{flexDirection: 'row'}}>
-                <Image
-                  source={{uri: item.imageUrl}}
-                  style={{width: 60, height: 60, borderRadius: 64}}
-                />
+          renderItem={({item}) => {
+            let likeColor = '';
+
+            console.log(item.likedBy);
+
+            if (item.likedBy.includes(profileName)) {
+              likeColor = '#000000';
+              console.log('running');
+            } else {
+              likeColor = '#ffffff';
+            }
+
+            return (
+              <View
+                style={{
+                  // elevation: 1000,
+                  // backgroundColor: '#ffffff',
+                  marginHorizontal: Dimensions.get('window').width * 0.05,
+                  marginVertical: Dimensions.get('window').height * 0.01,
+                  borderRadius: 16,
+                }}>
                 <View
-                  style={{marginLeft: Dimensions.get('window').width * 0.05}}>
-                  <Text
+                  style={{
+                    flexDirection: 'row',
+                    marginVertical: Dimensions.get('window').height * 0.01,
+                  }}>
+                  <Image
+                    source={{uri: item.imageUrl}}
                     style={{
-                      color: '#5BA199',
-                      fontWeight: 'bold',
-                      marginBottom: Dimensions.get('window').height * 0.005,
-                      fontSize: 16,
-                    }}>
-                    {item.name}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#5BA199',
-                      marginBottom: Dimensions.get('window').height * 0.005,
-                      fontSize: 12,
-                    }}>
-                    {item.title}
-                  </Text>
-                  <Text style={{color: '#777777', fontSize: 12}}>
-                    {item.datePosted}
-                  </Text>
+                      width: 60,
+                      height: 60,
+                      borderRadius: 64,
+                      marginLeft: Dimensions.get('window').width * 0.02,
+                    }}
+                  />
+                  <View
+                    style={{marginLeft: Dimensions.get('window').width * 0.05}}>
+                    <Text
+                      style={{
+                        color: '#5BA199',
+                        fontWeight: 'bold',
+                        marginBottom: Dimensions.get('window').height * 0.005,
+                        fontSize: 16,
+                      }}>
+                      {item.name}
+                    </Text>
+                    <Text
+                      style={{
+                        color: '#5BA199',
+                        marginBottom: Dimensions.get('window').height * 0.005,
+                        fontSize: 12,
+                      }}>
+                      {item.title}
+                    </Text>
+                    <Text style={{color: '#777777', fontSize: 12}}>
+                      {item.datePosted}
+                    </Text>
+                  </View>
+                </View>
+
+                <SliderBox
+                  // onCurrentImagePressed={index => ImagePressed()}
+                  parentWidth={Dimensions.get('window').width * 0.9}
+                  ImageComponentStyle={{borderRadius: 16}}
+                  // paginationBoxStyle={styles.sliderBoxPageStyle}
+                  // ImageComponentStyle={styles.sliderBoxImageStyle}
+                  // dotStyle={{
+                  //   width: 10,
+                  //   height: 10,
+                  //   borderRadius: 5,
+                  //   marginBottom: 20,
+                  //   marginHorizontal: 0,
+                  //   padding: 0,
+                  //   margin: 0,
+                  // }}
+                  images={item.images}
+                  sliderBoxHeight={Dimensions.get('window').height * 0.3}
+                />
+
+                <Text
+                  style={{
+                    color: '#000000',
+                    width: '95%',
+                    marginHorizontal: '2.5%',
+                    marginVertical: '2%',
+                  }}>
+                  {item.descriptionText}
+                </Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    marginBottom: '5%',
+                  }}>
+                  <View>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        color: '#469597',
+                        fontWeight: 'bold',
+                      }}>
+                      {item.likedBy.length} Likes
+                    </Text>
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: '8%',
+                        paddingVertical: '8%',
+                        backgroundColor: '#5BA199',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 8,
+                        // width: Dimensions.get('window').width * 0.2,
+                      }}>
+                      <AntDesign name="like1" size={25} color={likeColor} />
+                    </TouchableOpacity>
+                  </View>
+
+                  <View>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        color: '#469597',
+                        fontWeight: 'bold',
+                      }}>
+                      {item.commentedBy.length} Comments
+                    </Text>
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: '8%',
+                        paddingVertical: '8%',
+                        backgroundColor: '#5BA199',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 8,
+                        // width: Dimensions.get('window').width * 0.2,
+                      }}>
+                      <FontAwesome name="comment" size={25} color="#ffffff" />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-
-              <SliderBox
-                // onCurrentImagePressed={index => ImagePressed()}
-                parentWidth={Dimensions.get('window').width * 0.9}
-                ImageComponentStyle={{borderRadius: 16}}
-                // paginationBoxStyle={styles.sliderBoxPageStyle}
-                // ImageComponentStyle={styles.sliderBoxImageStyle}
-                // dotStyle={{
-                //   width: 10,
-                //   height: 10,
-                //   borderRadius: 5,
-                //   marginBottom: 20,
-                //   marginHorizontal: 0,
-                //   padding: 0,
-                //   margin: 0,
-                // }}
-                images={item.images}
-                // sliderBoxHeight={windowHeight * 0.4}
-              />
-            </View>
-          )}
+            );
+          }}
         />
       </View>
     </ScrollView>
