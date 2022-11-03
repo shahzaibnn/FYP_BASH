@@ -8,7 +8,8 @@ import ApplyToJob from './src/screens/ApplyToJob';
 export default function App() {
   return (
     // <RegistrationScreen/>
-    // <ProfileScreen></ProfileScreen>
-    <ApplyToJob />
+    <ProfileScreen />
+    // <ApplyToJob />
+    // <Test />
   );
 }
