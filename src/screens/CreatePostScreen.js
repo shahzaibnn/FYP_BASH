@@ -6,14 +6,61 @@ import {
   Dimensions,
   Image,
   TextInput,
+  FlatList,
 } from 'react-native';
 import React, {useState} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {profile} from '../model/data';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+import DocumentPicker from 'react-native-document-picker';
+import ImageModal from 'react-native-image-modal';
+
 export default function CreatePostScreen() {
   const [text, setText] = useState('');
+
+  const [multipleFile, setMultipleFile] = useState([]);
+
+  const selectMultipleFile = async () => {
+    try {
+      const results = await DocumentPicker.pickMultiple({
+        type: [DocumentPicker.types.images],
+      });
+      for (const res of results) {
+        console.log('length is : ', results.length);
+
+        console.log('URI : ' + res.uri);
+
+        console.log('File Name : ' + res.name);
+
+        console.log('File Type: ' + res.type);
+
+        setMultipleFile(current => [
+          ...current,
+          {
+            key: Math.floor(Math.random() * 1000000000),
+            name: res.name,
+            uri: res.uri,
+
+            type: res.type,
+          },
+        ]);
+      }
+    } catch (err) {
+      console.log('Some Error!!!');
+    }
+  };
+
+  const removeFile = key => {
+    setMultipleFile(current =>
+      current.filter(multipleFile => {
+        return multipleFile.key !== key;
+      }),
+    );
+    console.log('clicked!!!');
+  };
+
+  console.log(multipleFile);
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -93,11 +140,22 @@ export default function CreatePostScreen() {
           value={text}
           placeholder="Write post here..."
           placeholderTextColor={'#5BA199'}
-          // keyboardType="numeric"
         />
       </View>
 
+      <Text
+        style={{
+          marginHorizontal: '5%',
+          fontSize: 23,
+          fontWeight: 'bold',
+          color: '#000000',
+          marginBottom: '3%',
+        }}>
+        Attachments
+      </Text>
+
       <TouchableOpacity
+        onPress={() => selectMultipleFile()}
         style={{
           backgroundColor: '#4CA6A8',
 
@@ -109,6 +167,58 @@ export default function CreatePostScreen() {
         }}>
         <FontAwesome name="paperclip" size={30} color="#ffffff" />
       </TouchableOpacity>
+
+      <View
+        style={{
+          marginHorizontal: '5%',
+          marginVertical: '5%',
+          // backgroundColor: '#BBC6C8',
+          // justifyContent: 'space-between',
+        }}>
+        <FlatList
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          // numColumns={4}
+          data={multipleFile}
+          key={'_'}
+          keyExtractor={item => '_' + item.key}
+          renderItem={({item}) => {
+            return (
+              <View
+                style={{
+                  marginVertical: 10,
+                  marginEnd: 15,
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <ImageModal
+                  // onTap={() => console.log(item.display)}
+                  // disabled={!item.display}
+                  resizeMode="stretch"
+                  modalImageResizeMode="contain"
+                  style={{width: 60, height: 60, borderRadius: 64}}
+                  modalImageStyle={{
+                    minHeight: Dimensions.get('window').height,
+                    minWidth: Dimensions.get('window').width,
+                  }}
+                  source={{
+                    uri: item.uri,
+                  }}
+                />
+
+                <TouchableOpacity
+                  style={{marginTop: 5}}
+                  onPress={() => removeFile(item.key)}>
+                  <Entypo name="circle-with-cross" size={20} color="#777777" />
+                </TouchableOpacity>
+
+                {/* <Text>{item.name}</Text> */}
+              </View>
+            );
+          }}
+        />
+      </View>
     </ScrollView>
   );
 }

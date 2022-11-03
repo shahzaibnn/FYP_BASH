@@ -9,7 +9,7 @@ import CreatePostScreen from './src/screens/CreatePostScreen';
 export default function App() {
   return (
     // <RegistrationScreen/>
-    <HomeScreen />
-    // <CreatePostScreen />
+    // <HomeScreen />
+    <CreatePostScreen />
   );
 }
