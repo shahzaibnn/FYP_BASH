@@ -37,19 +37,46 @@ const ApplyToJob = () => {
   //   {label: 'Apple', value: 'apple'},
   //   {label: 'Banana', value: 'banana'},
   // ]);
+  const [singleFile, setSingleFile] = useState('');
+  const [multipleFile, setMultipleFile] = useState([]);
 
-  const [fileResponse, setFileResponse] = useState([]);
-
-  const handleDocumentSelection = useCallback(async () => {
+  const selectOneFile = async () => {
     try {
-      const response = await DocumentPicker.pick({
-        presentationStyle: 'fullScreen',
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
       });
-      setFileResponse(response);
+
+      //Printing the log realted to the file
+
+      console.log('res : ' + JSON.stringify(res));
+
+      console.log('URI : ' + res.uri);
+
+      console.log('Type : ' + res.type);
+
+      console.log('File Name : ' + res.name);
+
+      console.log('File Size : ' + res.size);
+
+      //Setting the state to show single file attributes
+
+      this.setState({singleFile: res});
     } catch (err) {
-      console.warn(err);
+      //Handling any exception (If any)
+
+      if (DocumentPicker.isCancel(err)) {
+        //If user canceled the document selection
+
+        alert('Canceled from single doc picker');
+      } else {
+        //For Unknown Error
+
+        alert('Unknown Error: ' + JSON.stringify(err));
+
+        throw err;
+      }
     }
-  }, []);
+  };
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -148,24 +175,14 @@ const ApplyToJob = () => {
           />
         </TouchableOpacity>
         <View style={styles.resumeText}>
-          <TouchableOpacity
-            style={styles.resumeText}
-            onPress={handleDocumentSelection}>
+          <TouchableOpacity style={styles.resumeText} onPress={selectOneFile}>
             <Text>Upload Here</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Apply Now Button */}
-      {fileResponse.map((file, index) => (
-        <Text
-          key={index.toString()}
-          style={styles.uri}
-          numberOfLines={1}
-          ellipsizeMode={'middle'}>
-          {file?.uri}
-        </Text>
-      ))}
+
       <TouchableOpacity
         style={styles.buttonStyle}
         // activeOpacity={0.5}
