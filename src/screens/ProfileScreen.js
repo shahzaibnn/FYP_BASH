@@ -12,7 +12,6 @@ import {
   TextInput,
 } from 'react-native';
 import {user, jobs, posts} from '../model/data';
-// import {SliderBox} from 'react-native-image-slider-box';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
