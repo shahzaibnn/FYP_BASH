@@ -1,4 +1,4 @@
-import React, {useState, createRef} from 'react';
+import React, {useState, createRef, useCallback} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -10,20 +10,67 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import DocumentPicker, {types} from 'react-native-document-picker';
+import {user, jobs, posts} from '../model/data';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 const ApplyToJob = () => {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [contactNo, setcontactNo] = useState('');
   const [course, setcourse] = useState('');
-  const [dateOfBirth, setdateOfBirth] = useState('09-10-2020');
-  const [city, setCity] = useState('');
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Pakistan', value: 'pakistan'},
+    {label: 'USA', value: 'usa'},
+  ]);
+  // const [dateOfBirth, setdateOfBirth] = useState('09-10-2020');
+  // const [city, setCity] = useState('');
+  // const [open, setOpen] = useState(false);
+  // const [value, setValue] = useState(null);
+  // const [items, setItems] = useState([
+  //   {label: 'Apple', value: 'apple'},
+  //   {label: 'Banana', value: 'banana'},
+  // ]);
+
+  const [fileResponse, setFileResponse] = useState([]);
+
+  const handleDocumentSelection = useCallback(async () => {
+    try {
+      const response = await DocumentPicker.pick({
+        presentationStyle: 'fullScreen',
+      });
+      setFileResponse(response);
+    } catch (err) {
+      console.warn(err);
+    }
+  }, []);
   return (
-    <View style={styles.SectionStyle}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={styles.SectionStyle}>
+      {/* Header */}
+      <View style={styles.Header}>
+        <TouchableOpacity>
+          <FontAwesome
+            name="chevron-left"
+            style={styles.back}
+            size={20}
+            color="blacks"
+          />
+        </TouchableOpacity>
+
+        <Text style={styles.titleText}>Apply to Job</Text>
+      </View>
+      {/* Form */}
       <View style={styles.ExpBoxView}>
         <Text style={styles.text}>First Name</Text>
-        <Text style={styles.ExpLocation}>Last Name</Text>
+        <Text style={styles.lastNameStyle}>Last Name</Text>
       </View>
       <View style={styles.ExpBoxView}>
         <TextInput
@@ -54,11 +101,79 @@ const ApplyToJob = () => {
           blurOnSubmit={false}
         />
       </View>
-      {/* <View>
-        <TextInput placeholder="Asim" style={styles.inputStyle}></TextInput>
-        <TextInput placeholder="Ali"></TextInput>
-      </View> */}
-    </View>
+      {/* Dropdown Menu */}
+      <View>
+        <View style={styles.ExpBoxView}>
+          <Text style={styles.text}>Country</Text>
+        </View>
+        <DropDownPicker
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          style={styles.dropdownContainer}
+        />
+      </View>
+      {/*  */}
+      {/* Message Input Field */}
+      <View style={styles.ExpBoxView}>
+        <Text style={styles.text}>Message</Text>
+      </View>
+      <View style={styles.messageBodyStyle}>
+        <TextInput
+          style={styles.messageStyle}
+          onChangeText={UserName => setUserName(UserName)}
+          placeholder="What sets you different from others?"
+          placeholderTextColor="#6A6A6A"
+          blurOnSubmit={false}
+        />
+      </View>
+      {/* CV + Icon */}
+      <View style={styles.UploadCV}>
+        <TouchableOpacity style={styles.UploadBtn}>
+          <Text style={styles.text}>CV</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <MaterialCommunityIcons
+            name="file-pdf-box"
+            size={60}
+            color="#6A6A6A"
+            style={{
+              // alignItems: 'center',
+              justifyContent: 'center',
+              alignSelf: 'center',
+            }}
+          />
+        </TouchableOpacity>
+        <View style={styles.resumeText}>
+          <TouchableOpacity
+            style={styles.resumeText}
+            onPress={handleDocumentSelection}>
+            <Text>Upload Here</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Apply Now Button */}
+      {fileResponse.map((file, index) => (
+        <Text
+          key={index.toString()}
+          style={styles.uri}
+          numberOfLines={1}
+          ellipsizeMode={'middle'}>
+          {file?.uri}
+        </Text>
+      ))}
+      <TouchableOpacity
+        style={styles.buttonStyle}
+        // activeOpacity={0.5}
+        // onPress={handleSubmitButton}
+      >
+        <Text style={styles.buttonTextStyle}>Apply</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
@@ -70,12 +185,43 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 10,
   },
+  Header: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    // height: 500,
+  },
+  titleText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginTop: 8,
+    marginBottom: 10,
+    marginLeft: 15,
+    color: '#5BA199',
+  },
+  messageBodyStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    height: 150,
+    justifyContent: 'center',
+  },
+  messageStyle: {
+    flex: 1,
+    backgroundColor: 'white',
+    color: '#6A6A6A',
+    paddingLeft: 40,
+    paddingRight: 20,
+    borderRadius: 12,
+    alignContent: 'center',
+    // alignSelf: 'center',
+  },
   Row: {
     flexDirection: 'row',
   },
   SectionStyle: {
     // flexDirection: 'row',
-    height: 50,
+    height: 500,
     // backgroundColor: 'white',
     borderRadius: 12,
     marginTop: 15,
@@ -103,11 +249,20 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     flex: 1,
   },
-  text: {fontSize: 20, fontWeight: 'bold', color: '#6A6A6A'},
+  resumeText: {
+    fontSize: 14,
+    color: 'black',
+    fontWeight: '600',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  text: {fontSize: 20, fontWeight: 'bold', color: '#6A6A6A', paddingTop: 15},
 
-  ExpLocation: {
+  lastNameStyle: {
     textAlign: 'right',
-    fontSize: 20,
+    marginRight: 70,
+    // paddingLeft: 15,
+    fontSize: 15,
     color: '#6A6A6A',
     fontWeight: 'bold',
     justifyContent: 'flex-end',
@@ -118,5 +273,48 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+  text: {
+    color: '#6A6A6A',
+    fontWeight: 'bold',
+    fontSize: 15,
+    marginLeft: 5,
+    marginTop: 20,
+    // borderRadius: 15,
+    // borderWidth: 5,
+  },
+  dropdownContainer: {
+    backgroundColor: 'white',
+    margin: 10,
+    borderWidth: 0.5,
+    borderColor: 'white',
+    borderRadius: 20,
+    height: 50,
+    width: 300,
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignSelf: 'center',
+  },
+  menuContent: {
+    color: '#000',
+    padding: 2,
+    fontSize: 15,
+  },
+  buttonStyle: {
+    backgroundColor: '#4CA6A8',
+    color: '#FFFFFF',
+    height: 50,
+    alignItems: 'center',
+    borderRadius: 20,
+    marginLeft: 25,
+    marginRight: 25,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  buttonTextStyle: {
+    color: '#FFFFFF',
+    paddingVertical: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
