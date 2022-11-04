@@ -16,13 +16,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
+import FileViewer from 'react-native-file-viewer';
 
 const ApplyToJob = () => {
-  const [userName, setUserName] = useState('');
+  const [name, setName] = useState('');
+  const [lastName, setlastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-  const [contactNo, setcontactNo] = useState('');
-  const [course, setcourse] = useState('');
+  const [imageURL, setimageURL] = useState(null);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -38,29 +38,44 @@ const ApplyToJob = () => {
   //   {label: 'Banana', value: 'banana'},
   // ]);
   const [singleFile, setSingleFile] = useState('');
-  const [multipleFile, setMultipleFile] = useState([]);
+  // const [multipleFile, setMultipleFile] = useState([]);
 
   const selectOneFile = async () => {
     try {
-      const res = await DocumentPicker.pick({
+      const results = await DocumentPicker.pickMultiple({
         type: [DocumentPicker.types.pdf],
+
+        //There can me more options as well find above
       });
+      singleFile = results;
+      for (const res of results) {
+        //Printing the log realted to the file
+        // console.log('res : ' + JSON.stringify(res));
 
-      //Printing the log realted to the file
+        console.log('length is : ', res.length);
 
-      console.log('res : ' + JSON.stringify(res));
+        console.log('URI : ' + res.uri);
+        let source = {uri: res.uri};
+        console.log(source);
+        // console.log('Type : ' + res.type);
+        console.log('File Name : ' + res.name);
 
-      console.log('URI : ' + res.uri);
-
-      console.log('Type : ' + res.type);
-
-      console.log('File Name : ' + res.name);
-
-      console.log('File Size : ' + res.size);
-
+        console.log('File Type: ' + res.type);
+        let uri = singleFile.uri;
+        FileViewer.open(uri)
+          .then(() => {
+            // Do whatever you want
+            console.log('Success here');
+          })
+          .catch(_err => {
+            // Do whatever you want
+            console.log(_err);
+          });
+      }
+      // await FileViewer.open(results.uri);
       //Setting the state to show single file attributes
 
-      this.setState({singleFile: res});
+      // this.setState({singleFile: res});
     } catch (err) {
       //Handling any exception (If any)
 
@@ -102,7 +117,7 @@ const ApplyToJob = () => {
       <View style={styles.ExpBoxView}>
         <TextInput
           style={styles.inputStyle}
-          onChangeText={UserName => setUserName(UserName)}
+          onChangeText={name => setName(name)}
           placeholder="First Name"
           placeholderTextColor="#6A6A6A"
           blurOnSubmit={false}
@@ -110,7 +125,7 @@ const ApplyToJob = () => {
         <View style={{flex: 0.1}}></View>
         <TextInput
           style={styles.inputStyle}
-          onChangeText={UserName => setUserName(UserName)}
+          onChangeText={lastName => setlastName(lastName)}
           placeholder="Last Name"
           placeholderTextColor="#6A6A6A"
           blurOnSubmit={false}
@@ -122,7 +137,7 @@ const ApplyToJob = () => {
       <View style={styles.ExpBoxView}>
         <TextInput
           style={styles.inputStyle}
-          onChangeText={UserName => setUserName(UserName)}
+          onChangeText={userEmail => setUserEmail(userEmail)}
           placeholder="Email"
           placeholderTextColor="#6A6A6A"
           blurOnSubmit={false}
@@ -190,6 +205,7 @@ const ApplyToJob = () => {
       >
         <Text style={styles.buttonTextStyle}>Apply</Text>
       </TouchableOpacity>
+      {/* <Image source={{uri: source}} /> */}
     </ScrollView>
   );
 };
