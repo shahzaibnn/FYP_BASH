@@ -27,13 +27,11 @@ export default function LoginScreen() {
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
       {/* <Text>check</Text> */}
-      <FastImage
+      <Image
         source={require('../assets/images/bash_icon.png')}
         style={{
-          // width: Dimensions.get('window').width,
-          // height: Dimensions.get('window').height / 2,
-          minHeight: Dimensions.get('window').height * 0.4,
-          minWidth: Dimensions.get('window').width,
+          height: Dimensions.get('window').height * 0.4,
+          width: Dimensions.get('window').width,
         }}
         resizeMode="cover"
       />
@@ -146,7 +144,13 @@ export default function LoginScreen() {
           paddingVertical: '4%',
           borderRadius: 16,
         }}>
-        <Text style={{color: '#ffffff', textAlign: 'center', fontSize: 18}}>
+        <Text
+          style={{
+            color: '#ffffff',
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: 'bold',
+          }}>
           LOGIN
         </Text>
       </TouchableOpacity>

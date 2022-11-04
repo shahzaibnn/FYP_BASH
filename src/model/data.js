@@ -29,6 +29,28 @@ export const jobs = [
     city: 'Karachi',
     country: 'Pakistan',
   },
+
+  {
+    id: 2,
+    postedBy: 'Faria Jameel',
+    postedByPic:
+      'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
+    title: 'React Native Developer',
+    company: 'Folio3 Software House',
+    city: 'Karachi',
+    country: 'Pakistan',
+  },
+
+  {
+    id: 3,
+    postedBy: 'Faria Jameel',
+    postedByPic:
+      'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
+    title: 'React Native Developer',
+    company: 'Folio3 Software House',
+    city: 'Karachi',
+    country: 'Pakistan',
+  },
 ];
 
 export const posts = [

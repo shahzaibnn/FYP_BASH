@@ -6,12 +6,18 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import CreatePostScreen from './src/screens/CreatePostScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import JobDashboardScreen from './src/screens/JobDashboardScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import StartScreen from './src/screens/StartScreen';
 
 export default function App() {
   return (
     // <RegistrationScreen/>
     // <HomeScreen />
     // <CreatePostScreen />
-    <SettingsScreen />
+    // <SettingsScreen />
+    // <JobDashboardScreen />
+    // <LoginScreen />
+    <StartScreen />
   );
 }
