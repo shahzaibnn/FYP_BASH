@@ -13,7 +13,6 @@ import StartScreen from './src/screens/StartScreen';
 
 import ApplyToJob from './src/screens/ApplyToJob';
 
-
 export default function App() {
   return (
     // <RegistrationScreen/>
@@ -24,10 +23,8 @@ export default function App() {
     // <JobDashboardScreen />
     // <LoginScreen />
     <StartScreen />
-
     // <ProfileScreen />
     // <ApplyToJob />
     // <Test />
-
   );
 }

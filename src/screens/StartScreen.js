@@ -1,9 +1,16 @@
-import {View, Text, Image, Dimensions, TouchableOpacity} from 'react-native';
+import {
+  ScrollView,
+  View,
+  Text,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 
 export default function StartScreen() {
   return (
-    <View style={{backgroundColor: '#E5E3E4', flex: 1}}>
+    <ScrollView style={{backgroundColor: '#E5E3E4', flex: 1}}>
       <Image
         source={require('../assets/images/start_image.png')}
         style={{
@@ -62,6 +69,6 @@ export default function StartScreen() {
           Get Started
         </Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
