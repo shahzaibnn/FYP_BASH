@@ -117,7 +117,6 @@ export default function HomeScreen() {
                     uri: item.postedByPic,
                   }}
                 />
-
                 <View
                   style={{marginLeft: Dimensions.get('window').width * 0.03}}>
                   <Text style={{fontSize: 12}}>
