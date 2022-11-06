@@ -43,23 +43,18 @@ const ApplyToJob = () => {
   const selectOneFile = async () => {
     try {
       const results = await DocumentPicker.pickMultiple({
-        type: [DocumentPicker.types.pdf],
+        type: [DocumentPicker.types.images],
 
         //There can me more options as well find above
       });
       singleFile = results;
       for (const res of results) {
-        //Printing the log realted to the file
-        // console.log('res : ' + JSON.stringify(res));
-
         console.log('length is : ', res.length);
-
         console.log('URI : ' + res.uri);
         let source = {uri: res.uri};
         console.log(source);
         // console.log('Type : ' + res.type);
         console.log('File Name : ' + res.name);
-
         console.log('File Type: ' + res.type);
         let uri = singleFile.uri;
         FileViewer.open(uri)
