@@ -75,12 +75,17 @@ export const jobs = [
   {
     id: 0,
     postedBy: 'Faria Jameel',
+    uri: 'https://10pearls.com/wp-content/uploads/2017/12/Untitled-design-19-2.png',
     postedByPic:
       'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
     title: 'React Native Developer',
-    company: 'Folio3 Software House',
+    company: '10Pearls',
     city: 'Karachi',
     country: 'Pakistan',
+    mode: 'Full Time',
+    salary: '50k',
+    description:
+      '•Exceptional communication skills and team working skill.\n•Creative with an eye for shape and colour.\n•Know the principal of animation and you can create high prototypes.\n•Figma,Xd & Sketch must know about this apps',
   },
 
   {
