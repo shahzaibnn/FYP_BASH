@@ -32,7 +32,17 @@ const ApplyToJob = () => {
     {label: 'Pakistan', value: 'pakistan'},
     {label: 'USA', value: 'usa'},
   ]);
-  const selectOneFile = () => {};
+  const [singleFile, setSingleFile] = useState(null);
+  const selectOneFile = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+      });
+      await FileViewer.open(res.uri);
+    } catch (e) {
+      // error
+    }
+  };
   return (
     // <View style={styles.bg}>
     <ScrollView
