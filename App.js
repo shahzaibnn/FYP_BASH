@@ -17,7 +17,7 @@ import PdfViewScreen from './src/screens/PDFViewScreen';
 
 export default function App() {
   return (
-    // <RegistrationScreen/>
+    // <RegistrationScreen />
 
     // <HomeScreen />
     // <CreatePostsssScreen />

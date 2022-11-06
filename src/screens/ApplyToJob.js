@@ -32,47 +32,58 @@ const ApplyToJob = () => {
     {label: 'Pakistan', value: 'pakistan'},
     {label: 'USA', value: 'usa'},
   ]);
-  const [singleFile, setSingleFile] = useState(null);
+  const [singleFile, setSingleFile] = useState();
+  const [uploaded, setUploaded] = useState(false);
   const selectFile = async () => {
     try {
-      const results = await DocumentPicker.pickMultiple({
-        type: [DocumentPicker.types.images],
+      const results = await DocumentPicker.pickSingle({
+        type: DocumentPicker.types.pdf,
       });
-      for (const res of results) {
-        console.log('length is : ', results.length);
 
-        console.log('URI : ' + res.uri);
+      console.log(results.uri);
+      console.log(results.type);
 
-        console.log('File Name : ' + res.name);
+      setSingleFile(results.uri);
+      setUploaded(true);
+      // console.log(results.uri);
 
-        console.log('File Type: ' + res.type);
+      // for (const res of results) {
+      //   console.log('length is : ', results.length);
 
-        setMultipleFile(current => [
-          ...current,
-          {
-            key: Math.floor(Math.random() * 1000000000),
-            name: res.name,
-            uri: res.uri,
+      //   console.log('URI : ' + res.uri);
 
-            type: res.type,
-          },
-        ]);
-      }
+      //   console.log('File Name : ' + res.name);
+
+      //   console.log('File Type: ' + res.type);
+
+      //   // setMultipleFile(current => [
+      //   //   ...current,
+      //   //   {
+      //   //     key: Math.floor(Math.random() * 1000000000),
+      //   //     name: res.name,
+      //   //     uri: res.uri,
+
+      //   //     type: res.type,
+      //   //   },
+      //   // ]);
+      // }
     } catch (err) {
       console.log('Some Error!!!');
     }
   };
 
-  const removeFile = key => {
-    setMultipleFile(current =>
-      current.filter(multipleFile => {
-        return multipleFile.key !== key;
-      }),
-    );
-    console.log('clicked!!!');
-  };
+  // const removeFile = key => {
+  //   setMultipleFile(current =>
+  //     current.filter(multipleFile => {
+  //       return multipleFile.key !== key;
+  //     }),
+  //   );
+  //   console.log('clicked!!!');
+  // };
 
-  console.log(multipleFile);
+  // console.log(multipleFile);
+
+  console.log('Saved value is: ', singleFile);
   return (
     // <View style={styles.bg}>
     <ScrollView
@@ -164,7 +175,7 @@ const ApplyToJob = () => {
             <MaterialCommunityIcons
               name="file-pdf-box"
               size={60}
-              color="#6A6A6A"
+              color={uploaded ? 'red' : '#6A6A6A'}
               style={{
                 // alignItems: 'center',
                 justifyContent: 'center',
@@ -173,6 +184,12 @@ const ApplyToJob = () => {
             />
           </TouchableOpacity>
           <View style={styles.resumeText}>
+            {uploaded ? (
+              <TouchableOpacity onPress={() => console.log('Pressed!!')}>
+                <Text>Resume.pdf</Text>
+              </TouchableOpacity>
+            ) : null}
+
             <TouchableOpacity style={styles.resumeText} onPress={selectFile}>
               <Text>Upload Here</Text>
             </TouchableOpacity>
@@ -192,7 +209,7 @@ const ApplyToJob = () => {
       </View>
 
       {/* testing upload */}
-      <ImageModal
+      {/* <ImageModal
         // onTap={() => console.log(item.display)}
         // disabled={!item.display}
         resizeMode="stretch"
@@ -205,7 +222,7 @@ const ApplyToJob = () => {
         source={{
           uri: res.uri,
         }}
-      />
+      /> */}
     </ScrollView>
     /*  </View> */
   );
