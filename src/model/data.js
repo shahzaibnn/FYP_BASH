@@ -53,6 +53,24 @@ export const user = [
     pic: 'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
   },
 ];
+export const experience = [
+  {
+    id: 0,
+    timePeriod: '5/10/21 - Present',
+    designation: 'React Native Developer',
+    location: 'Karachi',
+    company: 'Folio3',
+    pic: 'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
+  },
+  {
+    id: 1,
+    timePeriod: '5/10/21 - Present',
+    designation: 'Flutter Developer',
+    location: 'Karachi',
+    company: 'Folio3',
+    pic: 'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
+  },
+];
 export const jobs = [
   {
     id: 0,
