@@ -88,120 +88,124 @@ const ApplyToJob = () => {
     }
   };
   return (
+    // <View style={styles.bg}>
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={styles.SectionStyle}>
-      {/* Header */}
-      <View style={styles.Header}>
-        <TouchableOpacity>
-          <FontAwesome
-            name="chevron-left"
-            style={styles.back}
-            size={20}
-            color="blacks"
-          />
-        </TouchableOpacity>
-
-        <Text style={styles.titleText}>Apply to Job</Text>
-      </View>
-      {/* Form */}
-      <View style={styles.ExpBoxView}>
-        <Text style={styles.text}>First Name</Text>
-        <Text style={styles.lastNameStyle}>Last Name</Text>
-      </View>
-      <View style={styles.ExpBoxView}>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={name => setName(name)}
-          placeholder="First Name"
-          placeholderTextColor="#6A6A6A"
-          blurOnSubmit={false}
-        />
-        <View style={{flex: 0.1}}></View>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={lastName => setlastName(lastName)}
-          placeholder="Last Name"
-          placeholderTextColor="#6A6A6A"
-          blurOnSubmit={false}
-        />
-      </View>
-      <View style={styles.ExpBoxView}>
-        <Text style={styles.text}>Email</Text>
-      </View>
-      <View style={styles.ExpBoxView}>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={userEmail => setUserEmail(userEmail)}
-          placeholder="Email"
-          placeholderTextColor="#6A6A6A"
-          blurOnSubmit={false}
-        />
-      </View>
-      {/* Dropdown Menu */}
-      <View>
-        <View style={styles.ExpBoxView}>
-          <Text style={styles.text}>Country</Text>
-        </View>
-        <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          style={styles.dropdownContainer}
-        />
-      </View>
-      {/*  */}
-      {/* Message Input Field */}
-      <View style={styles.ExpBoxView}>
-        <Text style={styles.text}>Message</Text>
-      </View>
-      <View style={styles.messageBodyStyle}>
-        <TextInput
-          style={styles.messageStyle}
-          onChangeText={UserName => setUserName(UserName)}
-          placeholder="What sets you different from others?"
-          placeholderTextColor="#6A6A6A"
-          blurOnSubmit={false}
-        />
-      </View>
-      {/* CV + Icon */}
-      <View style={styles.UploadCV}>
-        <TouchableOpacity style={styles.UploadBtn}>
-          <Text style={styles.text}>CV</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <MaterialCommunityIcons
-            name="file-pdf-box"
-            size={60}
-            color="#6A6A6A"
-            style={{
-              // alignItems: 'center',
-              justifyContent: 'center',
-              alignSelf: 'center',
-            }}
-          />
-        </TouchableOpacity>
-        <View style={styles.resumeText}>
-          <TouchableOpacity style={styles.resumeText} onPress={selectOneFile}>
-            <Text>Upload Here</Text>
+      <View style={styles.bg}>
+        {/* Header */}
+        <View style={styles.Header}>
+          <TouchableOpacity>
+            <FontAwesome
+              name="chevron-left"
+              style={styles.back}
+              size={20}
+              color="blacks"
+            />
           </TouchableOpacity>
+
+          <Text style={styles.titleText}>Apply to Job</Text>
         </View>
+        {/* Form */}
+        <View style={styles.ExpBoxView}>
+          <Text style={styles.text}>First Name</Text>
+          <Text style={styles.lastNameStyle}>Last Name</Text>
+        </View>
+        <View style={styles.ExpBoxView}>
+          <TextInput
+            style={styles.inputStyle}
+            onChangeText={name => setName(name)}
+            placeholder="First Name"
+            placeholderTextColor="#6A6A6A"
+            blurOnSubmit={false}
+          />
+          <View style={{flex: 0.1}}></View>
+          <TextInput
+            style={styles.inputStyle}
+            onChangeText={lastName => setlastName(lastName)}
+            placeholder="Last Name"
+            placeholderTextColor="#6A6A6A"
+            blurOnSubmit={false}
+          />
+        </View>
+        <View style={styles.ExpBoxView}>
+          <Text style={styles.text}>Email</Text>
+        </View>
+        <View style={styles.ExpBoxView}>
+          <TextInput
+            style={styles.inputStyle}
+            onChangeText={userEmail => setUserEmail(userEmail)}
+            placeholder="Email"
+            placeholderTextColor="#6A6A6A"
+            blurOnSubmit={false}
+          />
+        </View>
+        {/* Dropdown Menu */}
+        <View>
+          <View style={styles.ExpBoxView}>
+            <Text style={styles.text}>Country</Text>
+          </View>
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            style={styles.dropdownContainer}
+          />
+        </View>
+        {/*  */}
+        {/* Message Input Field */}
+        <View style={styles.ExpBoxView}>
+          <Text style={styles.text}>Message</Text>
+        </View>
+        <View style={styles.messageBodyStyle}>
+          <TextInput
+            style={styles.messageStyle}
+            onChangeText={UserName => setUserName(UserName)}
+            placeholder="What sets you different from others?"
+            placeholderTextColor="#6A6A6A"
+            blurOnSubmit={false}
+          />
+        </View>
+        {/* CV + Icon */}
+        <View style={styles.UploadCV}>
+          <TouchableOpacity style={styles.UploadBtn}>
+            <Text style={styles.text}>CV</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <MaterialCommunityIcons
+              name="file-pdf-box"
+              size={60}
+              color="#6A6A6A"
+              style={{
+                // alignItems: 'center',
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}
+            />
+          </TouchableOpacity>
+          <View style={styles.resumeText}>
+            <TouchableOpacity style={styles.resumeText} onPress={selectOneFile}>
+              <Text>Upload Here</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Apply Now Button */}
+
+        <TouchableOpacity
+          style={styles.buttonStyle}
+          // activeOpacity={0.5}
+          // onPress={handleSubmitButton}
+        >
+          <Text style={styles.buttonTextStyle}>Apply</Text>
+        </TouchableOpacity>
+        {/* <Image source={{uri: source}} /> */}
       </View>
-
-      {/* Apply Now Button */}
-
-      <TouchableOpacity
-        style={styles.buttonStyle}
-        // activeOpacity={0.5}
-        // onPress={handleSubmitButton}
-      >
-        <Text style={styles.buttonTextStyle}>Apply</Text>
-      </TouchableOpacity>
-      {/* <Image source={{uri: source}} /> */}
     </ScrollView>
+    /*  </View> */
   );
 };
 
@@ -247,15 +251,21 @@ const styles = StyleSheet.create({
   Row: {
     flexDirection: 'row',
   },
-  SectionStyle: {
-    // flexDirection: 'row',
-    height: 500,
-    // backgroundColor: 'white',
+  bg: {
+    backgroundColor: '#E5E3E4',
+    height: 1000,
     borderRadius: 12,
     marginTop: 15,
     marginLeft: 25,
     marginRight: 25,
     margin: 10,
+  },
+  SectionStyle: {
+    // flexDirection: 'row',
+    backgroundColor: '#E5E3E4',
+    // height: 500,
+
+    // backgroundColor: 'white',
   },
   inputStyle: {
     flex: 1,
