@@ -24,7 +24,7 @@ export default function CreatePostScreen() {
   const selectMultipleFile = async () => {
     try {
       const results = await DocumentPicker.pickMultiple({
-        type: [DocumentPicker.types.images],
+        type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
       });
       for (const res of results) {
         console.log('length is : ', results.length);

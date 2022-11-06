@@ -12,6 +12,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import StartScreen from './src/screens/StartScreen';
 
 import ApplyToJob from './src/screens/ApplyToJob';
+import PdfView from './src/screens/PDFView';
 
 export default function App() {
   return (
@@ -22,9 +23,10 @@ export default function App() {
     // <SettingsScreen />
     // <JobDashboardScreen />
     // <LoginScreen />
-    <StartScreen />
+    // <StartScreen />
     // <ProfileScreen />
-    // <ApplyToJob />
+    <ApplyToJob />
     // <Test />
+    // <PdfView />
   );
 }
