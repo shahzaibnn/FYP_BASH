@@ -11,7 +11,7 @@ import {
   Dimensions,
   TextInput,
 } from 'react-native';
-import {user, jobs, posts} from '../model/data';
+import {user, jobs, posts, experience} from '../model/data';
 import {profile} from '../model/data';
 import {SliderBox} from 'react-native-image-slider-box';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -118,7 +118,7 @@ const ProfileScreen = () => {
             <FlatList
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              data={user}
+              data={experience}
               renderItem={({item}) => (
                 <View
                   style={{
