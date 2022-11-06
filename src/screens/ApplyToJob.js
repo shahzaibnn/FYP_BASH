@@ -32,61 +32,7 @@ const ApplyToJob = () => {
     {label: 'Pakistan', value: 'pakistan'},
     {label: 'USA', value: 'usa'},
   ]);
-  // const [dateOfBirth, setdateOfBirth] = useState('09-10-2020');
-  // const [city, setCity] = useState('');
-  // const [open, setOpen] = useState(false);
-  // const [value, setValue] = useState(null);
-  // const [items, setItems] = useState([
-  //   {label: 'Apple', value: 'apple'},
-  //   {label: 'Banana', value: 'banana'},
-  // ]);
-  const [singleFile, setSingleFile] = useState([]);
-  // const [multipleFile, setMultipleFile] = useState([]);
-  const removeFile = key => {
-    setSingleFile(current =>
-      current.filter(singleFile => {
-        return singleFile.key !== key;
-      }),
-    );
-    console.log('clicked!!!');
-  };
-  const selectOneFile = async () => {
-    try {
-      const results = await DocumentPicker.pickMultiple({
-        type: [DocumentPicker.types.images],
-
-        //There can me more options as well find above
-      });
-      singleFile = results;
-      for (const res of results) {
-        console.log('length is : ', res.length);
-        console.log('URI : ' + res.uri);
-        let source = {uri: res.uri};
-        console.log(source);
-        // console.log('Type : ' + res.type);
-        console.log('File Name : ' + res.name);
-        console.log('File Type: ' + res.type);
-      }
-      // await FileViewer.open(results.uri);
-      //Setting the state to show single file attributes
-
-      // this.setState({singleFile: res});
-    } catch (err) {
-      //Handling any exception (If any)
-
-      if (DocumentPicker.isCancel(err)) {
-        //If user canceled the document selection
-
-        alert('Canceled from single doc picker');
-      } else {
-        //For Unknown Error
-
-        alert('Unknown Error: ' + JSON.stringify(err));
-
-        throw err;
-      }
-    }
-  };
+  const selectOneFile = () => {};
   return (
     // <View style={styles.bg}>
     <ScrollView
@@ -206,49 +152,6 @@ const ApplyToJob = () => {
       </View>
 
       {/* testing upload */}
-      <FlatList
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        // numColumns={4}
-        data={singleFile}
-        key={'_'}
-        keyExtractor={item => '_' + item.key}
-        renderItem={({item}) => {
-          return (
-            <View
-              style={{
-                marginVertical: 10,
-                marginEnd: 15,
-                justifyContent: 'center',
-                alignContent: 'center',
-                alignItems: 'center',
-              }}>
-              <ImageModal
-                // onTap={() => console.log(item.display)}
-                // disabled={!item.display}
-                resizeMode="stretch"
-                modalImageResizeMode="contain"
-                style={{width: 60, height: 60, borderRadius: 64}}
-                modalImageStyle={{
-                  minHeight: Dimensions.get('window').height,
-                  minWidth: Dimensions.get('window').width,
-                }}
-                source={{
-                  uri: item.uri,
-                }}
-              />
-
-              <TouchableOpacity
-                style={{marginTop: 5}}
-                onPress={() => removeFile(item.key)}>
-                <Entypo name="circle-with-cross" size={20} color="#777777" />
-              </TouchableOpacity>
-
-              {/* <Text>{item.name}</Text> */}
-            </View>
-          );
-        }}
-      />
     </ScrollView>
     /*  </View> */
   );
