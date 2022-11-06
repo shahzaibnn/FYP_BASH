@@ -9,6 +9,8 @@ import {
   Keyboard,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
+  FlatList,
 } from 'react-native';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {user, jobs, posts} from '../model/data';
@@ -17,6 +19,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
 import FileViewer from 'react-native-file-viewer';
+import ImageModal from 'react-native-image-modal';
 
 const ApplyToJob = () => {
   const [name, setName] = useState('');
@@ -37,9 +40,16 @@ const ApplyToJob = () => {
   //   {label: 'Apple', value: 'apple'},
   //   {label: 'Banana', value: 'banana'},
   // ]);
-  const [singleFile, setSingleFile] = useState('');
+  const [singleFile, setSingleFile] = useState([]);
   // const [multipleFile, setMultipleFile] = useState([]);
-
+  const removeFile = key => {
+    setSingleFile(current =>
+      current.filter(singleFile => {
+        return singleFile.key !== key;
+      }),
+    );
+    console.log('clicked!!!');
+  };
   const selectOneFile = async () => {
     try {
       const results = await DocumentPicker.pickMultiple({
@@ -56,16 +66,6 @@ const ApplyToJob = () => {
         // console.log('Type : ' + res.type);
         console.log('File Name : ' + res.name);
         console.log('File Type: ' + res.type);
-        let uri = singleFile.uri;
-        FileViewer.open(uri)
-          .then(() => {
-            // Do whatever you want
-            console.log('Success here');
-          })
-          .catch(_err => {
-            // Do whatever you want
-            console.log(_err);
-          });
       }
       // await FileViewer.open(results.uri);
       //Setting the state to show single file attributes
@@ -204,6 +204,51 @@ const ApplyToJob = () => {
         </TouchableOpacity>
         {/* <Image source={{uri: source}} /> */}
       </View>
+
+      {/* testing upload */}
+      <FlatList
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        // numColumns={4}
+        data={singleFile}
+        key={'_'}
+        keyExtractor={item => '_' + item.key}
+        renderItem={({item}) => {
+          return (
+            <View
+              style={{
+                marginVertical: 10,
+                marginEnd: 15,
+                justifyContent: 'center',
+                alignContent: 'center',
+                alignItems: 'center',
+              }}>
+              <ImageModal
+                // onTap={() => console.log(item.display)}
+                // disabled={!item.display}
+                resizeMode="stretch"
+                modalImageResizeMode="contain"
+                style={{width: 60, height: 60, borderRadius: 64}}
+                modalImageStyle={{
+                  minHeight: Dimensions.get('window').height,
+                  minWidth: Dimensions.get('window').width,
+                }}
+                source={{
+                  uri: item.uri,
+                }}
+              />
+
+              <TouchableOpacity
+                style={{marginTop: 5}}
+                onPress={() => removeFile(item.key)}>
+                <Entypo name="circle-with-cross" size={20} color="#777777" />
+              </TouchableOpacity>
+
+              {/* <Text>{item.name}</Text> */}
+            </View>
+          );
+        }}
+      />
     </ScrollView>
     /*  </View> */
   );
