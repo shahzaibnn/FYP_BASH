@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "18.1.0",
     "react-native": "0.70.4",
+    "react-native-actions-sheet": "^0.8.10",
     "react-native-blob-util": "^0.16.4",
     "react-native-collapsible": "^1.6.0",
     "react-native-document-picker": "^8.1.2",
