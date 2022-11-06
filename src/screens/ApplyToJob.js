@@ -33,16 +33,46 @@ const ApplyToJob = () => {
     {label: 'USA', value: 'usa'},
   ]);
   const [singleFile, setSingleFile] = useState(null);
-  const selectOneFile = async () => {
+  const selectFile = async () => {
     try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
+      const results = await DocumentPicker.pickMultiple({
+        type: [DocumentPicker.types.images],
       });
-      await FileViewer.open(res.uri);
-    } catch (e) {
-      // error
+      for (const res of results) {
+        console.log('length is : ', results.length);
+
+        console.log('URI : ' + res.uri);
+
+        console.log('File Name : ' + res.name);
+
+        console.log('File Type: ' + res.type);
+
+        setMultipleFile(current => [
+          ...current,
+          {
+            key: Math.floor(Math.random() * 1000000000),
+            name: res.name,
+            uri: res.uri,
+
+            type: res.type,
+          },
+        ]);
+      }
+    } catch (err) {
+      console.log('Some Error!!!');
     }
   };
+
+  const removeFile = key => {
+    setMultipleFile(current =>
+      current.filter(multipleFile => {
+        return multipleFile.key !== key;
+      }),
+    );
+    console.log('clicked!!!');
+  };
+
+  console.log(multipleFile);
   return (
     // <View style={styles.bg}>
     <ScrollView
@@ -143,7 +173,7 @@ const ApplyToJob = () => {
             />
           </TouchableOpacity>
           <View style={styles.resumeText}>
-            <TouchableOpacity style={styles.resumeText} onPress={selectOneFile}>
+            <TouchableOpacity style={styles.resumeText} onPress={selectFile}>
               <Text>Upload Here</Text>
             </TouchableOpacity>
           </View>
@@ -162,6 +192,20 @@ const ApplyToJob = () => {
       </View>
 
       {/* testing upload */}
+      <ImageModal
+        // onTap={() => console.log(item.display)}
+        // disabled={!item.display}
+        resizeMode="stretch"
+        modalImageResizeMode="contain"
+        style={{width: 60, height: 60, borderRadius: 64}}
+        modalImageStyle={{
+          minHeight: Dimensions.get('window').height,
+          minWidth: Dimensions.get('window').width,
+        }}
+        source={{
+          uri: res.uri,
+        }}
+      />
     </ScrollView>
     /*  </View> */
   );

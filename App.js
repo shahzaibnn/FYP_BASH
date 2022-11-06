@@ -18,14 +18,14 @@ export default function App() {
     // <RegistrationScreen/>
 
     // <HomeScreen />
-    // <CreatePostScreen />
+    // <CreatePostsssScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
     // <LoginScreen />
     // <StartScreen />
 
-    <ProfileScreen />
-    // <ApplyToJob />
+    // <ProfileScreen />
+    <ApplyToJob />
     // <Test />
   );
 }
