@@ -26,9 +26,9 @@ export default function App() {
     // <LoginScreen />
     // <StartScreen />
     // <ProfileScreen />
-    <ApplyToJob />
+    // <ApplyToJob />
     // <Test />
-    // <PdfView />
+    <PdfViewScreen />
 
     // <ProfileScreen />
     // <ApplyToJob />
