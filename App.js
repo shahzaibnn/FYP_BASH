@@ -14,6 +14,8 @@ import StartScreen from './src/screens/StartScreen';
 import ApplyToJob from './src/screens/ApplyToJob';
 
 import PdfViewScreen from './src/screens/PDFViewScreen';
+import SplashScreen from './src/screens/SplashScreen';
+import ViewProfileScreen from './src/screens/ViewProfileScreen';
 
 export default function App() {
   return (
@@ -25,13 +27,15 @@ export default function App() {
     // <JobDashboardScreen />
     // <LoginScreen />
     // <StartScreen />
-    <ProfileScreen />
+    // <ProfileScreen />
     // <ApplyToJob />
     // <Test />
     // <PdfViewScreen />
 
-    // <ProfileScreen />
+    <ProfileScreen />
     // <ApplyToJob />
     // <Test />
+    // <SplashScreen />
+    // <ViewProfileScreen />
   );
 }

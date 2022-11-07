@@ -42,15 +42,34 @@ export const user = [
     id: 0,
     username: 'Benedict Cumberbatch',
     education: 'BSCS Student',
-    skills: ['C+', 'React JS', 'Java', 'C#', 'Python'],
+    skills: ['C Language', 'React JS', 'Java', 'C#', 'Python'],
     description:
       "I'm very active, have a lot of different interests. Pick an activity, I've probably tried it before. Very Talented in every field of life. This is life. The reality of life.",
-    cvFile: 'Resume.pdf',
+    cvFile: false,
     designation: 'React Native Developer',
     timePeriod: '5/10/21 - Present',
     location: 'Karachi, Pakistan',
     company: 'Folio3',
     pic: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/BCumberbatch_Comic-Con_2019.jpg/1200px-BCumberbatch_Comic-Con_2019.jpg',
+    experience: [
+      {
+        id: 0,
+        timePeriod: '5/10/21 - Present',
+        designation: 'React Native Developer',
+        location: 'Karachi, Pakistan',
+        company: 'Folio3',
+        pic: 'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
+      },
+
+      {
+        id: 1,
+        timePeriod: '5/10/21 - Present',
+        designation: 'Flutter Developer',
+        location: 'Karachi, Pakistan',
+        company: 'Folio3',
+        pic: 'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
+      },
+    ],
   },
 ];
 export const experience = [
@@ -58,14 +77,6 @@ export const experience = [
     id: 0,
     timePeriod: '5/10/21 - Present',
     designation: 'React Native Developer',
-    location: 'Karachi, Pakistan',
-    company: 'Folio3',
-    pic: 'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
-  },
-  {
-    id: 1,
-    timePeriod: '5/10/21 - Present',
-    designation: 'Flutter Developer',
     location: 'Karachi, Pakistan',
     company: 'Folio3',
     pic: 'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',

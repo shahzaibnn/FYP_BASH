@@ -16,45 +16,14 @@ import {profile} from '../model/data';
 import {SliderBox} from 'react-native-image-slider-box';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Entypo from 'react-native-vector-icons/Entypo';
 
 // import {SliderBox} from 'react-native-image-slider-box';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageModal from 'react-native-image-modal';
 
-import DocumentPicker, {types} from 'react-native-document-picker';
-
-const ProfileScreen = () => {
+const ViewProfileScreen = () => {
   const profileName = 'Tony';
-
-  const [singleFile, setSingleFile] = useState();
-  const [uploaded, setUploaded] = useState(false);
-  const selectFile = async () => {
-    try {
-      const results = await DocumentPicker.pickSingle({
-        type: DocumentPicker.types.pdf,
-      });
-
-      console.log(results.uri);
-      console.log(results.type);
-
-      setSingleFile(results.uri);
-      setUploaded(true);
-    } catch (err) {
-      console.log('Some Error!!!');
-    }
-  };
-
-  const removeFile = key => {
-    setSingleFile(null);
-    setUploaded(false);
-    console.log('clicked!!!');
-  };
-
-  // console.log(multipleFile);
-
-  console.log('Saved value is: ', singleFile);
 
   // const data = posts();
   return (
@@ -81,14 +50,14 @@ const ProfileScreen = () => {
           <Ionicons name="chevron-back-circle" size={50} color="#777777" />
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{position: 'absolute', right: '5%', top: '5%'}}>
           <MaterialCommunityIcons
             name="dots-vertical"
             size={40}
             color="#000000"
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ImageModal>
 
       <View style={styles.container}>
@@ -115,12 +84,12 @@ const ProfileScreen = () => {
               }}>
               Skills
             </Text>
-            <TouchableOpacity style={styles.skillsBox}>
+            {/* <TouchableOpacity style={styles.skillsBox}>
               <Text style={[styles.skillsText, {color: '#ffffff'}]}>
                 Add Skills
               </Text>
               <Ionicons name="chevron-forward" size={20} color="#ffffff" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           {/* Skills here */}
@@ -157,12 +126,12 @@ const ProfileScreen = () => {
                 }}>
                 Description
               </Text>
-              <TouchableOpacity style={styles.skillsBox}>
+              {/* <TouchableOpacity style={styles.skillsBox}>
                 <Text style={[styles.skillsText, {color: '#ffffff'}]}>
                   Edit Description
                 </Text>
                 <Ionicons name="chevron-forward" size={20} color="#ffffff" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             <Text style={{fontSize: 18, marginTop: '5%', fontStyle: 'italic'}}>
@@ -170,39 +139,23 @@ const ProfileScreen = () => {
             </Text>
             {/* add cv button here */}
             <View style={styles.UploadCV}>
-              {uploaded ? (
-                <View>
-                  <TouchableOpacity>
-                    <MaterialCommunityIcons
-                      name="file-pdf-box"
-                      size={60}
-                      color="red"
-                      style={{
-                        // alignItems: 'center',
-                        justifyContent: 'center',
-                        alignSelf: 'center',
-                      }}
-                    />
+              <TouchableOpacity>
+                <MaterialCommunityIcons
+                  name="file-pdf-box"
+                  size={60}
+                  color="red"
+                  style={{
+                    // alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                  }}
+                />
 
-                    <Text style={styles.resumeText}>Resume.pdf</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => removeFile()}
-                    style={{alignSelf: 'center', marginTop: '2%'}}>
-                    <Entypo
-                      name="circle-with-cross"
-                      color={'#777777'}
-                      size={20}
-                    />
-                  </TouchableOpacity>
-                </View>
-              ) : null}
-              <TouchableOpacity
-                style={styles.UploadBtn}
-                onPress={() => selectFile()}>
-                <Text style={styles.UploadText}>Upload CV</Text>
+                <Text style={styles.resumeText}>{user[0].cvFile}</Text>
               </TouchableOpacity>
+              {/* <TouchableOpacity style={styles.UploadBtn}>
+                <Text style={styles.UploadText}>Upload CV</Text>
+              </TouchableOpacity> */}
             </View>
             {/* cv file display */}
 
@@ -225,12 +178,12 @@ const ProfileScreen = () => {
                 }}>
                 Experience
               </Text>
-              <TouchableOpacity style={styles.skillsBox}>
+              {/* <TouchableOpacity style={styles.skillsBox}>
                 <Text style={[styles.skillsText, {color: '#ffffff'}]}>
                   Edit Experience
                 </Text>
                 <Ionicons name="chevron-forward" size={20} color="#ffffff" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             {/* </View> */}
 
@@ -263,8 +216,6 @@ const ProfileScreen = () => {
                       height: 60,
                       width: 60,
                       borderRadius: 16,
-                      // marginTop: 15,
-                      // marginLeft: 10,
                     }}
                     source={{
                       uri: item.pic,
@@ -376,7 +327,7 @@ const ProfileScreen = () => {
                       style={{
                         marginLeft: '18%',
                       }}>
-                      <MaterialCommunityIcons
+                      {/* <MaterialCommunityIcons
                         name="dots-vertical"
                         size={30}
                         color="#000000"
@@ -387,7 +338,7 @@ const ProfileScreen = () => {
                             // marginTop: Dimensions.get('window').height * 0.005,
                           }
                         }
-                      />
+                      /> */}
                     </TouchableOpacity>
                   </View>
 
@@ -483,16 +434,18 @@ const ProfileScreen = () => {
   );
 };
 
-export default ProfileScreen;
+export default ViewProfileScreen;
 const styles = StyleSheet.create({
   SectionStyle: {
     flexDirection: 'row',
   },
   container: {
-    borderRadius: 48,
+    // borderRadius: 48,
+    borderTopLeftRadius: 48,
+    borderTopRightRadius: 48,
     // borderColor: 'black',
     // borderWidth: 3,
-    marginTop: -60,
+    marginTop: -70,
     backgroundColor: '#E5E3E4',
   },
   resumeText: {
