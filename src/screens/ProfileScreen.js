@@ -20,6 +20,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import {SliderBox} from 'react-native-image-slider-box';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ImageModal from 'react-native-image-modal';
 
 const ProfileScreen = () => {
   const profileName = 'Tony';
@@ -28,317 +29,408 @@ const ProfileScreen = () => {
   return (
     <ScrollView>
       {/* back button with 3 dots button */}
-      <ImageBackground
-        source={{
-          uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/BCumberbatch_Comic-Con_2019.jpg/220px-BCumberbatch_Comic-Con_2019.jpg',
+      <ImageModal
+        resizeMode="stretch"
+        modalImageResizeMode="contain"
+        style={{
+          minHeight: Dimensions.get('window').height * 0.5,
+          minWidth: Dimensions.get('window').width,
+          // width: Dimensions.get('window').width,
+          // height: Dimensions.get('window').height * 0.4,
+          // borderRadius: 64,
         }}
-        style={styles.header}
-      />
+        modalImageStyle={{
+          minHeight: Dimensions.get('window').height,
+          minWidth: Dimensions.get('window').width,
+        }}
+        source={{
+          uri: user[0].pic,
+        }}>
+        <TouchableOpacity style={{position: 'absolute', left: '5%', top: '5%'}}>
+          <Ionicons name="chevron-back-circle" size={40} color="#777777" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{position: 'absolute', right: '5%', top: '5%'}}>
+          <MaterialCommunityIcons
+            name="dots-vertical"
+            size={40}
+            color="#000000"
+          />
+        </TouchableOpacity>
+      </ImageModal>
+
       <View style={styles.container}>
-        <View style={styles.body}>
-          <View style={styles.bodyContent}>
-            <Text style={styles.name}>{user[0].username}</Text>
-            <View>
-              <Text style={styles.info}>{user[0].education}</Text>
-            </View>
-            <View style={styles.skills}>
-              <TouchableOpacity style={styles.skillsBox}>
-                <Text style={styles.skillsText}>Add Skills +</Text>
-              </TouchableOpacity>
-            </View>
-            {/* Skills here */}
-            <FlatList
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              data={user}
-              style={styles.skills}
-              renderItem={({item}) => (
-                <View style={styles.skillsFlatlist}>
-                  <TouchableOpacity style={styles.skillsListBox}>
-                    <Text style={styles.skillsText}>{item.skills[0]}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.skillsListBox}>
-                    <Text style={styles.skillsText}>{item.skills[1]}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.skillsListBox}>
-                    <Text style={styles.skillsText}>{item.skills[2]}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.skillsListBox}>
-                    <Text style={styles.skillsText}>{item.skills[3]}</Text>
-                  </TouchableOpacity>
-                  {/* profile description */}
-                </View>
-              )}
-              keyExtractor={item => item.id}
-            />
-            <View style={styles.editExpView}>
-              <TouchableOpacity style={styles.skillsBox}>
-                <Text style={styles.skillsText}>Edit Description</Text>
-              </TouchableOpacity>
-
-              <Text style={styles.description}>{user[0].description}</Text>
-              {/* add cv button here */}
-              <View style={styles.UploadCV}>
-                <TouchableOpacity>
-                  <MaterialCommunityIcons
-                    name="file-pdf-box"
-                    size={60}
-                    color="red"
-                    style={{
-                      // alignItems: 'center',
-                      justifyContent: 'center',
-                      alignSelf: 'center',
-                    }}
-                  />
-                </TouchableOpacity>
-                <Text style={styles.resumeText}>{user[0].cvFile}</Text>
-                <TouchableOpacity style={styles.UploadBtn}>
-                  <Text style={styles.UploadText}>Upload CV</Text>
-                </TouchableOpacity>
-              </View>
-              {/* cv file display */}
-
-              {/* experience - edit experience */}
-              {/* <View> */}
-              <View style={styles.expView}>
-                <Text style={styles.expText1}>Experience</Text>
-                {/* place edit experience at right */}
-                <View style={styles.editExpView}>
-                  <TouchableOpacity style={styles.expBtn}>
-                    <Text style={styles.expText2}>Edit Experience</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              {/* </View> */}
-
-              {/* posts */}
-            </View>
+        <View style={styles.bodyContent}>
+          <Text style={styles.name}>{user[0].username}</Text>
+          <View>
+            <Text style={styles.info}>{user[0].education}</Text>
           </View>
-          <View style={styles.ExpbodyContent}>
-            <FlatList
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              data={experience}
-              renderItem={({item}) => (
+
+          <View
+            style={{
+              // flexDirection: 'row',
+              // justifyContent: 'space-between',
+              // alignItems: 'center',
+              // backgroundColor: 'orange',
+              marginTop: '3%',
+            }}>
+            <Text
+              style={{
+                // marginTop: '5%',
+                fontSize: 22,
+                fontWeight: 'bold',
+                color: '#000000',
+              }}>
+              Skills
+            </Text>
+            <TouchableOpacity style={styles.skillsBox}>
+              <Text style={[styles.skillsText, {color: '#ffffff'}]}>
+                Add Skills
+              </Text>
+              <Ionicons name="chevron-forward" size={20} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Skills here */}
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={user[0].skills}
+            renderItem={({item}) => (
+              <View style={{}}>
+                <View style={styles.skillsListBox}>
+                  <Text style={styles.skillsText}>{item}</Text>
+                </View>
+
+                {/* profile description */}
+              </View>
+            )}
+            keyExtractor={item => item.id}
+          />
+          <View style={{}}>
+            <View
+              style={{
+                // flexDirection: 'row',
+                // justifyContent: 'space-between',
+                // alignItems: 'center',
+                // backgroundColor: 'orange',
+                marginTop: '3%',
+              }}>
+              <Text
+                style={{
+                  // marginTop: '5%',
+                  fontSize: 22,
+                  fontWeight: 'bold',
+                  color: '#000000',
+                }}>
+                Description
+              </Text>
+              <TouchableOpacity style={styles.skillsBox}>
+                <Text style={[styles.skillsText, {color: '#ffffff'}]}>
+                  Edit Description
+                </Text>
+                <Ionicons name="chevron-forward" size={20} color="#ffffff" />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={{fontSize: 18, marginTop: '5%', fontStyle: 'italic'}}>
+              {user[0].description}
+            </Text>
+            {/* add cv button here */}
+            <View style={styles.UploadCV}>
+              <TouchableOpacity>
+                <MaterialCommunityIcons
+                  name="file-pdf-box"
+                  size={60}
+                  color="red"
+                  style={{
+                    // alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                  }}
+                />
+
+                <Text style={styles.resumeText}>{user[0].cvFile}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.UploadBtn}>
+                <Text style={styles.UploadText}>Upload CV</Text>
+              </TouchableOpacity>
+            </View>
+            {/* cv file display */}
+
+            {/* experience - edit experience */}
+            {/* <View> */}
+            <View
+              style={{
+                // flexDirection: 'row',
+                // justifyContent: 'space-between',
+                // alignItems: 'center',
+                // backgroundColor: 'orange',
+                marginTop: '3%',
+              }}>
+              <Text
+                style={{
+                  // marginTop: '5%',
+                  fontSize: 22,
+                  fontWeight: 'bold',
+                  color: '#000000',
+                }}>
+                Experience
+              </Text>
+              <TouchableOpacity style={styles.skillsBox}>
+                <Text style={[styles.skillsText, {color: '#ffffff'}]}>
+                  Edit Experience
+                </Text>
+                <Ionicons name="chevron-forward" size={20} color="#ffffff" />
+              </TouchableOpacity>
+            </View>
+            {/* </View> */}
+
+            {/* posts */}
+          </View>
+        </View>
+        <View style={styles.ExpbodyContent}>
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={experience}
+            renderItem={({item}) => (
+              <View
+                style={{
+                  backgroundColor: 'rgba(187, 198, 200, 0.5)',
+                  borderRadius: 16,
+                  marginHorizontal: Dimensions.get('window').width * 0.02,
+
+                  // height: Dimensions.get('window').height * 0.12,
+                  // width: Dimensions.get('window').width * 0.9,
+                }}>
                 <View
                   style={{
-                    backgroundColor: 'rgba(187, 198, 200, 0.5)',
+                    flexDirection: 'row',
+                    marginVertical: Dimensions.get('window').height * 0.015,
+                    marginHorizontal: Dimensions.get('window').width * 0.03,
+                  }}>
+                  <Image
+                    style={{
+                      height: 60,
+                      width: 60,
+                      borderRadius: 16,
+                      // marginTop: 15,
+                      // marginLeft: 10,
+                    }}
+                    source={{
+                      uri: item.pic,
+                    }}
+                  />
+
+                  <View
+                    style={{
+                      marginLeft: Dimensions.get('window').width * 0.03,
+                    }}>
+                    <Text style={styles.designationStyle}>
+                      {item.designation}
+                    </Text>
+                    <Text style={{fontWeight: 'bold'}}>{item.timePeriod}</Text>
+                    <View style={styles.ExpBoxView}>
+                      <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
+                      <Text style={{fontWeight: 'bold'}}> - </Text>
+                      <Text style={{fontWeight: 'bold', fontStyle: 'italic'}}>
+                        {item.location}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            )}
+            keyExtractor={item => item.id}
+          />
+        </View>
+        {/* <View style={styles.ExpbodyContent}> */}
+        {/* post content here */}
+        <View>
+          <Text
+            style={{
+              // marginTop: '5%',
+              marginHorizontal: '7%',
+              fontSize: 22,
+              fontWeight: 'bold',
+              color: '#000000',
+            }}>
+            Posts
+          </Text>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={posts}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              let likeColor = '';
+
+              console.log(item.likedBy);
+
+              if (item.likedBy.includes(profileName)) {
+                likeColor = '#000000';
+                console.log('running');
+              } else {
+                likeColor = '#ffffff';
+              }
+
+              return (
+                <View
+                  style={{
+                    // elevation: 1000,
+                    // backgroundColor: '#ffffff',
+                    marginHorizontal: Dimensions.get('window').width * 0.05,
+                    marginVertical: Dimensions.get('window').height * 0.01,
                     borderRadius: 16,
-                    marginLeft: Dimensions.get('window').width * 0.02,
-                    height: Dimensions.get('window').height * 0.12,
-                    width: Dimensions.get('window').width * 0.9,
                   }}>
                   <View
                     style={{
                       flexDirection: 'row',
+                      marginVertical: Dimensions.get('window').height * 0.01,
                     }}>
                     <Image
+                      source={{uri: item.imageUrl}}
                       style={{
-                        height: 60,
                         width: 60,
-                        borderRadius: 16,
-                        marginTop: 15,
-                        marginLeft: 10,
-                      }}
-                      source={{
-                        uri: item.pic,
+                        height: 60,
+                        borderRadius: 64,
+                        marginLeft: Dimensions.get('window').width * 0.02,
                       }}
                     />
-
                     <View
                       style={{
-                        marginLeft: Dimensions.get('window').width * 0.03,
+                        marginLeft: Dimensions.get('window').width * 0.05,
                       }}>
-                      <Text style={styles.designationStyle}>
-                        {item.designation}
+                      <Text
+                        style={{
+                          color: '#5BA199',
+                          fontWeight: 'bold',
+                          marginBottom: Dimensions.get('window').height * 0.005,
+                          fontSize: 16,
+                        }}>
+                        {item.name}
                       </Text>
-                      <Text>{item.timePeriod}</Text>
-                      <View style={styles.ExpBoxView}>
-                        <Text>{item.company}</Text>
-                        <Text style={styles.ExpLocation}>{item.location}</Text>
-                      </View>
+                      <Text
+                        style={{
+                          color: '#5BA199',
+                          marginBottom: Dimensions.get('window').height * 0.005,
+                          fontSize: 12,
+                        }}>
+                        {item.title}
+                      </Text>
+                      <Text style={{color: '#777777', fontSize: 12}}>
+                        {item.datePosted}
+                      </Text>
                     </View>
+                    {/* looks fine here */}
+
+                    <TouchableOpacity
+                      style={{
+                        marginLeft: '18%',
+                      }}>
+                      <MaterialCommunityIcons
+                        name="dots-vertical"
+                        size={30}
+                        color="#000000"
+                        style={
+                          {
+                            // marginLeft: Dimensions.get('window').width * 0.15,
+                            // alignSelf: 'flex-end',
+                            // marginTop: Dimensions.get('window').height * 0.005,
+                          }
+                        }
+                      />
+                    </TouchableOpacity>
                   </View>
-                </View>
-              )}
-              keyExtractor={item => item.id}
-            />
-          </View>
-          {/* <View style={styles.ExpbodyContent}> */}
-          {/* post content here */}
-          <View>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={posts}
-              keyExtractor={item => item.id}
-              renderItem={({item}) => {
-                let likeColor = '';
 
-                console.log(item.likedBy);
+                  <SliderBox
+                    // onCurrentImagePressed={index => ImagePressed()}
+                    parentWidth={Dimensions.get('window').width * 0.9}
+                    ImageComponentStyle={{borderRadius: 16}}
+                    // paginationBoxStyle={styles.sliderBoxPageStyle}
+                    // ImageComponentStyle={styles.sliderBoxImageStyle}
+                    // dotStyle={{
+                    //   width: 10,
+                    //   height: 10,
+                    //   borderRadius: 5,
+                    //   marginBottom: 20,
+                    //   marginHorizontal: 0,
+                    //   padding: 0,
+                    //   margin: 0,
+                    // }}
+                    images={item.images}
+                    sliderBoxHeight={Dimensions.get('window').height * 0.3}
+                  />
 
-                if (item.likedBy.includes(profileName)) {
-                  likeColor = '#000000';
-                  console.log('running');
-                } else {
-                  likeColor = '#ffffff';
-                }
+                  <Text
+                    style={{
+                      color: '#000000',
+                      width: '95%',
+                      marginHorizontal: '2.5%',
+                      marginVertical: '2%',
+                    }}>
+                    {item.descriptionText}
+                  </Text>
 
-                return (
                   <View
                     style={{
-                      // elevation: 1000,
-                      // backgroundColor: '#ffffff',
-                      marginHorizontal: Dimensions.get('window').width * 0.05,
-                      marginVertical: Dimensions.get('window').height * 0.01,
-                      borderRadius: 16,
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      marginBottom: '5%',
                     }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginVertical: Dimensions.get('window').height * 0.01,
-                      }}>
-                      <Image
-                        source={{uri: item.imageUrl}}
+                    <View>
+                      <Text
                         style={{
-                          width: 60,
-                          height: 60,
-                          borderRadius: 64,
-                          marginLeft: Dimensions.get('window').width * 0.02,
-                        }}
-                      />
-                      <View
-                        style={{
-                          marginLeft: Dimensions.get('window').width * 0.05,
+                          textAlign: 'center',
+                          color: '#469597',
+                          fontWeight: 'bold',
                         }}>
-                        <Text
-                          style={{
-                            color: '#5BA199',
-                            fontWeight: 'bold',
-                            marginBottom:
-                              Dimensions.get('window').height * 0.005,
-                            fontSize: 16,
-                          }}>
-                          {item.name}
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#5BA199',
-                            marginBottom:
-                              Dimensions.get('window').height * 0.005,
-                            fontSize: 12,
-                          }}>
-                          {item.title}
-                        </Text>
-                        <Text style={{color: '#777777', fontSize: 12}}>
-                          {item.datePosted}
-                        </Text>
-                      </View>
-                      {/* looks fine here */}
-                      <TouchableOpacity>
-                        <MaterialCommunityIcons
-                          name="dots-vertical"
-                          size={30}
-                          color="#000000"
-                          style={{
-                            marginLeft: Dimensions.get('window').width * 0.09,
-                            marginTop: Dimensions.get('window').height * 0.005,
-                          }}
-                        />
+                        {item.likedBy.length} Likes
+                      </Text>
+                      <TouchableOpacity
+                        style={{
+                          paddingHorizontal: '8%',
+                          paddingVertical: '8%',
+                          backgroundColor: '#5BA199',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderRadius: 8,
+                          // width: Dimensions.get('window').width * 0.2,
+                        }}>
+                        <AntDesign name="like1" size={25} color={likeColor} />
                       </TouchableOpacity>
                     </View>
 
-                    <SliderBox
-                      // onCurrentImagePressed={index => ImagePressed()}
-                      parentWidth={Dimensions.get('window').width * 0.9}
-                      ImageComponentStyle={{borderRadius: 16}}
-                      // paginationBoxStyle={styles.sliderBoxPageStyle}
-                      // ImageComponentStyle={styles.sliderBoxImageStyle}
-                      // dotStyle={{
-                      //   width: 10,
-                      //   height: 10,
-                      //   borderRadius: 5,
-                      //   marginBottom: 20,
-                      //   marginHorizontal: 0,
-                      //   padding: 0,
-                      //   margin: 0,
-                      // }}
-                      images={item.images}
-                      sliderBoxHeight={Dimensions.get('window').height * 0.3}
-                    />
-
-                    <Text
-                      style={{
-                        color: '#000000',
-                        width: '95%',
-                        marginHorizontal: '2.5%',
-                        marginVertical: '2%',
-                      }}>
-                      {item.descriptionText}
-                    </Text>
-
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-evenly',
-                        marginBottom: '5%',
-                      }}>
-                      <View>
-                        <Text
-                          style={{
-                            textAlign: 'center',
-                            color: '#469597',
-                            fontWeight: 'bold',
-                          }}>
-                          {item.likedBy.length} Likes
-                        </Text>
-                        <TouchableOpacity
-                          style={{
-                            paddingHorizontal: '8%',
-                            paddingVertical: '8%',
-                            backgroundColor: '#5BA199',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 8,
-                            // width: Dimensions.get('window').width * 0.2,
-                          }}>
-                          <AntDesign name="like1" size={25} color={likeColor} />
-                        </TouchableOpacity>
-                      </View>
-
-                      <View>
-                        <Text
-                          style={{
-                            textAlign: 'center',
-                            color: '#469597',
-                            fontWeight: 'bold',
-                          }}>
-                          {item.commentedBy.length} Comments
-                        </Text>
-                        <TouchableOpacity
-                          style={{
-                            paddingHorizontal: '8%',
-                            paddingVertical: '8%',
-                            backgroundColor: '#5BA199',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 8,
-                            // width: Dimensions.get('window').width * 0.2,
-                          }}>
-                          <FontAwesome
-                            name="comment"
-                            size={25}
-                            color="#ffffff"
-                          />
-                        </TouchableOpacity>
-                      </View>
+                    <View>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          color: '#469597',
+                          fontWeight: 'bold',
+                        }}>
+                        {item.commentedBy.length} Comments
+                      </Text>
+                      <TouchableOpacity
+                        style={{
+                          paddingHorizontal: '8%',
+                          paddingVertical: '8%',
+                          backgroundColor: '#5BA199',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderRadius: 8,
+                          // width: Dimensions.get('window').width * 0.2,
+                        }}>
+                        <FontAwesome name="comment" size={25} color="#ffffff" />
+                      </TouchableOpacity>
                     </View>
                   </View>
-                );
-              }}
-            />
-          </View>
-          {/* </View> */}
+                </View>
+              );
+            }}
+          />
         </View>
+        {/* </View> */}
       </View>
     </ScrollView>
   );
@@ -350,10 +442,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   container: {
-    borderRadius: 35,
-    borderColor: 'black',
-    borderWidth: 3,
-    marginTop: -35,
+    borderRadius: 48,
+    // borderColor: 'black',
+    // borderWidth: 3,
+    marginTop: -60,
     backgroundColor: '#E5E3E4',
   },
   resumeText: {
@@ -368,27 +460,17 @@ const styles = StyleSheet.create({
   },
   ExpBoxView: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   designationStyle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginVertical: Dimensions.get('window').height * 0.006,
     color: '#000000',
-    marginTop: 12,
-  },
-  ExpLocation: {
-    textAlign: 'right',
-    fontStyle: 'italic',
-    justifyContent: 'flex-end',
-    alignSelf: 'flex-end',
-    alignItems: 'flex-end',
-  },
-  skills: {
-    alignSelf: 'flex-end',
+    // marginTop: 12,
   },
   UploadCV: {
     alignSelf: 'center',
+    marginTop: '5%',
   },
   header: {
     backgroundColor: '#E5E3E4',
@@ -407,21 +489,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 130,
   },
-  name: {
-    fontSize: 22,
-    color: '#FFFFFF',
-    fontWeight: '600',
-  },
-  body: {
-    marginTop: 5,
-    // borderRadius: 15,
-    // borderColor: 'red',
-    // borderWidth: 4,
-  },
   bodyContent: {
-    flex: 1,
-    alignItems: 'flex-start',
-    padding: 30,
+    // flex: 1,
+    // alignItems: 'flex-start',
+    // padding: 30,
+    marginHorizontal: '7%',
+    marginVertical: '2%',
   },
   ExpbodyContent: {
     flex: 1,
@@ -430,20 +503,15 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 28,
-    color: '#696969',
-    fontWeight: '600',
-    marginTop: 5,
+    color: '#000000',
+    fontWeight: 'bold',
+    marginTop: '5%',
+    width: Dimensions.get('window').width * 0.5,
   },
   info: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#469597',
-    marginTop: 10,
-  },
-  description: {
-    // backgroundColor: '#FFFFFF',
-    // borderRadius: 10,
-    // padding: 10,
-    marginTop: 10,
+    // marginTop: 10,
   },
   skillsBtn: {
     backgroundColor: '#469597',
@@ -454,62 +522,50 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 20,
   },
-  skillsFlatlist: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginHorizontal: Dimensions.get('window').width * 0.05,
-    marginVertical: Dimensions.get('window').height * 0.02,
-  },
+
   skillsBox: {
+    alignSelf: 'flex-end',
+    // backgroundColor: '#BBC6C8',
     backgroundColor: '#469597',
-    color: '#FFFFFF',
+    // color: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 25,
-    width: 120,
-    borderRadius: 15,
-    marginTop: 5,
-    marginBottom: 20,
+    borderRadius: 24,
+    flexDirection: 'row',
+    paddingHorizontal: '3%',
   },
   skillsListBox: {
-    backgroundColor: '#469597',
-    color: '#FFFFFF',
+    backgroundColor: '#BBC6C8',
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
-    alignContent: 'center',
-    height: 25,
-    width: 80,
-    marginRight: 5,
-    borderRadius: 15,
-    marginTop: 5,
-    marginBottom: 20,
-    paddingRight: 15,
+    borderRadius: 24,
+    paddingHorizontal: Dimensions.get('window').width * 0.05,
+    paddingVertical: Dimensions.get('window').height * 0.02,
+    marginEnd: Dimensions.get('window').width * 0.05,
+    marginTop: Dimensions.get('window').height * 0.02,
   },
   skillsText: {
-    color: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    alignContent: 'center',
+    color: '#000000',
     fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   UploadBtn: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#469597',
     borderRadius: 12,
-    marginTop: 25,
+    marginTop: '3%',
     height: 30,
     width: 150,
-    marginBottom: 25,
+    // marginBottom: 25,
   },
   UploadText: {
     color: '#FFFFFF',
     fontSize: 15,
     justifyContent: 'center',
     alignItems: 'center',
+    fontWeight: 'bold',
   },
   expView: {
     flexDirection: 'row',
@@ -517,11 +573,7 @@ const styles = StyleSheet.create({
     /* Not doing anything. */
     // flex: 1,
   },
-  editExpView: {
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    flex: 1,
-  },
+
   expText1: {
     color: 'black',
     fontSize: 20,

@@ -25,10 +25,10 @@ export default function App() {
     // <JobDashboardScreen />
     // <LoginScreen />
     // <StartScreen />
-    // <ProfileScreen />
+    <ProfileScreen />
     // <ApplyToJob />
     // <Test />
-    <PdfViewScreen />
+    // <PdfViewScreen />
 
     // <ProfileScreen />
     // <ApplyToJob />
