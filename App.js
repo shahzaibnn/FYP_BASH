@@ -16,6 +16,7 @@ import ApplyToJob from './src/screens/ApplyToJob';
 import PdfViewScreen from './src/screens/PDFViewScreen';
 import ViewJob from './src/screens/ViewJob';
 import Test from './src/screens/Test';
+import ExplorePage from './src/screens/ExplorePage';
 
 export default function App() {
   return (
@@ -29,7 +30,8 @@ export default function App() {
     // <StartScreen />
     // <ProfileScreen />
     // <ApplyToJob />
-    <ViewJob />
+    // <ViewJob />
+    <ExplorePage />
     // <Test />
     // <PdfViewScreen />
 
