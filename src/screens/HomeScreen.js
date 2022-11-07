@@ -22,8 +22,11 @@ export default function HomeScreen() {
   const profileName = 'Tony';
   return (
     <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{backgroundColor: '#E5E3E4'}}>
+      // horizontal
+      // scrollEnabled={false}
+      // nestedScrollEnabled={true}
+      // showsVerticalScrollIndicator={false}
+      style={{backgroundColor: '#E5E3E4', width: '100%'}}>
       <View
         style={{flexDirection: 'row', marginTop: '3%', marginHorizontal: '5%'}}>
         <TouchableOpacity>
@@ -87,6 +90,7 @@ export default function HomeScreen() {
 
       <View style={{marginHorizontal: '3%', marginVertical: '4%'}}>
         <FlatList
+          // nestedScrollEnabled
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           data={jobs}
@@ -186,6 +190,7 @@ export default function HomeScreen() {
 
       <View>
         <FlatList
+          // scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           data={posts}
           keyExtractor={item => item.id}

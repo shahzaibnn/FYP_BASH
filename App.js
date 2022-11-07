@@ -16,13 +16,14 @@ import ApplyToJob from './src/screens/ApplyToJob';
 import PdfViewScreen from './src/screens/PDFViewScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import ViewProfileScreen from './src/screens/ViewProfileScreen';
+import JobPostingScreen from './src/screens/JobPostingScreen';
 
 export default function App() {
   return (
     // <RegistrationScreen />
 
     // <HomeScreen />
-    // <CreatePostsssScreen />
+    // <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
     // <LoginScreen />
@@ -31,8 +32,8 @@ export default function App() {
     // <ApplyToJob />
     // <Test />
     // <PdfViewScreen />
-
-    <ProfileScreen />
+    <JobPostingScreen />
+    // <ProfileScreen />
     // <ApplyToJob />
     // <Test />
     // <SplashScreen />
