@@ -16,6 +16,7 @@ import DocumentPicker, {types} from 'react-native-document-picker';
 import {user, jobs, posts} from '../model/data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
 import FileViewer from 'react-native-file-viewer';
@@ -34,6 +35,8 @@ const ApplyToJob = () => {
   ]);
   const [singleFile, setSingleFile] = useState();
   const [uploaded, setUploaded] = useState(false);
+  const [fileName, setfileName] = useState(false);
+  const [message, setMessage] = useState(false);
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
@@ -41,48 +44,15 @@ const ApplyToJob = () => {
       });
 
       console.log(results.uri);
-      console.log(results.type);
+      console.log(results.name);
 
       setSingleFile(results.uri);
+      setfileName(results.name);
       setUploaded(true);
-      // console.log(results.uri);
-
-      // for (const res of results) {
-      //   console.log('length is : ', results.length);
-
-      //   console.log('URI : ' + res.uri);
-
-      //   console.log('File Name : ' + res.name);
-
-      //   console.log('File Type: ' + res.type);
-
-      //   // setMultipleFile(current => [
-      //   //   ...current,
-      //   //   {
-      //   //     key: Math.floor(Math.random() * 1000000000),
-      //   //     name: res.name,
-      //   //     uri: res.uri,
-
-      //   //     type: res.type,
-      //   //   },
-      //   // ]);
-      // }
     } catch (err) {
       console.log('Some Error!!!');
     }
   };
-
-  // const removeFile = key => {
-  //   setMultipleFile(current =>
-  //     current.filter(multipleFile => {
-  //       return multipleFile.key !== key;
-  //     }),
-  //   );
-  //   console.log('clicked!!!');
-  // };
-
-  // console.log(multipleFile);
-
   console.log('Saved value is: ', singleFile);
   return (
     // <View style={styles.bg}>
@@ -160,7 +130,9 @@ const ApplyToJob = () => {
         <View style={styles.messageBodyStyle}>
           <TextInput
             style={styles.messageStyle}
-            onChangeText={UserName => setUserName(UserName)}
+            onChangeText={message => setMessage(message)}
+            multiline={true}
+            // textAlignVertical={true}
             placeholder="What sets you different from others?"
             placeholderTextColor="#6A6A6A"
             blurOnSubmit={false}
@@ -171,28 +143,43 @@ const ApplyToJob = () => {
           <TouchableOpacity style={styles.UploadBtn}>
             <Text style={styles.text}>CV</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <MaterialCommunityIcons
-              name="file-pdf-box"
-              size={60}
-              color={uploaded ? 'red' : '#6A6A6A'}
-              style={{
-                // alignItems: 'center',
-                justifyContent: 'center',
-                alignSelf: 'center',
-              }}
-            />
-          </TouchableOpacity>
+          <View>
+            {uploaded ? (
+              <TouchableOpacity>
+                <Ionicons
+                  name="checkmark-done-circle-outline"
+                  size={60}
+                  color="green"
+                  style={{
+                    // alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                  }}
+                />
+              </TouchableOpacity>
+            ) : (
+              <MaterialCommunityIcons
+                name="file-pdf-box"
+                size={60}
+                color="red"
+                style={{
+                  // alignItems: 'center',
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                }}
+              />
+            )}
+          </View>
           <View style={styles.resumeText}>
             {uploaded ? (
               <TouchableOpacity onPress={() => console.log('Pressed!!')}>
-                <Text>Resume.pdf</Text>
+                <Text>Uploaded {fileName}</Text>
               </TouchableOpacity>
-            ) : null}
-
-            <TouchableOpacity style={styles.resumeText} onPress={selectFile}>
-              <Text>Upload Here</Text>
-            </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.resumeText} onPress={selectFile}>
+                <Text>Upload Here</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -209,20 +196,6 @@ const ApplyToJob = () => {
       </View>
 
       {/* testing upload */}
-      {/* <ImageModal
-        // onTap={() => console.log(item.display)}
-        // disabled={!item.display}
-        resizeMode="stretch"
-        modalImageResizeMode="contain"
-        style={{width: 60, height: 60, borderRadius: 64}}
-        modalImageStyle={{
-          minHeight: Dimensions.get('window').height,
-          minWidth: Dimensions.get('window').width,
-        }}
-        source={{
-          uri: res.uri,
-        }}
-      /> */}
     </ScrollView>
     /*  </View> */
   );
