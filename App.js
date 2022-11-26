@@ -10,6 +10,7 @@ import SettingsScreen from './src/screens/SettingsScreen';
 import JobDashboardScreen from './src/screens/JobDashboardScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import StartScreen from './src/screens/StartScreen';
+import ForgotPassword from './src/screens/ForgotPassword';
 
 import ApplyToJob from './src/screens/ApplyToJob';
 
@@ -23,6 +24,7 @@ export default function App() {
     // <RegistrationScreen />
 
     // <HomeScreen />
+    <ForgotPassword />
     // <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
@@ -31,14 +33,10 @@ export default function App() {
     // <ProfileScreen />
     // <ApplyToJob />
     // <ViewJob />
-    <ExplorePage />
+    // <ExplorePage />
     // <Test />
     // <PdfViewScreen />
-
     // <JobPostingScreen />
-
-
-
     // <ProfileScreen />
     // <ApplyToJob />
     // <Test />
