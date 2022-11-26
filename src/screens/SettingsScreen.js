@@ -1,4 +1,11 @@
-import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  TextInput,
+} from 'react-native';
 import React, {useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -10,6 +17,11 @@ export default function SettingsScreen() {
   const [faqViewDisplay, setFaqViewDisplay] = useState(false);
   const [privacyViewDisplay, setPrivacyViewDisplay] = useState(false);
   const [contactViewDisplay, setContactViewDisplay] = useState(false);
+  const [changePasswordDisplay, setChangePasswordDisplay] = useState(false);
+
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -196,6 +208,126 @@ export default function SettingsScreen() {
         </View>
       </Collapsible>
 
+      <View
+        style={{
+          marginHorizontal: '5%',
+          marginTop: '10%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: '#BBC6C8',
+          //   borderRadius: 8,
+          padding: '2%',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderTopLeftRadius: 8,
+          borderTopRightRadius: 8,
+          borderBottomLeftRadius: changePasswordDisplay ? 0 : 8,
+          borderBottomRightRadius: changePasswordDisplay ? 0 : 8,
+        }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <MaterialCommunityIcons
+            name="lock"
+            size={25}
+            color="#777777"
+            style={{marginLeft: '0%'}}
+          />
+          <Text style={{fontSize: 25, color: '#000000', marginLeft: 10}}>
+            Change Password
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          onPress={() => setChangePasswordDisplay(!changePasswordDisplay)}
+          style={{marginRight: '2%'}}>
+          <FontAwesome name="plus-circle" size={25} color="#777777" />
+        </TouchableOpacity>
+      </View>
+
+      <Collapsible collapsed={!changePasswordDisplay}>
+        <View
+          style={{
+            marginHorizontal: '5%',
+            backgroundColor: '#BBC6C8',
+            borderBottomLeftRadius: 8,
+            borderBottomRightRadius: 8,
+          }}>
+          <View
+            style={{
+              backgroundColor: '#ffffff',
+              // width: Dimensions.get('window').width * 0.8,
+              marginHorizontal: '10%',
+              borderRadius: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+              // marginBottom: '7%',
+              marginVertical: '3%',
+            }}>
+            <FontAwesome
+              name="unlock-alt"
+              size={22}
+              color="#777777"
+              style={{marginHorizontal: '5%', width: 20}}
+            />
+            <TextInput
+              style={{}}
+              onChangeText={setOldPassword}
+              value={oldPassword}
+              placeholder="Old Password"
+            />
+          </View>
+
+          <View
+            style={{
+              backgroundColor: '#ffffff',
+              // width: Dimensions.get('window').width * 0.8,
+              marginHorizontal: '10%',
+              borderRadius: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+              // marginBottom: '7%',
+              marginVertical: '3%',
+            }}>
+            <FontAwesome
+              name="lock"
+              size={22}
+              color="#777777"
+              style={{marginHorizontal: '5%', width: 20}}
+            />
+            <TextInput
+              style={{}}
+              onChangeText={setNewPassword}
+              value={newPassword}
+              placeholder="New Password"
+            />
+          </View>
+
+          <View
+            style={{
+              backgroundColor: '#ffffff',
+              // width: Dimensions.get('window').width * 0.8,
+              marginHorizontal: '10%',
+              borderRadius: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+              // marginBottom: '7%',
+              marginVertical: '3%',
+            }}>
+            <FontAwesome
+              name="lock"
+              size={22}
+              color="#777777"
+              style={{marginHorizontal: '5%', width: 20}}
+            />
+            <TextInput
+              style={{}}
+              onChangeText={setConfirmPassword}
+              value={confirmPassword}
+              placeholder="Confirm New Password"
+            />
+          </View>
+        </View>
+      </Collapsible>
+
       <TouchableOpacity
         style={{
           justifyContent: 'center',
@@ -205,7 +337,7 @@ export default function SettingsScreen() {
           paddingHorizontal: '15%',
           paddingVertical: '3%',
           borderRadius: 32,
-          marginTop: '80%',
+          marginTop: '70%',
         }}>
         <Text style={{color: '#000000', fontSize: 30, fontWeight: 'bold'}}>
           Logout

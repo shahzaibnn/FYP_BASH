@@ -24,20 +24,18 @@ export default function App() {
 
     // <HomeScreen />
     // <CreatePostScreen />
-    // <SettingsScreen />
+    <SettingsScreen />
     // <JobDashboardScreen />
     // <LoginScreen />
     // <StartScreen />
     // <ProfileScreen />
     // <ApplyToJob />
     // <ViewJob />
-    <ExplorePage />
+    // <ExplorePage />
     // <Test />
     // <PdfViewScreen />
 
     // <JobPostingScreen />
-
-
 
     // <ProfileScreen />
     // <ApplyToJob />
