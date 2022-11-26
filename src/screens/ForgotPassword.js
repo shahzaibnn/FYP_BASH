@@ -13,6 +13,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -21,6 +22,7 @@ export default function ForgotPassword() {
 
   const [id, setId] = useState('');
   const [email, setEmail] = useState('');
+  const [emailGenerated, setemailGenerated] = useState('');
 
   console.log(id);
   console.log(email);
@@ -106,6 +108,9 @@ export default function ForgotPassword() {
           backgroundColor: '#469597',
           paddingVertical: '4%',
           borderRadius: 16,
+        }}
+        onPress={() => {
+          setemailGenerated(true);
         }}>
         <Text
           style={{
@@ -117,6 +122,48 @@ export default function ForgotPassword() {
           Generate Password
         </Text>
       </TouchableOpacity>
+      <View>
+        {emailGenerated ? (
+          <View
+            style={{
+              //   backgroundColor: '#777777',
+              width: Dimensions.get('window').width * 0.8,
+              //   height: Dimensions.get('window').height * 0.8,
+              marginHorizontal: '10%',
+              marginTop: '40%',
+              borderRadius: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: '7%',
+              justifyContent: 'center',
+            }}>
+            <MaterialIcons
+              name="mark-email-read"
+              size={30}
+              color="green"
+              style={{
+                // alignItems: 'center',
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}
+            />
+            <Text
+              style={{
+                // alignItems: 'center',
+                justifyContent: 'center',
+                marginLeft: '7%',
+                // fontStyle: 'italic',
+                alignSelf: 'center',
+                fontSize: 22,
+                fontWeight: 'bold',
+              }}>
+              Email sent successfully!
+            </Text>
+          </View>
+        ) : (
+          <></>
+        )}
+      </View>
     </ScrollView>
   );
 }
