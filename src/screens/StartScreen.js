@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 
-export default function StartScreen() {
+export default function StartScreen({navigation}) {
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4', flex: 1}}>
       <Image
@@ -16,7 +16,7 @@ export default function StartScreen() {
         style={{
           // backgroundColor: '#E5E3E4',
           // marginHorizontal: '5%',
-          marginVertical: '10%',
+          marginVertical: '8%',
           height: Dimensions.get('window').height * 0.55,
           width: Dimensions.get('window').width * 0.85,
           alignSelf: 'center',
@@ -26,8 +26,8 @@ export default function StartScreen() {
 
       <Text
         style={{
-          color: '#000000',
-          fontSize: 40,
+          color: '#469597',
+          fontSize: 35,
           textAlign: 'center',
           fontWeight: 'bold',
           // marginTop: '10%',
@@ -43,20 +43,21 @@ export default function StartScreen() {
           alignSelf: 'center',
           color: '#777777',
           marginTop: '5%',
-          fontSize: 20,
+          fontSize: 18,
         }}>
         and stregthen the community to discover more oppurtunities
       </Text>
 
       <TouchableOpacity
+        onPress={() => navigation.navigate('Login')}
         style={{
           alignSelf: 'center',
           backgroundColor: '#469597',
           // paddingHorizontal: '20%',
-          paddingVertical: '5%',
-          marginTop: '7%',
+          paddingVertical: '4%',
+          marginTop: '15%',
           // marginHorizontal: '5%',
-          width: '80%',
+          width: '70%',
           borderRadius: 32,
         }}>
         <Text

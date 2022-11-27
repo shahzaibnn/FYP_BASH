@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
+import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -17,7 +18,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-export default function ForgotPassword() {
+export default function ForgotPassword({navigation}) {
   const [text, setText] = useState('');
 
   const [id, setId] = useState('');
@@ -29,33 +30,70 @@ export default function ForgotPassword() {
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
-      <TouchableOpacity
+      {/* <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: 0,
+            // marginTop: '10%',
+            // marginLeft: '5%',
+          }}>
+          <AntDesign name="leftcircle" size={32} color="#777777" />
+        </TouchableOpacity>
+        <Text
+          style={{
+            color: '#469597',
+            textAlign: 'center',
+            justifyContent: 'center',
+            // alignSelf: 'center',
+            fontSize: 30,
+            fontWeight: 'bold',
+            marginTop: '8%',
+            // marginLeft: '20%',
+            // backgroundColor: 'orange',
+          }}>
+          Forgot Password
+        </Text>
+      </View> */}
+
+      <View
         style={{
-          position: 'absolute',
-          marginTop: '10%',
-          marginLeft: '6%',
-        }}>
-        <AntDesign name="leftcircle" size={32} color="#777777" />
-      </TouchableOpacity>
-      <Text
-        style={{
-          color: '#469597',
-          textAlign: 'center',
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: '5%',
+          marginVertical: '7%',
           justifyContent: 'center',
-          fontSize: 30,
-          fontWeight: 'bold',
-          marginTop: '8%',
-          marginLeft: '5%',
         }}>
-        Forgot Password
-      </Text>
+        <TouchableOpacity
+          style={{position: 'absolute', left: 0}}
+          onPress={() => navigation.navigate('Login')}>
+          <AntDesign name="leftcircle" size={32} color="#777777" />
+        </TouchableOpacity>
+
+        <Text
+          style={{
+            color: '#469597',
+            textAlign: 'center',
+            justifyContent: 'center',
+            // alignSelf: 'center',
+            fontSize: 30,
+            fontWeight: 'bold',
+            marginLeft: '5%',
+            // marginTop: '8%',
+            // marginLeft: '20%',
+            // backgroundColor: 'orange',
+          }}>
+          Forgot Password
+        </Text>
+      </View>
       <View
         style={{
           backgroundColor: '#ffffff',
           width: Dimensions.get('window').width * 0.8,
           //   height: Dimensions.get('window').height * 0.8,
           marginHorizontal: '10%',
-          marginTop: '50%',
+          marginTop: '40%',
           borderRadius: 16,
           flexDirection: 'row',
           alignItems: 'center',

@@ -14,7 +14,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}) {
   const [text, setText] = useState('');
 
   const [password, setPassword] = useState('');
@@ -43,6 +43,7 @@ export default function LoginScreen() {
           color: '#000000',
           marginTop: '-10%',
           fontWeight: 'bold',
+          // marginHorizontal: '10%',
         }}>
         Welcome
       </Text>
@@ -50,9 +51,10 @@ export default function LoginScreen() {
       <Text
         style={{
           color: '#5BA199',
-          marginHorizontal: '10%',
+          marginHorizontal: '12%',
           marginVertical: '5%',
-          fontSize: 20,
+          fontSize: 18,
+          // textAlign: 'center',
         }}>
         Sign in to continue
       </Text>
@@ -131,13 +133,16 @@ export default function LoginScreen() {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={{marginHorizontal: '10%', marginVertical: '8%'}}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ForgotPassword')}
+        style={{marginHorizontal: '10%', marginVertical: '8%'}}>
         <Text style={{color: '#5BA199', textAlign: 'right'}}>
           Forget Password?
         </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
+        onPress={() => navigation.navigate('Home')}
         style={{
           marginHorizontal: '10%',
           backgroundColor: '#469597',
@@ -165,7 +170,7 @@ export default function LoginScreen() {
         }}>
         <Text style={{fontSize: 18, color: '#5BA199'}}>New User? </Text>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
           <Text style={{fontWeight: 'bold', fontSize: 18, color: '#5BA199'}}>
             Create Account
           </Text>

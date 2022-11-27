@@ -11,7 +11,9 @@ import {
   ScrollView,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-const RegisterScreen = props => {
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+export default function RegistrationScreen({navigation}) {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -133,16 +135,20 @@ const RegisterScreen = props => {
           alignContent: 'center',
         }}>
         <View style={styles.Header}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <FontAwesome
               name="chevron-left"
               style={styles.back}
               size={20}
-              color="blacks"
+              color="black"
             />
+          </TouchableOpacity> */}
+          <TouchableOpacity
+            style={{position: 'absolute', left: '5%', top: '40%'}}
+            onPress={() => navigation.navigate('Login')}>
+            <AntDesign name="leftcircle" size={32} color="#777777" />
           </TouchableOpacity>
-
-          <Text style={styles.titleText}>Teacher Sign Up</Text>
+          <Text style={styles.titleText}>Sign Up</Text>
         </View>
         <KeyboardAvoidingView enabled>
           <View style={styles.SectionStyle}>
@@ -242,7 +248,7 @@ const RegisterScreen = props => {
           </TouchableOpacity>
           <View style={styles.RegisteredUser}>
             <Text style={styles.registered_1}>Already have an account? </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
               <Text style={styles.registered_2}>Login Here</Text>
             </TouchableOpacity>
           </View>
@@ -250,8 +256,7 @@ const RegisterScreen = props => {
       </ScrollView>
     </View>
   );
-};
-export default RegisterScreen;
+}
 
 const styles = StyleSheet.create({
   SectionStyle: {
@@ -268,7 +273,7 @@ const styles = StyleSheet.create({
   },
   Header: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   RegisteredUser: {
