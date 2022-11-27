@@ -39,5 +39,27 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    // <RegistrationScreen />
+
+    // <HomeScreen />
+    // <CreatePostScreen />
+    // <SettingsScreen />
+    // <JobDashboardScreen />
+    // <LoginScreen />
+    // <StartScreen />
+    // <ProfileScreen />
+    // <ApplyToJob />
+    // <ViewJob />
+    // <ExplorePage />
+    // <Test />
+    // <PdfViewScreen />
+
+    // <JobPostingScreen />
+
+    // <ProfileScreen />
+    // <ApplyToJob />
+    // <Test />
+    // <SplashScreen />
+    // <ViewProfileScreen />
   );
 }
