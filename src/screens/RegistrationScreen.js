@@ -9,10 +9,16 @@ import {
   Keyboard,
   TouchableOpacity,
   ScrollView,
+  Button,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
+import {ref, set, update, onValue, remove, push} from 'firebase/database';
+import {db} from '../Firebase/Config';
+
+import {firebase} from '@react-native-firebase/database';
+import database from '@react-native-firebase/database';
 export default function RegistrationScreen({navigation}) {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -121,6 +127,30 @@ export default function RegistrationScreen({navigation}) {
   //     </View>
   //   );
   // }
+
+  async function createData() {
+    // const newKey = push(child(ref(database), 'users')).key;
+
+    // push(ref(db, 'roles/students/' + userName + '/'), {
+    await set(ref(db, 'roles/students/' + userName + '/'), {
+      userName: userName,
+      userEmail: userEmail,
+      userPassword: userPassword,
+      contactNo: contactNo,
+      course: course,
+      dateOfBirth: dateOfBirth,
+      city: city,
+    })
+      // .then(() => {
+      //   // Data saved successfully!
+      //   alert('Signed In!');
+      // })
+      .catch(error => {
+        // The write failed...
+        alert(error);
+      });
+  }
+
   return (
     <View
       style={{
@@ -161,7 +191,9 @@ export default function RegistrationScreen({navigation}) {
 
             <TextInput
               style={styles.inputStyle}
-              onChangeText={UserName => setUserName(UserName)}
+              value={userName}
+              onChangeText={userName => setUserName(userName)}
+              // onChangeText={this.setState({userName: userName})}
               placeholder="Enter Name"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
@@ -176,6 +208,7 @@ export default function RegistrationScreen({navigation}) {
             />
             <TextInput
               style={styles.inputStyle}
+              value={userEmail}
               onChangeText={userEmail => setUserEmail(userEmail)}
               placeholder="Enter Email Address"
               placeholderTextColor="#6A6A6A"
@@ -186,6 +219,7 @@ export default function RegistrationScreen({navigation}) {
             <FontAwesome name="lock" style={styles.icon} size={15} />
             <TextInput
               style={styles.inputStyle}
+              value={userPassword}
               onChangeText={userPassword => setUserPassword(userPassword)}
               placeholder="Enter Password"
               placeholderTextColor="#6A6A6A"
@@ -202,6 +236,7 @@ export default function RegistrationScreen({navigation}) {
           <View style={styles.SectionStyle}>
             <FontAwesome name="phone" style={styles.icon} size={15} />
             <TextInput
+              value={contactNo}
               style={styles.inputStyle}
               onChangeText={contactNo => setcontactNo(contactNo)}
               placeholder="Enter Contact Number"
@@ -212,6 +247,7 @@ export default function RegistrationScreen({navigation}) {
           <View style={styles.SectionStyle}>
             <FontAwesome name="book" style={styles.icon} size={15} />
             <TextInput
+              value={course}
               style={styles.inputStyle}
               onChangeText={course => setcourse(course)}
               placeholder="Enter Course Name"
@@ -223,6 +259,7 @@ export default function RegistrationScreen({navigation}) {
             <FontAwesome name="calendar" style={styles.icon} size={15} />
             <TextInput
               style={styles.inputStyle}
+              value={dateOfBirth}
               onChangeText={dateOfBirth => setdateOfBirth(dateOfBirth)}
               placeholder="Enter Date of Birth"
               placeholderTextColor="#6A6A6A"
@@ -242,8 +279,10 @@ export default function RegistrationScreen({navigation}) {
           <TouchableOpacity
             style={styles.buttonStyle}
             activeOpacity={0.5}
+            onPress={createData()}
             // onPress={handleSubmitButton}
           >
+            {/* <Button onPress={createData()} title="press"></Button> */}
             <Text style={styles.buttonTextStyle}>Sign Up</Text>
           </TouchableOpacity>
           <View style={styles.RegisteredUser}>
