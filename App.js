@@ -43,13 +43,13 @@ export default function App() {
     // </NavigationContainer>
 
     // <Test />
-    <RegistrationScreen />
+    // <RegistrationScreen />
 
     // <HomeScreen />
     // <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
-    // <LoginScreen />
+    <LoginScreen />
     // <StartScreen />
     // <ProfileScreen />
     // <ApplyToJob />

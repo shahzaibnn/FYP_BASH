@@ -7,22 +7,53 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {auth} from '@react-native-firebase/auth';
+import {db, authorization} from '../Firebase/Config';
+// import {signInWithEmailAndPassword} from 'firebase/auth';
 
 export default function LoginScreen({navigation}) {
-  const [text, setText] = useState('');
+  const [email, setEmail] = useState('');
 
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(true);
   const [eye, setEye] = useState('eye');
 
-  console.log(text);
+  console.log(email);
   console.log(password);
+
+  useEffect(() => {
+    const unsubscribe = authorization.onAuthStateChanged(user => {
+      if (user) {
+        navigation.navigate('Home');
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  const handleLogin = () => {
+    authorization
+      .signInWithEmailAndPassword(email, password)
+      .then(user => {
+        console.log(user);
+        // If server response message same as Data Matched
+        if (user) navigation.replace('HomeScreen');
+      })
+      .catch(error => {
+        console.log(error);
+        if (error.code === 'auth/invalid-email') setErrortext(error.message);
+        else if (error.code === 'auth/user-not-found')
+          setErrortext('No User Found');
+        else {
+          setErrortext('Please check your email id or password');
+        }
+      });
+  };
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -77,8 +108,8 @@ export default function LoginScreen({navigation}) {
         />
         <TextInput
           style={{flex: 1}}
-          onChangeText={setText}
-          value={text}
+          onChangeText={email => setEmail(email)}
+          value={email}
           placeholder="UserName / ID"
         />
       </View>
@@ -103,7 +134,7 @@ export default function LoginScreen({navigation}) {
         />
         <TextInput
           style={{flex: 1}}
-          onChangeText={setPassword}
+          onChangeText={password => setPassword(password)}
           value={password}
           placeholder="Password"
           secureTextEntry={passwordVisible}
@@ -142,7 +173,7 @@ export default function LoginScreen({navigation}) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('Home')}
+        onPress={handleLogin}
         style={{
           marginHorizontal: '10%',
           backgroundColor: '#469597',

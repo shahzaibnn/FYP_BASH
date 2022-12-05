@@ -1,6 +1,9 @@
 import {initializeApp} from 'firebase/app';
 import {getDatabase} from 'firebase/database';
 import {getFirestore} from 'firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import {getAuth} from 'firebase/auth';
+
 const firebaseConfig = {
   apiKey: 'AIzaSyBeJkjyyQBii5lFh2-3kwmKUWVAeC4ZlqM',
   authDomain: 'nodetest-f3431.firebaseapp.com',
@@ -12,6 +15,11 @@ const firebaseConfig = {
   measurementId: 'G-KYD0E1K5K1',
 };
 const app = initializeApp(firebaseConfig);
+
+// const authorization = firebase.auth(app);
+export const authorization = getAuth(app);
 //initizile database
 export const db = getDatabase(app);
 //export const dbFirestore = getFirestore(app);
+
+// export {authorization};
