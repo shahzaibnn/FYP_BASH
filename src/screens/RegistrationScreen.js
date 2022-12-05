@@ -279,7 +279,7 @@ export default function RegistrationScreen({navigation}) {
           <TouchableOpacity
             style={styles.buttonStyle}
             activeOpacity={0.5}
-            onPress={createData()}
+            onPress={createData}
             // onPress={handleSubmitButton}
           >
             {/* <Button onPress={createData()} title="press"></Button> */}
