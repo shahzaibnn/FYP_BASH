@@ -33,11 +33,13 @@ const ExplorePage = () => {
     } else if (jobsSelected) {
       return <Text style={styles.titleTextStyle}>Jobs</Text>;
     } else {
-      return (
-        <Text style={styles.titleTextStyle_italic}>
-          What do you want to search for?
-        </Text>
-      );
+      return <Text style={styles.titleTextStyle}>Posts</Text>;
+      // return
+      // (
+      //   <Text style={styles.titleTextStyle_italic}>
+      //     What do you want to search for?
+      //   </Text>
+      // );
     }
   };
 

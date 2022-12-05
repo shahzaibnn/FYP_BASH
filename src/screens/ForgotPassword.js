@@ -109,7 +109,7 @@ export default function ForgotPassword({navigation}) {
           style={{flex: 1}}
           onChangeText={setId}
           value={id}
-          placeholder="Student ID"
+          placeholder="ID"
         />
       </View>
 

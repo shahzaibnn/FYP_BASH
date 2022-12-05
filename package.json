@@ -10,8 +10,13 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@firebase/database": "^0.13.10",
+    "@react-native-firebase/app": "^16.4.6",
+    "@react-native-firebase/database": "^16.4.6",
+    "@react-native-firebase/firestore": "^16.4.6",
     "@react-navigation/native": "^6.0.14",
     "@react-navigation/native-stack": "^6.9.2",
+    "firebase": "^9.14.0",
     "lottie-react-native": "^5.1.4",
     "react": "18.1.0",
     "react-native": "0.70.4",

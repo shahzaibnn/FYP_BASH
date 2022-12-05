@@ -43,6 +43,46 @@ export const user = [
     username: 'Benedict Cumberbatch',
     education: 'BSCS Student',
     skills: ['C Language', 'React JS', 'Java', 'C#', 'Python'],
+
+    experience: [
+      {
+        id: 0,
+        timePeriod: '5/10/21 - Present',
+        designation: 'React Native Developer',
+        location: 'Karachi, Pakistan',
+        company: 'Folio3',
+        pic: 'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
+      },
+    ],
+
+    applied: [
+      {
+        id: 0,
+        postedBy: 'Faria Jameel',
+        uri: 'https://10pearls.com/wp-content/uploads/2017/12/Untitled-design-19-2.png',
+        postedByPic:
+          'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
+        title: 'React Native Developer',
+        company: '10Pearls',
+        city: 'Karachi',
+        country: 'Pakistan',
+        mode: 'Full Time',
+        salary: '50k',
+        description:
+          '•Exceptional communication skills and team working skill.\n•Creative with an eye for shape and colour.\n•Know the principal of animation and you can create high prototypes.\n•Figma,Xd & Sketch must know about this apps',
+      },
+
+      {
+        id: 1,
+        postedBy: 'Faria Jameel',
+        postedByPic:
+          'https://imageio.forbes.com/specials-images/imageserve/62e05c262f3d7605f72ace28/bear-against-a-yellow-backdrop/960x0.jpg?format=jpg&width=960',
+        title: 'React Native Developer',
+        company: 'Folio3 Software House',
+        city: 'Karachi',
+        country: 'Pakistan',
+      },
+    ],
     description:
       "I'm very active, have a lot of different interests. Pick an activity, I've probably tried it before. Very Talented in every field of life. This is life. The reality of life.",
     cvFile: false,
