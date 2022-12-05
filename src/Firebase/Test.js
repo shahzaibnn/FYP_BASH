@@ -77,9 +77,9 @@ export default function App() {
         onChangeText={setEmail}
         placeholder="Email"
         style={styles.textBoxes}></TextInput>
-      <Button onPress={createData()} title="Get Data"></Button>
+      {/* <Button onPress={createData} title="Submit Data"></Button> */}
       <TouchableOpacity>
-        {/* <Text onClick={createData()}>Submit Data </Text> */}
+        <Text onPress={createData}>Submit Data </Text>
       </TouchableOpacity>
       <TouchableOpacity>
         <Text
