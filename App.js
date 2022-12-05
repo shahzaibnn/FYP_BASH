@@ -29,7 +29,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-<<<<<<< HEAD
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
@@ -44,7 +43,6 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
-=======
     // <NavigationContainer>
     //   <Stack.Navigator
     //     screenOptions={{
@@ -59,8 +57,7 @@ export default function App() {
     //   </Stack.Navigator>
     // </NavigationContainer>
 
-    <Test />
->>>>>>> 128cee718dd12c96b26b594fc423b8506101c7ab
+    // <Test />
     // <RegistrationScreen />
 
     // <HomeScreen />
