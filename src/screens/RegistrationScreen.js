@@ -131,7 +131,7 @@ export default function RegistrationScreen({navigation}) {
   async function createData() {
     // const newKey = push(child(ref(database), 'users')).key;
 
-    // push(ref(db, 'roles/students/' + userName + '/'), {
+    // push(ref(db, 'roles/students/' + userName + '/')),
     await set(ref(db, 'roles/students/' + userName + '/'), {
       userName: userName,
       userEmail: userEmail,
@@ -141,10 +141,10 @@ export default function RegistrationScreen({navigation}) {
       dateOfBirth: dateOfBirth,
       city: city,
     })
-      // .then(() => {
-      //   // Data saved successfully!
-      //   alert('Signed In!');
-      // })
+      .then(() => {
+        // Data saved successfully!
+        alert('Signed In!');
+      })
       .catch(error => {
         // The write failed...
         alert(error);
