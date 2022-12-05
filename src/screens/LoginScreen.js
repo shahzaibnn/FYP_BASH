@@ -7,14 +7,16 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import firebase from 'firebase/compat/app';
+
 import React, {useEffect, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {auth} from '@react-native-firebase/auth';
-import {db, authorization} from '../Firebase/Config';
+// import {auth} from '@react-native-firebase/auth';
+import {db, authorization, auth} from '../Firebase/Config';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 
 export default function LoginScreen({navigation}) {
@@ -37,12 +39,12 @@ export default function LoginScreen({navigation}) {
   }, []);
 
   const handleLogin = () => {
-    authorization
+    auth
       .signInWithEmailAndPassword(email, password)
       .then(user => {
         console.log(user);
         // If server response message same as Data Matched
-        if (user) navigation.replace('HomeScreen');
+        if (user) navigation.replace('Home');
       })
       .catch(error => {
         console.log(error);
