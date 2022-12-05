@@ -15,7 +15,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {auth} from '@react-native-firebase/auth';
 import {db, authorization} from '../Firebase/Config';
-// import {signInWithEmailAndPassword} from 'firebase/auth';
+import {signInWithEmailAndPassword} from 'firebase/auth';
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
