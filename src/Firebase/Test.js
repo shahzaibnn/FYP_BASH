@@ -17,8 +17,10 @@ export default function App() {
   const [email, setEmail] = useState('');
   const [item, setitem] = useState([]);
 
+  const userInput = 'insideanother';
   useEffect(() => {
-    return onValue(ref(db, '/roles/email/'), querySnapShot => {
+    return onValue(ref(db, '/roles/email/' + userInput), querySnapShot => {
+      // let data = querySnapShot.toJSON();
       let data = querySnapShot.val();
       const items = Object.values(data);
       setitem(items);
