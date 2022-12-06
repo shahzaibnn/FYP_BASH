@@ -23,7 +23,3 @@ export const db = getDatabase(app);
 //export const dbFirestore = getFirestore(app);
 
 // export {authorization};
-import 'firebase/compat/auth';
-const auth = firebase.auth(app);
-
-export {auth};

@@ -58,14 +58,14 @@ export default function App() {
     //   </Stack.Navigator>
     // </NavigationContainer>
 
-    // <Test />
+    <Test />
     // <RegistrationScreen />
 
     // <HomeScreen />
     // <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
-    <LoginScreen />
+    // <LoginScreen />
     // <StartScreen />
     // <ProfileScreen />
     // <ApplyToJob />
