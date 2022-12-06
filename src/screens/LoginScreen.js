@@ -17,9 +17,15 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // import {auth} from '@react-native-firebase/auth';
 import {db, authorization, auth} from '../Firebase/Config';
-import {signInWithEmailAndPassword} from 'firebase/auth';
-
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from 'firebase/auth';
+// import {useNavigation} from '@react-navigation/core';
+// import {useNavigation} from '@react-navigation/native';
 export default function LoginScreen({navigation}) {
+  // export default function LoginScreen() {
   const [email, setEmail] = useState('');
 
   const [password, setPassword] = useState('');
@@ -28,35 +34,43 @@ export default function LoginScreen({navigation}) {
 
   console.log(email);
   console.log(password);
-
+  // const navigation = useNavigation();
   useEffect(() => {
-    const unsubscribe = authorization.onAuthStateChanged(user => {
+    onAuthStateChanged(auth, user => {
       if (user) {
+        console.log('logged in');
         navigation.navigate('Home');
+      } else {
+        console.log('not logged in');
       }
+      // Check for user status
     });
-    return unsubscribe;
-  }, []);
 
-  const handleLogin = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then(user => {
-        console.log(user);
-        // If server response message same as Data Matched
-        if (user) navigation.replace('Home');
+    // const unsubscribe = auth.onAuthStateChanged(user => {
+    //   if (user) {
+    //     navigation.navigate('HomeScreen');
+    //   }
+    // }
+
+    // );
+    // return unsubscribe;
+  });
+
+  const handleLogin = e => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then(cred => {
+        console.log(cred);
+        console.log('success');
+        const user = cred.user;
+        console.log('Logged in as ', user.email);
       })
       .catch(error => {
-        console.log(error);
-        if (error.code === 'auth/invalid-email') setErrortext(error.message);
-        else if (error.code === 'auth/user-not-found')
-          setErrortext('No User Found');
-        else {
-          setErrortext('Please check your email id or password');
-        }
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
       });
   };
-
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
       {/* <Text>check</Text> */}
