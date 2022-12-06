@@ -17,9 +17,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // const authorization = firebase.auth(app);
-export const authorization = getAuth(app);
+// export const authorization = getAuth(app);
 //initizile database
 export const db = getDatabase(app);
 //export const dbFirestore = getFirestore(app);
 
 // export {authorization};
+import 'firebase/compat/auth';
+
+const auth = getAuth(app);
+export {auth};
