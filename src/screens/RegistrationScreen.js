@@ -15,10 +15,17 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {ref, set, update, onValue, remove, push} from 'firebase/database';
-import {db} from '../Firebase/Config';
+// import {db} from '../Firebase/Config';
 
 import {firebase} from '@react-native-firebase/database';
 import database from '@react-native-firebase/database';
+import {db, authorization, auth} from '../Firebase/Config';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from 'firebase/auth';
+
 export default function RegistrationScreen({navigation}) {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -128,28 +135,63 @@ export default function RegistrationScreen({navigation}) {
   //   );
   // }
 
-  async function createData() {
-    // const newKey = push(child(ref(database), 'users')).key;
-
-    // push(ref(db, 'roles/students/' + userName + '/')),
-    await set(ref(db, 'roles/students/' + userName + '/'), {
-      userName: userName,
-      userEmail: userEmail,
-      userPassword: userPassword,
-      contactNo: contactNo,
-      course: course,
-      dateOfBirth: dateOfBirth,
-      city: city,
-    })
-      .then(() => {
-        // Data saved successfully!
-        alert('Signed In!');
+  const handleSignUp = e => {
+    // e.preventDefault();
+    createUserWithEmailAndPassword(auth, userEmail, userPassword)
+      .then(cred => {
+        console.log(cred);
+        console.log('success');
+        const user = cred.user;
+        console.log('Logged in as ', user.userEmail);
+        //adding here so first the details are verified and then saved further
+        set(ref(db, 'roles/' + userName + '/'), {
+          userName: userName,
+          userEmail: userEmail,
+          userPassword: userPassword,
+          contactNo: contactNo,
+          course: course,
+          dateOfBirth: dateOfBirth,
+          city: city,
+        })
+          .then(() => {
+            // Data saved successfully!
+            alert('Signed In!');
+          })
+          .catch(error => {
+            // The write failed...
+            const errorMessage = error.message;
+            alert(errorMessage);
+          });
       })
       .catch(error => {
-        // The write failed...
-        alert(error);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorMessage);
+        // ..
       });
-  }
+  };
+  // async function createData() {
+  //   // const newKey = push(child(ref(database), 'users')).key;
+
+  //   // push(ref(db, 'roles/students/' + userName + '/')),
+  //   await set(ref(db, 'roles/students/' + userName + '/'), {
+  //     userName: userName,
+  //     userEmail: userEmail,
+  //     userPassword: userPassword,
+  //     contactNo: contactNo,
+  //     course: course,
+  //     dateOfBirth: dateOfBirth,
+  //     city: city,
+  //   })
+  //     .then(() => {
+  //       // Data saved successfully!
+  //       alert('Signed In!');
+  //     })
+  //     .catch(error => {
+  //       // The write failed...
+  //       alert(error);
+  //     });
+  // }
 
   return (
     <View
@@ -279,9 +321,10 @@ export default function RegistrationScreen({navigation}) {
           <TouchableOpacity
             style={styles.buttonStyle}
             activeOpacity={0.5}
-            onPress={createData}
-            // onPress={handleSubmitButton}
-          >
+            // onPress={createData}
+            onPress={() => {
+              handleSignUp();
+            }}>
             {/* <Button onPress={createData()} title="press"></Button> */}
             <Text style={styles.buttonTextStyle}>Sign Up</Text>
           </TouchableOpacity>
