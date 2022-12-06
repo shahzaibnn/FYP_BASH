@@ -44,21 +44,21 @@ export default function App() {
     //   </Stack.Navigator>
     // </NavigationContainer>
 
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //     screenOptions={{
-    //       headerShown: false,
-    //     }}>
-    //     <Stack.Screen name="Splash" component={SplashScreen} />
-    //     <Stack.Screen name="Start" component={StartScreen} />
-    //     <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-    //     <Stack.Screen name="Registration" component={RegistrationScreen} />
-    //     <Stack.Screen name="Login" component={LoginScreen} />
-    //     <Stack.Screen name="Home" component={HomeScreen} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Screen name="Start" component={StartScreen} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="Registration" component={RegistrationScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
 
-    <Test />
+    // <Test />
     // <RegistrationScreen />
 
     // <HomeScreen />
