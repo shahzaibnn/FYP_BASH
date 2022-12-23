@@ -29,25 +29,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-        <Stack.Screen name="Splash" component={SplashScreen} />
-        <Stack.Screen name="Start" component={StartScreen} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-        <Stack.Screen name="Registration" component={RegistrationScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
     // <NavigationContainer>
     //   <Stack.Navigator
     //     screenOptions={{
     //       headerShown: false,
     //     }}>
+    //     <Stack.Screen name="EditProfile" component={EditProfileScreen} />
     //     <Stack.Screen name="Splash" component={SplashScreen} />
     //     <Stack.Screen name="Start" component={StartScreen} />
     //     <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
@@ -56,6 +43,20 @@ export default function App() {
     //     <Stack.Screen name="Home" component={HomeScreen} />
     //   </Stack.Navigator>
     // </NavigationContainer>
+
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Screen name="Start" component={StartScreen} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="Registration" component={RegistrationScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
 
     // <Test />
     // <RegistrationScreen />

@@ -6,15 +6,27 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
-import {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ref, set, update, onValue, remove} from 'firebase/database';
 import {db, dbFirestore} from './Config';
 
 import firestore from '@react-native-firebase/firestore';
-
+import database from '@react-native-firebase/database';
 export default function App() {
   const [username, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [item, setitem] = useState([]);
+
+  const userInput = 'insideanother';
+  useEffect(() => {
+    return onValue(ref(db, '/roles/email/' + userInput), querySnapShot => {
+      // let data = querySnapShot.toJSON();
+      let data = querySnapShot.val();
+      const items = Object.values(data);
+      setitem(items);
+      console.log(items);
+    });
+  }, []);
 
   function createData() {
     // const newKey = push(child(ref(database), 'users')).key;
@@ -78,8 +90,10 @@ export default function App() {
         placeholder="Email"
         style={styles.textBoxes}></TextInput>
       {/* <Button onPress={createData} title="Submit Data"></Button> */}
+      <Text>{item}</Text>
+
       <TouchableOpacity>
-        <Text onPress={createData}>Submit Data </Text>
+        <Text>Submit Data </Text>
       </TouchableOpacity>
       <TouchableOpacity>
         <Text
