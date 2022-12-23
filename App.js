@@ -1,6 +1,6 @@
 import {View, Text} from 'react-native';
 import React from 'react';
-import RegistrationScreen from './src/screens/RegistrationScreen';
+import RegistrationScreenStudent from './src/screens/RegistrationScreenStudent';
 
 import ProfileScreen from './src/screens/ProfileScreen';
 
@@ -25,6 +25,7 @@ import Test from './src/Firebase/Test';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import MyTabs from './src/screens/tabs';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -52,7 +53,7 @@ export default function App() {
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Start" component={StartScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-        <Stack.Screen name="Registration" component={RegistrationScreen} />
+        <Stack.Screen name="Registration" component={MyTabs} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>

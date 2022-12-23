@@ -26,21 +26,35 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 
-export default function RegistrationScreen({navigation}) {
+import {NavigationContainer} from '@react-navigation/native';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import SettingsScreen from './SettingsScreen';
+import CreatePostScreen from './CreatePostScreen';
+
+const Tab = createMaterialTopTabNavigator();
+
+export default function RegistrationScreenFaculty({navigation}) {
   const [userName, setUserName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+
   const [userPassword, setUserPassword] = useState('');
+
   const [contactNo, setcontactNo] = useState('');
-  const [course, setcourse] = useState('');
+
+  const [batch, setbatch] = useState('');
+
   const [dateOfBirth, setdateOfBirth] = useState('09-10-2020');
-  const [city, setCity] = useState('');
+
+  // const [city, setCity] = useState('');
 
   // const [userAge, setUserAge] = useState('');
   // const [userAddress, setUserAddress] = useState('');
   // const [loading, setLoading] = useState(false);
+
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-  const [visible, setVisibility] = React.useState(false);
+  const [visible, setVisibility] = useState(false);
 
   // const handleSubmitButton = () => {
   //   setErrortext('');
@@ -145,13 +159,20 @@ export default function RegistrationScreen({navigation}) {
         console.log('Logged in as ', user.userEmail);
         //adding here so first the details are verified and then saved further
         set(ref(db, 'roles/' + userName + '/'), {
-          userName: userName,
+          firstName: userName,
+          lastName: lastName,
           userEmail: userEmail,
           userPassword: userPassword,
           contactNo: contactNo,
-          course: course,
           dateOfBirth: dateOfBirth,
-          city: city,
+          pic: '',
+          title: '',
+          description: '',
+          skills: ['java', 'React'],
+          cv: '',
+          experience: [{organization: 'one'}, {organization: 'two'}],
+          postsId: ['1'],
+          appliedJobId: ['1'],
         })
           .then(() => {
             // Data saved successfully!
@@ -207,21 +228,14 @@ export default function RegistrationScreen({navigation}) {
           alignContent: 'center',
         }}>
         <View style={styles.Header}>
-          {/* <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <FontAwesome
-              name="chevron-left"
-              style={styles.back}
-              size={20}
-              color="black"
-            />
-          </TouchableOpacity> */}
           <TouchableOpacity
-            style={{position: 'absolute', left: '5%', top: '40%'}}
+            style={{position: 'absolute', left: '5%'}}
             onPress={() => navigation.navigate('Login')}>
             <AntDesign name="leftcircle" size={32} color="#777777" />
           </TouchableOpacity>
-          <Text style={styles.titleText}>Sign Up</Text>
+          <Text style={styles.titleText}>Faculty Sign Up</Text>
         </View>
+
         <KeyboardAvoidingView enabled>
           <View style={styles.SectionStyle}>
             <FontAwesome
@@ -235,12 +249,24 @@ export default function RegistrationScreen({navigation}) {
               style={styles.inputStyle}
               value={userName}
               onChangeText={userName => setUserName(userName)}
-              // onChangeText={this.setState({userName: userName})}
-              placeholder="Enter Name"
+              placeholder="Enter First Name"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
             />
           </View>
+
+          <View style={styles.SectionStyle}>
+            <FontAwesome name="user-circle-o" style={styles.icon} size={15} />
+            <TextInput
+              style={styles.inputStyle}
+              value={lastName}
+              onChangeText={lastName => setLastName(lastName)}
+              placeholder="Enter Last Name"
+              placeholderTextColor="#6A6A6A"
+              blurOnSubmit={false}
+            />
+          </View>
+
           <View style={styles.SectionStyle}>
             <FontAwesome
               name="envelope-o"
@@ -280,19 +306,21 @@ export default function RegistrationScreen({navigation}) {
             <TextInput
               value={contactNo}
               style={styles.inputStyle}
+              keyboardType="numeric"
               onChangeText={contactNo => setcontactNo(contactNo)}
               placeholder="Enter Contact Number"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
+              maxLength={11}
             />
           </View>
           <View style={styles.SectionStyle}>
             <FontAwesome name="book" style={styles.icon} size={15} />
             <TextInput
-              value={course}
+              value={batch}
               style={styles.inputStyle}
-              onChangeText={course => setcourse(course)}
-              placeholder="Enter Course Name"
+              onChangeText={batch => setbatch(batch)}
+              placeholder="Batch"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
             />
@@ -308,7 +336,7 @@ export default function RegistrationScreen({navigation}) {
               blurOnSubmit={false}
             />
           </View>
-          <View style={styles.SectionStyle}>
+          {/* <View style={styles.SectionStyle}>
             <FontAwesome name="map-marker" style={styles.icon} size={15} />
             <TextInput
               style={styles.inputStyle}
@@ -317,7 +345,7 @@ export default function RegistrationScreen({navigation}) {
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
             />
-          </View>
+          </View> */}
           <TouchableOpacity
             style={styles.buttonStyle}
             activeOpacity={0.5}
@@ -357,6 +385,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: '3%',
   },
   RegisteredUser: {
     flexDirection: 'row',
@@ -381,9 +410,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   titleText: {
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: 'bold',
-    marginTop: 25,
+    // marginTop: 25,
     marginBottom: 10,
     color: '#5BA199',
   },

@@ -35,26 +35,26 @@ export default function LoginScreen({navigation}) {
   console.log(email);
   console.log(password);
   // const navigation = useNavigation();
-  useEffect(() => {
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        console.log('logged in');
-        navigation.navigate('Home');
-      } else {
-        console.log('not logged in');
-      }
-      // Check for user status
-    });
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, user => {
+  //     if (user) {
+  //       // console.log('logged in');
+  //       // navigation.navigate('Home');
+  //     } else {
+  //       console.log('not logged in');
+  //     }
+  //     // Check for user status
+  //   });
 
-    // const unsubscribe = auth.onAuthStateChanged(user => {
-    //   if (user) {
-    //     navigation.navigate('HomeScreen');
-    //   }
-    // }
+  // const unsubscribe = auth.onAuthStateChanged(user => {
+  //   if (user) {
+  //     navigation.navigate('HomeScreen');
+  //   }
+  // }
 
-    // );
-    // return unsubscribe;
-  });
+  // );
+  // return unsubscribe;
+  // });
 
   const handleLogin = e => {
     e.preventDefault();
@@ -64,6 +64,7 @@ export default function LoginScreen({navigation}) {
         console.log('success');
         const user = cred.user;
         console.log('Logged in as ', user.email);
+        navigation.navigate('Home');
       })
       .catch(error => {
         const errorCode = error.code;
