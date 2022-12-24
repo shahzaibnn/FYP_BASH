@@ -1,21 +1,81 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import RegistrationScreenAlumni from './RegistrationScreenAlumni';
 import RegistrationScreenFaculty from './RegistrationScreenFaculty';
 import RegistrationScreenStudent from './RegistrationScreenStudent';
 import MyTabBar from './tabBarChecking';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import React from 'react';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function MyTabs() {
   return (
-    <Tab.Navigator
-      //   screenOptions={{
-      //     tabBarStyle: {backgroundColor: 'orange'},
-      //   }}
-      tabBar={props => <MyTabBar {...props} />}>
-      <Tab.Screen name="Student" component={RegistrationScreenStudent} />
-      <Tab.Screen name="Faculty" component={RegistrationScreenFaculty} />
-      <Tab.Screen name="Alumni" component={RegistrationScreenAlumni} />
-    </Tab.Navigator>
+    // <View>
+    <>
+      <View style={styles.Header}>
+        <TouchableOpacity
+          style={{position: 'absolute', left: '5%'}}
+          onPress={() => navigation.navigate('Login')}>
+          <AntDesign name="leftcircle" size={32} color="#777777" />
+        </TouchableOpacity>
+        <Text style={styles.titleText}>Register Here</Text>
+      </View>
+
+      <Tab.Navigator
+        initialRouteName="Student"
+        screenOptions={{
+          tabBarActiveTintColor: 'white',
+          tabBarInActiveTintColor: '#E5E3E4',
+          tabBarBounces: true,
+          tabBarLabelStyle: {fontSize: 12},
+          tabBarStyle: {backgroundColor: '#469597'},
+        }}
+        // tabBar={props => <MyTabBar {...props} />}
+      >
+        <Tab.Screen name="Student" component={RegistrationScreenStudent} />
+        <Tab.Screen name="Faculty" component={RegistrationScreenFaculty} />
+        <Tab.Screen name="Alumni" component={RegistrationScreenAlumni} />
+      </Tab.Navigator>
+    </>
   );
 }
+const styles = StyleSheet.create({
+  SectionStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 50,
+    backgroundColor: 'white',
+    borderRadius: 12,
+    marginTop: 15,
+    marginLeft: 25,
+    marginRight: 25,
+    margin: 10,
+  },
+  Header: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // marginTop: '3%',
+    backgroundColor: '#E5E3E4',
+  },
+  titleText: {
+    fontSize: 30,
+    // fontSize: 32,
+    fontWeight: 'bold',
+    // fontStyle: 'italic',
+    // textAlign: 'center',
+    marginTop: '2%',
+    marginLeft: '4%',
+    marginBottom: '4%',
+    color: '#5BA199',
+  },
+});
