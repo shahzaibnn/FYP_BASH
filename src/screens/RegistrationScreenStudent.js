@@ -158,7 +158,7 @@ export default function RegistrationScreenStudent({navigation}) {
         const user = cred.user;
         console.log('Logged in as ', user.userEmail);
         //adding here so first the details are verified and then saved further
-        set(ref(db, 'roles/' + userName + '/'), {
+        push(ref(db, 'roles/students/'), {
           firstName: userName,
           lastName: lastName,
           userEmail: userEmail,
@@ -176,7 +176,7 @@ export default function RegistrationScreenStudent({navigation}) {
         })
           .then(() => {
             // Data saved successfully!
-            alert('Signed In!');
+            alert('Registered!');
           })
           .catch(error => {
             // The write failed...
