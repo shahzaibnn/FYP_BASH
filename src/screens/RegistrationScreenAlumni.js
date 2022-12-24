@@ -227,14 +227,14 @@ export default function RegistrationScreenAlumni({navigation}) {
           justifyContent: 'center',
           alignContent: 'center',
         }}>
-        <View style={styles.Header}>
+        {/* <View style={styles.Header}>
           <TouchableOpacity
             style={{position: 'absolute', left: '5%'}}
             onPress={() => navigation.navigate('Login')}>
             <AntDesign name="leftcircle" size={32} color="#777777" />
           </TouchableOpacity>
           <Text style={styles.titleText}>Alumni Sign Up</Text>
-        </View>
+        </View> */}
 
         <KeyboardAvoidingView enabled>
           <View style={styles.SectionStyle}>
@@ -391,6 +391,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: '5%',
   },
   buttonStyle: {
     backgroundColor: '#469597',
