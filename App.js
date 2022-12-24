@@ -51,6 +51,7 @@ export default function App() {
           headerShown: false,
         }}>
         {/* <Stack.Screen name="ViewJob" component={ViewJob} /> */}
+        <Stack.Screen name="test" component={Test} />
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Start" component={StartScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />

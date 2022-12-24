@@ -18,15 +18,15 @@ export default function App() {
   const [item, setitem] = useState([]);
 
   const userInput = 'insideanother';
-  useEffect(() => {
-    return onValue(ref(db, '/roles/email/' + userInput), querySnapShot => {
-      // let data = querySnapShot.toJSON();
-      let data = querySnapShot.val();
-      const items = Object.values(data);
-      setitem(items);
-      console.log(items);
-    });
-  }, []);
+  // useEffect(() => {
+  //   return onValue(ref(db, '/roles/email/' + userInput), querySnapShot => {
+  //     // let data = querySnapShot.toJSON();
+  //     let data = querySnapShot.val();
+  //     const items = Object.values(data);
+  //     setitem(items);
+  //     console.log(items);
+  //   });
+  // }, []);
 
   function createData() {
     // const newKey = push(child(ref(database), 'users')).key;
@@ -63,11 +63,11 @@ export default function App() {
   }
 
   function readData() {
-    // const starCountRef = ref(db, 'users/' + username);
-    // onValue(starCountRef, snapshot => {
-    //   const data = snapshot.val();
-    //   setEmail(data.email);
-    // });
+    const starCountRef = ref(db, 'roles/students/Shahzaib');
+    onValue(starCountRef, snapshot => {
+      const data = snapshot.val();
+      setEmail(data.userEmail);
+    });
   }
 
   function deleteData() {
@@ -92,16 +92,11 @@ export default function App() {
       {/* <Button onPress={createData} title="Submit Data"></Button> */}
       <Text>{item}</Text>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={readData}>
         <Text>Submit Data </Text>
       </TouchableOpacity>
       <TouchableOpacity>
-        <Text
-          onClick={() => {
-            console.log('submitted');
-          }}>
-          hi
-        </Text>
+        <Text>hi</Text>
       </TouchableOpacity>
     </View>
   );
