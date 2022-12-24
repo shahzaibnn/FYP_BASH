@@ -50,6 +50,7 @@ export default function App() {
         screenOptions={{
           headerShown: false,
         }}>
+        {/* <Stack.Screen name="ViewJob" component={ViewJob} /> */}
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Start" component={StartScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />

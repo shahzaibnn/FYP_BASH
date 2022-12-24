@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {user, jobs, posts, experience} from '../model/data';
+
 // const actionSheetRef = createRef();
 const ViewJob = () => {
   let actionSheet = createRef();
@@ -29,15 +30,19 @@ const ViewJob = () => {
       <TouchableOpacity onPress={show}>
         <Text>Open ActionSheet</Text>
       </TouchableOpacity>
+
       <ActionSheet
+        // id={sheetId}
         ref={actionSheet}
-        // title={'what'}
-        // options={optionsArray}
-        // onPress={index => {
-        //   alert(optionsArray[index]);
-        // }
-        // }
-      >
+        containerStyle={{
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+          backgroundColor: '#E5E3E4',
+        }}
+        indicatorStyle={{
+          width: 100,
+        }}
+        gestureEnabled={true}>
         <View>
           {/* action sheet */}
           <ScrollView style={styles.SectionStyle}>
@@ -276,10 +281,12 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#E5E3E4',
-    height: Dimensions.get('window').height * 0.5,
-    borderRadius: 1200,
+    height: 100,
+    width: 100,
+    borderRadius: 64,
     borderWidth: 10,
     resizeMode: 'cover',
+    alignSelf: 'center',
     // marginTop: -20,
   },
   Header: {
