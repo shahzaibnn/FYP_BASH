@@ -30,6 +30,7 @@ export default function MyTabs() {
       </View>
 
       <Tab.Navigator
+        style={styles.nav}
         initialRouteName="Student"
         screenOptions={{
           // headerShown: false,
@@ -67,6 +68,9 @@ export default function MyTabs() {
   );
 }
 const styles = StyleSheet.create({
+  nav: {
+    backgroundColor: '#E5E3E4',
+  },
   SectionStyle: {
     flexDirection: 'row',
     justifyContent: 'center',
