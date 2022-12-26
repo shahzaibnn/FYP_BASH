@@ -33,27 +33,18 @@ export default function MyTabs() {
         style={styles.nav}
         initialRouteName="Student"
         screenOptions={{
-          // headerShown: false,
           tabBarActiveTintColor: 'white',
           tabBarInActiveTintColor: '#E5E3E4',
           tabBarBounces: true,
           tabBarLabelStyle: {fontSize: 12},
-          // tabBarStyle: {backgroundColor: '#469597'},
           tabBarStyle: {
             backgroundColor: '#469597',
-            // paddingTop: 7,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
             borderBottomRightRadius: 24,
             borderBottomLeftRadius: 24,
             marginRight: '2%',
             marginLeft: '2%',
-            // marginTop: -20,
-            // marginBottom: 40,
-
-            // borderLeftWidth: 0.2,
-            // borderRightWidth: 0.2,
-            // position: 'absolute',
             overflow: 'hidden',
           },
         }}
