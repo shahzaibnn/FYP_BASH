@@ -21,6 +21,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DropDownPicker from 'react-native-dropdown-picker';
 import FileViewer from 'react-native-file-viewer';
 import ImageModal from 'react-native-image-modal';
+import RNSmtpMailer from 'react-native-smtp-mailer';
 
 const ApplyToJob = () => {
   const [name, setName] = useState('');
@@ -33,10 +34,63 @@ const ApplyToJob = () => {
     {label: 'Pakistan', value: 'pakistan'},
     {label: 'USA', value: 'usa'},
   ]);
-  const [singleFile, setSingleFile] = useState();
+  // const [singleFile, setSingleFile] = useState();
+  const [singleFile, setSingleFile] = useState([]);
   const [uploaded, setUploaded] = useState(false);
   const [fileName, setfileName] = useState(false);
   const [message, setMessage] = useState(false);
+
+  // var convertStringToArray = JSON.parse(singleFile);
+  const sendEmail = async () => {
+    const ar = singleFile.split('//');
+    const arr = Object.values(ar);
+    console.log(typeof arr);
+    console.log('checking');
+    console.log(arr[1]);
+    RNSmtpMailer.sendMail({
+      mailhost: 'smtp.gmail.com',
+      port: '465',
+      ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
+      username: 'bashfyp@gmail.com',
+      password: 'ltdapqlallccrgss',
+      // fromName: 'Some Name', // optional
+      // replyTo: 'usernameEmail', // optional
+      recipients: 'habibafaisal8@gmail.com',
+      // bcc: ['bccEmail1', 'bccEmail2'], // optional
+      subject: 'AGAIN UGH',
+      htmlBody: '<h1>header</h1><p>Helloooooo</p>',
+      //   attachmentPaths: ['/FYP_BASH/bash_icon.png'],
+      attachmentPaths: arr[1],
+      // attachmentPaths: require('../assets/images/bash_icon.png'),
+      // [
+      // RNFS. + '/FYP_BASH/a.txt',
+      // RNFS.ExternalStorageDirectoryPath + '/FYP_BASH/a.txt',
+      // RNFS.ExternalDirectoryPath + 'FYP_BASH/src/assets/images/bash_icon.png',
+      // ]
+      attachmentNames: ['a.pdf'], //only used in android, these are renames of original files. in ios filenames will be same as specified in path. In ios-only application, leave it empty: attachmentNames:[]
+      //   attachmentTypes: ['img'],
+
+      //   attachmentPaths: [
+      //     RNFS.ExternalDirectoryPath + '/image.jpg',
+      //     // RNFS.DocumentDirectoryPath + '/test.txt',
+      //     // RNFS.DocumentDirectoryPath + '/test2.csv',
+      //     // RNFS.DocumentDirectoryPath + '/pdfFile.pdf',
+      //     // RNFS.DocumentDirectoryPath + '/zipFile.zip',
+      //     // RNFS.DocumentDirectoryPath + '/image.png',
+      //   ], // optional
+      //   attachmentNames: [
+      //     'image.jpg',
+      //     // 'firstFile.txt',
+      //     // 'secondFile.csv',
+      //     // 'pdfFile.pdf',
+      //     // 'zipExample.zip',
+      //     // 'pngImage.png',
+      //   ], // required in android, these are renames of original files. in ios filenames will be same as specified in path. In a ios-only application, no need to define it
+    })
+      .then(success => console.log(success))
+      .catch(err => console.log(err));
+  };
+
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
@@ -188,8 +242,7 @@ const ApplyToJob = () => {
         <TouchableOpacity
           style={styles.buttonStyle}
           // activeOpacity={0.5}
-          // onPress={handleSubmitButton}
-        >
+          onPress={sendEmail}>
           <Text style={styles.buttonTextStyle}>Apply</Text>
         </TouchableOpacity>
         {/* <Image source={{uri: source}} /> */}
