@@ -23,6 +23,8 @@ import EditProfileScreen from './src/screens/EditProfileScreen';
 
 import TestReg from './src/screens/TestReg';
 import Test from './src/Firebase/Test';
+// import Email from './src/screens/TestEmail';
+import Email from './src/screens/Email';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -62,9 +64,12 @@ export default function App() {
     //   </Stack.Navigator>
     // </NavigationContainer>
 
-    <NavigationContainer>
-      <MyTabs />
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <MyTabs />
+    // </NavigationContainer>
+
+    // Testing email
+    // <Email />
 
     // <Test />
     // <RegistrationScreen />
@@ -77,7 +82,7 @@ export default function App() {
     // <LoginScreen />
     // <StartScreen />
     // <ProfileScreen />
-    // <ApplyToJob />
+    <ApplyToJob />
     // <ViewJob />
     // <ExplorePage />
     // <Test />
