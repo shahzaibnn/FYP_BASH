@@ -5,14 +5,23 @@ import React, {Component} from 'react';
 
 export default class App extends Component {
   sendEmail = () => {
-    // console.log(RNFS.readDir(RNFS.MainBundlePath));
+    console.log(RNFS.readFileAssets(RNFS.DownloadDirectoryPath));
     console.log(RNFS.DownloadDirectoryPath);
 
-    var path = RNFS.DownloadDirectoryPath + '/hiiiiiiiiiiii.txt';
+    var path = RNFS.DownloadDirectoryPath + '/check.pdf';
     // write the file
     RNFS.writeFile(path, 'Lorem ipsum dolor sit amet', 'utf8')
       .then(success => {
         console.log('FILE WRITTEN!');
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+    var path2 = RNFS.DownloadDirectoryPath + '/Case-study.docx';
+
+    RNFS.readFile(path2, 'base64')
+      .then(success => {
+        console.log('Read!');
       })
       .catch(err => {
         console.log(err.message);
@@ -27,40 +36,17 @@ export default class App extends Component {
       // replyTo: 'usernameEmail', // optional
       recipients: 'habibafaisal8@gmail.com',
       // bcc: ['bccEmail1', 'bccEmail2'], // optional
-      bcc: ['shahzaibnn@gmail.com'], // optional
-      subject: 'testinggggg',
+      // bcc: ['shahzaibnn@gmail.com'], // optional
+      subject: 'Let me know if it works',
       htmlBody: '<h1>header</h1><p>Helloooooo</p>',
-      //   attachmentPaths: ['/FYP_BASH/bash_icon.png'],
-      attachmentPaths: [
-        // RNFS. + '/FYP_BASH/a.txt',
-        // RNFS.DocumentDirectoryPath + '/image6.pdf',
-        RNFS.DownloadDirectoryPath + '/hiiiiiiiiiiii.txt',
-        // RNFS.ExternalDirectoryPath + 'FYP_BASH/src/assets/images/bash_icon.png',
-      ],
-      attachmentNames: ['hiiiiiiiiiiii.txt'], //only used in android, these are renames of original files. in ios filenames will be same as specified in path. In ios-only application, leave it empty: attachmentNames:[]
-      //   attachmentTypes: ['img'],
 
-      //   //   attachmentPaths: [
-      //   //     RNFS.ExternalDirectoryPath + '/image.jpg',
-      //   //     // RNFS.DocumentDirectoryPath + '/test.txt',
-      //   //     // RNFS.DocumentDirectoryPath + '/test2.csv',
-      //   //     // RNFS.DocumentDirectoryPath + '/pdfFile.pdf',
-      //   //     // RNFS.DocumentDirectoryPath + '/zipFile.zip',
-      //   //     // RNFS.DocumentDirectoryPath + '/image.png',
-      //   //   ], // optional
-      //   //   attachmentNames: [
-      //   //     'image.jpg',
-      //   //     // 'firstFile.txt',
-      //   //     // 'secondFile.csv',
-      //   //     // 'pdfFile.pdf',
-      //   //     // 'zipExample.zip',
-      //   //     // 'pngImage.png',
-      //   //   ], // required in android, these are renames of original files. in ios filenames will be same as specified in path. In a ios-only application, no need to define it
+      attachmentPaths: [path],
+      attachmentNames: ['test'], //only used in android, these are renames of original files. in ios filenames will be same as specified in path. In ios-only application, leave it empty: attachmentNames:[]
+      //   attachmentTypes: ['img'],
     })
       .then(success => console.log(success))
       .catch(err => console.log(err));
   };
-
   render() {
     return (
       <View style={styles.container}>
