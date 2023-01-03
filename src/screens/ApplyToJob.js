@@ -41,14 +41,8 @@ const ApplyToJob = () => {
   const [fileName, setfileName] = useState(false);
   const [message, setMessage] = useState(false);
 
-  // var convertStringToArray = JSON.parse(singleFile);
   const sendEmail = async () => {
-    // const ar = singleFile.split('//');
-    // const arr = Object.values(ar);
-    // console.log(typeof arr);
-    // console.log('checking');
-    // console.log(arr[1]);
-    var path = RNFS.DownloadDirectoryPath + '/CV.pdf';
+    var path = RNFS.DownloadDirectoryPath + '/test.pdf';
     // write the file
     RNFS.copyFile(singleFile, path)
       .then(success => {
@@ -68,38 +62,10 @@ const ApplyToJob = () => {
       recipients: 'habibafaisal8@gmail.com',
       // bcc: ['bccEmail1', 'bccEmail2'], // optional
       bcc: ['shahzaibnn@gmail.com'], // optional
-      subject: 'CV',
-      htmlBody: '<h1>header</h1><p>Helloooooo</p>',
-      //   attachmentPaths: ['/FYP_BASH/bash_icon.png'],
-      // attachmentPaths: arr[1],
-      // attachmentPaths: [arr[1]],
-      // attachmentPaths: [singleFile],
+      subject: 'Testing after code cleaning',
+      htmlBody: '<h1>header</h1><p>Report Submission</p>',
       attachmentPaths: [path],
-      // attachmentPaths: require('../assets/images/bash_icon.png'),
-      // [
-      // RNFS. + '/FYP_BASH/a.txt',
-      // RNFS.ExternalStorageDirectoryPath + '/FYP_BASH/a.txt',
-      // RNFS.ExternalDirectoryPath + 'FYP_BASH/src/assets/images/bash_icon.png',
-      // ]
-      attachmentNames: ['CV_TEST.pdf'], //only used in android, these are renames of original files. in ios filenames will be same as specified in path. In ios-only application, leave it empty: attachmentNames:[]
-      //   attachmentTypes: ['img'],
-
-      //   attachmentPaths: [
-      //     RNFS.ExternalDirectoryPath + '/image.jpg',
-      //     // RNFS.DocumentDirectoryPath + '/test.txt',
-      //     // RNFS.DocumentDirectoryPath + '/test2.csv',
-      //     // RNFS.DocumentDirectoryPath + '/pdfFile.pdf',
-      //     // RNFS.DocumentDirectoryPath + '/zipFile.zip',
-      //     // RNFS.DocumentDirectoryPath + '/image.png',
-      //   ], // optional
-      //   attachmentNames: [
-      //     'image.jpg',
-      //     // 'firstFile.txt',
-      //     // 'secondFile.csv',
-      //     // 'pdfFile.pdf',
-      //     // 'zipExample.zip',
-      //     // 'pngImage.png',
-      //   ], // required in android, these are renames of original files. in ios filenames will be same as specified in path. In a ios-only application, no need to define it
+      attachmentNames: ['anotherTest.pdf'],
     })
       .then(success => console.log(success))
       .catch(err => console.log(err));
