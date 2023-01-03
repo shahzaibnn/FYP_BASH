@@ -7,7 +7,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {ref, set, update, onValue, remove} from 'firebase/database';
+import {
+  ref,
+  set,
+  update,
+  onValue,
+  remove,
+  orderByChild,
+  query,
+  limitToLast,
+  equalTo,
+  limitToFirst,
+} from 'firebase/database';
 import {db, dbFirestore} from './Config';
 
 import firestore from '@react-native-firebase/firestore';
@@ -16,6 +27,7 @@ export default function App() {
   const [username, setName] = useState('');
   const [email, setEmail] = useState('');
   const [item, setitem] = useState([]);
+  const [values, setValues] = useState('No Value');
 
   const userInput = 'insideanother';
   // useEffect(() => {
@@ -63,11 +75,56 @@ export default function App() {
   }
 
   function readData() {
-    const starCountRef = ref(db, 'roles/students/Shahzaib');
-    onValue(starCountRef, snapshot => {
+    const recentPostsRef = query(ref(db, 'roles/students'), limitToFirst(1));
+    // console.log(Object.values(recentPostsRef));
+
+    const topUserPostsRef = query(
+      ref(db, 'roles/students'),
+      orderByChild('userEmail'),
+    );
+
+    onValue(recentPostsRef, snapshot => {
       const data = snapshot.val();
-      setEmail(data.userEmail);
+      console.log(data);
+      // console.log(starCountRef);
+      // setEmail(data.userEmail);
+      // setValues(Object.values(data));
     });
+
+    // const starCountRef = ref(db, 'roles/students');
+
+    // orderByChild(starCountRef, snapshot => {
+    //   const data = snapshot.val();
+    //   console.log(data);
+    //   console.log(starCountRef);
+    //   // setEmail(data.userEmail);
+    //   // setValues(Object.values(data));
+    // });
+
+    // onValue(starCountRef, snapshot => {
+    //   const data = snapshot.val();
+    //   console.log(data);
+    //   console.log(starCountRef);
+    //   // setEmail(data.userEmail);
+    //   // setValues(Object.values(data));
+    // });
+
+    // const refer = ref(db, 'roles/students/');
+
+    // var query = orderByChild('userEmail');
+    // var query2 = equalTo('shahzaibnn@gmail.com');
+
+    // console.log(query);
+
+    // const refer = ref(db, 'roles/students/');
+    // // var ref = ref(db, 'roles/students/');
+    // var query = refer.orderByChild('userEmail').equalTo('shahzaibnn@gmail.com');
+
+    // query.once('value', function (snapshot) {
+    //   snapshot.forEach(function (child) {
+    //     console.log(child.key, child.val().contactNo);
+    //   });
+    // });
   }
 
   function deleteData() {
@@ -93,11 +150,10 @@ export default function App() {
       <Text>{item}</Text>
 
       <TouchableOpacity onPress={readData}>
-        <Text>Submit Data </Text>
+        <Text>Submit Data</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Text>hi</Text>
-      </TouchableOpacity>
+
+      <Text>{values}</Text>
     </View>
   );
 }
