@@ -22,6 +22,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import FileViewer from 'react-native-file-viewer';
 import ImageModal from 'react-native-image-modal';
 import RNSmtpMailer from 'react-native-smtp-mailer';
+import RNFS from 'react-native-fs';
 
 const ApplyToJob = () => {
   const [name, setName] = useState('');
@@ -42,11 +43,20 @@ const ApplyToJob = () => {
 
   // var convertStringToArray = JSON.parse(singleFile);
   const sendEmail = async () => {
-    const ar = singleFile.split('//');
-    const arr = Object.values(ar);
-    console.log(typeof arr);
-    console.log('checking');
-    console.log(arr[1]);
+    // const ar = singleFile.split('//');
+    // const arr = Object.values(ar);
+    // console.log(typeof arr);
+    // console.log('checking');
+    // console.log(arr[1]);
+    var path = RNFS.DownloadDirectoryPath + '/CV.pdf';
+    // write the file
+    RNFS.copyFile(singleFile, path)
+      .then(success => {
+        console.log('worksss!');
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
     RNSmtpMailer.sendMail({
       mailhost: 'smtp.gmail.com',
       port: '465',
@@ -57,17 +67,21 @@ const ApplyToJob = () => {
       // replyTo: 'usernameEmail', // optional
       recipients: 'habibafaisal8@gmail.com',
       // bcc: ['bccEmail1', 'bccEmail2'], // optional
-      subject: 'AGAIN UGH',
+      bcc: ['shahzaibnn@gmail.com'], // optional
+      subject: 'CV',
       htmlBody: '<h1>header</h1><p>Helloooooo</p>',
       //   attachmentPaths: ['/FYP_BASH/bash_icon.png'],
-      attachmentPaths: arr[1],
+      // attachmentPaths: arr[1],
+      // attachmentPaths: [arr[1]],
+      // attachmentPaths: [singleFile],
+      attachmentPaths: [path],
       // attachmentPaths: require('../assets/images/bash_icon.png'),
       // [
       // RNFS. + '/FYP_BASH/a.txt',
       // RNFS.ExternalStorageDirectoryPath + '/FYP_BASH/a.txt',
       // RNFS.ExternalDirectoryPath + 'FYP_BASH/src/assets/images/bash_icon.png',
       // ]
-      attachmentNames: ['a.pdf'], //only used in android, these are renames of original files. in ios filenames will be same as specified in path. In ios-only application, leave it empty: attachmentNames:[]
+      attachmentNames: ['CV_TEST.pdf'], //only used in android, these are renames of original files. in ios filenames will be same as specified in path. In ios-only application, leave it empty: attachmentNames:[]
       //   attachmentTypes: ['img'],
 
       //   attachmentPaths: [
