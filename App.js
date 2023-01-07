@@ -75,14 +75,14 @@ export default function App() {
     // <RegistrationScreen />
     // <TestReg></TestReg>
 
-    // <HomeScreen />
+    <HomeScreen />
     // <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
     // <LoginScreen />
     // <StartScreen />
     // <ProfileScreen />
-    <ApplyToJob />
+    // <ApplyToJob />
     // <ViewJob />
     // <ExplorePage />
     // <Test />

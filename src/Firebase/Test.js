@@ -74,21 +74,29 @@ export default function App() {
       });
   }
 
-  function readData() {
+  const readData = () => {
     const recentPostsRef = query(ref(db, 'roles/students'), limitToFirst(1));
     // console.log(Object.values(recentPostsRef));
+
+    // const topUserPostsRef = query(
+    //   ref(db, 'roles/students'),
+    //   orderByValue('userEmail'),
+    // );
 
     const topUserPostsRef = query(
       ref(db, 'roles/students'),
       orderByChild('userEmail'),
+      // equalTo(emailAddressOfCurrentUser),
+      // onValue('userEmail'),
     );
 
-    onValue(recentPostsRef, snapshot => {
+    onValue(topUserPostsRef, snapshot => {
       const data = snapshot.val();
       console.log(data);
-      // console.log(starCountRef);
-      // setEmail(data.userEmail);
-      // setValues(Object.values(data));
+      // console.log(data.key);
+      snapshot.forEach(function (data) {
+        console.log(data.val().experience);
+      });
     });
 
     // const starCountRef = ref(db, 'roles/students');
@@ -125,7 +133,7 @@ export default function App() {
     //     console.log(child.key, child.val().contactNo);
     //   });
     // });
-  }
+  };
 
   function deleteData() {
     remove(ref(db, 'users/' + username));

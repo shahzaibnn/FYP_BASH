@@ -7,12 +7,25 @@ import {
   FlatList,
   Dimensions,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import {profile, jobs, posts} from '../model/data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import {
+  ref,
+  set,
+  update,
+  onValue,
+  remove,
+  orderByChild,
+  query,
+  limitToLast,
+  equalTo,
+  limitToFirst,
+  orderByValue,
+} from 'firebase/database';
+import {db, dbFirestore} from '../Firebase/Config';
 import {SliderBox} from 'react-native-image-slider-box';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -20,16 +33,55 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function HomeScreen() {
   const profileName = 'Tony';
+  const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
+  const [currentUserPostsId, setCurrentUserPostsId] = useState([]);
+
+  const readData = () => {
+    const topUserPostsRef = query(
+      ref(db, 'roles/students'),
+      orderByChild('userEmail'),
+      equalTo(emailAddressOfCurrentUser),
+    );
+
+    onValue(topUserPostsRef, snapshot => {
+      // const data = snapshot.val().postsId;
+      // console.log(data);
+      console.log('Posts Ids Are: ');
+      // console.log(snapshot.toJSON());
+      snapshot.forEach(function (data) {
+        console.log(data.val().postsId);
+        console.log(data);
+
+        setCurrentUserPostsId(...currentUserPostsId, data.val().postsId);
+      });
+    });
+  };
+
+  const readDataOfPosts = () => {
+    const topUserPostsRef = query(ref(db, 'Posts'));
+
+    onValue(topUserPostsRef, snapshot => {
+      // const data = snapshot.val().postsId;
+      // console.log(data);
+      snapshot.forEach(function (data) {
+        if (!currentUserPostsId.includes(data.key)) {
+          console.log('Posts Id is: ', data.key);
+
+          console.log(data);
+        }
+      });
+    });
+  };
+
+  useEffect(() => {
+    readData();
+  }, []);
+
   return (
-    <ScrollView
-      // horizontal
-      // scrollEnabled={false}
-      // nestedScrollEnabled={true}
-      // showsVerticalScrollIndicator={false}
-      style={{backgroundColor: '#E5E3E4', width: '100%'}}>
+    <ScrollView style={{backgroundColor: '#E5E3E4', width: '100%'}}>
       <View
         style={{flexDirection: 'row', marginTop: '3%', marginHorizontal: '5%'}}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={readDataOfPosts}>
           <Image
             style={{height: 60, width: 60, borderRadius: 64}}
             source={{
@@ -39,6 +91,7 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
+          onPress={() => console.log(currentUserPostsId)}
           style={{
             alignItems: 'center',
             marginLeft: '3%',
