@@ -12,6 +12,7 @@ import React, {useState} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {profile} from '../model/data';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import storage from '@react-native-firebase/storage';
 
 import DocumentPicker from 'react-native-document-picker';
 import ImageModal from 'react-native-image-modal';
@@ -21,10 +22,15 @@ export default function CreatePostScreen() {
 
   const [multipleFile, setMultipleFile] = useState([]);
 
+  const [image, setImage] = useState(null);
+  const [filePath, setfilePath] = useState();
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
   const selectMultipleFile = async () => {
     try {
       const results = await DocumentPicker.pickMultiple({
         type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+        copyTo: 'cachesDirectory',
       });
       for (const res of results) {
         console.log('length is : ', results.length);
@@ -43,14 +49,59 @@ export default function CreatePostScreen() {
             uri: res.uri,
 
             type: res.type,
+            // setfilePath(results)
+            // console.log(results);
           },
+          // setfilePath(results),
+          console.log(results),
         ]);
+        // setfilePath(results);
+        console.log(results);
       }
     } catch (err) {
       console.log('Some Error!!!');
     }
   };
 
+  const uploadImage = async () => {
+    const filename = filePath.fileCopyUri.substring(
+      filePath.fileCopyUri.lastIndexOf('/') + 1,
+    );
+    const uploadUri =
+      Platform.OS === 'ios'
+        ? filePath.fileCopyUri.replace('file://', '')
+        : filePath.fileCopyUri;
+    setUploading(true);
+    setTransferred(0);
+    const task = storage().ref(filename).putFile(uploadUri);
+    console.error('working');
+
+    // set progress state
+    task.on('state_changed', snapshot => {
+      setTransferred(
+        Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
+      );
+      console.error('working2');
+    });
+    task.then(() => {
+      Alert.alert(
+        'Photo uploaded!',
+        'Your photo has been uploaded to Firebase Cloud Storage!',
+      );
+    });
+    // try {
+    //   await task;
+    // } catch (e) {
+    //   console.error(e);
+    // }
+    // setUploading(false);
+    // Alert.alert(
+    //   'Photo uploaded!',
+    //   'Your photo has been uploaded to Firebase Cloud Storage!',
+    // );
+    // setImage(null);
+    setfilePath({});
+  };
   const removeFile = key => {
     setMultipleFile(current =>
       current.filter(multipleFile => {
@@ -118,7 +169,8 @@ export default function CreatePostScreen() {
             paddingHorizontal: '7%',
             borderRadius: 16,
             marginLeft: '30%',
-          }}>
+          }}
+          onPress={() => uploadImage()}>
           <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
             Post
           </Text>
