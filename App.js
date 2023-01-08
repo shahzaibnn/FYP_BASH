@@ -72,12 +72,12 @@ export default function App() {
     // Testing email
     // <Email />
 
-    <Test />
+    // <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>
 
     // <HomeScreen />
-    // <CreatePostScreen />
+    <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
     // <LoginScreen />
