@@ -37,6 +37,7 @@ export default function HomeScreen() {
   const profileName = 'Tony';
   const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
   const [currentUserPostsId, setCurrentUserPostsId] = useState([]);
+  const [fetchedPosts, setFetchedPosts] = useState([]);
 
   const writePost = async () => {
     await dbFirestore()
@@ -76,6 +77,10 @@ export default function HomeScreen() {
             'User ID: ',
             documentSnapshot.id,
             documentSnapshot.data(),
+            setFetchedPosts(fetchedPosts => [
+              ...fetchedPosts,
+              documentSnapshot.data(),
+            ]),
             //To grab a particular field use
             //documentSnapshot.data().userEmail,
           );
@@ -128,7 +133,11 @@ export default function HomeScreen() {
     <ScrollView style={{backgroundColor: '#E5E3E4', width: '100%'}}>
       <View
         style={{flexDirection: 'row', marginTop: '3%', marginHorizontal: '5%'}}>
-        <TouchableOpacity onPress={writePost}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('---------------------------');
+            console.log(fetchedPosts);
+          }}>
           <Image
             style={{height: 60, width: 60, borderRadius: 64}}
             source={{
@@ -292,19 +301,19 @@ export default function HomeScreen() {
         <FlatList
           // scrollEnabled={false}
           showsVerticalScrollIndicator={false}
-          data={posts}
-          keyExtractor={item => item.id}
+          data={fetchedPosts}
+          // keyExtractor={item => item.id}
           renderItem={({item}) => {
             let likeColor = '';
 
-            console.log(item.likedBy);
+            // console.log(item.likedBy);
 
-            if (item.likedBy.includes(profileName)) {
-              likeColor = '#000000';
-              console.log('running');
-            } else {
-              likeColor = '#ffffff';
-            }
+            // if (item.likedBy.includes(profileName)) {
+            //   likeColor = '#000000';
+            //   console.log('running');
+            // } else {
+            //   likeColor = '#ffffff';
+            // }
 
             return (
               <View
@@ -321,7 +330,7 @@ export default function HomeScreen() {
                     marginVertical: Dimensions.get('window').height * 0.01,
                   }}>
                   <Image
-                    source={{uri: item.imageUrl}}
+                    source={{uri: item.profilePic}}
                     style={{
                       width: 60,
                       height: 60,
@@ -349,7 +358,7 @@ export default function HomeScreen() {
                       {item.title}
                     </Text>
                     <Text style={{color: '#777777', fontSize: 12}}>
-                      {item.datePosted}
+                      {item.date}
                     </Text>
                   </View>
                 </View>
@@ -380,7 +389,7 @@ export default function HomeScreen() {
                     marginHorizontal: '2.5%',
                     marginVertical: '2%',
                   }}>
-                  {item.descriptionText}
+                  {item.description}
                 </Text>
 
                 <View
@@ -396,7 +405,7 @@ export default function HomeScreen() {
                         color: '#469597',
                         fontWeight: 'bold',
                       }}>
-                      {item.likedBy.length} Likes
+                      {item.likes} Likes
                     </Text>
                     <TouchableOpacity
                       style={{
@@ -419,7 +428,7 @@ export default function HomeScreen() {
                         color: '#469597',
                         fontWeight: 'bold',
                       }}>
-                      {item.commentedBy.length} Comments
+                      {item.comments} Comments
                     </Text>
                     <TouchableOpacity
                       style={{
