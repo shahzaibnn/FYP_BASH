@@ -36,78 +36,58 @@ export default function CreatePostScreen() {
         type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
         copyTo: 'cachesDirectory',
       });
-      for (const res of results) {
-        console.log('length is : ', results.length);
+      setfilePath(results);
+      // for (const res of results) {
+      //   // console.log('length is : ', results.length);
 
-        console.log('URI : ' + res.uri);
+      //   // console.log('URI : ' + res.uri);
 
-        console.log('File Name : ' + res.name);
+      //   // console.log('File Name : ' + res.name);
 
-        console.log('File Type: ' + res.type);
+      //   // console.log('File Type: ' + res.type);
 
-        console.log('CHECKING ' + filePath);
+      //   // console.log('CHECKING ' + filePath);
 
-        setMultipleFile(
-          current => [
-            ...current,
-            {
-              key: Math.floor(Math.random() * 1000000000),
-              name: res.name,
-              uri: res.uri,
+      //   setMultipleFile(
+      //     current => [
+      //       ...current,
+      //       {
+      //         key: Math.floor(Math.random() * 1000000000),
+      //         name: res.name,
+      //         uri: res.uri,
 
-              type: res.type,
-            },
-          ],
-          setfilePath(res),
-          console.log('File Path :'),
-        );
-      }
+      //         type: res.type,
+      //       },
+      //     ],
+      //     console.log('File Path :' + results),
+      //   );
+      // }
     } catch (err) {
       console.log('Some Error!!!');
     }
   };
 
   const uploadImage = async () => {
-    const filename = filePath.fileCopyUri.substring(
-      filePath.fileCopyUri.lastIndexOf('/') + 1,
-    );
-    const uploadUri =
-      Platform.OS === 'ios'
-        ? filePath.fileCopyUri.replace('file://', '')
-        : filePath.fileCopyUri;
-    setUploading(true);
-    setTransferred(0);
-    const task = await storage().ref(filename).putFile(uploadUri);
-    // console.log(task.ref.getDownloadURL);
-    // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
-    console.log('working');
-    const url = await storage().ref(filename).getDownloadURL();
-    console.log('url is: ' + url);
-
     try {
-      task;
-      dbFirestore()
-        .collection('Users')
-        .doc('roles')
-        .collection('student')
-        .add({
-          name: ' Habiba check againnn ',
-          PostContent: 'Testing AGAIN',
-          Image: url,
-        })
-        .then(() => {
-          console.log('Uploaded!');
+      let mod = filePath.map(function (element) {
+        const reference = storage().ref('/myfiles/' + element.name);
+        const task = reference.putFile(
+          element.fileCopyUri.replace('file://', ''),
+        );
+        task.on('state_changed', taskSnapshot => {
+          // console.log('checking');
         });
-    } catch (e) {
-      console.error(e);
+        task.then(() => {
+          console.log('Uploaded');
+        });
+      });
+      // {
+
+      //  );
+      setfilePath({});
+    } catch (error) {
+      console.log('Some Error!!!');
     }
-    setUploading(false);
-    Alert.alert(
-      'Photo uploaded!',
-      'Your photo has been uploaded to Firebase Cloud Storage!',
-    );
-    // setImage(null);
-    setfilePath({});
   };
 
   const removeFile = key => {
