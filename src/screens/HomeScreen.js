@@ -36,14 +36,30 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 export default function HomeScreen() {
   const profileName = 'Tony';
   const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
-  const [currentUserPostsId, setCurrentUserPostsId] = useState([]);
+  const [tempLike, setTempLike] = useState([]);
   const [fetchedPosts, setFetchedPosts] = useState([]);
+  const [extraData, setExtraData] = React.useState(new Date());
+
+  // const updateLike = async id => {
+  //   console.log('yahan tak coming ', id);
+  //   dbFirestore()
+  //     .collection('Posts')
+  //     .doc(id)
+  //     .get()
+  //     .then(documentSnapshot => {
+  //       console.log('User exists: ', documentSnapshot.exists);
+
+  //       if (documentSnapshot.exists) {
+  //         console.log('User data: ', documentSnapshot.data().likedBy);
+  //       }
+  //     });
+  // };
 
   const writePost = async () => {
     await dbFirestore()
       .collection('Posts')
       .add({
-        comments: 6,
+        commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
         date: '25th October 2022',
         description:
           "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
@@ -51,7 +67,7 @@ export default function HomeScreen() {
           'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
         ],
-        likes: 4,
+        likedBy: ['shahzaibnn@gmail.com'],
         name: 'Benedict',
         profilePic:
           'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
@@ -73,14 +89,13 @@ export default function HomeScreen() {
         console.log('Total posts: ', querySnapshot.size);
 
         querySnapshot.forEach(documentSnapshot => {
+          let v = documentSnapshot.data();
+          v.id = documentSnapshot.id;
           console.log(
             'User ID: ',
             documentSnapshot.id,
             documentSnapshot.data(),
-            setFetchedPosts(fetchedPosts => [
-              ...fetchedPosts,
-              documentSnapshot.data(),
-            ]),
+            setFetchedPosts(fetchedPosts => [...fetchedPosts, v]),
             //To grab a particular field use
             //documentSnapshot.data().userEmail,
           );
@@ -135,8 +150,15 @@ export default function HomeScreen() {
         style={{flexDirection: 'row', marginTop: '3%', marginHorizontal: '5%'}}>
         <TouchableOpacity
           onPress={() => {
-            console.log('---------------------------');
-            console.log(fetchedPosts);
+            console.log(tempLike);
+            // console.log(fetchedPosts.find());
+            // let arr = ['shahzaibnn@gmail.com'];
+            // fetchedPosts.find(obj => obj.id == '7tWu8bWtheIhNUH3Xf3w').likedBy =
+            //   arr;
+            // console.log(
+            //   fetchedPosts.find(obj => obj.id == '7tWu8bWtheIhNUH3Xf3w')
+            //     .likedBy,
+            // );
           }}>
           <Image
             style={{height: 60, width: 60, borderRadius: 64}}
@@ -302,18 +324,21 @@ export default function HomeScreen() {
           // scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           data={fetchedPosts}
+          extraData={extraData}
+          // key={item => item.id}
           // keyExtractor={item => item.id}
           renderItem={({item}) => {
+            console.log('Id is : ', item.id);
             let likeColor = '';
 
-            // console.log(item.likedBy);
+            console.log(item.likedBy);
 
-            // if (item.likedBy.includes(profileName)) {
-            //   likeColor = '#000000';
-            //   console.log('running');
-            // } else {
-            //   likeColor = '#ffffff';
-            // }
+            if (item.likedBy.includes(emailAddressOfCurrentUser)) {
+              likeColor = '#000000';
+              console.log('running');
+            } else {
+              likeColor = '#ffffff';
+            }
 
             return (
               <View
@@ -405,9 +430,52 @@ export default function HomeScreen() {
                         color: '#469597',
                         fontWeight: 'bold',
                       }}>
-                      {item.likes} Likes
+                      {item.likedBy.length} Likes
                     </Text>
                     <TouchableOpacity
+                      onPress={() => {
+                        console.log('hdshjdsfvhddhfbhj');
+                        if (item.likedBy.includes(emailAddressOfCurrentUser)) {
+                          dbFirestore()
+                            .doc('Posts/' + item.id)
+                            .update({
+                              likedBy: dbFirestore.FieldValue.arrayRemove(
+                                emailAddressOfCurrentUser,
+                              ),
+                            })
+                            .then(() => {
+                              console.log('Like Removed!');
+                            });
+
+                          fetchedPosts.find(obj => obj.id == item.id).likedBy =
+                            item.likedBy.filter(
+                              e => e !== emailAddressOfCurrentUser,
+                            );
+                          setExtraData(new Date());
+
+                          // likeColor = '#ffffff';
+                        } else {
+                          console.log('ye work');
+                          dbFirestore()
+                            .doc('Posts/' + item.id)
+                            .update({
+                              likedBy: dbFirestore.FieldValue.arrayUnion(
+                                emailAddressOfCurrentUser,
+                              ),
+                            })
+                            .then(() => {
+                              console.log('Like Placed!');
+                            });
+                          let arr = item.likedBy;
+                          arr.push(emailAddressOfCurrentUser);
+                          fetchedPosts.find(obj => obj.id == item.id).likedBy =
+                            arr;
+
+                          setExtraData(new Date());
+                        }
+                        // setFetchedPosts([]);
+                        // searchPosts();
+                      }}
                       style={{
                         paddingHorizontal: '8%',
                         paddingVertical: '8%',
@@ -428,7 +496,7 @@ export default function HomeScreen() {
                         color: '#469597',
                         fontWeight: 'bold',
                       }}>
-                      {item.comments} Comments
+                      {item.commentedBy.length} Comments
                     </Text>
                     <TouchableOpacity
                       style={{

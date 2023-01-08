@@ -35,16 +35,16 @@ export default function App() {
     await dbFirestore()
       .collection('Posts')
       .add({
-        comments: 6,
+        commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
         date: '25th October 2022',
         description:
-          "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
+          'Canada is one of those countries that continuously finds itself on “top 10” destination lists. Whether it’s for the country’s incredible natural beauty, delicious food, mountain resorts, unique culture, or unbeatable road trips—Canada has it all!',
         images: [
-          'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
+          // 'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
+          // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
         ],
-        likes: 4,
-        name: 'Benedict',
+        likedBy: ['shahzaibnn@gmail.com'],
+        name: 'Canada',
         profilePic:
           'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
         title: 'BSCS Student',
@@ -105,6 +105,7 @@ export default function App() {
       .doc('roles')
       .collection('student')
       .add({
+        role: 'student',
         firstName: 'Habiba',
         lastName: 'Faisal',
         userEmail: 'habibafaisal8@gmail.com',
