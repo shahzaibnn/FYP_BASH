@@ -31,16 +31,94 @@ export default function App() {
 
   /* Creating a reference to the collection named Users. */
 
+  const writePost = async () => {
+    await dbFirestore()
+      .collection('Posts')
+      .add({
+        comments: 6,
+        date: '25th October 2022',
+        description:
+          "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
+        images: [
+          'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
+        ],
+        likes: 4,
+        name: 'Benedict',
+        profilePic:
+          'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
+        title: 'BSCS Student',
+      })
+      .then(() => {
+        console.log('Post Added!');
+      });
+  };
+
+  const searchFirestore = async () => {
+    await dbFirestore()
+      .collection('Users')
+      .doc('roles')
+      .collection('student')
+      // Filter results
+      .where('userEmail', '==', 'habibafaisal8@gmail.com')
+      // .where('firstName', '==', 'Habiba')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(
+            'User ID: ',
+            documentSnapshot.id,
+            documentSnapshot.data(),
+            //To grab a particular field use
+            //documentSnapshot.data().userEmail,
+          );
+        });
+      });
+  };
+
   const readFirestore = async () => {
+    await dbFirestore()
+      .collection('Users')
+      .doc('roles')
+      .collection('student')
+      .get()
+      .then(querySnapshot => {
+        console.log('Total users: ', querySnapshot.size);
+
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(
+            'User ID: ',
+            documentSnapshot.id,
+            documentSnapshot.data(),
+            //To grab a particular field use
+            //documentSnapshot.data().userEmail,
+          );
+        });
+      });
+  };
+
+  const addDataFirestore = async () => {
     // const usersCollection = await
 
-    dbFirestore()
+    await dbFirestore()
       .collection('Users')
       .doc('roles')
       .collection('student')
       .add({
-        name: ' mcka kadckacmdfsl',
-        age: 30,
+        firstName: 'Habiba',
+        lastName: 'Faisal',
+        userEmail: 'habibafaisal8@gmail.com',
+        userPassword: '123456',
+        contactNo: '03212185174',
+        dateOfBirth: '25-10-2022',
+        pic: '',
+        title: 'BSCS Student',
+        description: '',
+        skills: ['java', 'React'],
+        cv: '',
+        experience: [{organization: 'one'}, {organization: 'two'}],
+        postsId: ['1'],
+        appliedJobId: ['1'],
       })
       .then(() => {
         console.log('User added!');
@@ -188,8 +266,28 @@ export default function App() {
       {/* <Button onPress={createData} title="Submit Data"></Button> */}
       <Text>{item}</Text>
 
-      <TouchableOpacity onPress={readFirestore}>
-        <Text>Submit Data</Text>
+      <TouchableOpacity
+        style={{backgroundColor: 'red', padding: '10%', borderRadius: 16}}
+        onPress={addDataFirestore}>
+        <Text>Write Data</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={readFirestore}
+        style={{backgroundColor: 'orange', padding: '10%', borderRadius: 16}}>
+        <Text>Read Button</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={searchFirestore}
+        style={{backgroundColor: 'green', padding: '10%', borderRadius: 16}}>
+        <Text>Search Button</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={writePost}
+        style={{backgroundColor: 'yellow', padding: '10%', borderRadius: 16}}>
+        <Text>Write Post</Text>
       </TouchableOpacity>
 
       <Text>{values}</Text>

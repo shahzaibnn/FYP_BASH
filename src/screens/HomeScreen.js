@@ -31,57 +31,104 @@ import {SliderBox} from 'react-native-image-slider-box';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+// import {db, dbFirestore} from './Config';
+
 export default function HomeScreen() {
   const profileName = 'Tony';
   const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
   const [currentUserPostsId, setCurrentUserPostsId] = useState([]);
 
-  const readData = () => {
-    const topUserPostsRef = query(
-      ref(db, 'roles/students'),
-      orderByChild('userEmail'),
-      equalTo(emailAddressOfCurrentUser),
-    );
-
-    onValue(topUserPostsRef, snapshot => {
-      // const data = snapshot.val().postsId;
-      // console.log(data);
-      console.log('Posts Ids Are: ');
-      // console.log(snapshot.toJSON());
-      snapshot.forEach(function (data) {
-        console.log(data.val().postsId);
-        console.log(data);
-
-        setCurrentUserPostsId(...currentUserPostsId, data.val().postsId);
+  const writePost = async () => {
+    await dbFirestore()
+      .collection('Posts')
+      .add({
+        comments: 6,
+        date: '25th October 2022',
+        description:
+          "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
+        images: [
+          'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
+        ],
+        likes: 4,
+        name: 'Benedict',
+        profilePic:
+          'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
+        title: 'BSCS Student',
+      })
+      .then(() => {
+        console.log('Post Added!');
       });
-    });
   };
 
-  const readDataOfPosts = () => {
-    const topUserPostsRef = query(ref(db, 'Posts'));
+  const searchPosts = async () => {
+    await dbFirestore()
+      .collection('Posts')
+      // Filter results
+      // .where('userEmail', '==', 'habibafaisal8@gmail.com')
+      // .where('firstName', '==', 'Habiba')
+      .get()
+      .then(querySnapshot => {
+        console.log('Total posts: ', querySnapshot.size);
 
-    onValue(topUserPostsRef, snapshot => {
-      // const data = snapshot.val().postsId;
-      // console.log(data);
-      snapshot.forEach(function (data) {
-        if (!currentUserPostsId.includes(data.key)) {
-          console.log('Posts Id is: ', data.key);
-
-          console.log(data);
-        }
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(
+            'User ID: ',
+            documentSnapshot.id,
+            documentSnapshot.data(),
+            //To grab a particular field use
+            //documentSnapshot.data().userEmail,
+          );
+        });
       });
-    });
   };
+
+  // const readData = () => {
+  //   const topUserPostsRef = query(
+  //     ref(db, 'roles/students'),
+  //     orderByChild('userEmail'),
+  //     equalTo(emailAddressOfCurrentUser),
+  //   );
+
+  //   onValue(topUserPostsRef, snapshot => {
+  //     // const data = snapshot.val().postsId;
+  //     // console.log(data);
+  //     console.log('Posts Ids Are: ');
+  //     // console.log(snapshot.toJSON());
+  //     snapshot.forEach(function (data) {
+  //       console.log(data.val().postsId);
+  //       console.log(data);
+
+  //       setCurrentUserPostsId(...currentUserPostsId, data.val().postsId);
+  //     });
+  //   });
+  // };
+
+  // const readDataOfPosts = () => {
+  //   const topUserPostsRef = query(ref(db, 'Posts'));
+
+  //   onValue(topUserPostsRef, snapshot => {
+  //     // const data = snapshot.val().postsId;
+  //     // console.log(data);
+  //     snapshot.forEach(function (data) {
+  //       if (!currentUserPostsId.includes(data.key)) {
+  //         console.log('Posts Id is: ', data.key);
+
+  //         console.log(data);
+  //       }
+  //     });
+  //   });
+  // };
 
   useEffect(() => {
-    readData();
+    searchPosts();
   }, []);
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4', width: '100%'}}>
       <View
         style={{flexDirection: 'row', marginTop: '3%', marginHorizontal: '5%'}}>
-        <TouchableOpacity onPress={readDataOfPosts}>
+        <TouchableOpacity onPress={writePost}>
           <Image
             style={{height: 60, width: 60, borderRadius: 64}}
             source={{
