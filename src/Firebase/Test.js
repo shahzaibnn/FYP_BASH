@@ -29,6 +29,37 @@ export default function App() {
   const [item, setitem] = useState([]);
   const [values, setValues] = useState('No Value');
 
+  /* Creating a reference to the collection named Users. */
+
+  const readFirestore = async () => {
+    // const usersCollection = await
+
+    dbFirestore()
+      .collection('Users')
+      .doc('roles')
+      .collection('student')
+      .add({
+        name: ' mcka kadckacmdfsl',
+        age: 30,
+      })
+      .then(() => {
+        console.log('User added!');
+      });
+    // dbFirestore().collection('Users').doc('roles').collection('student').add({
+    //   name: 'Ada Lovelace',
+    //   age: 30,
+    // });
+    // .doc('IWLSdpM6vFjgOcLYwJLt')
+    // .get()
+    // .set({
+    //   key: '1',
+    //   value: '88',
+    // });
+    // .onSnapshot(documentSnapshot => {
+    //   console.log('User data: ', documentSnapshot.data());
+    // });
+    // console.log(usersCollection);
+  };
   const userInput = 'insideanother';
   // useEffect(() => {
   //   return onValue(ref(db, '/roles/email/' + userInput), querySnapShot => {
@@ -157,7 +188,7 @@ export default function App() {
       {/* <Button onPress={createData} title="Submit Data"></Button> */}
       <Text>{item}</Text>
 
-      <TouchableOpacity onPress={readData}>
+      <TouchableOpacity onPress={readFirestore}>
         <Text>Submit Data</Text>
       </TouchableOpacity>
 

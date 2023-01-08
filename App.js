@@ -72,11 +72,11 @@ export default function App() {
     // Testing email
     // <Email />
 
-    // <Test />
+    <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>
 
-    <HomeScreen />
+    // <HomeScreen />
     // <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
@@ -89,7 +89,7 @@ export default function App() {
     // <Test />
     // <PdfViewScreen />
 
-    <ImageScreen />
+    // <ImageScreen />
     // <JobPostingScreen />
 
     // <ProfileScreen />
