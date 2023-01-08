@@ -7,25 +7,29 @@ import {
   Image,
   TextInput,
   FlatList,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {profile} from '../model/data';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import storage from '@react-native-firebase/storage';
 
 import DocumentPicker from 'react-native-document-picker';
 import ImageModal from 'react-native-image-modal';
+
+import storage from '@react-native-firebase/storage';
+import {db, dbFirestore} from '../Firebase/Config';
+import {ref, set, limitToFirst} from 'firebase/database';
 
 export default function CreatePostScreen() {
   const [text, setText] = useState('');
 
   const [multipleFile, setMultipleFile] = useState([]);
-
-  const [image, setImage] = useState(null);
   const [filePath, setfilePath] = useState();
+
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
+
   const selectMultipleFile = async () => {
     try {
       const results = await DocumentPicker.pickMultiple({
@@ -41,22 +45,22 @@ export default function CreatePostScreen() {
 
         console.log('File Type: ' + res.type);
 
-        setMultipleFile(current => [
-          ...current,
-          {
-            key: Math.floor(Math.random() * 1000000000),
-            name: res.name,
-            uri: res.uri,
+        console.log('CHECKING ' + filePath);
 
-            type: res.type,
-            // setfilePath(results)
-            // console.log(results);
-          },
-          // setfilePath(results),
-          console.log(results),
-        ]);
-        // setfilePath(results);
-        console.log(results);
+        setMultipleFile(
+          current => [
+            ...current,
+            {
+              key: Math.floor(Math.random() * 1000000000),
+              name: res.name,
+              uri: res.uri,
+
+              type: res.type,
+            },
+          ],
+          setfilePath(res),
+          console.log('File Path :'),
+        );
       }
     } catch (err) {
       console.log('Some Error!!!');
@@ -73,35 +77,39 @@ export default function CreatePostScreen() {
         : filePath.fileCopyUri;
     setUploading(true);
     setTransferred(0);
-    const task = storage().ref(filename).putFile(uploadUri);
-    console.error('working');
+    const task = await storage().ref(filename).putFile(uploadUri);
+    // console.log(task.ref.getDownloadURL);
+    // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
+    console.log('working');
+    const url = await storage().ref(filename).getDownloadURL();
+    console.log('url is: ' + url);
 
-    // set progress state
-    task.on('state_changed', snapshot => {
-      setTransferred(
-        Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
-      );
-      console.error('working2');
-    });
-    task.then(() => {
-      Alert.alert(
-        'Photo uploaded!',
-        'Your photo has been uploaded to Firebase Cloud Storage!',
-      );
-    });
-    // try {
-    //   await task;
-    // } catch (e) {
-    //   console.error(e);
-    // }
-    // setUploading(false);
-    // Alert.alert(
-    //   'Photo uploaded!',
-    //   'Your photo has been uploaded to Firebase Cloud Storage!',
-    // );
+    try {
+      task;
+      dbFirestore()
+        .collection('Users')
+        .doc('roles')
+        .collection('student')
+        .add({
+          name: ' Habiba check againnn ',
+          PostContent: 'Testing AGAIN',
+          Image: url,
+        })
+        .then(() => {
+          console.log('Uploaded!');
+        });
+    } catch (e) {
+      console.error(e);
+    }
+    setUploading(false);
+    Alert.alert(
+      'Photo uploaded!',
+      'Your photo has been uploaded to Firebase Cloud Storage!',
+    );
     // setImage(null);
     setfilePath({});
   };
+
   const removeFile = key => {
     setMultipleFile(current =>
       current.filter(multipleFile => {
@@ -170,7 +178,7 @@ export default function CreatePostScreen() {
             borderRadius: 16,
             marginLeft: '30%',
           }}
-          onPress={() => uploadImage()}>
+          onPress={uploadImage}>
           <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
             Post
           </Text>
