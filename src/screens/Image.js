@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 // import ImagePicker from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
-import {getStorage, getDownloadURL} from 'firebase/storage';
+// import {getStorage, getDownloadURL} from 'firebase/storage';
 
 import DocumentPicker from 'react-native-document-picker';
 import {db, dbFirestore} from '../Firebase/Config';
@@ -80,57 +80,59 @@ export default function ImageScreen() {
     setUploading(true);
     setTransferred(0);
     const task = await storage().ref(filename).putFile(uploadUri);
-    console.log(task.ref.getDownloadURL);
+    // console.log(task.ref.getDownloadURL);
     // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
     console.log('working');
+    const url = await storage().ref(filename).getDownloadURL();
+    console.log('url is: ' + url);
     // const ref = firebase.storage().ref('path/to/image.jpg');
     // const url = await task.ref().getDownloadURL();
     // console.log('url is ' + url);
 
-    set(ref(db, 'Habiba/' + username), {
-      username: username,
-      email: email,
-      //   url: url,
-    })
-      .then(() => {
-        // Data saved successfully!
-        alert('data updated!');
-      })
-      .catch(error => {
-        // The write failed...
-        alert(error);
-      });
+    // set(ref(db, 'Habiba/' + username), {
+    //   username: username,
+    //   email: email,
+    //   url: url,
+    // })
+    // .then(() => {
+    //   // Data saved successfully!
+    //   alert('data updated!');
+    // })
+    // .catch(error => {
+    //   // The write failed...
+    //   alert(error);
+    // });
     // ... in your render
 
     // <Image
     //   source={{ uri: url }}
     // />
     // set progress state
-    task.on('state_changed', snapshot => {
-      setTransferred(
-        Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
-      );
-      console.log('working2');
-    });
-    task.then(() => {
-      //   const url = task.snapshot.ref.getDownloadURL();
-      //   console.log('url is ' + url);
+    // task.on('state_changed', snapshot => {
+    //   setTransferred(
+    //     Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
+    //   );
+    //   console.log('working2');
+    // });
+    // task.then(() => {
+    //   //   const url = task.snapshot.ref.getDownloadURL();
+    //   //   console.log('url is ' + url);
 
-      Alert.alert(
-        'Photo uploaded!',
-        'Your photo has been uploaded to Firebase Cloud Storage!',
-      );
-    });
-    // try {
-    //   await task;
-    // } catch (e) {
-    //   console.error(e);
-    // }
-    // setUploading(false);
-    // Alert.alert(
-    //   'Photo uploaded!',
-    //   'Your photo has been uploaded to Firebase Cloud Storage!',
-    // );
+    //   Alert.alert(
+    //     'Photo uploaded!',
+    //     'Your photo has been uploaded to Firebase Cloud Storage!',
+    //   );
+    // });
+    try {
+      await task;
+    } catch (e) {
+      console.error(e);
+    }
+    setUploading(false);
+    Alert.alert(
+      'Photo uploaded!',
+      'Your photo has been uploaded to Firebase Cloud Storage!',
+    );
     // setImage(null);
     setfilePath({});
   };
