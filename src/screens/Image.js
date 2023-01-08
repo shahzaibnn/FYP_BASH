@@ -52,6 +52,22 @@ export default function ImageScreen() {
     }
   };
 
+  const readFirestore = async () => {
+    // const usersCollection = await
+
+    dbFirestore()
+      .collection('Users')
+      .doc('roles')
+      .collection('student')
+      .add({
+        name: ' mcka kadckacmdfsl',
+        age: 30,
+        url: url,
+      })
+      .then(() => {
+        console.log('User added!');
+      });
+  };
   function createData() {
     // const newKey = push(child(ref(database), 'users')).key;
 
@@ -85,46 +101,21 @@ export default function ImageScreen() {
     console.log('working');
     const url = await storage().ref(filename).getDownloadURL();
     console.log('url is: ' + url);
-    // const ref = firebase.storage().ref('path/to/image.jpg');
-    // const url = await task.ref().getDownloadURL();
-    // console.log('url is ' + url);
 
-    // set(ref(db, 'Habiba/' + username), {
-    //   username: username,
-    //   email: email,
-    //   url: url,
-    // })
-    // .then(() => {
-    //   // Data saved successfully!
-    //   alert('data updated!');
-    // })
-    // .catch(error => {
-    //   // The write failed...
-    //   alert(error);
-    // });
-    // ... in your render
-
-    // <Image
-    //   source={{ uri: url }}
-    // />
-    // set progress state
-    // task.on('state_changed', snapshot => {
-    //   setTransferred(
-    //     Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
-    //   );
-    //   console.log('working2');
-    // });
-    // task.then(() => {
-    //   //   const url = task.snapshot.ref.getDownloadURL();
-    //   //   console.log('url is ' + url);
-
-    //   Alert.alert(
-    //     'Photo uploaded!',
-    //     'Your photo has been uploaded to Firebase Cloud Storage!',
-    //   );
-    // });
     try {
-      await task;
+      task;
+      dbFirestore()
+        .collection('Users')
+        .doc('roles')
+        .collection('student')
+        .add({
+          name: ' Habiba ',
+          PostContent: 'Testing the functionality',
+          Image: url,
+        })
+        .then(() => {
+          console.log('Uploaded!');
+        });
     } catch (e) {
       console.error(e);
     }
