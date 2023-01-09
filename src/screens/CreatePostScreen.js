@@ -36,6 +36,7 @@ export default function CreatePostScreen() {
         type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
         copyTo: 'cachesDirectory',
       });
+      console.log(results);
       setfilePath(results);
       // for (const res of results) {
       //   // console.log('length is : ', results.length);
@@ -63,6 +64,7 @@ export default function CreatePostScreen() {
       //   );
       // }
     } catch (err) {
+      setfilePath({});
       console.log('Some Error!!!');
     }
   };
@@ -70,20 +72,22 @@ export default function CreatePostScreen() {
   const uploadImage = async () => {
     try {
       let mod = filePath.map(function (element) {
+        console.log('test 1');
+        console.log(element.fileCopyUri.replace('file://', ''));
+        console.log('test 2');
+        console.log(element.name);
         const reference = storage().ref('/myfiles/' + element.name);
         const task = reference.putFile(
           element.fileCopyUri.replace('file://', ''),
         );
         task.on('state_changed', taskSnapshot => {
           // console.log('checking');
+          console.log('uploading');
         });
         task.then(() => {
           console.log('Uploaded');
         });
       });
-      // {
-
-      //  );
       setfilePath({});
     } catch (error) {
       console.log('Some Error!!!');
