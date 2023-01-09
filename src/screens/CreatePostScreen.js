@@ -110,9 +110,9 @@ export default function CreatePostScreen() {
 
     // console.log('another method to check 222!!!' + yourArray);
     // uploadImage();
-    setTimeout(function () {
-      uploadImage();
-    }, 3000);
+    // setTimeout(function () {
+    //   uploadImage();
+    // }, 3000);
   };
 
   const uploadImage = async () => {
@@ -167,12 +167,11 @@ export default function CreatePostScreen() {
         // console.log(yourArray);
         // setyourArray(url);
         // console.log(yourArray);
-
+        setyourArray(yourArray);
         setfilePath({});
       });
       // console.log('Checking here 2!');
-      setyourArray(yourArray);
-
+      // setyourArray(yourArray);
       // console.log(yourArray);
 
       // console.log('Checking here!');
@@ -268,7 +267,7 @@ export default function CreatePostScreen() {
             borderRadius: 16,
             marginLeft: '30%',
           }}
-          onPress={checking}>
+          onPress={uploadImage}>
           <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
             Post
           </Text>
