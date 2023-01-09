@@ -29,6 +29,7 @@ export default function CreatePostScreen() {
 
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
+  var yourArray = new Array();
 
   const selectMultipleFile = async () => {
     try {
@@ -64,6 +65,34 @@ export default function CreatePostScreen() {
     }
   };
 
+  const fb = async () => {
+    // let promise = new Promise(resolve => {
+    //   // setTimeout(() => resolve("done!"), 1000)
+    //   uploadImage();
+    //   setTimeout(() => resolve('done!'), 1000);
+    // });
+    // let result = await promise;
+    // alert(result);
+    const result = await uploadImage();
+
+    console.log('another method to check!!!' + yourArray);
+    console.log('WORKING ');
+
+    console.log('another method to check 222!!!' + yourArray);
+
+    dbFirestore()
+      .collection('Users')
+      .doc('roles')
+      .collection('alumni')
+      .add({
+        name: ' AGAINNNNN',
+        age: 22,
+        url: yourArray,
+      })
+      .then(() => {
+        console.log('WORKING WITH MULTIPLE URLS!');
+      });
+  };
   const uploadImage = async () => {
     try {
       let mod = filePath.map(function (element) {
@@ -83,49 +112,61 @@ export default function CreatePostScreen() {
         task.on('state_changed', async taskSnapshot => {
           // console.log('checking');
           console.log('uploading');
-          const url = await reference.getDownloadURL();
-          let yourArray = [url];
-          yourArray.push(...[url]);
-          console.log('URLS ARE \n' + yourArray.join('\n'));
+          // const url = await reference.getDownloadURL();
+          // let yourArray = [url];
+          // yourArray.push(...[url]);
+          // console.log('URLS ARE \n' + yourArray.join('\n'));
         });
         task.then(async () => {
-          // const url = await reference.getDownloadURL();
+          const url = await reference.getDownloadURL();
+          // yourArray = [url];
+          // console.log('URLS 1 \n' + yourArray.join('\n'));
+
+          // yourArray.push(url);
+          // console.log('URLS ARE \n' + yourArray.join('\n'));
           console.log('Uploaded');
+          console.log('Checking here 5555!');
+          console.log(yourArray);
+          function addd() {
+            console.log('URLS ARE \n');
+
+            yourArray.push(url);
+            console.log('Checking here!34443');
+            console.log(yourArray);
+            // dbFirestore()
+            //   .collection('Users')
+            //   .doc('roles')
+            //   .collection('student')
+            //   .add({
+            //     name: ' TESTTTTTTT',
+            //     age: 22,
+            //     url: yourArray,
+            //   })
+            //   .then(() => {
+            //     console.log('WORKING WITH MULTIPLE URLS!');
+            //   });
+            // list.push(value);
+          }
+          addd();
           // console.log('url is: ' + url);
           // let yourArray = [url].join('');
           // console.log('URL: \n' + yourArray.push(...url));
           // yourArray.push(...url);
           // console.log('URLS ARE \n' + yourArray.push(...url));
-
-          // dbFirestore()
-          //   .collection('Posts')
-          // .add({
-          //   commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
-          //   date: '25th October 2022',
-          //   description:
-          //     "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
-          //   images: [
-          //     'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
-          //     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
-          //   ],
-          //   likedBy: ['shahzaibnn@gmail.com'],
-          //   name: 'Benedict',
-          //   profilePic:
-          //     'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
-          //   title: 'BSCS Student',
-          // })
-          //   .add({
-          //     name: 'NEW POST',
-          //     age: 30,
-          //     url: yourArray,
-          //   })
-          // .then(() => {
-          //   console.log('User added!');
-          // });
         });
-      });
+        console.log('Checking here!');
+        console.log(yourArray);
 
-      setfilePath({});
+        setfilePath({});
+      });
+      console.log('Checking here 2!');
+
+      console.log(yourArray);
+
+      // console.log('Checking here!');
+      // console.log(yourArray);
+
+      // setfilePath({});
 
       // dbFirestore()
       //   .collection('Users')
@@ -143,6 +184,7 @@ export default function CreatePostScreen() {
       console.log('Some Error!!!');
     }
   };
+  console.log(yourArray);
 
   const removeFile = key => {
     setMultipleFile(current =>
@@ -154,6 +196,8 @@ export default function CreatePostScreen() {
   };
 
   console.log(multipleFile);
+  console.log('outside to check!!!');
+  console.log('outside to check!!!' + yourArray);
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -212,7 +256,7 @@ export default function CreatePostScreen() {
             borderRadius: 16,
             marginLeft: '30%',
           }}
-          onPress={uploadImage}>
+          onPress={fb}>
           <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
             Post
           </Text>

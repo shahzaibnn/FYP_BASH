@@ -205,3 +205,31 @@ const styles = StyleSheet.create({
     height: 300,
   },
 });
+
+// checking
+
+// dbFirestore()
+//   .collection('Posts')
+// .add({
+//   commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
+//   date: '25th October 2022',
+//   description:
+//     "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
+//   images: [
+//     'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
+//     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
+//   ],
+//   likedBy: ['shahzaibnn@gmail.com'],
+//   name: 'Benedict',
+//   profilePic:
+//     'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
+//   title: 'BSCS Student',
+// })
+//   .add({
+//     name: 'NEW POST',
+//     age: 30,
+//     url: yourArray,
+//   })
+// .then(() => {
+//   console.log('User added!');
+// });
