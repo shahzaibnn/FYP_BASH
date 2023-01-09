@@ -31,6 +31,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SettingsScreen from './SettingsScreen';
 import CreatePostScreen from './CreatePostScreen';
+import RNSmtpMailer from 'react-native-smtp-mailer';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -49,10 +50,10 @@ export default function RegistrationScreenStudent({navigation}) {
 
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(true);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [eye, setEye] = useState('eye');
 
-  const signupPressed = () => {
+  const signupPressed = async () => {
     if (!userName) {
       alert('Please fill First Name');
     } else if (!lastName) {
@@ -67,6 +68,32 @@ export default function RegistrationScreenStudent({navigation}) {
       alert('Please fill Batch');
     } else if (!dateOfBirth) {
       alert('Please fill Date of Birth');
+    } else if (!/^[a-zA-Z]+$/.test(userName)) {
+      alert('First Name can only contain alphabets');
+    } else if (!/^[a-zA-Z]+$/.test(lastName)) {
+      alert('Last Name can only contain alphabets');
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(userEmail)) {
+      alert('Invalid Email');
+    } else if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&//.])[A-Za-z\d@$!%*?&//.]{8,}$/.test(
+        userPassword,
+      )
+    ) {
+      // alert(userPassword);
+
+      alert(
+        '(Password Criteria)\nMinimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character',
+      );
+    } else if (!/^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/.test(contactNo)) {
+      alert('Inalid Contact Number');
+    } else if (batch > 2023 || batch < 2000) {
+      alert('Inavlid Batch');
+    } else if (
+      !/^(([0-9])|([0-2][0-9])|([3][0-1]))\-(01|02|03|04|05|06|07|08|09|10|11|12)\-\d{4}$/.test(
+        dateOfBirth,
+      )
+    ) {
+      alert('Invalid DOB');
     } else {
       alert('EVERYTHING GUD');
 
@@ -75,28 +102,53 @@ export default function RegistrationScreenStudent({navigation}) {
           console.log(cred);
           console.log('success');
           const user = cred.user;
-          console.log('Logged in as ', user.userEmail);
+          console.log('Logged in as ', user.email);
           //adding here so first the details are verified and then saved further
-          push(ref(db, 'roles/students/'), {
-            firstName: userName,
-            lastName: lastName,
-            userEmail: userEmail,
-            userPassword: userPassword,
-            contactNo: contactNo,
-            dateOfBirth: dateOfBirth,
-            pic: '',
-            title: '',
-            description: '',
-            skills: ['java', 'React'],
-            cv: '',
-            experience: [{organization: 'one'}, {organization: 'two'}],
-            postsId: ['1'],
-            appliedJobId: ['1'],
-            role: 'student',
-          })
+          dbFirestore()
+            .collection('Users')
+            .doc('roles')
+            .collection('student')
+            .add({
+              role: 'student',
+              firstName: userName,
+              lastName: lastName,
+              userEmail: userEmail,
+              userPassword: userPassword,
+              contactNo: contactNo,
+              dateOfBirth: dateOfBirth,
+              batch: batch,
+              pic: '',
+              title: '',
+              description: '',
+              skills: [],
+              cv: '',
+              experience: [{}],
+              postsId: [],
+              appliedJobId: [],
+            })
             .then(() => {
-              // Data saved successfully!
-              alert('Registered!');
+              console.log('User added!');
+              RNSmtpMailer.sendMail({
+                mailhost: 'smtp.gmail.com',
+                port: '465',
+                ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
+                username: 'bashfyp@gmail.com',
+                password: 'ltdapqlallccrgss',
+                // fromName: 'Some Name', // optional
+                // replyTo: 'usernameEmail', // optional
+                recipients: userEmail,
+                // bcc: ['bccEmail1', 'bccEmail2'], // optional
+                // bcc: ['shahzaibnn@gmail.com'], // optional
+                subject: 'Welcome To BASH',
+                htmlBody: '<h1>Account Registered</h1>',
+                // attachmentPaths: [path],
+                // attachmentNames: ['anotherTest.pdf'],
+              })
+                .then(success => {
+                  console.log(success);
+                  alert('Account Regsitered');
+                })
+                .catch(err => console.log(err));
             })
             .catch(error => {
               // The write failed...
@@ -376,7 +428,7 @@ export default function RegistrationScreenStudent({navigation}) {
               placeholder="Enter Contact Number"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
-              maxLength={11}
+              // maxLength={11}
             />
           </View>
           <View style={styles.SectionStyle}>
@@ -400,18 +452,10 @@ export default function RegistrationScreenStudent({navigation}) {
               placeholder="Enter Date of Birth"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
+              keyboardType="numeric"
             />
           </View>
-          {/* <View style={styles.SectionStyle}>
-            <FontAwesome name="map-marker" style={styles.icon} size={15} />
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={city => setCity(city)}
-              placeholder="Enter City"
-              placeholderTextColor="#6A6A6A"
-              blurOnSubmit={false}
-            />
-          </View> */}
+
           <TouchableOpacity
             style={styles.buttonStyle}
             activeOpacity={0.5}

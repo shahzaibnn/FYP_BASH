@@ -13,13 +13,14 @@ import {
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {ref, set, update, onValue, remove, push} from 'firebase/database';
 // import {db} from '../Firebase/Config';
 
 import {firebase} from '@react-native-firebase/database';
 import database from '@react-native-firebase/database';
-import {db, authorization, auth} from '../Firebase/Config';
+import {db, authorization, auth, dbFirestore} from '../Firebase/Config';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -30,10 +31,11 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SettingsScreen from './SettingsScreen';
 import CreatePostScreen from './CreatePostScreen';
+import RNSmtpMailer from 'react-native-smtp-mailer';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function RegistrationScreenFaculty({navigation}) {
+export default function RegistrationFacultyStudent({navigation}) {
   const [userName, setUserName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -46,15 +48,96 @@ export default function RegistrationScreenFaculty({navigation}) {
 
   const [dateOfBirth, setdateOfBirth] = useState('09-10-2020');
 
-  // const [city, setCity] = useState('');
-
-  // const [userAge, setUserAge] = useState('');
-  // const [userAddress, setUserAddress] = useState('');
-  // const [loading, setLoading] = useState(false);
-
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-  const [visible, setVisibility] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [eye, setEye] = useState('eye');
+
+  const signupPressed = async () => {
+    if (!userName) {
+      alert('Please fill First Name');
+    } else if (!lastName) {
+      alert('Please fill Last Name');
+    } else if (!userEmail) {
+      alert('Please fill Email');
+    } else if (!userPassword) {
+      alert('Please fill Password');
+    } else if (!contactNo) {
+      alert('Please fill Contact Number');
+    } else if (!batch) {
+      alert('Please fill Batch');
+    } else if (!dateOfBirth) {
+      alert('Please fill Date of Birth');
+    } else {
+      alert('EVERYTHING GUD');
+
+      createUserWithEmailAndPassword(auth, userEmail, userPassword)
+        .then(cred => {
+          console.log(cred);
+          console.log('success');
+          const user = cred.user;
+          console.log('Logged in as ', user.email);
+          //adding here so first the details are verified and then saved further
+          dbFirestore()
+            .collection('Users')
+            .doc('roles')
+            .collection('faculty')
+            .add({
+              role: 'faculty',
+              firstName: userName,
+              lastName: lastName,
+              userEmail: userEmail,
+              userPassword: userPassword,
+              contactNo: contactNo,
+              dateOfBirth: dateOfBirth,
+              joinYear: batch,
+              pic: '',
+              title: '',
+              description: '',
+              skills: [],
+              cv: '',
+              experience: [{}],
+              postsId: [],
+              appliedJobId: [],
+            })
+            .then(() => {
+              console.log('User added!');
+              RNSmtpMailer.sendMail({
+                mailhost: 'smtp.gmail.com',
+                port: '465',
+                ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
+                username: 'bashfyp@gmail.com',
+                password: 'ltdapqlallccrgss',
+                // fromName: 'Some Name', // optional
+                // replyTo: 'usernameEmail', // optional
+                recipients: userEmail,
+                // bcc: ['bccEmail1', 'bccEmail2'], // optional
+                // bcc: ['shahzaibnn@gmail.com'], // optional
+                subject: 'Welcome To BASH',
+                htmlBody: '<h1>Account Registered</h1>',
+                // attachmentPaths: [path],
+                // attachmentNames: ['anotherTest.pdf'],
+              })
+                .then(success => {
+                  console.log(success);
+                  alert('Account Regsitered');
+                })
+                .catch(err => console.log(err));
+            })
+            .catch(error => {
+              // The write failed...
+              const errorMessage = error.message;
+              alert(errorMessage);
+            });
+        })
+        .catch(error => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorMessage);
+          // ..
+        });
+    }
+  };
 
   // const handleSubmitButton = () => {
   //   setErrortext('');
@@ -158,7 +241,7 @@ export default function RegistrationScreenFaculty({navigation}) {
         const user = cred.user;
         console.log('Logged in as ', user.userEmail);
         //adding here so first the details are verified and then saved further
-        set(ref(db, 'roles/' + userName + '/'), {
+        push(ref(db, 'roles/students/'), {
           firstName: userName,
           lastName: lastName,
           userEmail: userEmail,
@@ -173,10 +256,11 @@ export default function RegistrationScreenFaculty({navigation}) {
           experience: [{organization: 'one'}, {organization: 'two'}],
           postsId: ['1'],
           appliedJobId: ['1'],
+          role: 'student',
         })
           .then(() => {
             // Data saved successfully!
-            alert('Signed In!');
+            alert('Registered!');
           })
           .catch(error => {
             // The write failed...
@@ -233,7 +317,7 @@ export default function RegistrationScreenFaculty({navigation}) {
             onPress={() => navigation.navigate('Login')}>
             <AntDesign name="leftcircle" size={32} color="#777777" />
           </TouchableOpacity>
-          <Text style={styles.titleText}>Faculty Sign Up</Text>
+          <Text style={styles.titleText}>Student Sign Up</Text>
         </View> */}
 
         <KeyboardAvoidingView enabled>
@@ -292,13 +376,20 @@ export default function RegistrationScreenFaculty({navigation}) {
               placeholder="Enter Password"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
-              secureTextEntry={!visible}
+              secureTextEntry={!passwordVisible}
             />
-            <FontAwesome
-              name="eye-slash"
+            <MaterialCommunityIcons
+              name={eye}
               style={styles.icon}
               size={15}
-              onPress={() => setVisibility(!visible)}
+              onPress={() => {
+                setPasswordVisible(!passwordVisible);
+                if (passwordVisible) {
+                  setEye('eye-off');
+                } else {
+                  setEye('eye');
+                }
+              }}
             />
           </View>
           <View style={styles.SectionStyle}>
@@ -320,9 +411,10 @@ export default function RegistrationScreenFaculty({navigation}) {
               value={batch}
               style={styles.inputStyle}
               onChangeText={batch => setbatch(batch)}
-              placeholder="Batch"
+              placeholder="Join Year"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
+              keyboardType="numeric"
             />
           </View>
           <View style={styles.SectionStyle}>
@@ -334,24 +426,16 @@ export default function RegistrationScreenFaculty({navigation}) {
               placeholder="Enter Date of Birth"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
+              keyboardType="numeric"
             />
           </View>
-          {/* <View style={styles.SectionStyle}>
-            <FontAwesome name="map-marker" style={styles.icon} size={15} />
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={city => setCity(city)}
-              placeholder="Enter City"
-              placeholderTextColor="#6A6A6A"
-              blurOnSubmit={false}
-            />
-          </View> */}
+
           <TouchableOpacity
             style={styles.buttonStyle}
             activeOpacity={0.5}
             // onPress={createData}
             onPress={() => {
-              handleSignUp();
+              signupPressed();
             }}>
             {/* <Button onPress={createData()} title="press"></Button> */}
             <Text style={styles.buttonTextStyle}>Sign Up</Text>
