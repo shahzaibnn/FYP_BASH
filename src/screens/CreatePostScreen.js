@@ -25,11 +25,12 @@ export default function CreatePostScreen() {
   const [text, setText] = useState('');
 
   const [multipleFile, setMultipleFile] = useState([]);
+  const [yourArray, setyourArray] = useState([]);
   const [filePath, setfilePath] = useState();
 
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
-  var yourArray = new Array();
+  // var yourArray = new Array();
 
   const selectMultipleFile = async () => {
     try {
@@ -65,7 +66,30 @@ export default function CreatePostScreen() {
     }
   };
 
+  const checking = () => {
+    console.log('Button Clicked!');
+    setTimeout(function () {
+      fb();
+      // first();
+    }, 3000);
+  };
   const fb = async () => {
+    console.log('Clicked ');
+    console.log(yourArray);
+    console.log('another method to check!!!' + yourArray);
+    console.log('WORKING ');
+    dbFirestore()
+      .collection('Users')
+      .doc('roles')
+      .collection('alumni')
+      .add({
+        name: ' CHECK12',
+        age: 22,
+        url: yourArray,
+      })
+      .then(() => {
+        console.log('WORKING WITH MULTIPLE URLS!');
+      });
     // let promise = new Promise(resolve => {
     //   // setTimeout(() => resolve("done!"), 1000)
     //   uploadImage();
@@ -73,35 +97,33 @@ export default function CreatePostScreen() {
     // });
     // let result = await promise;
     // alert(result);
-    const result = await uploadImage();
+    // const result = (function () {
+    //   var executed = false;
+    //   return function () {
+    //     if (!executed) {
+    //       executed = true;
+    //       uploadImage();
+    //     }
+    //   };
+    // })();
+    // console.log(result);
 
-    console.log('another method to check!!!' + yourArray);
-    console.log('WORKING ');
-
-    console.log('another method to check 222!!!' + yourArray);
-
-    dbFirestore()
-      .collection('Users')
-      .doc('roles')
-      .collection('alumni')
-      .add({
-        name: ' AGAINNNNN',
-        age: 22,
-        url: yourArray,
-      })
-      .then(() => {
-        console.log('WORKING WITH MULTIPLE URLS!');
-      });
+    // console.log('another method to check 222!!!' + yourArray);
+    // uploadImage();
+    setTimeout(function () {
+      uploadImage();
+    }, 3000);
   };
+
   const uploadImage = async () => {
     try {
       let mod = filePath.map(function (element) {
-        console.log('test 1');
-        console.log(element.fileCopyUri.replace('file://', ''));
-        console.log('test 2');
-        console.log(element.name);
-        console.log('test 3');
-        console.log(element.uri);
+        // console.log('test 1');
+        // console.log(element.fileCopyUri.replace('file://', ''));
+        // console.log('test 2');
+        // console.log(element.name);
+        // console.log('test 3');
+        // console.log(element.uri);
 
         // const url = .getDownloadURL();
         const reference = storage().ref('/myfiles/' + element.name);
@@ -109,7 +131,7 @@ export default function CreatePostScreen() {
           element.fileCopyUri.replace('file://', ''),
         );
 
-        task.on('state_changed', async taskSnapshot => {
+        task.on('state_changed', taskSnapshot => {
           // console.log('checking');
           console.log('uploading');
           // const url = await reference.getDownloadURL();
@@ -117,36 +139,22 @@ export default function CreatePostScreen() {
           // yourArray.push(...[url]);
           // console.log('URLS ARE \n' + yourArray.join('\n'));
         });
-        task.then(async () => {
+        async function addd() {
           const url = await reference.getDownloadURL();
+          console.log('URLS ARE \n');
+          yourArray.push(url);
+          // console.log('Checking here!34443');
+          console.log(yourArray);
+        }
+        task.then(() => {
           // yourArray = [url];
           // console.log('URLS 1 \n' + yourArray.join('\n'));
 
           // yourArray.push(url);
           // console.log('URLS ARE \n' + yourArray.join('\n'));
           console.log('Uploaded');
-          console.log('Checking here 5555!');
-          console.log(yourArray);
-          function addd() {
-            console.log('URLS ARE \n');
-
-            yourArray.push(url);
-            console.log('Checking here!34443');
-            console.log(yourArray);
-            // dbFirestore()
-            //   .collection('Users')
-            //   .doc('roles')
-            //   .collection('student')
-            //   .add({
-            //     name: ' TESTTTTTTT',
-            //     age: 22,
-            //     url: yourArray,
-            //   })
-            //   .then(() => {
-            //     console.log('WORKING WITH MULTIPLE URLS!');
-            //   });
-            // list.push(value);
-          }
+          // console.log('Checking here 5555!');
+          // console.log(yourArray);
           addd();
           // console.log('url is: ' + url);
           // let yourArray = [url].join('');
@@ -154,14 +162,18 @@ export default function CreatePostScreen() {
           // yourArray.push(...url);
           // console.log('URLS ARE \n' + yourArray.push(...url));
         });
-        console.log('Checking here!');
-        console.log(yourArray);
+        // console.log('Checking here 2! Checking here! ');
+        // console.log('Checking here! Checking here!  ');
+        // console.log(yourArray);
+        // setyourArray(url);
+        // console.log(yourArray);
 
         setfilePath({});
       });
-      console.log('Checking here 2!');
+      // console.log('Checking here 2!');
+      setyourArray(yourArray);
 
-      console.log(yourArray);
+      // console.log(yourArray);
 
       // console.log('Checking here!');
       // console.log(yourArray);
@@ -184,7 +196,7 @@ export default function CreatePostScreen() {
       console.log('Some Error!!!');
     }
   };
-  console.log(yourArray);
+  // console.log(yourArray);
 
   const removeFile = key => {
     setMultipleFile(current =>
@@ -196,7 +208,7 @@ export default function CreatePostScreen() {
   };
 
   console.log(multipleFile);
-  console.log('outside to check!!!');
+  // console.log('outside to check!!!');
   console.log('outside to check!!!' + yourArray);
 
   return (
@@ -256,7 +268,7 @@ export default function CreatePostScreen() {
             borderRadius: 16,
             marginLeft: '30%',
           }}
-          onPress={fb}>
+          onPress={checking}>
           <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
             Post
           </Text>
