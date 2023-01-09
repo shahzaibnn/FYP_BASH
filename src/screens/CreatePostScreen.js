@@ -88,6 +88,18 @@ export default function CreatePostScreen() {
           console.log('Uploaded');
           const url = await reference.getDownloadURL();
           console.log('url is: ' + url);
+          let yourArray = [url];
+          yourArray.push(...url);
+          dbFirestore()
+            .collection('Posts')
+            .add({
+              name: 'NEW POST',
+              age: 30,
+              url: yourArray,
+            })
+            .then(() => {
+              console.log('User added!');
+            });
         });
       });
 
