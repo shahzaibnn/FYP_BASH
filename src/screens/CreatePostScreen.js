@@ -38,31 +38,26 @@ export default function CreatePostScreen() {
       });
       console.log(results);
       setfilePath(results);
-      // for (const res of results) {
-      //   // console.log('length is : ', results.length);
+      for (const res of results) {
+        // console.log('length is : ', results.length);
+        // console.log('URI : ' + res.uri);
+        // console.log('File Name : ' + res.name);
+        // console.log('File Type: ' + res.type);
+        // console.log('CHECKING ' + filePath);
+        setMultipleFile(
+          current => [
+            ...current,
+            {
+              key: Math.floor(Math.random() * 1000000000),
+              name: res.name,
+              uri: res.uri,
 
-      //   // console.log('URI : ' + res.uri);
-
-      //   // console.log('File Name : ' + res.name);
-
-      //   // console.log('File Type: ' + res.type);
-
-      //   // console.log('CHECKING ' + filePath);
-
-      //   setMultipleFile(
-      //     current => [
-      //       ...current,
-      //       {
-      //         key: Math.floor(Math.random() * 1000000000),
-      //         name: res.name,
-      //         uri: res.uri,
-
-      //         type: res.type,
-      //       },
-      //     ],
-      //     console.log('File Path :' + results),
-      //   );
-      // }
+              type: res.type,
+            },
+          ],
+          console.log('File Path :' + results),
+        );
+      }
     } catch (err) {
       setfilePath({});
       console.log('Some Error!!!');
@@ -76,19 +71,40 @@ export default function CreatePostScreen() {
         console.log(element.fileCopyUri.replace('file://', ''));
         console.log('test 2');
         console.log(element.name);
+        console.log('test 3');
+        console.log(element.uri);
+
+        // const url = .getDownloadURL();
         const reference = storage().ref('/myfiles/' + element.name);
         const task = reference.putFile(
           element.fileCopyUri.replace('file://', ''),
         );
+
         task.on('state_changed', taskSnapshot => {
           // console.log('checking');
           console.log('uploading');
         });
-        task.then(() => {
+        task.then(async () => {
           console.log('Uploaded');
+          const url = await reference.getDownloadURL();
+          console.log('url is: ' + url);
         });
       });
+
       setfilePath({});
+
+      // dbFirestore()
+      //   .collection('Users')
+      //   .doc('roles')
+      //   .collection('student')
+      //   .add({
+      //     name: ' mcka kadckacmdfsl',
+      //     age: 30,
+      //     url: url,
+      //   })
+      //   .then(() => {
+      //     console.log('User added!');
+      //   });
     } catch (error) {
       console.log('Some Error!!!');
     }
