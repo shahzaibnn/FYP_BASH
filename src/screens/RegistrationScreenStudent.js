@@ -13,13 +13,14 @@ import {
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {ref, set, update, onValue, remove, push} from 'firebase/database';
 // import {db} from '../Firebase/Config';
 
 import {firebase} from '@react-native-firebase/database';
 import database from '@react-native-firebase/database';
-import {db, authorization, auth} from '../Firebase/Config';
+import {db, authorization, auth, dbFirestore} from '../Firebase/Config';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -46,15 +47,71 @@ export default function RegistrationScreenStudent({navigation}) {
 
   const [dateOfBirth, setdateOfBirth] = useState('09-10-2020');
 
-  // const [city, setCity] = useState('');
-
-  // const [userAge, setUserAge] = useState('');
-  // const [userAddress, setUserAddress] = useState('');
-  // const [loading, setLoading] = useState(false);
-
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-  const [visible, setVisibility] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(true);
+  const [eye, setEye] = useState('eye');
+
+  const signupPressed = () => {
+    if (!userName) {
+      alert('Please fill First Name');
+    } else if (!lastName) {
+      alert('Please fill Last Name');
+    } else if (!userEmail) {
+      alert('Please fill Email');
+    } else if (!userPassword) {
+      alert('Please fill Password');
+    } else if (!contactNo) {
+      alert('Please fill Contact Number');
+    } else if (!batch) {
+      alert('Please fill Batch');
+    } else if (!dateOfBirth) {
+      alert('Please fill Date of Birth');
+    } else {
+      alert('EVERYTHING GUD');
+
+      createUserWithEmailAndPassword(auth, userEmail, userPassword)
+        .then(cred => {
+          console.log(cred);
+          console.log('success');
+          const user = cred.user;
+          console.log('Logged in as ', user.userEmail);
+          //adding here so first the details are verified and then saved further
+          push(ref(db, 'roles/students/'), {
+            firstName: userName,
+            lastName: lastName,
+            userEmail: userEmail,
+            userPassword: userPassword,
+            contactNo: contactNo,
+            dateOfBirth: dateOfBirth,
+            pic: '',
+            title: '',
+            description: '',
+            skills: ['java', 'React'],
+            cv: '',
+            experience: [{organization: 'one'}, {organization: 'two'}],
+            postsId: ['1'],
+            appliedJobId: ['1'],
+            role: 'student',
+          })
+            .then(() => {
+              // Data saved successfully!
+              alert('Registered!');
+            })
+            .catch(error => {
+              // The write failed...
+              const errorMessage = error.message;
+              alert(errorMessage);
+            });
+        })
+        .catch(error => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorMessage);
+          // ..
+        });
+    }
+  };
 
   // const handleSubmitButton = () => {
   //   setErrortext('');
@@ -173,6 +230,7 @@ export default function RegistrationScreenStudent({navigation}) {
           experience: [{organization: 'one'}, {organization: 'two'}],
           postsId: ['1'],
           appliedJobId: ['1'],
+          role: 'student',
         })
           .then(() => {
             // Data saved successfully!
@@ -292,13 +350,20 @@ export default function RegistrationScreenStudent({navigation}) {
               placeholder="Enter Password"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
-              secureTextEntry={!visible}
+              secureTextEntry={!passwordVisible}
             />
-            <FontAwesome
-              name="eye-slash"
+            <MaterialCommunityIcons
+              name={eye}
               style={styles.icon}
               size={15}
-              onPress={() => setVisibility(!visible)}
+              onPress={() => {
+                setPasswordVisible(!passwordVisible);
+                if (passwordVisible) {
+                  setEye('eye-off');
+                } else {
+                  setEye('eye');
+                }
+              }}
             />
           </View>
           <View style={styles.SectionStyle}>
@@ -323,6 +388,7 @@ export default function RegistrationScreenStudent({navigation}) {
               placeholder="Batch"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
+              keyboardType="numeric"
             />
           </View>
           <View style={styles.SectionStyle}>
@@ -351,7 +417,7 @@ export default function RegistrationScreenStudent({navigation}) {
             activeOpacity={0.5}
             // onPress={createData}
             onPress={() => {
-              handleSignUp();
+              signupPressed();
             }}>
             {/* <Button onPress={createData()} title="press"></Button> */}
             <Text style={styles.buttonTextStyle}>Sign Up</Text>
