@@ -19,7 +19,19 @@ import ImageModal from 'react-native-image-modal';
 
 import storage from '@react-native-firebase/storage';
 import {db, dbFirestore} from '../Firebase/Config';
-import {ref, set, limitToFirst} from 'firebase/database';
+import {
+  ref,
+  set,
+  update,
+  onValue,
+  remove,
+  orderByChild,
+  query,
+  limitToLast,
+  equalTo,
+  limitToFirst,
+} from 'firebase/database';
+import {waitForPendingWrites} from 'firebase/firestore';
 
 export default function CreatePostScreen() {
   const [text, setText] = useState('');
@@ -30,8 +42,9 @@ export default function CreatePostScreen() {
 
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
-  // var yourArray = new Array();
 
+  // var yourArray = new Array();
+  var abc;
   const selectMultipleFile = async () => {
     try {
       const results = await DocumentPicker.pickMultiple({
@@ -75,36 +88,59 @@ export default function CreatePostScreen() {
   };
   const fb = async () => {
     console.log('Clicked ');
-    console.log(yourArray);
-    console.log('another method to check!!!' + yourArray);
-    console.log('WORKING ');
+
+    let promise = new Promise(resolve => {
+      // setTimeout(() => resolve("done!"), 1000)
+      setTimeout(() => resolve('done!'), 1000);
+      console.log('WORKING promise ');
+      uploadImage();
+    });
+    let result = await promise;
+    alert(result);
+    console.log('check after promise' + yourArray);
+
+    // let promisee = new Promise(resolve => {
+    //   // setTimeout(() => resolve("done!"), 1000)
+    //   setTimeout(() => resolve('DONEEEEE!'), 1000);
+    //   console.log('WORKING promise 21 ');
+    //   console.log(yourArray);
+    //   console.log('another method to check!!! 22222' + yourArray);
+    console.log('WORKING 1112222');
     dbFirestore()
       .collection('Users')
       .doc('roles')
       .collection('alumni')
       .add({
-        name: ' CHECK12',
+        name: 'PROMISE LOGICC',
         age: 22,
         url: yourArray,
       })
       .then(() => {
         console.log('WORKING WITH MULTIPLE URLS!');
+        alert('FIRESTORE');
       });
-    // let promise = new Promise(resolve => {
-    //   // setTimeout(() => resolve("done!"), 1000)
-    //   uploadImage();
-    //   setTimeout(() => resolve('done!'), 1000);
+    return true;
     // });
-    // let result = await promise;
-    // alert(result);
-    // const result = (function () {
-    //   var executed = false;
-    //   return function () {
-    //     if (!executed) {
-    //       executed = true;
-    //       uploadImage();
-    //     }
-    //   };
+    // let results = await promisee;
+    // alert(results);
+    // resultt();
+    // const resultt = (function () {
+    //   console.log(yourArray);
+    //   console.log('another method to check!!!' + yourArray);
+    //   console.log('WORKING ');
+    //   dbFirestore()
+    //     .collection('Users')
+    //     .doc('roles')
+    //     .collection('alumni')
+    //     .add({
+    //       name: 'PROMISE LOGICC',
+    //       age: 22,
+    //       url: yourArray,
+    //     })
+    //     .then(() => {
+    //       console.log('WORKING WITH MULTIPLE URLS!');
+    //       alert('doneeeeeee');
+    //     });
     // })();
     // console.log(result);
 
@@ -116,6 +152,8 @@ export default function CreatePostScreen() {
   };
 
   const uploadImage = async () => {
+    const Docid = Math.floor(Math.random() * 100);
+    console.log(Docid);
     try {
       let mod = filePath.map(function (element) {
         // console.log('test 1');
@@ -145,6 +183,21 @@ export default function CreatePostScreen() {
           yourArray.push(url);
           // console.log('Checking here!34443');
           console.log(yourArray);
+          dbFirestore()
+            .collection('Users')
+            .doc('roles')
+            .collection('alumni')
+            .doc('P01' + Docid)
+            .set({
+              name: 'PLSSSSSSSSSSSS PLS AGAINNN',
+              age: 22,
+              url: yourArray,
+            })
+            .then(() => {
+              // console.log(ress.id);
+              console.log('WORKING WITH MULTIPLE URLS!');
+              alert('FIRESTORE');
+            });
         }
         task.then(() => {
           // yourArray = [url];
@@ -170,6 +223,12 @@ export default function CreatePostScreen() {
         setyourArray(yourArray);
         setfilePath({});
       });
+      // mod.then(function () {
+      //   console.log('Checking here 2! Checking here! ');
+      //   dbadd();
+      // });
+      // abc = true;
+
       // console.log('Checking here 2!');
       // setyourArray(yourArray);
       // console.log(yourArray);
@@ -193,7 +252,31 @@ export default function CreatePostScreen() {
       //   });
     } catch (error) {
       console.log('Some Error!!!');
+    } finally {
+      console.log('final: ');
+      // dbadd();
     }
+    // abc = 'true';
+  };
+
+  //try setting variable
+  const buttonClick = () => {
+    uploadImage();
+    // dbadd();
+
+    // isBool = uploadImage();
+    // setTimeout(() => {
+    //   uploadImage();
+    // }, 1000);
+
+    console.log('TRUE: ');
+    // if (abc === 'true') {
+    //   dbadd();
+    // } else {
+    //   console.log('sorryy ');
+
+    //   alert('ERROR');
+    // }
   };
   // console.log(yourArray);
 
@@ -204,6 +287,24 @@ export default function CreatePostScreen() {
       }),
     );
     console.log('clicked!!!');
+  };
+
+  const dbadd = () => {
+    dbFirestore()
+      .collection('Users')
+      .doc('roles')
+      .collection('alumni')
+      .doc('5156')
+      .set({
+        name: 'HELLO',
+        age: 22,
+        url: yourArray,
+      })
+      .then(() => {
+        // console.log(ress.id);
+        console.log('WORKING WITH MULTIPLE URLS!');
+        alert('FIRESTORE');
+      });
   };
 
   console.log(multipleFile);
@@ -267,11 +368,26 @@ export default function CreatePostScreen() {
             borderRadius: 16,
             marginLeft: '30%',
           }}
-          onPress={uploadImage}>
+          onPress={buttonClick}>
           <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
             Post
           </Text>
         </TouchableOpacity>
+
+        {/* <TouchableOpacity
+          style={{
+            backgroundColor: '#4CA6A8',
+            paddingVertical: '2%',
+            paddingHorizontal: '17%',
+            // borderRadius: 16,
+            marginLeft: '-50%',
+            marginTop: '-50%',
+          }}
+          onPress={dbadd}>
+          <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
+            Post here
+          </Text>
+        </TouchableOpacity> */}
       </View>
 
       <View
