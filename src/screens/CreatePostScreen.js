@@ -43,6 +43,8 @@ export default function CreatePostScreen() {
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
 
+  const Docid = Math.floor(Math.random() * 100);
+
   // var yourArray = new Array();
   var abc;
   const selectMultipleFile = async () => {
@@ -152,7 +154,6 @@ export default function CreatePostScreen() {
   };
 
   const uploadImage = async () => {
-    const Docid = Math.floor(Math.random() * 100);
     console.log(Docid);
     try {
       let mod = filePath.map(function (element) {
@@ -168,6 +169,7 @@ export default function CreatePostScreen() {
         const task = reference.putFile(
           element.fileCopyUri.replace('file://', ''),
         );
+        addd();
 
         task.on('state_changed', taskSnapshot => {
           // console.log('checking');
@@ -183,21 +185,40 @@ export default function CreatePostScreen() {
           yourArray.push(url);
           // console.log('Checking here!34443');
           console.log(yourArray);
-          dbFirestore()
-            .collection('Users')
-            .doc('roles')
-            .collection('alumni')
-            .doc('P01' + Docid)
-            .set({
-              name: 'PLSSSSSSSSSSSS PLS AGAINNN',
-              age: 22,
-              url: yourArray,
-            })
-            .then(() => {
-              // console.log(ress.id);
-              console.log('WORKING WITH MULTIPLE URLS!');
-              alert('FIRESTORE');
-            });
+          addtoDB(yourArray);
+
+          // dbFirestore()
+          //   .collection('Posts')
+          //   // .doc('roles')
+          //   // .collection('alumni')
+          //   .doc('P01' + Docid)
+          //   .set({
+          //     // name: 'PLSSSSSSSSSSSS PLS AGAINNN',
+          //     // age: 22,
+          //     // url: yourArray,
+          //     // .set({
+          //     commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
+          //     date: '25th October 2022',
+          //     description:
+          //       "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
+          //     images: [
+          //       'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
+          //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
+          //     ],
+          //     likedBy: ['shahzaibnn@gmail.com'],
+          //     name: 'Benedict',
+          //     profilePic:
+          //       'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
+          //     title: 'BSCS Student',
+          //     url: yourArray,
+          //   }
+          //   )
+          // })
+          // .then(() => {
+          //   // console.log(ress.id);
+          //   console.log('WORKING WITH MULTIPLE URLS!');
+          //   alert('FIRESTORE');
+          // });
         }
         task.then(() => {
           // yourArray = [url];
@@ -206,9 +227,10 @@ export default function CreatePostScreen() {
           // yourArray.push(url);
           // console.log('URLS ARE \n' + yourArray.join('\n'));
           console.log('Uploaded');
+
           // console.log('Checking here 5555!');
           // console.log(yourArray);
-          addd();
+          // addd();
           // console.log('url is: ' + url);
           // let yourArray = [url].join('');
           // console.log('URL: \n' + yourArray.push(...url));
@@ -254,9 +276,37 @@ export default function CreatePostScreen() {
       console.log('Some Error!!!');
     } finally {
       console.log('final: ');
+      addtoDB(yourArray);
+      console.log('Here: ');
+
       // dbadd();
     }
     // abc = 'true';
+  };
+
+  const addtoDB = yourArray => {
+    console.log('id is ' + Docid);
+
+    dbFirestore()
+      .collection('Posts')
+      // .doc('roles')
+      // .collection('alumni')
+      .doc('P0000' + Docid)
+      .set({
+        postBody: text,
+        url: yourArray,
+        date: '25th October 2022',
+        name: 'BASH',
+        profilePic:
+          'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
+        title: 'BSCS Student',
+      })
+      .then(() => {
+        // console.log(ress.id);
+        console.log('WORKING WITH MULTIPLE URLS!');
+        alert('FIRESTORE');
+        console.log(yourArray);
+      });
   };
 
   //try setting variable
@@ -269,7 +319,7 @@ export default function CreatePostScreen() {
     //   uploadImage();
     // }, 1000);
 
-    console.log('TRUE: ');
+    console.log('Button clicked: ');
     // if (abc === 'true') {
     //   dbadd();
     // } else {
