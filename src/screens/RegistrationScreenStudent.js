@@ -17,6 +17,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import MonthPicker from 'react-native-month-year-picker';
 
+import DatePicker from 'react-native-date-picker';
+
 import {ref, set, update, onValue, remove, push} from 'firebase/database';
 // import {db} from '../Firebase/Config';
 
@@ -45,6 +47,9 @@ export default function RegistrationScreenStudent({navigation}) {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
+  const [dob, setDob] = useState(new Date());
+  const [open, setOpen] = useState(false);
+
   const showPicker = useCallback(value => {
     setShow(value);
   }, []);
@@ -72,7 +77,7 @@ export default function RegistrationScreenStudent({navigation}) {
 
   const [contactNo, setcontactNo] = useState('');
 
-  const [dateOfBirth, setdateOfBirth] = useState('09-10-2020');
+  const [dateOfBirth, setdateOfBirth] = useState('Date of Birth');
 
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
@@ -233,32 +238,11 @@ export default function RegistrationScreenStudent({navigation}) {
         // ..
       });
   };
-  // async function createData() {
-  //   // const newKey = push(child(ref(database), 'users')).key;
-
-  //   // push(ref(db, 'roles/students/' + userName + '/')),
-  //   await set(ref(db, 'roles/students/' + userName + '/'), {
-  //     userName: userName,
-  //     userEmail: userEmail,
-  //     userPassword: userPassword,
-  //     contactNo: contactNo,
-  //     course: course,
-  //     dateOfBirth: dateOfBirth,
-  //     city: city,
-  //   })
-  //     .then(() => {
-  //       // Data saved successfully!
-  //       alert('Signed In!');
-  //     })
-  //     .catch(error => {
-  //       // The write failed...
-  //       alert(error);
-  //     });
-  // }
 
   useEffect(() => {
-    setbatch(moment(date).format('MM-YYYY'));
-  }, [date]);
+    setbatch('Join Month/Year: ' + moment(date).format('MM-YYYY'));
+    setdateOfBirth('Date of Birth: ' + moment(dob).format('DD-MM-YYYY'));
+  }, [date, dob]);
 
   return (
     <View
@@ -395,7 +379,9 @@ export default function RegistrationScreenStudent({navigation}) {
               mode="number"
             />
           )}
-          <View style={styles.SectionStyle}>
+          <TouchableOpacity
+            style={styles.SectionStyle}
+            onPress={() => setOpen(true)}>
             <FontAwesome name="calendar" style={styles.icon} size={15} />
 
             <TextInput
@@ -406,8 +392,26 @@ export default function RegistrationScreenStudent({navigation}) {
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
               keyboardType="numeric"
+              editable={false}
             />
-          </View>
+          </TouchableOpacity>
+
+          <DatePicker
+            // style={{backgroundColor: 'orange'}}
+            androidVariant="iosClone"
+            maximumDate={new Date(2025, 5, 30)}
+            mode="date"
+            modal
+            open={open}
+            date={date}
+            onConfirm={dob => {
+              setOpen(false);
+              setDob(dob);
+            }}
+            onCancel={() => {
+              setOpen(false);
+            }}
+          />
 
           <TouchableOpacity
             style={styles.buttonStyle}

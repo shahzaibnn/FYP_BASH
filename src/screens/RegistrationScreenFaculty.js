@@ -1,4 +1,4 @@
-import React, {useState, createRef} from 'react';
+import React, {useState, createRef, useCallback, useEffect} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -14,6 +14,10 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import MonthPicker from 'react-native-month-year-picker';
+
+import DatePicker from 'react-native-date-picker';
 
 import {ref, set, update, onValue, remove, push} from 'firebase/database';
 // import {db} from '../Firebase/Config';
@@ -35,7 +39,36 @@ import RNSmtpMailer from 'react-native-smtp-mailer';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function RegistrationFacultyStudent({navigation}) {
+var moment = require('moment'); // require
+
+export default function RegistrationScreenFaculty({navigation}) {
+  const [batch, setbatch] = useState();
+
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
+  const [dob, setDob] = useState(new Date());
+  const [open, setOpen] = useState(false);
+
+  const showPicker = useCallback(value => {
+    setShow(value);
+  }, []);
+
+  const onValueChange = useCallback(
+    (event, newDate) => {
+      const selectedDate = newDate || date;
+
+      showPicker(false);
+      setDate(selectedDate);
+      // setbatch(moment(date).format('MM-YYYY'));
+    },
+    [date, showPicker],
+
+    console.log(moment(date).format('MM-YYYY')),
+    // setbatch(moment(date).format('MM-YYYY')),
+    // console.log(moment(date, 'MM-YYYY')),
+  );
+
   const [userName, setUserName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -44,9 +77,7 @@ export default function RegistrationFacultyStudent({navigation}) {
 
   const [contactNo, setcontactNo] = useState('');
 
-  const [batch, setbatch] = useState('');
-
-  const [dateOfBirth, setdateOfBirth] = useState('09-10-2020');
+  const [dateOfBirth, setdateOfBirth] = useState('Date of Birth');
 
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
@@ -68,6 +99,32 @@ export default function RegistrationFacultyStudent({navigation}) {
       alert('Please fill Batch');
     } else if (!dateOfBirth) {
       alert('Please fill Date of Birth');
+    } else if (!/^[a-zA-Z]+$/.test(userName)) {
+      alert('First Name can only contain alphabets');
+    } else if (!/^[a-zA-Z]+$/.test(lastName)) {
+      alert('Last Name can only contain alphabets');
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(userEmail)) {
+      alert('Invalid Email');
+    } else if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&//.])[A-Za-z\d@$!%*?&//.]{8,}$/.test(
+        userPassword,
+      )
+    ) {
+      // alert(userPassword);
+
+      alert(
+        '(Password Criteria)\nMinimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character',
+      );
+    } else if (!/^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/.test(contactNo)) {
+      alert('Inalid Contact Number');
+    } else if (batch > 2023 || batch < 2000) {
+      alert('Inavlid Batch');
+    } else if (
+      !/^(([0-9])|([0-2][0-9])|([3][0-1]))\-(01|02|03|04|05|06|07|08|09|10|11|12)\-\d{4}$/.test(
+        dateOfBirth,
+      )
+    ) {
+      alert('Invalid DOB');
     } else {
       alert('EVERYTHING GUD');
 
@@ -81,7 +138,7 @@ export default function RegistrationFacultyStudent({navigation}) {
           dbFirestore()
             .collection('Users')
             .doc('roles')
-            .collection('faculty')
+            .collection('student')
             .add({
               role: 'faculty',
               firstName: userName,
@@ -90,7 +147,7 @@ export default function RegistrationFacultyStudent({navigation}) {
               userPassword: userPassword,
               contactNo: contactNo,
               dateOfBirth: dateOfBirth,
-              joinYear: batch,
+              batch: batch,
               pic: '',
               title: '',
               description: '',
@@ -138,100 +195,6 @@ export default function RegistrationFacultyStudent({navigation}) {
         });
     }
   };
-
-  // const handleSubmitButton = () => {
-  //   setErrortext('');
-  //   if (!userName) {
-  //     alert('Please fill Name');
-  //     return;
-  //   }
-  //   if (!userEmail) {
-  //     alert('Please fill Email');
-  //     return;
-  //   }
-  //   if (!userAge) {
-  //     alert('Please fill Age');
-  //     return;
-  //   }
-  //   if (!userAddress) {
-  //     alert('Please fill Address');
-  //     return;
-  //   }
-  //   if (!userPassword) {
-  //     alert('Please fill Password');
-  //     return;
-  //   }
-  //   //Show Loader
-  //   setLoading(true);
-  //   var dataToSend = {
-  //     name: userName,
-  //     email: userEmail,
-  //     age: userAge,
-  //     address: userAddress,
-  //     password: userPassword,
-  //   };
-  //   var formBody = [];
-  //   for (var key in dataToSend) {
-  //     var encodedKey = encodeURIComponent(key);
-  //     var encodedValue = encodeURIComponent(dataToSend[key]);
-  //     formBody.push(encodedKey + '=' + encodedValue);
-  //   }
-  //   formBody = formBody.join('&');
-
-  //   fetch('http://localhost:3000/api/user/register', {
-  //     method: 'POST',
-  //     body: formBody,
-  //     headers: {
-  //       //Header Defination
-  //       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(responseJson => {
-  //       //Hide Loader
-  //       setLoading(false);
-  //       console.log(responseJson);
-  //       // If server response message same as Data Matched
-  //       if (responseJson.status === 'success') {
-  //         setIsRegistraionSuccess(true);
-  //         console.log('Registration Successful. Please Login to proceed');
-  //       } else {
-  //         setErrortext(responseJson.msg);
-  //       }
-  //     })
-  //     .catch(error => {
-  //       //Hide Loader
-  //       setLoading(false);
-  //       console.error(error);
-  //     });
-  // };
-  // if (isRegistraionSuccess) {
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         backgroundColor: '#307ecc',
-  //         justifyContent: 'center',
-  //       }}>
-  //       {/* <Image
-  //         source={require('../Image/success.png')}
-  //         style={{
-  //           height: 150,
-  //           resizeMode: 'contain',
-  //           alignSelf: 'center',
-  //         }}
-  //       /> */}
-  //       <Text style={styles.successTextStyle}>Registration Successful</Text>
-  //       <TouchableOpacity
-  //         style={styles.buttonStyle}
-  //         activeOpacity={0.5}
-  //         onPress={() => props.navigation.navigate('LoginScreen')}>
-  //         <Text style={styles.buttonTextStyle}>Login Now</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // }
-
   const handleSignUp = e => {
     // e.preventDefault();
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
@@ -275,28 +238,11 @@ export default function RegistrationFacultyStudent({navigation}) {
         // ..
       });
   };
-  // async function createData() {
-  //   // const newKey = push(child(ref(database), 'users')).key;
 
-  //   // push(ref(db, 'roles/students/' + userName + '/')),
-  //   await set(ref(db, 'roles/students/' + userName + '/'), {
-  //     userName: userName,
-  //     userEmail: userEmail,
-  //     userPassword: userPassword,
-  //     contactNo: contactNo,
-  //     course: course,
-  //     dateOfBirth: dateOfBirth,
-  //     city: city,
-  //   })
-  //     .then(() => {
-  //       // Data saved successfully!
-  //       alert('Signed In!');
-  //     })
-  //     .catch(error => {
-  //       // The write failed...
-  //       alert(error);
-  //     });
-  // }
+  useEffect(() => {
+    setbatch('Join Month/Year: ' + moment(date).format('MM-YYYY'));
+    setdateOfBirth('Date of Birth: ' + moment(dob).format('DD-MM-YYYY'));
+  }, [date, dob]);
 
   return (
     <View
@@ -402,23 +348,42 @@ export default function RegistrationFacultyStudent({navigation}) {
               placeholder="Enter Contact Number"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
-              maxLength={11}
+              // maxLength={11}
             />
           </View>
-          <View style={styles.SectionStyle}>
+          <TouchableOpacity
+            style={styles.SectionStyle}
+            onPress={() => showPicker(true)}>
+            {/* <TouchableOpacity onPress={() => showPicker(true)}> */}
             <FontAwesome name="book" style={styles.icon} size={15} />
+
             <TextInput
               value={batch}
               style={styles.inputStyle}
               onChangeText={batch => setbatch(batch)}
-              placeholder="Join Year"
+              placeholder="Batch"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
               keyboardType="numeric"
+              editable={false}
             />
-          </View>
-          <View style={styles.SectionStyle}>
+            {/* </TouchableOpacity> */}
+          </TouchableOpacity>
+
+          {show && (
+            <MonthPicker
+              onChange={onValueChange}
+              value={date}
+              minimumDate={new Date()}
+              maximumDate={new Date(2025, 5)}
+              mode="number"
+            />
+          )}
+          <TouchableOpacity
+            style={styles.SectionStyle}
+            onPress={() => setOpen(true)}>
             <FontAwesome name="calendar" style={styles.icon} size={15} />
+
             <TextInput
               style={styles.inputStyle}
               value={dateOfBirth}
@@ -427,8 +392,26 @@ export default function RegistrationFacultyStudent({navigation}) {
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
               keyboardType="numeric"
+              editable={false}
             />
-          </View>
+          </TouchableOpacity>
+
+          <DatePicker
+            // style={{backgroundColor: 'orange'}}
+            androidVariant="iosClone"
+            maximumDate={new Date(2025, 5, 30)}
+            mode="date"
+            modal
+            open={open}
+            date={date}
+            onConfirm={dob => {
+              setOpen(false);
+              setDob(dob);
+            }}
+            onCancel={() => {
+              setOpen(false);
+            }}
+          />
 
           <TouchableOpacity
             style={styles.buttonStyle}

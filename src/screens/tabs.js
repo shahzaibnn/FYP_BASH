@@ -33,10 +33,11 @@ export default function MyTabs() {
         style={styles.nav}
         initialRouteName="Student"
         screenOptions={{
+          tabBarIndicatorStyle: {backgroundColor: '#000000'},
           tabBarActiveTintColor: 'white',
           tabBarInActiveTintColor: '#E5E3E4',
           tabBarBounces: true,
-          tabBarLabelStyle: {fontSize: 12},
+          tabBarLabelStyle: {fontSize: 15, fontWeight: 'bold'},
           tabBarStyle: {
             backgroundColor: '#469597',
             borderTopLeftRadius: 24,
