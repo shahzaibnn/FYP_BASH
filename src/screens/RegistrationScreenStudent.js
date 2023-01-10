@@ -1,4 +1,4 @@
-import React, {useState, createRef} from 'react';
+import React, {useState, createRef, useCallback, useEffect} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -14,6 +14,8 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import MonthPicker from 'react-native-month-year-picker';
 
 import {ref, set, update, onValue, remove, push} from 'firebase/database';
 // import {db} from '../Firebase/Config';
@@ -35,7 +37,33 @@ import RNSmtpMailer from 'react-native-smtp-mailer';
 
 const Tab = createMaterialTopTabNavigator();
 
+var moment = require('moment'); // require
+
 export default function RegistrationScreenStudent({navigation}) {
+  const [batch, setbatch] = useState();
+
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
+  const showPicker = useCallback(value => {
+    setShow(value);
+  }, []);
+
+  const onValueChange = useCallback(
+    (event, newDate) => {
+      const selectedDate = newDate || date;
+
+      showPicker(false);
+      setDate(selectedDate);
+      // setbatch(moment(date).format('MM-YYYY'));
+    },
+    [date, showPicker],
+
+    console.log(moment(date).format('MM-YYYY')),
+    // setbatch(moment(date).format('MM-YYYY')),
+    // console.log(moment(date, 'MM-YYYY')),
+  );
+
   const [userName, setUserName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -43,8 +71,6 @@ export default function RegistrationScreenStudent({navigation}) {
   const [userPassword, setUserPassword] = useState('');
 
   const [contactNo, setcontactNo] = useState('');
-
-  const [batch, setbatch] = useState('');
 
   const [dateOfBirth, setdateOfBirth] = useState('09-10-2020');
 
@@ -164,100 +190,6 @@ export default function RegistrationScreenStudent({navigation}) {
         });
     }
   };
-
-  // const handleSubmitButton = () => {
-  //   setErrortext('');
-  //   if (!userName) {
-  //     alert('Please fill Name');
-  //     return;
-  //   }
-  //   if (!userEmail) {
-  //     alert('Please fill Email');
-  //     return;
-  //   }
-  //   if (!userAge) {
-  //     alert('Please fill Age');
-  //     return;
-  //   }
-  //   if (!userAddress) {
-  //     alert('Please fill Address');
-  //     return;
-  //   }
-  //   if (!userPassword) {
-  //     alert('Please fill Password');
-  //     return;
-  //   }
-  //   //Show Loader
-  //   setLoading(true);
-  //   var dataToSend = {
-  //     name: userName,
-  //     email: userEmail,
-  //     age: userAge,
-  //     address: userAddress,
-  //     password: userPassword,
-  //   };
-  //   var formBody = [];
-  //   for (var key in dataToSend) {
-  //     var encodedKey = encodeURIComponent(key);
-  //     var encodedValue = encodeURIComponent(dataToSend[key]);
-  //     formBody.push(encodedKey + '=' + encodedValue);
-  //   }
-  //   formBody = formBody.join('&');
-
-  //   fetch('http://localhost:3000/api/user/register', {
-  //     method: 'POST',
-  //     body: formBody,
-  //     headers: {
-  //       //Header Defination
-  //       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(responseJson => {
-  //       //Hide Loader
-  //       setLoading(false);
-  //       console.log(responseJson);
-  //       // If server response message same as Data Matched
-  //       if (responseJson.status === 'success') {
-  //         setIsRegistraionSuccess(true);
-  //         console.log('Registration Successful. Please Login to proceed');
-  //       } else {
-  //         setErrortext(responseJson.msg);
-  //       }
-  //     })
-  //     .catch(error => {
-  //       //Hide Loader
-  //       setLoading(false);
-  //       console.error(error);
-  //     });
-  // };
-  // if (isRegistraionSuccess) {
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         backgroundColor: '#307ecc',
-  //         justifyContent: 'center',
-  //       }}>
-  //       {/* <Image
-  //         source={require('../Image/success.png')}
-  //         style={{
-  //           height: 150,
-  //           resizeMode: 'contain',
-  //           alignSelf: 'center',
-  //         }}
-  //       /> */}
-  //       <Text style={styles.successTextStyle}>Registration Successful</Text>
-  //       <TouchableOpacity
-  //         style={styles.buttonStyle}
-  //         activeOpacity={0.5}
-  //         onPress={() => props.navigation.navigate('LoginScreen')}>
-  //         <Text style={styles.buttonTextStyle}>Login Now</Text>
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // }
-
   const handleSignUp = e => {
     // e.preventDefault();
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
@@ -323,6 +255,10 @@ export default function RegistrationScreenStudent({navigation}) {
   //       alert(error);
   //     });
   // }
+
+  useEffect(() => {
+    setbatch(moment(date).format('MM-YYYY'));
+  }, [date]);
 
   return (
     <View
@@ -431,8 +367,12 @@ export default function RegistrationScreenStudent({navigation}) {
               // maxLength={11}
             />
           </View>
-          <View style={styles.SectionStyle}>
+          <TouchableOpacity
+            style={styles.SectionStyle}
+            onPress={() => showPicker(true)}>
+            {/* <TouchableOpacity onPress={() => showPicker(true)}> */}
             <FontAwesome name="book" style={styles.icon} size={15} />
+
             <TextInput
               value={batch}
               style={styles.inputStyle}
@@ -441,10 +381,23 @@ export default function RegistrationScreenStudent({navigation}) {
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
               keyboardType="numeric"
+              editable={false}
             />
-          </View>
+            {/* </TouchableOpacity> */}
+          </TouchableOpacity>
+
+          {show && (
+            <MonthPicker
+              onChange={onValueChange}
+              value={date}
+              minimumDate={new Date()}
+              maximumDate={new Date(2025, 5)}
+              mode="number"
+            />
+          )}
           <View style={styles.SectionStyle}>
             <FontAwesome name="calendar" style={styles.icon} size={15} />
+
             <TextInput
               style={styles.inputStyle}
               value={dateOfBirth}
