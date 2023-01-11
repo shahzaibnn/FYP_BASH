@@ -81,7 +81,7 @@ export default function RegistrationScreenFaculty({navigation}) {
 
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(true);
   const [eye, setEye] = useState('eye');
 
   const signupPressed = async () => {
@@ -138,7 +138,7 @@ export default function RegistrationScreenFaculty({navigation}) {
           dbFirestore()
             .collection('Users')
             .doc('roles')
-            .collection('student')
+            .collection('faculty')
             .add({
               role: 'faculty',
               firstName: userName,
@@ -147,7 +147,7 @@ export default function RegistrationScreenFaculty({navigation}) {
               userPassword: userPassword,
               contactNo: contactNo,
               dateOfBirth: dateOfBirth,
-              batch: batch,
+              joining: batch,
               pic: '',
               title: '',
               description: '',

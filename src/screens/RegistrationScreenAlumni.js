@@ -81,7 +81,7 @@ export default function RegistrationScreenAlumni({navigation}) {
 
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(true);
   const [eye, setEye] = useState('eye');
 
   const signupPressed = async () => {
@@ -117,15 +117,18 @@ export default function RegistrationScreenAlumni({navigation}) {
       );
     } else if (!/^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/.test(contactNo)) {
       alert('Inalid Contact Number');
-    } else if (batch > 2023 || batch < 2000) {
-      alert('Inavlid Batch');
-    } else if (
-      !/^(([0-9])|([0-2][0-9])|([3][0-1]))\-(01|02|03|04|05|06|07|08|09|10|11|12)\-\d{4}$/.test(
-        dateOfBirth,
-      )
-    ) {
-      alert('Invalid DOB');
-    } else {
+    }
+    // else if (batch > 2023 || batch < 2000) {
+    //   alert('Inavlid Batch');
+    // }
+    // else if (
+    //   !/^(([0-9])|([0-2][0-9])|([3][0-1]))\-(01|02|03|04|05|06|07|08|09|10|11|12)\-\d{4}$/.test(
+    //     dateOfBirth,
+    //   )
+    // ) {
+    //   alert('Invalid DOB');
+    // }
+    else {
       alert('EVERYTHING GUD');
 
       createUserWithEmailAndPassword(auth, userEmail, userPassword)
@@ -138,7 +141,7 @@ export default function RegistrationScreenAlumni({navigation}) {
           dbFirestore()
             .collection('Users')
             .doc('roles')
-            .collection('student')
+            .collection('alumni')
             .add({
               role: 'alumni',
               firstName: userName,

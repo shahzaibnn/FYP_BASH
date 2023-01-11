@@ -81,7 +81,7 @@ export default function RegistrationScreenStudent({navigation}) {
 
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(true);
   const [eye, setEye] = useState('eye');
 
   const signupPressed = async () => {
@@ -194,49 +194,6 @@ export default function RegistrationScreenStudent({navigation}) {
           // ..
         });
     }
-  };
-  const handleSignUp = e => {
-    // e.preventDefault();
-    createUserWithEmailAndPassword(auth, userEmail, userPassword)
-      .then(cred => {
-        console.log(cred);
-        console.log('success');
-        const user = cred.user;
-        console.log('Logged in as ', user.userEmail);
-        //adding here so first the details are verified and then saved further
-        push(ref(db, 'roles/students/'), {
-          firstName: userName,
-          lastName: lastName,
-          userEmail: userEmail,
-          userPassword: userPassword,
-          contactNo: contactNo,
-          dateOfBirth: dateOfBirth,
-          pic: '',
-          title: '',
-          description: '',
-          skills: ['java', 'React'],
-          cv: '',
-          experience: [{organization: 'one'}, {organization: 'two'}],
-          postsId: ['1'],
-          appliedJobId: ['1'],
-          role: 'student',
-        })
-          .then(() => {
-            // Data saved successfully!
-            alert('Registered!');
-          })
-          .catch(error => {
-            // The write failed...
-            const errorMessage = error.message;
-            alert(errorMessage);
-          });
-      })
-      .catch(error => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert(errorMessage);
-        // ..
-      });
   };
 
   useEffect(() => {
