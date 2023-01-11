@@ -38,11 +38,12 @@ export default function CreatePostScreen() {
 
   const [multipleFile, setMultipleFile] = useState([]);
   const [yourArray, setyourArray] = useState([]);
-  const [filePath, setfilePath] = useState();
+  const [filePath, setfilePath] = useState([]);
 
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
   const [currentDate, setCurrentDate] = useState('');
+  const [flag, setFlag] = useState(false);
 
   useEffect(() => {
     var date = new Date().getDate(); //Current Date
@@ -63,337 +64,179 @@ export default function CreatePostScreen() {
   const selectMultipleFile = async () => {
     try {
       const results = await DocumentPicker.pickMultiple({
-        type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+        type: [DocumentPicker.types.images],
         copyTo: 'cachesDirectory',
       });
-      console.log(results);
-      setfilePath(results);
+      console.log('Main rrsuklts chbhdscbsh: ', results);
+      // setfilePath(results);
       for (const res of results) {
-        // console.log('length is : ', results.length);
-        // console.log('URI : ' + res.uri);
-        // console.log('File Name : ' + res.name);
-        // console.log('File Type: ' + res.type);
-        // console.log('CHECKING ' + filePath);
-        setMultipleFile(
+        setfilePath(
           current => [
             ...current,
             {
-              key: Math.floor(Math.random() * 1000000000),
+              key: Math.floor(Math.random() * 100000000000),
               name: res.name,
               uri: res.uri,
-
+              fileCopyUri: res.fileCopyUri,
+              size: res.size,
               type: res.type,
             },
           ],
-          console.log('File Path :' + results),
+          // console.log('File Path :' + results),
         );
       }
     } catch (err) {
-      setfilePath({});
+      // setfilePath({});
       console.log('Some Error!!!');
     }
   };
 
-  // const checking = () => {
-  //   console.log('Button Clicked!');
-  //   setTimeout(function () {
-  //     fb();
-  //     // first();
-  //   }, 3000);
-  // };
-  // const fb = async () => {
-  //   console.log('Clicked ');
-
-  //   let promise = new Promise(resolve => {
-  //     // setTimeout(() => resolve("done!"), 1000)
-  //     setTimeout(() => resolve('done!'), 1000);
-  //     console.log('WORKING promise ');
-  //     uploadImage();
-  //   });
-  //   let result = await promise;
-  //   alert(result);
-  //   console.log('check after promise' + yourArray);
-
-  //   // let promisee = new Promise(resolve => {
-  //   //   // setTimeout(() => resolve("done!"), 1000)
-  //   //   setTimeout(() => resolve('DONEEEEE!'), 1000);
-  //   //   console.log('WORKING promise 21 ');
-  //   //   console.log(yourArray);
-  //   //   console.log('another method to check!!! 22222' + yourArray);
-  //   console.log('WORKING 1112222');
-  //   dbFirestore()
-  //     .collection('Users')
-  //     .doc('roles')
-  //     .collection('alumni')
-  //     .add({
-  //       name: 'PROMISE LOGICC',
-  //       age: 22,
-  //       url: yourArray,
-  //     })
-  //     .then(() => {
-  //       console.log('WORKING WITH MULTIPLE URLS!');
-  //       alert('FIRESTORE');
-  //     });
-  //   return true;
-  //   // });
-  //   // let results = await promisee;
-  //   // alert(results);
-  //   // resultt();
-  //   // const resultt = (function () {
-  //   //   console.log(yourArray);
-  //   //   console.log('another method to check!!!' + yourArray);
-  //   //   console.log('WORKING ');
-  //   //   dbFirestore()
-  //   //     .collection('Users')
-  //   //     .doc('roles')
-  //   //     .collection('alumni')
-  //   //     .add({
-  //   //       name: 'PROMISE LOGICC',
-  //   //       age: 22,
-  //   //       url: yourArray,
-  //   //     })
-  //   //     .then(() => {
-  //   //       console.log('WORKING WITH MULTIPLE URLS!');
-  //   //       alert('doneeeeeee');
-  //   //     });
-  //   // })();
-  //   // console.log(result);
-
-  //   // console.log('another method to check 222!!!' + yourArray);
-  //   // uploadImage();
-  //   // setTimeout(function () {
-  //   //   uploadImage();
-  //   // }, 3000);
-  // };
-
   const uploadImage = async () => {
     console.log(Docid);
     try {
-      let mod = filePath.map(function (element) {
-        // console.log('test 1');
-        // console.log(element.fileCopyUri.replace('file://', ''));
-        // console.log('test 2');
-        // console.log(element.name);
-        // console.log('test 3');
-        // console.log(element.uri);
-
+      let counter = 0;
+      let mod = filePath.map(function (element, index) {
         // const url = .getDownloadURL();
         const reference = storage().ref('/myfiles/' + element.name);
         const task = reference.putFile(
           element.fileCopyUri.replace('file://', ''),
         );
-        addd();
+        // addd();
 
         task.on('state_changed', taskSnapshot => {
-          // console.log('checking');
           console.log('uploading');
-          // const url = await reference.getDownloadURL();
-          // let yourArray = [url];
-          // yourArray.push(...[url]);
-          // console.log('URLS ARE \n' + yourArray.join('\n'));
         });
-        async function addd() {
+
+        task.then(async () => {
+          console.log('Task complete');
+          console.log('Uploaded');
           const url = await reference.getDownloadURL();
           console.log('URLS ARE \n');
           yourArray.push(url);
           // console.log('Checking here!34443');
           console.log(yourArray);
-          addtoDB(yourArray);
-
-          // dbFirestore()
-          //   .collection('Posts')
-          //   // .doc('roles')
-          //   // .collection('alumni')
-          //   .doc('P01' + Docid)
-          //   .set({
-          //     // name: 'PLSSSSSSSSSSSS PLS AGAINNN',
-          //     // age: 22,
-          //     // url: yourArray,
-          //     // .set({
-          //     commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
-          //     date: '25th October 2022',
-          //     description:
-          //       "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
-          //     images: [
-          //       'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
-          //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
-          //     ],
-          //     likedBy: ['shahzaibnn@gmail.com'],
-          //     name: 'Benedict',
-          //     profilePic:
-          //       'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
-          //     title: 'BSCS Student',
-          //     url: yourArray,
-          //   }
-          //   )
-          // })
-          // .then(() => {
-          //   // console.log(ress.id);
-          //   console.log('WORKING WITH MULTIPLE URLS!');
-          //   alert('FIRESTORE');
-          // });
-        }
-        task.then(() => {
-          // yourArray = [url];
-          // console.log('URLS 1 \n' + yourArray.join('\n'));
-
-          // yourArray.push(url);
-          // console.log('URLS ARE \n' + yourArray.join('\n'));
-          console.log('Uploaded');
-
-          // console.log('Checking here 5555!');
-          // console.log(yourArray);
-          // addd();
-          // console.log('url is: ' + url);
-          // let yourArray = [url].join('');
-          // console.log('URL: \n' + yourArray.push(...url));
-          // yourArray.push(...url);
-          // console.log('URLS ARE \n' + yourArray.push(...url));
+          // addtoDB(yourArray);
+          setyourArray(yourArray);
+          // setfilePath({});
+          counter++;
+          console.log(counter);
+          console.log(filePath.length);
+          if (counter == filePath.length) {
+            setFlag(true);
+          }
         });
-        // console.log('Checking here 2! Checking here! ');
-        // console.log('Checking here! Checking here!  ');
-        // console.log(yourArray);
-        // setyourArray(url);
-        // console.log(yourArray);
-        setyourArray(yourArray);
-        setfilePath({});
       });
-      // mod.then(function () {
-      //   console.log('Checking here 2! Checking here! ');
-      //   dbadd();
-      // });
-      // abc = true;
-
-      // console.log('Checking here 2!');
-      // setyourArray(yourArray);
-      // console.log(yourArray);
-
-      // console.log('Checking here!');
-      // console.log(yourArray);
-
-      // setfilePath({});
-
-      // dbFirestore()
-      //   .collection('Users')
-      //   .doc('roles')
-      //   .collection('student')
-      //   .add({
-      //     name: ' mcka kadckacmdfsl',
-      //     age: 30,
-      //     url: url,
-      //   })
-      //   .then(() => {
-      //     console.log('User added!');
-      //   });
+      console.log('abey bhai!!');
     } catch (error) {
       console.log('Some Error!!!');
     } finally {
       console.log('final: ');
-      addtoDB(yourArray);
+      // addtoDB(yourArray);
       console.log('Here: ');
 
-      // dbadd();
+      // alert('ALL UPLOADED');
     }
-    // abc = 'true';
   };
 
-  const addtoDB = yourArray => {
+  const addtoDB = async yourArray => {
     console.log('id is ' + Docid);
+    console.log('------------------------------------------------------------');
 
-    dbFirestore()
+    await dbFirestore()
       .collection('Posts')
-      // .doc('roles')
-      // .collection('alumni')
-      .doc('P0000' + Docid)
-      .set({
-        // name: 'PLSSSSSSSSSSSS PLS AGAINNN',
-        // age: 22,
-        // url: yourArray,
-        // .set({
-        commentedBy: [],
+      .add({
+        commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
         date: currentDate,
         description: text,
         images: yourArray,
-        // [
-        //   'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
-        //   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
-        // ],
-        likedBy: [],
-        name: 'Benedict',
+        likedBy: ['shahzaibnn@gmail.com'],
+        name: 'Canada',
         profilePic:
           'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
         title: 'BSCS Student',
-        // url: yourArray,
       })
-
-      // .set({
-      //   postBody: text,
-      //   url: yourArray,
-      //   date: '25th October 2022',
-      //   name: 'BASH',
-      //   profilePic:
-      //     'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
-      //   title: 'BSCS Student',
-      // })
       .then(() => {
-        // console.log(ress.id);
-        console.log('WORKING WITH MULTIPLE URLS!');
-        alert('Uploaded');
-        console.log(yourArray);
+        console.log('Post Added!');
       });
   };
 
-  //try setting variable
-  const buttonClick = () => {
+  // function one() {
+  //   return new Promise(function (resolve, reject) {
+  //     uploadImage();
+  //     // setTimeout(function () {
+  //     //   // console.log('first function executed');
+  //     //   // resolve();
+  //     // }, 3000);
+  //   });
+  // }
+
+  // function two() {
+  //   console.log('second function executed');
+  // }
+  // one().then(two);
+
+  function buttonClick() {
     uploadImage();
-    // dbadd();
-
-    // isBool = uploadImage();
-    // setTimeout(() => {
-    //   uploadImage();
-    // }, 1000);
-
-    console.log('Button clicked: ');
-    // if (abc === 'true') {
-    //   dbadd();
-    // } else {
-    //   console.log('sorryy ');
-
-    //   alert('ERROR');
+    // function doHomework(subject, callback) {
+    //   // alert(`Starting my ${subject} homework.`);
+    //   addtoDB(yourArray);
+    //   callback();
     // }
-  };
-  // console.log(yourArray);
+    // function alertFinished() {
+    //   // alert('Finished my homework');
+    //   uploadImage();
+    // }
+    // doHomework('math', alertFinished);
+
+    // setTimeout(async () => {
+    //   await addtoDB(yourArray);
+    // });
+    // await uploadImage();
+
+    // let myPromise = new Promise(function (myResolve, myReject) {
+    //   uploadImage;
+    //   myResolve('succesffulll'); // when successful
+    //   myReject('errorrrrr'); // when error
+    // });
+
+    // // "Consuming Code" (Must wait for a fulfilled Promise)
+    // myPromise.then(
+    //   function (value) {
+    //     alert('sahi!!');
+    //     console.log('pass', value);
+    //   },
+    //   function (error) {
+    //     console.log('afsos', error);
+    //     alert('errir hey!!');
+    //   },
+    // );
+  }
 
   const removeFile = key => {
-    setMultipleFile(current =>
-      current.filter(multipleFile => {
-        return multipleFile.key !== key;
+    setfilePath(current =>
+      current.filter(filePath => {
+        return filePath.key !== key;
       }),
     );
     console.log('clicked!!!');
   };
 
-  const dbadd = () => {
-    dbFirestore()
-      .collection('Users')
-      .doc('roles')
-      .collection('alumni')
-      .doc('5156')
-      .set({
-        name: 'HELLO',
-        age: 22,
-        url: yourArray,
-      })
-      .then(() => {
-        // console.log(ress.id);
-        console.log('WORKING WITH MULTIPLE URLS!');
-        alert('Uploaded!');
-      });
-  };
-
-  console.log(multipleFile);
+  console.log(filePath);
   // console.log('outside to check!!!');
   console.log('outside to check!!!' + yourArray);
+
+  useEffect(() => {
+    if (flag) {
+      console.log('Flag is : ', flag);
+      addtoDB(yourArray);
+      console.log('file path: ', filePath);
+      setfilePath([]);
+      setText('');
+      setyourArray([]);
+      setFlag(false);
+      alert('Post Uploaded!!!');
+    }
+  }, [flag]);
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -528,7 +371,7 @@ export default function CreatePostScreen() {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           // numColumns={4}
-          data={multipleFile}
+          data={filePath}
           key={'_'}
           keyExtractor={item => '_' + item.key}
           renderItem={({item}) => {

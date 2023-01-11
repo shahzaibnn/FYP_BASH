@@ -72,13 +72,13 @@ export default function App() {
     // Testing email
     // <Email />
 
-    <ForgotPassword />
+    // <ForgotPassword />
     // <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>
 
     // <HomeScreen />
-    // <CreatePostScreen />
+    <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
     // <LoginScreen />
