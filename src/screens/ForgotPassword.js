@@ -26,8 +26,6 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth';
 export default function ForgotPassword({navigation}) {
-  const [text, setText] = useState('');
-
   const [id, setId] = useState('');
   const [email, setEmail] = useState('');
   const [emailGenerated, setemailGenerated] = useState('');
@@ -35,7 +33,7 @@ export default function ForgotPassword({navigation}) {
   console.log(id);
   console.log(email);
 
-  const forgotPassword = email => {
+  const forgotPassword = () => {
     // firebase
     // authorization()
     console.log('reset email sent to ' + email);
@@ -167,7 +165,7 @@ export default function ForgotPassword({navigation}) {
           paddingVertical: '4%',
           borderRadius: 16,
         }}
-        onPress={forgotPassword(email)}>
+        onPress={forgotPassword}>
         <Text
           style={{
             color: '#ffffff',
