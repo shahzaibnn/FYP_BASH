@@ -9,7 +9,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {profile} from '../model/data';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -42,11 +42,24 @@ export default function CreatePostScreen() {
 
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+    setCurrentDate(
+      date + '/' + month + '/' + year + ' ' + hours + ':' + min + ':' + sec,
+    );
+  }, []);
 
   const Docid = Math.floor(Math.random() * 100);
 
   // var yourArray = new Array();
-  var abc;
+  // var abc;
   const selectMultipleFile = async () => {
     try {
       const results = await DocumentPicker.pickMultiple({
@@ -81,77 +94,77 @@ export default function CreatePostScreen() {
     }
   };
 
-  const checking = () => {
-    console.log('Button Clicked!');
-    setTimeout(function () {
-      fb();
-      // first();
-    }, 3000);
-  };
-  const fb = async () => {
-    console.log('Clicked ');
+  // const checking = () => {
+  //   console.log('Button Clicked!');
+  //   setTimeout(function () {
+  //     fb();
+  //     // first();
+  //   }, 3000);
+  // };
+  // const fb = async () => {
+  //   console.log('Clicked ');
 
-    let promise = new Promise(resolve => {
-      // setTimeout(() => resolve("done!"), 1000)
-      setTimeout(() => resolve('done!'), 1000);
-      console.log('WORKING promise ');
-      uploadImage();
-    });
-    let result = await promise;
-    alert(result);
-    console.log('check after promise' + yourArray);
+  //   let promise = new Promise(resolve => {
+  //     // setTimeout(() => resolve("done!"), 1000)
+  //     setTimeout(() => resolve('done!'), 1000);
+  //     console.log('WORKING promise ');
+  //     uploadImage();
+  //   });
+  //   let result = await promise;
+  //   alert(result);
+  //   console.log('check after promise' + yourArray);
 
-    // let promisee = new Promise(resolve => {
-    //   // setTimeout(() => resolve("done!"), 1000)
-    //   setTimeout(() => resolve('DONEEEEE!'), 1000);
-    //   console.log('WORKING promise 21 ');
-    //   console.log(yourArray);
-    //   console.log('another method to check!!! 22222' + yourArray);
-    console.log('WORKING 1112222');
-    dbFirestore()
-      .collection('Users')
-      .doc('roles')
-      .collection('alumni')
-      .add({
-        name: 'PROMISE LOGICC',
-        age: 22,
-        url: yourArray,
-      })
-      .then(() => {
-        console.log('WORKING WITH MULTIPLE URLS!');
-        alert('FIRESTORE');
-      });
-    return true;
-    // });
-    // let results = await promisee;
-    // alert(results);
-    // resultt();
-    // const resultt = (function () {
-    //   console.log(yourArray);
-    //   console.log('another method to check!!!' + yourArray);
-    //   console.log('WORKING ');
-    //   dbFirestore()
-    //     .collection('Users')
-    //     .doc('roles')
-    //     .collection('alumni')
-    //     .add({
-    //       name: 'PROMISE LOGICC',
-    //       age: 22,
-    //       url: yourArray,
-    //     })
-    //     .then(() => {
-    //       console.log('WORKING WITH MULTIPLE URLS!');
-    //       alert('doneeeeeee');
-    //     });
-    // })();
-    // console.log(result);
+  //   // let promisee = new Promise(resolve => {
+  //   //   // setTimeout(() => resolve("done!"), 1000)
+  //   //   setTimeout(() => resolve('DONEEEEE!'), 1000);
+  //   //   console.log('WORKING promise 21 ');
+  //   //   console.log(yourArray);
+  //   //   console.log('another method to check!!! 22222' + yourArray);
+  //   console.log('WORKING 1112222');
+  //   dbFirestore()
+  //     .collection('Users')
+  //     .doc('roles')
+  //     .collection('alumni')
+  //     .add({
+  //       name: 'PROMISE LOGICC',
+  //       age: 22,
+  //       url: yourArray,
+  //     })
+  //     .then(() => {
+  //       console.log('WORKING WITH MULTIPLE URLS!');
+  //       alert('FIRESTORE');
+  //     });
+  //   return true;
+  //   // });
+  //   // let results = await promisee;
+  //   // alert(results);
+  //   // resultt();
+  //   // const resultt = (function () {
+  //   //   console.log(yourArray);
+  //   //   console.log('another method to check!!!' + yourArray);
+  //   //   console.log('WORKING ');
+  //   //   dbFirestore()
+  //   //     .collection('Users')
+  //   //     .doc('roles')
+  //   //     .collection('alumni')
+  //   //     .add({
+  //   //       name: 'PROMISE LOGICC',
+  //   //       age: 22,
+  //   //       url: yourArray,
+  //   //     })
+  //   //     .then(() => {
+  //   //       console.log('WORKING WITH MULTIPLE URLS!');
+  //   //       alert('doneeeeeee');
+  //   //     });
+  //   // })();
+  //   // console.log(result);
 
-    // console.log('another method to check 222!!!' + yourArray);
-    // uploadImage();
-    // setTimeout(function () {
-    //   uploadImage();
-    // }, 3000);
-  };
+  //   // console.log('another method to check 222!!!' + yourArray);
+  //   // uploadImage();
+  //   // setTimeout(function () {
+  //   //   uploadImage();
+  //   // }, 3000);
+  // };
 
   const uploadImage = async () => {
     console.log(Docid);
@@ -298,7 +311,7 @@ export default function CreatePostScreen() {
         // url: yourArray,
         // .set({
         commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
-        date: '25th October 2022',
+        date: currentDate,
         description: text,
         images: yourArray,
         // [
