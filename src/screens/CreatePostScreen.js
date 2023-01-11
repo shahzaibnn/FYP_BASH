@@ -293,14 +293,35 @@ export default function CreatePostScreen() {
       // .collection('alumni')
       .doc('P0000' + Docid)
       .set({
-        postBody: text,
-        url: yourArray,
+        // name: 'PLSSSSSSSSSSSS PLS AGAINNN',
+        // age: 22,
+        // url: yourArray,
+        // .set({
+        commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
         date: '25th October 2022',
-        name: 'BASH',
+        description: text,
+        images: yourArray,
+        // [
+        //   'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
+        //   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
+        // ],
+        likedBy: ['shahzaibnn@gmail.com'],
+        name: 'Benedict',
         profilePic:
           'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
         title: 'BSCS Student',
+        // url: yourArray,
       })
+
+      // .set({
+      //   postBody: text,
+      //   url: yourArray,
+      //   date: '25th October 2022',
+      //   name: 'BASH',
+      //   profilePic:
+      //     'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
+      //   title: 'BSCS Student',
+      // })
       .then(() => {
         // console.log(ress.id);
         console.log('WORKING WITH MULTIPLE URLS!');
