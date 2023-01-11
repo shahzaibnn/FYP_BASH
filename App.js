@@ -30,6 +30,8 @@ import ImageScreen from './src/screens/Image';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MyTabs from './src/screens/tabs';
+import Alerts_Error from './src/components/AlertBoxStyles/Alerts_Error';
+import Alerts_Success from './src/components/AlertBoxStyles/Alerts_Success';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -72,10 +74,12 @@ export default function App() {
     // Testing email
     // <Email />
 
-    <ForgotPassword />
+    // <ForgotPassword />
     // <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>
+    <Alerts_Error />
+    // <Alerts_Success />
 
     // <HomeScreen />
     // <CreatePostScreen />
