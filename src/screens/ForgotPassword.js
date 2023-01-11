@@ -12,12 +12,19 @@ import FastImage from 'react-native-fast-image';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+// import {withFirebaseHOC} from '../Firebase/Config';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import {db, authorization, auth} from '../Firebase/Config';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+} from 'firebase/auth';
 export default function ForgotPassword({navigation}) {
   const [text, setText] = useState('');
 
@@ -28,6 +35,19 @@ export default function ForgotPassword({navigation}) {
   console.log(id);
   console.log(email);
 
+  const forgotPassword = email => {
+    // firebase
+    // authorization()
+    console.log('reset email sent to ' + email);
+    sendPasswordResetEmail(auth, email, null)
+      .then(function (user) {
+        setemailGenerated(true);
+        alert('Please check your email...');
+      })
+      .catch(function (e) {
+        console.log(e);
+      });
+  };
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
       {/* <View style={{flexDirection: 'row', justifyContent: 'center'}}>
@@ -133,7 +153,7 @@ export default function ForgotPassword({navigation}) {
         />
         <TextInput
           style={{flex: 1}}
-          onChangeText={setEmail}
+          onChangeText={email => setEmail(email)}
           value={email}
           placeholder="Email"
         />
@@ -147,9 +167,7 @@ export default function ForgotPassword({navigation}) {
           paddingVertical: '4%',
           borderRadius: 16,
         }}
-        onPress={() => {
-          setemailGenerated(true);
-        }}>
+        onPress={forgotPassword(email)}>
         <Text
           style={{
             color: '#ffffff',
@@ -205,3 +223,5 @@ export default function ForgotPassword({navigation}) {
     </ScrollView>
   );
 }
+
+// export default withFirebaseHOC(ForgotPassword);
