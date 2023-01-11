@@ -31,6 +31,21 @@ export default function ImageScreen() {
   const [transferred, setTransferred] = useState(0);
   const [username, setName] = useState('');
   const [email, setEmail] = useState('');
+
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+    setCurrentDate(
+      date + '/' + month + '/' + year + ' ' + hours + ':' + min + ':' + sec,
+    );
+  }, []);
+
   const selectImage = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
