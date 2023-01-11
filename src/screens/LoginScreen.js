@@ -21,6 +21,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 // import {useNavigation} from '@react-navigation/core';
 // import {useNavigation} from '@react-navigation/native';
