@@ -68,9 +68,9 @@ export default function App() {
     //   </Stack.Navigator>
     // </NavigationContainer>
 
-    <NavigationContainer>
-      <MyTabs />
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <MyTabs />
+    // </NavigationContainer>
 
     // Testing email
     // <Email />
@@ -80,7 +80,7 @@ export default function App() {
     // <TestReg></TestReg>
     // <tabs />
 
-    // <HomeScreen />
+    <HomeScreen />
     // <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />

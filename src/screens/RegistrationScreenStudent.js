@@ -42,7 +42,7 @@ const Tab = createMaterialTopTabNavigator();
 var moment = require('moment'); // require
 
 export default function RegistrationScreenStudent({navigation}) {
-  const [batch, setbatch] = useState();
+  const [batch, setbatch] = useState('Join Month/Year: ');
 
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -77,7 +77,7 @@ export default function RegistrationScreenStudent({navigation}) {
 
   const [contactNo, setcontactNo] = useState('');
 
-  const [dateOfBirth, setdateOfBirth] = useState('Date of Birth');
+  const [dateOfBirth, setdateOfBirth] = useState('Date of Birth: ');
 
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
@@ -119,13 +119,15 @@ export default function RegistrationScreenStudent({navigation}) {
       alert('Inalid Contact Number');
     } else if (batch > 2023 || batch < 2000) {
       alert('Inavlid Batch');
-    } else if (
-      !/^(([0-9])|([0-2][0-9])|([3][0-1]))\-(01|02|03|04|05|06|07|08|09|10|11|12)\-\d{4}$/.test(
-        dateOfBirth,
-      )
-    ) {
-      alert('Invalid DOB');
-    } else {
+    }
+    // else if (
+    //   !/^(([0-9])|([0-2][0-9])|([3][0-1]))\-(01|02|03|04|05|06|07|08|09|10|11|12)\-\d{4}$/.test(
+    //     dateOfBirth,
+    //   )
+    // ) {
+    //   alert('Invalid DOB');
+    // }
+    else {
       alert('EVERYTHING GUD');
 
       createUserWithEmailAndPassword(auth, userEmail, userPassword)
@@ -178,6 +180,13 @@ export default function RegistrationScreenStudent({navigation}) {
                 .then(success => {
                   console.log(success);
                   alert('Account Regsitered');
+                  setUserName('');
+                  setLastName('');
+                  setUserEmail('');
+                  setUserPassword('');
+                  setcontactNo('');
+                  setDate(new Date());
+                  setDob(new Date());
                 })
                 .catch(err => console.log(err));
             })
@@ -197,8 +206,8 @@ export default function RegistrationScreenStudent({navigation}) {
   };
 
   useEffect(() => {
-    setbatch('Join Month/Year: ' + moment(date).format('MM-YYYY'));
-    setdateOfBirth('Date of Birth: ' + moment(dob).format('DD-MM-YYYY'));
+    setbatch(moment(date).format('MM-YYYY'));
+    setdateOfBirth(moment(dob).format('DD-MM-YYYY'));
   }, [date, dob]);
 
   return (
@@ -279,7 +288,7 @@ export default function RegistrationScreenStudent({navigation}) {
               placeholder="Enter Password"
               placeholderTextColor="#6A6A6A"
               blurOnSubmit={false}
-              secureTextEntry={!passwordVisible}
+              secureTextEntry={passwordVisible}
             />
             <MaterialCommunityIcons
               name={eye}
@@ -315,7 +324,7 @@ export default function RegistrationScreenStudent({navigation}) {
             <FontAwesome name="book" style={styles.icon} size={15} />
 
             <TextInput
-              value={batch}
+              value={'Join Month/Year: ' + batch}
               style={styles.inputStyle}
               onChangeText={batch => setbatch(batch)}
               placeholder="Batch"
@@ -343,7 +352,7 @@ export default function RegistrationScreenStudent({navigation}) {
 
             <TextInput
               style={styles.inputStyle}
-              value={dateOfBirth}
+              value={'Date of Birth: ' + dateOfBirth}
               onChangeText={dateOfBirth => setdateOfBirth(dateOfBirth)}
               placeholder="Enter Date of Birth"
               placeholderTextColor="#6A6A6A"
@@ -360,7 +369,7 @@ export default function RegistrationScreenStudent({navigation}) {
             mode="date"
             modal
             open={open}
-            date={date}
+            date={dob}
             onConfirm={dob => {
               setOpen(false);
               setDob(dob);
