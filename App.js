@@ -21,14 +21,11 @@ import ExplorePage from './src/screens/ExplorePage';
 import SplashScreen from './src/screens/SplashScreen';
 import EditProfileScreen from './src/screens/EditProfileScreen';
 
-// import RegistrationScreenStudent from './src/screens/RegistrationScreenStudent';
-
 import TestReg from './src/screens/TestReg';
 import Test from './src/Firebase/Test';
 // import Email from './src/screens/TestEmail';
 import Email from './src/screens/Email';
 import ImageScreen from './src/screens/Image';
-import tabs from './src/screens/tabs';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -75,12 +72,12 @@ export default function App() {
     // Testing email
     // <Email />
 
+    <ForgotPassword />
     // <Test />
-    // <RegistrationScreen/>
+    // <RegistrationScreen />
     // <TestReg></TestReg>
-    // <tabs />
 
-    <HomeScreen />
+    // <HomeScreen />
     // <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />

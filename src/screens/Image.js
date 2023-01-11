@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 // import ImagePicker from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
-import {getStorage, getDownloadURL} from 'firebase/storage';
+// import {getStorage, getDownloadURL} from 'firebase/storage';
 
 import DocumentPicker from 'react-native-document-picker';
 import {db, dbFirestore} from '../Firebase/Config';
@@ -31,6 +31,21 @@ export default function ImageScreen() {
   const [transferred, setTransferred] = useState(0);
   const [username, setName] = useState('');
   const [email, setEmail] = useState('');
+
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+    setCurrentDate(
+      date + '/' + month + '/' + year + ' ' + hours + ':' + min + ':' + sec,
+    );
+  }, []);
+
   const selectImage = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
@@ -52,6 +67,22 @@ export default function ImageScreen() {
     }
   };
 
+  const readFirestore = async () => {
+    // const usersCollection = await
+
+    dbFirestore()
+      .collection('Users')
+      .doc('roles')
+      .collection('student')
+      .add({
+        name: ' mcka kadckacmdfsl',
+        age: 30,
+        url: url,
+      })
+      .then(() => {
+        console.log('User added!');
+      });
+  };
   function createData() {
     // const newKey = push(child(ref(database), 'users')).key;
 
@@ -80,57 +111,34 @@ export default function ImageScreen() {
     setUploading(true);
     setTransferred(0);
     const task = await storage().ref(filename).putFile(uploadUri);
-    console.log(task.ref.getDownloadURL);
+    // console.log(task.ref.getDownloadURL);
     // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
     console.log('working');
-    // const ref = firebase.storage().ref('path/to/image.jpg');
-    // const url = await task.ref().getDownloadURL();
-    // console.log('url is ' + url);
+    const url = await storage().ref(filename).getDownloadURL();
+    console.log('url is: ' + url);
 
-    set(ref(db, 'Habiba/' + username), {
-      username: username,
-      email: email,
-      //   url: url,
-    })
-      .then(() => {
-        // Data saved successfully!
-        alert('data updated!');
-      })
-      .catch(error => {
-        // The write failed...
-        alert(error);
-      });
-    // ... in your render
-
-    // <Image
-    //   source={{ uri: url }}
-    // />
-    // set progress state
-    task.on('state_changed', snapshot => {
-      setTransferred(
-        Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
-      );
-      console.log('working2');
-    });
-    task.then(() => {
-      //   const url = task.snapshot.ref.getDownloadURL();
-      //   console.log('url is ' + url);
-
-      Alert.alert(
-        'Photo uploaded!',
-        'Your photo has been uploaded to Firebase Cloud Storage!',
-      );
-    });
-    // try {
-    //   await task;
-    // } catch (e) {
-    //   console.error(e);
-    // }
-    // setUploading(false);
-    // Alert.alert(
-    //   'Photo uploaded!',
-    //   'Your photo has been uploaded to Firebase Cloud Storage!',
-    // );
+    try {
+      task;
+      dbFirestore()
+        .collection('Users')
+        .doc('roles')
+        .collection('student')
+        .add({
+          name: ' Habiba ',
+          PostContent: 'Testing the functionality',
+          Image: url,
+        })
+        .then(() => {
+          console.log('Uploaded!');
+        });
+    } catch (e) {
+      console.error(e);
+    }
+    setUploading(false);
+    Alert.alert(
+      'Photo uploaded!',
+      'Your photo has been uploaded to Firebase Cloud Storage!',
+    );
     // setImage(null);
     setfilePath({});
   };
@@ -212,3 +220,31 @@ const styles = StyleSheet.create({
     height: 300,
   },
 });
+
+// checking
+
+// dbFirestore()
+//   .collection('Posts')
+// .add({
+//   commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
+//   date: '25th October 2022',
+//   description:
+//     "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
+//   images: [
+//     'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
+//     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
+//   ],
+//   likedBy: ['shahzaibnn@gmail.com'],
+//   name: 'Benedict',
+//   profilePic:
+//     'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
+//   title: 'BSCS Student',
+// })
+//   .add({
+//     name: 'NEW POST',
+//     age: 30,
+//     url: yourArray,
+//   })
+// .then(() => {
+//   console.log('User added!');
+// });

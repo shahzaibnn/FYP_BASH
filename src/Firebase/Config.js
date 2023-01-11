@@ -17,6 +17,9 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 
+passwordReset: email => {
+  return firebase.auth().sendPasswordResetEmail(email);
+};
 // const authorization = firebase.auth(app);
 // export const authorization = getAuth(app);
 //initizile database
