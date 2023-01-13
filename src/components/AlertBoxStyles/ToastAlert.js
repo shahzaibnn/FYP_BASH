@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Text, View, StyleSheet, Button} from 'react-native';
-import {Toaster} from './Toaster';
+import Toaster from './Toaster';
 
 export default function ToastAlert() {
   const [isToasterDisplayed, setIsToasterDisplayed] = React.useState(false);
@@ -12,7 +12,8 @@ export default function ToastAlert() {
         }}
         title={'Show Toaster'}
       />
-      {isToasterDisplayed && <Toaster />}
+
+      {isToasterDisplayed && <Toaster message="Check Email Please" />}
     </View>
   );
 }

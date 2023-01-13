@@ -25,11 +25,25 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
 } from 'firebase/auth';
+import {Toaster} from '../components/AlertBoxStyles/Toaster';
+
+var hereEmail = 'none';
+
+// make first letter of every sentence capital
+const toaster = () => {
+  console.log('prop ' + hereEmail);
+
+  return (
+    <View>
+      {/* <Text>HIIIIIIIIIIIIIIIIII</Text> */}
+      <Toaster msg="Check Email Please"></Toaster>;
+    </View>
+  );
+};
 export default function ForgotPassword({navigation}) {
   const [id, setId] = useState('');
-  const [email, setEmail] = useState('');
   const [emailGenerated, setemailGenerated] = useState('');
-
+  const [email, setEmail] = useState('');
   console.log(id);
   console.log(email);
 
@@ -40,14 +54,48 @@ export default function ForgotPassword({navigation}) {
     sendPasswordResetEmail(auth, email, null)
       .then(function (user) {
         setemailGenerated(true);
-        alert('Please check your email...');
+        // alert('Please check your email...');
+        console.log('toaster sent');
+        // hereEmail = email;
+
+        // toaster();
+        // message="Check Email Please"
       })
       .catch(function (e) {
         console.log(e);
+        // toaster();
       });
   };
+  // pass props to Toaster function react native
+
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
+      <View>
+        {emailGenerated ? (
+          <View
+            style={{
+              //   backgroundColor: '#777777',
+              width: Dimensions.get('window').width * 0.8,
+              //   height: Dimensions.get('window').height * 0.8,
+              // marginHosrizontal: '10%',
+              // marginTop: '40%',
+              // borderRadius: 16,
+              // flexDirection: 'row',
+              // alignItems: 'center',
+              // marginBottom: '7%',
+              // justifyContent: 'center',
+            }}>
+            <Toaster msg="Check email at " emailId={email}></Toaster>
+          </View>
+        ) : (
+          <></>
+        )}
+      </View>
+      {/* <View> */}
+      {/* toaster() */}
+      {/* <Toaster /> */}
+      {/* <Text>{toaster()}</Text> */}
+      {/* </View> */}
       {/* <View style={{flexDirection: 'row', justifyContent: 'center'}}>
         <TouchableOpacity
           style={{
@@ -201,6 +249,8 @@ export default function ForgotPassword({navigation}) {
                 alignSelf: 'center',
               }}
             />
+            {/* <Toaster msg="Check Email Please"></Toaster> */}
+
             <Text
               style={{
                 // alignItems: 'center',

@@ -79,7 +79,7 @@ export default function App() {
     // Testing email
     // <Email />
 
-    // <ForgotPassword />
+    <ForgotPassword />
     // <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>
@@ -90,7 +90,7 @@ export default function App() {
     // <ModalTester></ModalTester>
     // <Tip />
     // <HomeScreen />
-    <CreatePostScreen />
+    // <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
     // <LoginScreen />
