@@ -30,16 +30,15 @@ import {Toaster} from '../components/AlertBoxStyles/Toaster';
 var hereEmail = 'none';
 
 // make first letter of every sentence capital
-const toaster = () => {
-  console.log('prop ' + hereEmail);
-
-  return (
-    <View>
-      {/* <Text>HIIIIIIIIIIIIIIIIII</Text> */}
-      <Toaster msg="Check Email Please"></Toaster>;
-    </View>
-  );
-};
+// const toaster = () => {
+//   console.log('prop ' + hereEmail);
+//   return (
+//     <View>
+//       {/* <Text>HIIIIIIIIIIIIIIIIII</Text> */}
+//       <Toaster msg="Check Email Please"></Toaster>;
+//     </View>
+//   );
+// };
 export default function ForgotPassword({navigation}) {
   const [id, setId] = useState('');
   const [emailGenerated, setemailGenerated] = useState('');
@@ -66,7 +65,6 @@ export default function ForgotPassword({navigation}) {
         // toaster();
       });
   };
-  // pass props to Toaster function react native
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -123,14 +121,7 @@ export default function ForgotPassword({navigation}) {
         </Text>
       </View> */}
 
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: '5%',
-          marginVertical: '7%',
-          justifyContent: 'center',
-        }}>
+      <View style={styles.backBtnStyle}>
         <TouchableOpacity
           style={{position: 'absolute', left: 0}}
           onPress={() => navigation.navigate('Login')}>
@@ -273,3 +264,36 @@ export default function ForgotPassword({navigation}) {
 }
 
 // export default withFirebaseHOC(ForgotPassword);
+
+// python code to modify GAN
+// react native code to connect with firebase functional component
+// figma ui to react native code
+// pass props to Toaster function react native
+
+// https://www.figma.com/file/G5UlE3Pnwz7qAGw5tOaSON/UI-Dashboard-Components-(Community)?node-id=0%3A1&t=dhECHGav8cECjjJk-1 to react native code
+
+//create a post with image in firestore react native
+// facebook newsfeed react native
+// upload multiple images firestore react native
+
+//facebook ui design react native code
+
+// flutter learning management system dart
+
+// linkedin homescreen ui design react native code
+
+//linkedin ui design react native code
+
+// apply to job react native firebase
+
+// firebase firestore CRUD integration
+
+const styles = StyleSheet.create({
+  backBtnStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: '5%',
+    marginVertical: '7%',
+    justifyContent: 'center',
+  },
+});
