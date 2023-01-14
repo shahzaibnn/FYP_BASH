@@ -6,11 +6,13 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {ToastAndroid, Platform, AlertIOS} from 'react-native';
 
 // import {withFirebaseHOC} from '../Firebase/Config';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -53,6 +55,8 @@ export default function ForgotPassword({navigation}) {
     sendPasswordResetEmail(auth, email, null)
       .then(function (user) {
         setemailGenerated(true);
+        notifyMessage('Check email sent to ' + email);
+        // ToastAndroid.show('Hello World!', ToastAndroid.SHORT);
         // alert('Please check your email...');
         console.log('toaster sent');
         // hereEmail = email;
@@ -66,6 +70,15 @@ export default function ForgotPassword({navigation}) {
       });
   };
 
+  function notifyMessage(msg) {
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(msg, ToastAndroid.SHORT);
+    } else {
+      AlertIOS.alert(msg);
+    }
+  }
+
+  // useeffect for toaster react native
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
       <View>
@@ -288,6 +301,7 @@ export default function ForgotPassword({navigation}) {
 
 // firebase firestore CRUD integration
 
+//redux code for react native
 const styles = StyleSheet.create({
   backBtnStyle: {
     flexDirection: 'row',
@@ -297,3 +311,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+// react native game code
