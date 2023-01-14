@@ -55,7 +55,7 @@ export default function ForgotPassword({navigation}) {
     sendPasswordResetEmail(auth, email, null)
       .then(function (user) {
         setemailGenerated(true);
-        notifyMessage('Check email sent to ' + email);
+        notifyMessage('Sent at ' + email);
         // ToastAndroid.show('Hello World!', ToastAndroid.SHORT);
         // alert('Please check your email...');
         console.log('toaster sent');
