@@ -37,11 +37,16 @@ import ModalTester from './src/components/AlertBoxStyles/Modal';
 import {Toaster} from './src/components/AlertBoxStyles/Toaster';
 import ToastAlert from './src/components/AlertBoxStyles/ToastAlert';
 import NotificationsTest from './src/components/AlertBoxStyles/NotificationsTest';
+import BottomTabs from './src/navigations/BottomTabs';
 // import Tip from './src/components/AlertBoxStyles/Tip';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
+    <NavigationContainer>
+      <BottomTabs />
+    </NavigationContainer>
+
     // <NavigationContainer>
     //   <Stack.Navigator
     //     screenOptions={{
@@ -80,7 +85,7 @@ export default function App() {
     // Testing email
     // <Email />
     // <NotificationsTest />
-    <ForgotPassword />
+    // <ForgotPassword />
     // <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>
