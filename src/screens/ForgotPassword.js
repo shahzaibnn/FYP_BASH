@@ -6,11 +6,13 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {ToastAndroid, Platform, AlertIOS} from 'react-native';
 
 // import {withFirebaseHOC} from '../Firebase/Config';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -25,31 +27,86 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
 } from 'firebase/auth';
+import {Toaster} from '../components/AlertBoxStyles/Toaster';
+
+var hereEmail = 'none';
+
+// make first letter of every sentence capital
+// const toaster = () => {
+//   console.log('prop ' + hereEmail);
+//   return (
+//     <View>
+//       {/* <Text>HIIIIIIIIIIIIIIIIII</Text> */}
+//       <Toaster msg="Check Email Please"></Toaster>;
+//     </View>
+//   );
+// };
 export default function ForgotPassword({navigation}) {
-  const [text, setText] = useState('');
-
   const [id, setId] = useState('');
-  const [email, setEmail] = useState('');
   const [emailGenerated, setemailGenerated] = useState('');
-
+  const [email, setEmail] = useState('');
   console.log(id);
   console.log(email);
 
-  const forgotPassword = email => {
+  const forgotPassword = () => {
     // firebase
     // authorization()
     console.log('reset email sent to ' + email);
     sendPasswordResetEmail(auth, email, null)
       .then(function (user) {
         setemailGenerated(true);
-        alert('Please check your email...');
+        notifyMessage('Sent at ' + email);
+        // ToastAndroid.show('Hello World!', ToastAndroid.SHORT);
+        // alert('Please check your email...');
+        console.log('toaster sent');
+        // hereEmail = email;
+
+        // toaster();
+        // message="Check Email Please"
       })
       .catch(function (e) {
         console.log(e);
+        // toaster();
       });
   };
+
+  function notifyMessage(msg) {
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(msg, ToastAndroid.SHORT);
+    } else {
+      AlertIOS.alert(msg);
+    }
+  }
+
+  // useeffect for toaster react native
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
+      <View>
+        {emailGenerated ? (
+          <View
+            style={{
+              //   backgroundColor: '#777777',
+              width: Dimensions.get('window').width * 0.8,
+              //   height: Dimensions.get('window').height * 0.8,
+              // marginHosrizontal: '10%',
+              // marginTop: '40%',
+              // borderRadius: 16,
+              // flexDirection: 'row',
+              // alignItems: 'center',
+              // marginBottom: '7%',
+              // justifyContent: 'center',
+            }}>
+            <Toaster msg="Check email at " emailId={email}></Toaster>
+          </View>
+        ) : (
+          <></>
+        )}
+      </View>
+      {/* <View> */}
+      {/* toaster() */}
+      {/* <Toaster /> */}
+      {/* <Text>{toaster()}</Text> */}
+      {/* </View> */}
       {/* <View style={{flexDirection: 'row', justifyContent: 'center'}}>
         <TouchableOpacity
           style={{
@@ -77,14 +134,7 @@ export default function ForgotPassword({navigation}) {
         </Text>
       </View> */}
 
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: '5%',
-          marginVertical: '7%',
-          justifyContent: 'center',
-        }}>
+      <View style={styles.backBtnStyle}>
         <TouchableOpacity
           style={{position: 'absolute', left: 0}}
           onPress={() => navigation.navigate('Login')}>
@@ -167,7 +217,7 @@ export default function ForgotPassword({navigation}) {
           paddingVertical: '4%',
           borderRadius: 16,
         }}
-        onPress={forgotPassword(email)}>
+        onPress={forgotPassword}>
         <Text
           style={{
             color: '#ffffff',
@@ -203,6 +253,8 @@ export default function ForgotPassword({navigation}) {
                 alignSelf: 'center',
               }}
             />
+            {/* <Toaster msg="Check Email Please"></Toaster> */}
+
             <Text
               style={{
                 // alignItems: 'center',
@@ -225,3 +277,39 @@ export default function ForgotPassword({navigation}) {
 }
 
 // export default withFirebaseHOC(ForgotPassword);
+
+// python code to modify GAN
+// react native code to connect with firebase functional component
+// figma ui to react native code
+// pass props to Toaster function react native
+
+// https://www.figma.com/file/G5UlE3Pnwz7qAGw5tOaSON/UI-Dashboard-Components-(Community)?node-id=0%3A1&t=dhECHGav8cECjjJk-1 to react native code
+
+//create a post with image in firestore react native
+// facebook newsfeed react native
+// upload multiple images firestore react native
+
+//facebook ui design react native code
+
+// flutter learning management system dart
+
+// linkedin homescreen ui design react native code
+
+//linkedin ui design react native code
+
+// apply to job react native firebase
+
+// firebase firestore CRUD integration
+
+//redux code for react native
+const styles = StyleSheet.create({
+  backBtnStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: '5%',
+    marginVertical: '7%',
+    justifyContent: 'center',
+  },
+});
+
+// react native game code

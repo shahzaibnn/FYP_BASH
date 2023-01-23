@@ -414,3 +414,75 @@ export default function CreatePostScreen() {
     </ScrollView>
   );
 }
+
+// const checking = () => {
+//   console.log('Button Clicked!');
+//   setTimeout(function () {
+//     fb();
+//     // first();
+//   }, 3000);
+// };
+// const fb = async () => {
+//   console.log('Clicked ');
+
+//   let promise = new Promise(resolve => {
+//     // setTimeout(() => resolve("done!"), 1000)
+//     setTimeout(() => resolve('done!'), 1000);
+//     console.log('WORKING promise ');
+//     uploadImage();
+//   });
+//   let result = await promise;
+//   alert(result);
+//   console.log('check after promise' + yourArray);
+
+//   // let promisee = new Promise(resolve => {
+//   //   // setTimeout(() => resolve("done!"), 1000)
+//   //   setTimeout(() => resolve('DONEEEEE!'), 1000);
+//   //   console.log('WORKING promise 21 ');
+//   //   console.log(yourArray);
+//   //   console.log('another method to check!!! 22222' + yourArray);
+//   console.log('WORKING 1112222');
+//   dbFirestore()
+//     .collection('Users')
+//     .doc('roles')
+//     .collection('alumni')
+//     .add({
+//       name: 'PROMISE LOGICC',
+//       age: 22,
+//       url: yourArray,
+//     })
+//     .then(() => {
+//       console.log('WORKING WITH MULTIPLE URLS!');
+//       alert('FIRESTORE');
+//     });
+//   return true;
+//   // });
+//   // let results = await promisee;
+//   // alert(results);
+//   // resultt();
+//   // const resultt = (function () {
+//   //   console.log(yourArray);
+//   //   console.log('another method to check!!!' + yourArray);
+//   //   console.log('WORKING ');
+//   //   dbFirestore()
+//   //     .collection('Users')
+//   //     .doc('roles')
+//   //     .collection('alumni')
+//   //     .add({
+//   //       name: 'PROMISE LOGICC',
+//   //       age: 22,
+//   //       url: yourArray,
+//   //     })
+//   //     .then(() => {
+//   //       console.log('WORKING WITH MULTIPLE URLS!');
+//   //       alert('doneeeeeee');
+//   //     });
+//   // })();
+//   // console.log(result);
+
+//   // console.log('another method to check 222!!!' + yourArray);
+//   // uploadImage();
+//   // setTimeout(function () {
+//   //   uploadImage();
+//   // }, 3000);
+// };

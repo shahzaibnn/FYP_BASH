@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import {View, Text} from 'react-native';
 import React from 'react';
 import RegistrationScreenStudent from './src/screens/RegistrationScreenStudent';
@@ -30,6 +31,13 @@ import ImageScreen from './src/screens/Image';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MyTabs from './src/screens/tabs';
+import Alerts_Error from './src/components/AlertBoxStyles/Alerts_Error';
+import Alerts_Success from './src/components/AlertBoxStyles/Alerts_Success';
+import ModalTester from './src/components/AlertBoxStyles/Modal';
+import {Toaster} from './src/components/AlertBoxStyles/Toaster';
+import ToastAlert from './src/components/AlertBoxStyles/ToastAlert';
+import NotificationsTest from './src/components/AlertBoxStyles/NotificationsTest';
+// import Tip from './src/components/AlertBoxStyles/Tip';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -71,14 +79,19 @@ export default function App() {
 
     // Testing email
     // <Email />
-
-    // <ForgotPassword />
+    // <NotificationsTest />
+    <ForgotPassword />
     // <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>
-
+    // <Alerts_Error />
+    // <Alerts_Success />
+    // <ToastAlert />
+    // <Toaster />
+    // <ModalTester></ModalTester>
+    // <Tip />
     // <HomeScreen />
-    <CreatePostScreen />
+    // <CreatePostScreen />
     // <SettingsScreen />
     // <JobDashboardScreen />
     // <LoginScreen />
