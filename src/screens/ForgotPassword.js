@@ -313,3 +313,4 @@ const styles = StyleSheet.create({
 });
 
 // react native game code
+// bottom tab navigator with animation and images

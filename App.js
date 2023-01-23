@@ -37,6 +37,7 @@ import ModalTester from './src/components/AlertBoxStyles/Modal';
 import {Toaster} from './src/components/AlertBoxStyles/Toaster';
 import ToastAlert from './src/components/AlertBoxStyles/ToastAlert';
 import NotificationsTest from './src/components/AlertBoxStyles/NotificationsTest';
+import BottomTabNavigator from './src/components/BottomTabNav';
 // import Tip from './src/components/AlertBoxStyles/Tip';
 
 export default function App() {
@@ -80,7 +81,8 @@ export default function App() {
     // Testing email
     // <Email />
     // <NotificationsTest />
-    <ForgotPassword />
+    // <ForgotPassword />
+    <BottomTabNavigator />
     // <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>
