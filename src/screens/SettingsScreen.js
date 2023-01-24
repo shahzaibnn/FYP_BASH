@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Dimensions,
   TextInput,
+  StyleSheet,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -85,20 +86,7 @@ export default function SettingsScreen() {
             />
           </TouchableOpacity>
 
-          <Text
-            style={{
-              fontSize: 35,
-              color: '#000000',
-              fontWeight: 'bold',
-              textAlign: 'center',
-              marginLeft: '3%',
-              // marginHorizontal: Dimensions.get('window').width / 5,
-              // marginEnd: '30%',
-
-              // marginHorizontal: '25%',
-            }}>
-            Settings
-          </Text>
+          <Text style={styles.settingsOptions}>Settings</Text>
         </View>
 
         <View
@@ -127,9 +115,7 @@ export default function SettingsScreen() {
               color="#777777"
               style={{marginLeft: '2%'}}
             />
-            <Text style={{fontSize: 25, color: '#000000', marginLeft: 10}}>
-              FAQ's
-            </Text>
+            <Text style={styles.optionsStyle}>FAQ's</Text>
           </View>
 
           <TouchableOpacity
@@ -179,9 +165,7 @@ export default function SettingsScreen() {
               color="#777777"
               style={{marginLeft: '0%'}}
             />
-            <Text style={{fontSize: 25, color: '#000000', marginLeft: 10}}>
-              Privacy Policy
-            </Text>
+            <Text style={styles.optionsStyle}>Privacy Policy</Text>
           </View>
 
           <TouchableOpacity
@@ -205,7 +189,8 @@ export default function SettingsScreen() {
           </View>
         </Collapsible>
 
-        {/* Contact Us */}
+        {/* Contact Us
+         */}
 
         <View
           style={{
@@ -230,9 +215,7 @@ export default function SettingsScreen() {
               color="#777777"
               style={{marginLeft: '0%'}}
             />
-            <Text style={{fontSize: 25, color: '#000000', marginLeft: 10}}>
-              Contact Us
-            </Text>
+            <Text style={styles.optionsStyle}>Contact Us</Text>
           </View>
 
           <TouchableOpacity
@@ -279,9 +262,7 @@ export default function SettingsScreen() {
               color="#777777"
               style={{marginLeft: '0%'}}
             />
-            <Text style={{fontSize: 25, color: '#000000', marginLeft: 10}}>
-              Change Password
-            </Text>
+            <Text style={styles.optionsStyle}>Change Password</Text>
           </View>
 
           <TouchableOpacity
@@ -378,17 +359,7 @@ export default function SettingsScreen() {
 
         <TouchableOpacity
           onPress={() => setSpinnerVisible(!spinnerVisible)}
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#BBC6C8',
-            alignSelf: 'center',
-            paddingHorizontal: '15%',
-            paddingVertical: '3%',
-            borderRadius: 32,
-            marginTop: '50%',
-            marginBottom: 100,
-          }}>
+          style={styles.logoutStyle}>
           <Text style={{color: '#000000', fontSize: 30, fontWeight: 'bold'}}>
             Logout
           </Text>
@@ -412,3 +383,32 @@ export default function SettingsScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  settingsOptions: {
+    fontSize: 35,
+    color: '#000000',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginLeft: '3%',
+    // marginHorizontal: Dimensions.get('window').width / 5,
+    // marginEnd: '30%',
+    // marginHorizontal: '25%',  },
+  },
+  logoutStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#BBC6C8',
+    alignSelf: 'center',
+    paddingHorizontal: '15%',
+    paddingVertical: '3%',
+    borderRadius: 32,
+    marginTop: '50%',
+    marginBottom: 100,
+  },
+  optionsStyle: {
+    fontSize: 20,
+    color: '#000000',
+    marginLeft: 10,
+  },
+});
