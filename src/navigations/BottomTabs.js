@@ -49,19 +49,27 @@ export default function Tabs({navigation}) {
                     shadowColor: focused ? '#5BA199' : '',
 
                     // shadowColor: focused ? '#000000' : '',
-                    shadowOpacity: focused ? 0.5 : 0,
+                    shadowOpacity: focused ? 1 : 0,
                     shadowRadius: focused ? 6 : 0,
-                    elevation: focused ? 8 : 0,
+
+                    // elevation: focused ? 6 : 0,
                     // elevation: 0,
                   },
                 ]}>
-                <FontAwesome name="home" size={25} color="#5BA199" />
+                <FontAwesome
+                  name="home"
+                  size={25}
+                  color={focused ? '#5BA199' : 'grey'}
+                />
 
                 {/* <Image
                   style={styles.image}
                   source={require('../assets/images/bash_icon.png')}
                 /> */}
-                <Text style={styles.tabBarText}>Home</Text>
+                <Text
+                  style={{fontSize: 13, color: focused ? '#5BA199' : 'grey'}}>
+                  Home
+                </Text>
               </View>
             );
           },
@@ -83,17 +91,25 @@ export default function Tabs({navigation}) {
                     // shadowColor: focused ? '#000000' : '',
                     shadowOpacity: focused ? 0.5 : 0,
                     shadowRadius: focused ? 6 : 0,
-                    elevation: focused ? 8 : 0,
+                    // elevation: focused ? 8 : 0,
                   },
                 ]}>
-                <Ionicons name="search-circle" size={25} color="#5BA199" />
+                <Ionicons
+                  name="search-circle"
+                  size={25}
+                  color={focused ? '#5BA199' : 'grey'}
+                  // color="#5BA199"
+                />
 
                 {/* <Image
                   style={styles.image}
                   source={require('../assets/images/bash_icon.png')}
                 />
                 */}
-                <Text style={styles.tabBarText}>Explore</Text>
+                <Text
+                  style={{fontSize: 13, color: focused ? '#5BA199' : 'grey'}}>
+                  Explore
+                </Text>
               </View>
             );
           },
@@ -128,7 +144,8 @@ export default function Tabs({navigation}) {
                 <Feather
                   name="plus"
                   size={30}
-                  color="#5BA199"
+                  color={focused ? '#5BA199' : '#5BA199'}
+                  // color="#5BA199"
                   // style={styles.plusIcon}
                 />
 
@@ -160,16 +177,25 @@ export default function Tabs({navigation}) {
                     // shadowColor: focused ? '#000000' : '',
                     shadowOpacity: focused ? 0.5 : 0,
                     shadowRadius: focused ? 6 : 0,
-                    elevation: focused ? 8 : 0,
+                    // elevation: focused ? 8 : 0,
                   },
                 ]}>
-                <FontAwesome name="briefcase" size={25} color="#5BA199" />
+                <FontAwesome
+                  name="briefcase"
+                  size={25}
+                  color={focused ? '#5BA199' : 'grey'}
+
+                  // color="#5BA199"
+                />
                 {/* <Image
                   style={styles.image}
                   source={require('../assets/images/bash_icon.png')}
                 />
                 */}
-                <Text style={styles.tabBarText}>Jobs</Text>
+                <Text
+                  style={{fontSize: 13, color: focused ? '#5BA199' : 'grey'}}>
+                  Jobs
+                </Text>
               </View>
             );
           },
@@ -194,16 +220,25 @@ export default function Tabs({navigation}) {
                     // shadowColor: focused ? '#000000' : '',
                     shadowOpacity: focused ? 0.5 : 0,
                     shadowRadius: focused ? 6 : 0,
-                    elevation: focused ? 8 : 0,
+                    // elevation: focused ? 8 : 0,
                   },
                 ]}>
-                <Ionicons name="settings" size={25} color="#5BA199" />
+                <Ionicons
+                  name="settings"
+                  size={25}
+                  color={focused ? '#5BA199' : 'grey'}
+
+                  // color="#5BA199"
+                />
 
                 {/* <Image
                   style={styles.image}
                   source={require('../assets/images/bash_icon.png')}
                 /> */}
-                <Text style={styles.tabBarText}>Settings</Text>
+                <Text
+                  style={{fontSize: 13, color: focused ? '#5BA199' : 'grey'}}>
+                  Settings
+                </Text>
               </View>
             );
           },
@@ -216,10 +251,11 @@ export default function Tabs({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  tabBarText: {
-    fontSize: 13,
-    color: '#5BA199',
-  },
+  // tabBarText: {
+  //   fontSize: 13,
+  //   color={focused ? '#5BA199' : 'grey'}
+
+  // },
   tabBar: {
     height: 60,
     elevation: 0,
@@ -251,11 +287,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 60,
     height: 25,
-    shadowColor: '#5BA199',
-
+    // shadowColor: '#5BA199',
+    // shadowColor: 'yellow',
+    shadowOpacity: 1,
+    // tintColor: 'purple',
     // borderRadius: 16,
     // borderWidth: 16,
-    // backgroundColor: '#F4F8EE',
+    backgroundColor: 'black',
     marginLeft: '10%',
     // marginBottom: '5%',
   },

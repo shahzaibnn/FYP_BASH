@@ -33,7 +33,8 @@ const ExplorePage = () => {
     } else if (jobsSelected) {
       return <Text style={styles.titleTextStyle}>Jobs</Text>;
     } else {
-      return <Text style={styles.titleTextStyle}>Posts</Text>;
+      setpeopleSelected(true);
+      return <Text style={styles.titleTextStyle}>People</Text>;
       // return
       // (
       //   <Text style={styles.titleTextStyle_italic}>
