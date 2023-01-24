@@ -134,17 +134,20 @@ export default function Tabs({navigation}) {
                     shadowOpacity: focused ? 0.5 : 0,
                     shadowRadius: focused ? 6 : 0,
                     // elevation: focused ? 8 : 0,
+                    // elevation: 55,
                     marginTop: -60,
                     borderRadius: 64,
                     borderWidth: 8,
-                    borderColor: focused ? '#5BA199' : 'grey',
-                    backgroundColor: 'white',
+                    // borderColor: focused ? '#5BA199' : 'grey',
+                    borderColor: focused ? '#5BA199' : '#5BA199',
+                    // backgroundColor: focused ? 'white' : 'rgba(0,0,0, 0.8)',
+                    backgroundColor: focused ? 'white' : 'white',
                   },
                 ]}>
                 <Feather
                   name="plus"
                   size={30}
-                  color={focused ? '#5BA199' : 'grey'}
+                  color={focused ? '#5BA199' : 'black'}
                   // color="#5BA199"
                   // style={styles.plusIcon}
                 />
@@ -276,7 +279,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 50,
     shadowColor: '#5BA199',
-
+    // backgroundColor: '#5BA199',
     // borderRadius: 16,
     // borderWidth: 16,
     // backgroundColor: '#F4F8EE',
