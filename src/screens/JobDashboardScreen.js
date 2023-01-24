@@ -213,6 +213,7 @@ export default function JobDashboardScreen() {
           //   horizontal={true}
           //   showsHorizontalScrollIndicator={false}
           data={jobs}
+          ListFooterComponent={<View style={{height: 60}}></View>}
           renderItem={({item}) => (
             <View
               style={{

@@ -245,6 +245,7 @@ const ExplorePage = () => {
               horizontal={false}
               showsHorizontalScrollIndicator={false}
               data={user}
+              ListFooterComponent={<View style={{height: 60}}></View>}
               renderItem={({item}) => (
                 <View
                   style={{
@@ -307,6 +308,7 @@ const ExplorePage = () => {
               showsVerticalScrollIndicator={false}
               data={posts}
               keyExtractor={item => item.id}
+              ListFooterComponent={<View style={{height: 60}}></View>}
               renderItem={({item}) => {
                 let likeColor = '';
 
@@ -490,6 +492,7 @@ const ExplorePage = () => {
               horizontal={false}
               showsHorizontalScrollIndicator={false}
               data={jobs}
+              ListFooterComponent={<View style={{height: 60}}></View>}
               renderItem={({item}) => (
                 <View
                   style={{

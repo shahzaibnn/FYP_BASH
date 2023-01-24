@@ -327,6 +327,7 @@ export default function HomeScreen() {
           extraData={extraData}
           // key={item => item.id}
           // keyExtractor={item => item.id}
+          ListFooterComponent={<View style={{height: 60}}></View>}
           renderItem={({item}) => {
             console.log('Id is : ', item.id);
             let likeColor = '';

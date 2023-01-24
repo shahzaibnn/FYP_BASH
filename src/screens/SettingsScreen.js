@@ -386,7 +386,8 @@ export default function SettingsScreen() {
             paddingHorizontal: '15%',
             paddingVertical: '3%',
             borderRadius: 32,
-            marginTop: '70%',
+            marginTop: '50%',
+            marginBottom: 100,
           }}>
           <Text style={{color: '#000000', fontSize: 30, fontWeight: 'bold'}}>
             Logout
