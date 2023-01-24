@@ -43,9 +43,10 @@ import BottomTabs from './src/navigations/BottomTabs';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
-      <BottomTabs />
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <BottomTabs />
+    // </NavigationContainer>
+    <SettingsScreen />
 
     // <NavigationContainer>
     //   <Stack.Navigator
