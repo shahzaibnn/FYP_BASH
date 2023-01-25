@@ -13,7 +13,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Collapsible from 'react-native-collapsible';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Spinner from 'react-native-spinkit';
 
 import {enableFreeze} from 'react-native-screens';
 
@@ -28,39 +27,6 @@ export default function SettingsScreen() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  const [spinnerVisible, setSpinnerVisible] = useState(false);
-
-  const [value, setValue] = useState('');
-
-  const [indexValue, setIndexValue] = useState(0);
-
-  const types = [
-    'CircleFlip',
-    'Bounce',
-    'Wave',
-    'WanderingCubes',
-    'Pulse',
-    'ChasingDots',
-    'ThreeBounce',
-    'Circle',
-    '9CubeGrid',
-    'WordPress',
-    'FadingCircle',
-    'FadingCircleAlt',
-    'Arc',
-    'ArcAlt',
-  ];
-
-  useEffect(() => {
-    setValue(types[indexValue]);
-
-    console.log(value);
-
-    if (!spinnerVisible) {
-    } else {
-    }
-  }, [indexValue, spinnerVisible]);
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -90,7 +56,6 @@ export default function SettingsScreen() {
         </View>
 
         <View
-          pointerEvents="none"
           style={{
             marginHorizontal: '5%',
             marginTop: '10%',
@@ -106,9 +71,7 @@ export default function SettingsScreen() {
             borderBottomLeftRadius: faqViewDisplay ? 0 : 8,
             borderBottomRightRadius: faqViewDisplay ? 0 : 8,
           }}>
-          <View
-            style={{flexDirection: 'row', alignItems: 'center'}}
-            pointerEvents="none">
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <FontAwesome
               name="question-circle"
               size={25}
@@ -127,7 +90,6 @@ export default function SettingsScreen() {
 
         <Collapsible collapsed={!faqViewDisplay}>
           <View
-            pointerEvents="none"
             style={{
               marginHorizontal: '5%',
               backgroundColor: '#BBC6C8',
@@ -357,28 +319,11 @@ export default function SettingsScreen() {
           </View>
         </Collapsible>
 
-        <TouchableOpacity
-          onPress={() => setSpinnerVisible(!spinnerVisible)}
-          style={styles.logoutStyle}>
+        <TouchableOpacity style={styles.logoutStyle}>
           <Text style={{color: '#000000', fontSize: 30, fontWeight: 'bold'}}>
             Logout
           </Text>
         </TouchableOpacity>
-
-        <Spinner
-          style={{
-            position: 'absolute',
-            top: Dimensions.get('window').height * 0.5,
-            left: Dimensions.get('window').width * 0.5,
-            alignSelf: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          isVisible={spinnerVisible}
-          size={Dimensions.get('window').width * 0.2}
-          type={value}
-          color={'#5BA199'}
-        />
       </View>
     </ScrollView>
   );
