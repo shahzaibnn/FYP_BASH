@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
+  Alert,
   TextInput,
 } from 'react-native';
 import {user, jobs, posts, experience} from '../model/data';
@@ -23,8 +24,10 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageModal from 'react-native-image-modal';
+import {db, dbFirestore} from '../Firebase/Config';
 
 import DocumentPicker, {types} from 'react-native-document-picker';
+import storage from '@react-native-firebase/storage';
 
 export default function JobPostingScreen() {
   const [title, setTitle] = useState('');
@@ -50,14 +53,66 @@ export default function JobPostingScreen() {
     {label: 'Hybrid', value: 'hybrid'},
     {label: 'Onsite', value: 'onsite'},
   ]);
+  const [filePath, setfilePath] = useState();
 
   const [singleFile, setSingleFile] = useState();
   const [uploaded, setUploaded] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
+
+  const addtoDB = async () => {
+    const filename = filePath.fileCopyUri.substring(
+      filePath.fileCopyUri.lastIndexOf('/') + 1,
+    );
+    const uploadUri =
+      Platform.OS === 'ios'
+        ? filePath.fileCopyUri.replace('file://', '')
+        : filePath.fileCopyUri;
+    setUploading(true);
+    setTransferred(0);
+    const task = await storage().ref(filename).putFile(uploadUri);
+    // console.log(task.ref.getDownloadURL);
+    // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
+    console.log('working');
+    const url = await storage().ref(filename).getDownloadURL();
+    console.log('url is: ' + url);
+
+    try {
+      task;
+      dbFirestore()
+        .collection('Jobs')
+        .add({
+          jobTitle: title,
+          jobEmail: email,
+          jobCompany: company,
+          jobSalary: salary,
+          jobDescription: description,
+          jobLocation: value,
+          jobMode: value2,
+          image: url,
+        })
+        .then(() => {
+          console.log('Post Added!');
+        });
+    } catch (e) {
+      console.error(e);
+    }
+    setUploading(false);
+    Alert.alert(
+      'Photo uploaded!',
+      'Your photo has been uploaded to Firebase Cloud Storage!',
+    );
+    // setImage(null);
+    setfilePath({});
+  };
+
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
         type: DocumentPicker.types.images,
+        copyTo: 'cachesDirectory',
       });
+      setfilePath(results);
 
       console.log(results.uri);
       console.log(results.type);
@@ -354,7 +409,8 @@ export default function JobPostingScreen() {
           backgroundColor: '#469597',
           borderRadius: 32,
           marginVertical: '3%',
-        }}>
+        }}
+        onPress={addtoDB}>
         <Text
           style={{
             fontSize: 25,
