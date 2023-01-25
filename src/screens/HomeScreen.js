@@ -12,6 +12,8 @@ import FastImage from 'react-native-fast-image';
 import {profile, jobs, posts} from '../model/data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ImageModal from 'react-native-image-modal';
+
 import {
   ref,
   set,
@@ -38,6 +40,8 @@ export default function HomeScreen() {
   const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
   const [tempLike, setTempLike] = useState([]);
   const [fetchedPosts, setFetchedPosts] = useState([]);
+  const [fetchedJobs, setFetchedJobs] = useState([]);
+
   const [extraData, setExtraData] = React.useState(new Date());
 
   // const updateLike = async id => {
@@ -103,6 +107,31 @@ export default function HomeScreen() {
       });
   };
 
+  const searchJobs = async () => {
+    await dbFirestore()
+      .collection('Jobs')
+      // Filter results
+      // .where('userEmail', '==', 'habibafaisal8@gmail.com')
+      // .where('firstName', '==', 'Habiba')
+      .get()
+      .then(querySnapshot => {
+        console.log('Total posts: ', querySnapshot.size);
+
+        querySnapshot.forEach(documentSnapshot => {
+          let v = documentSnapshot.data();
+          v.id = documentSnapshot.id;
+          console.log(
+            'User ID: ',
+            documentSnapshot.id,
+            documentSnapshot.data(),
+            setFetchedJobs(fetchedJobs => [...fetchedJobs, v]),
+            //To grab a particular field use
+            //documentSnapshot.data().userEmail,
+          );
+        });
+      });
+  };
+
   // const readData = () => {
   //   const topUserPostsRef = query(
   //     ref(db, 'roles/students'),
@@ -142,6 +171,10 @@ export default function HomeScreen() {
 
   useEffect(() => {
     searchPosts();
+  }, []);
+
+  useEffect(() => {
+    searchJobs();
   }, []);
 
   return (
@@ -224,7 +257,7 @@ export default function HomeScreen() {
           // nestedScrollEnabled
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          data={jobs}
+          data={fetchedJobs}
           renderItem={({item}) => (
             <View
               style={{
@@ -249,13 +282,13 @@ export default function HomeScreen() {
                     // marginLeft: Dimensions.get('window').width * 0.1,
                   }}
                   source={{
-                    uri: item.postedByPic,
+                    uri: item.image,
                   }}
                 />
                 <View
                   style={{marginLeft: Dimensions.get('window').width * 0.03}}>
                   <Text style={{fontSize: 12}}>
-                    {item.postedBy} posted a new job
+                    {item.jobCompany} posted a new job
                   </Text>
                   <Text
                     style={{
@@ -264,12 +297,12 @@ export default function HomeScreen() {
                       marginVertical: Dimensions.get('window').height * 0.005,
                       color: '#000000',
                     }}>
-                    {item.title}
+                    {item.jobTitle}
                   </Text>
-                  <Text>{item.company}</Text>
+                  <Text>{item.jobCompany}</Text>
                 </View>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={actionSheet}>
                   <MaterialCommunityIcons
                     name="dots-vertical"
                     size={25}
@@ -300,7 +333,8 @@ export default function HomeScreen() {
                 </TouchableOpacity>
 
                 <Text style={{color: '#469597', fontSize: 16}}>
-                  {item.city},{item.country}
+                  {/* {item.city}, */}
+                  {item.jobLocation}
                 </Text>
               </View>
             </View>
