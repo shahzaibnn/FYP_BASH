@@ -13,12 +13,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Collapsible from 'react-native-collapsible';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {CommonActions} from '@react-navigation/native';
 
-import {enableFreeze} from 'react-native-screens';
+import Spinner from 'react-native-spinkit';
 
-import {enableScreens} from 'react-native-screens';
-
-export default function SettingsScreen() {
+export default function SettingsScreen({navigation}) {
   const [faqViewDisplay, setFaqViewDisplay] = useState(false);
   const [privacyViewDisplay, setPrivacyViewDisplay] = useState(false);
   const [contactViewDisplay, setContactViewDisplay] = useState(false);
@@ -28,9 +27,33 @@ export default function SettingsScreen() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
+  const [pointerEvent, setPointerEvent] = useState('auto');
+  const [opacity, setOpacity] = useState(1);
+
+  function logoutPressed() {
+    return new Promise(function (resolve, reject) {
+      setSpinnerLoader(true);
+      setPointerEvent('none');
+      setOpacity(0.8);
+      setTimeout(function () {
+        setSpinnerLoader(false);
+        setPointerEvent('auto');
+        setOpacity(1);
+        navigation.navigate('Login');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: 'Login'}],
+          }),
+        );
+      }, 3000);
+    });
+  }
+
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
-      <View>
+      <View pointerEvents={pointerEvent} style={{opacity: opacity}}>
         <View
           style={{
             flexDirection: 'row',
@@ -319,11 +342,26 @@ export default function SettingsScreen() {
           </View>
         </Collapsible>
 
-        <TouchableOpacity style={styles.logoutStyle}>
+        <TouchableOpacity onPress={logoutPressed} style={styles.logoutStyle}>
           <Text style={{color: '#000000', fontSize: 30, fontWeight: 'bold'}}>
             Logout
           </Text>
         </TouchableOpacity>
+
+        <Spinner
+          style={{
+            position: 'absolute',
+            top: Dimensions.get('window').height * 0.5,
+            left: Dimensions.get('window').width * 0.4,
+            alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          isVisible={spinnerLoader}
+          size={Dimensions.get('window').width * 0.2}
+          type={'9CubeGrid'}
+          color={'#5BA199'}
+        />
       </View>
     </ScrollView>
   );

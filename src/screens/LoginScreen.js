@@ -27,8 +27,6 @@ import {
 
 import {CommonActions} from '@react-navigation/native';
 
-// import {useNavigation} from '@react-navigation/core';
-// import {useNavigation} from '@react-navigation/native';
 export default function LoginScreen({navigation}) {
   // export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -38,44 +36,25 @@ export default function LoginScreen({navigation}) {
   const [eye, setEye] = useState('eye');
 
   const [spinnerLoader, setSpinnerLoader] = useState(false);
-
   const [pointerEvent, setPointerEvent] = useState('auto');
   const [opacity, setOpacity] = useState(1);
+  const [flag, setFlag] = useState(true);
 
   console.log(email);
   console.log(password);
-  // const navigation = useNavigation();
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, user => {
-  //     if (user) {
-  //       // console.log('logged in');
-  //       // navigation.navigate('Home');
-  //     } else {
-  //       console.log('not logged in');
-  //     }
-  //     // Check for user status
-  //   });
 
-  // const unsubscribe = auth.onAuthStateChanged(user => {
-  //   if (user) {
-  //     navigation.navigate('HomeScreen');
-  //   }
-  // }
-
-  // );
-  // return unsubscribe;
-  // });
-
-  const handleLogin = e => {
+  const handleLogin = () => {
     // setSpinnerLoader(true);
 
     // e.preventDefault();
+    setFlag(false);
     signInWithEmailAndPassword(auth, email, password)
       .then(cred => {
         console.log(cred);
         console.log('success');
         const user = cred.user;
         console.log('Logged in as ', user.email);
+        setFlag(true);
         navigation.navigate('BottomTabs');
         navigation.dispatch(
           CommonActions.reset({
@@ -87,26 +66,24 @@ export default function LoginScreen({navigation}) {
       .catch(error => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.error(errorMessage);
+        alert(errorMessage);
+        setFlag(true);
+
         // ..
       });
-    setSpinnerLoader(false);
-    setPointerEvent('auto');
-    setOpacity(1);
   };
 
-  function one() {
-    return new Promise(function (resolve, reject) {
+  useEffect(() => {
+    if (flag) {
+      setSpinnerLoader(false);
+      setPointerEvent('auto');
+      setOpacity(1);
+    } else {
       setSpinnerLoader(true);
       setPointerEvent('none');
       setOpacity(0.8);
-      setTimeout(function () {
-        handleLogin();
-      }, 3000);
-    });
-  }
-
-  useEffect(() => {}, [spinnerLoader]);
+    }
+  }, [flag]);
 
   // one();
   return (
@@ -228,7 +205,7 @@ export default function LoginScreen({navigation}) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={one}
+          onPress={handleLogin}
           style={{
             marginHorizontal: '10%',
             backgroundColor: '#469597',
@@ -266,7 +243,7 @@ export default function LoginScreen({navigation}) {
           style={{
             position: 'absolute',
             top: Dimensions.get('window').height * 0.5,
-            left: Dimensions.get('window').width * 0.5,
+            left: Dimensions.get('window').width * 0.4,
             alignSelf: 'center',
             alignItems: 'center',
             justifyContent: 'center',

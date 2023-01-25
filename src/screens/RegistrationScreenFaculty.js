@@ -10,7 +10,10 @@ import {
   TouchableOpacity,
   ScrollView,
   Button,
+  Dimensions,
 } from 'react-native';
+import Spinner from 'react-native-spinkit';
+
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -20,7 +23,6 @@ import MonthPicker from 'react-native-month-year-picker';
 import DatePicker from 'react-native-date-picker';
 
 import {ref, set, update, onValue, remove, push} from 'firebase/database';
-// import {db} from '../Firebase/Config';
 
 import {firebase} from '@react-native-firebase/database';
 import database from '@react-native-firebase/database';
@@ -50,6 +52,12 @@ export default function RegistrationScreenFaculty({navigation}) {
   const [dob, setDob] = useState(new Date());
   const [open, setOpen] = useState(false);
 
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
+  const [pointerEvent, setPointerEvent] = useState('auto');
+  const [opacity, setOpacity] = useState(1);
+
+  const [flag, setFlag] = useState(true);
+
   const showPicker = useCallback(value => {
     setShow(value);
   }, []);
@@ -60,13 +68,10 @@ export default function RegistrationScreenFaculty({navigation}) {
 
       showPicker(false);
       setDate(selectedDate);
-      // setbatch(moment(date).format('MM-YYYY'));
     },
     [date, showPicker],
 
     console.log(moment(date).format('MM-YYYY')),
-    // setbatch(moment(date).format('MM-YYYY')),
-    // console.log(moment(date, 'MM-YYYY')),
   );
 
   const [userName, setUserName] = useState('');
@@ -110,32 +115,26 @@ export default function RegistrationScreenFaculty({navigation}) {
         userPassword,
       )
     ) {
-      // alert(userPassword);
-
       alert(
         '(Password Criteria)\nMinimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character',
       );
     } else if (!/^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/.test(contactNo)) {
-      alert('Inalid Contact Number');
-    } else if (batch > 2023 || batch < 2000) {
-      alert('Inavlid Batch');
+      alert('Invalid Contact Number');
     }
-    // else if (
-    //   !/^(([0-9])|([0-2][0-9])|([3][0-1]))\-(01|02|03|04|05|06|07|08|09|10|11|12)\-\d{4}$/.test(
-    //     dateOfBirth,
-    //   )
-    // ) {
-    //   alert('Invalid DOB');
+    // else if (batch > 2023 || batch < 2000) {
+    //   alert('Inavlid Batch');
     // }
     else {
-      alert('EVERYTHING GUD');
+      // alert('EVERYTHING GUD');
+
+      setFlag(false);
 
       createUserWithEmailAndPassword(auth, userEmail, userPassword)
         .then(cred => {
           console.log(cred);
           console.log('success');
           const user = cred.user;
-          console.log('Logged in as ', user.email);
+          // console.log('Logged in as ', user.email);
           //adding here so first the details are verified and then saved further
           dbFirestore()
             .collection('Users')
@@ -179,7 +178,6 @@ export default function RegistrationScreenFaculty({navigation}) {
               })
                 .then(success => {
                   console.log(success);
-                  alert('Account Regsitered');
                   setUserName('');
                   setLastName('');
                   setUserEmail('');
@@ -187,19 +185,27 @@ export default function RegistrationScreenFaculty({navigation}) {
                   setcontactNo('');
                   setDate(new Date());
                   setDob(new Date());
+                  setFlag(true);
+                  alert('Account Regsitered');
+                  navigation.navigate('Login');
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                  console.log(err);
+                  setFlag(true);
+                });
             })
             .catch(error => {
               // The write failed...
               const errorMessage = error.message;
               alert(errorMessage);
+              setFlag(true);
             });
         })
         .catch(error => {
           const errorCode = error.code;
           const errorMessage = error.message;
           alert(errorMessage);
+          setFlag(true);
           // ..
         });
     }
@@ -208,7 +214,17 @@ export default function RegistrationScreenFaculty({navigation}) {
   useEffect(() => {
     setbatch(moment(date).format('MM-YYYY'));
     setdateOfBirth(moment(dob).format('DD-MM-YYYY'));
-  }, [date, dob]);
+
+    if (flag) {
+      setSpinnerLoader(false);
+      setPointerEvent('auto');
+      setOpacity(1);
+    } else {
+      setSpinnerLoader(true);
+      setPointerEvent('none');
+      setOpacity(0.8);
+    }
+  }, [date, dob, flag]);
 
   return (
     <View
@@ -223,16 +239,10 @@ export default function RegistrationScreenFaculty({navigation}) {
           justifyContent: 'center',
           alignContent: 'center',
         }}>
-        {/* <View style={styles.Header}>
-          <TouchableOpacity
-            style={{position: 'absolute', left: '5%'}}
-            onPress={() => navigation.navigate('Login')}>
-            <AntDesign name="leftcircle" size={32} color="#777777" />
-          </TouchableOpacity>
-          <Text style={styles.titleText}>Student Sign Up</Text>
-        </View> */}
-
-        <KeyboardAvoidingView enabled>
+        <KeyboardAvoidingView
+          enabled
+          pointerEvents={pointerEvent}
+          style={{opacity: opacity}}>
           <View style={styles.SectionStyle}>
             <FontAwesome
               name="user-circle-o"
@@ -395,6 +405,21 @@ export default function RegistrationScreenFaculty({navigation}) {
               <Text style={styles.registered_2}>Login Here</Text>
             </TouchableOpacity>
           </View>
+
+          <Spinner
+            style={{
+              position: 'absolute',
+              top: Dimensions.get('window').height * 0.4,
+              left: Dimensions.get('window').width * 0.4,
+              alignSelf: 'center',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            isVisible={spinnerLoader}
+            size={Dimensions.get('window').width * 0.2}
+            type={'9CubeGrid'}
+            color={'#5BA199'}
+          />
         </KeyboardAvoidingView>
       </ScrollView>
     </View>
