@@ -217,7 +217,7 @@ export default function JobPostingScreen() {
 
       <View style={{marginHorizontal: '5%'}}>
         <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-          Job Title
+          Contact Email
         </Text>
 
         <View
