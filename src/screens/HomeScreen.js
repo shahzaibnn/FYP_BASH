@@ -12,7 +12,6 @@ import FastImage from 'react-native-fast-image';
 import {profile, jobs, posts} from '../model/data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ImageModal from 'react-native-image-modal';
 
 import {
   ref,
