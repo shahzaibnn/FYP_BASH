@@ -6,17 +6,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import RegistrationScreenAlumni from './RegistrationScreenAlumni';
-import RegistrationScreenFaculty from './RegistrationScreenFaculty';
-import RegistrationScreenStudent from './RegistrationScreenStudent';
-import MyTabBar from './tabBarChecking';
+import RegistrationScreenAlumni from '../screens/RegistrationScreenAlumni';
+import RegistrationScreenFaculty from '../screens/RegistrationScreenFaculty';
+import RegistrationScreenStudent from '../screens/RegistrationScreenStudent';
+import MyTabBar from '../screens/tabBarChecking';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import React from 'react';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function MyTabs() {
+export default function RegistrationTabs({navigation}) {
   return (
     // <View>
     <>

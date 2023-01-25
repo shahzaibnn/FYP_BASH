@@ -23,6 +23,9 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
 } from 'firebase/auth';
+
+import {CommonActions} from '@react-navigation/native';
+
 // import {useNavigation} from '@react-navigation/core';
 // import {useNavigation} from '@react-navigation/native';
 export default function LoginScreen({navigation}) {
@@ -65,7 +68,13 @@ export default function LoginScreen({navigation}) {
         console.log('success');
         const user = cred.user;
         console.log('Logged in as ', user.email);
-        navigation.navigate('Home');
+        navigation.navigate('BottomTabs');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: 'BottomTabs'}],
+          }),
+        );
       })
       .catch(error => {
         const errorCode = error.code;

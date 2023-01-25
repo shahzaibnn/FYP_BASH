@@ -30,7 +30,7 @@ import ImageScreen from './src/screens/Image';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MyTabs from './src/screens/tabs';
+import MyTabs from './src/navigations/RegistrationTabs';
 import Alerts_Error from './src/components/AlertBoxStyles/Alerts_Error';
 import Alerts_Success from './src/components/AlertBoxStyles/Alerts_Success';
 import ModalTester from './src/components/AlertBoxStyles/Modal';
@@ -38,13 +38,14 @@ import {Toaster} from './src/components/AlertBoxStyles/Toaster';
 import ToastAlert from './src/components/AlertBoxStyles/ToastAlert';
 import NotificationsTest from './src/components/AlertBoxStyles/NotificationsTest';
 import BottomTabs from './src/navigations/BottomTabs';
+import AppStack from './src/navigations/AppStack';
 // import Tip from './src/components/AlertBoxStyles/Tip';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <BottomTabs />
+      <AppStack />
     </NavigationContainer>
     // <SettingsScreen />
 
