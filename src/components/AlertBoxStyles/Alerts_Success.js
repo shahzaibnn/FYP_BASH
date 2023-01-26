@@ -21,16 +21,14 @@ const Alerts_Error = () => {
         icon={
           <View style={[styles.icon, {borderRadius: 32}]}>
             <Ionicons
-              name={Platform.select({ios: 'ios-close', android: 'warning'})}
+              name={Platform.select({ios: 'ios-close', android: 'checkmark'})}
               size={36}
               color="#FFFFFF"
             />
           </View>
         }
         style={{backgroundColor: 'white'}}>
-        <Text style={styles.alertText}>
-          Sorry, your request cannot be processed at the moment.
-        </Text>
+        <Text style={styles.alertText}>Success.</Text>
       </FancyAlert>
       {/* </Animated.View> */}
     </View>
@@ -53,7 +51,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FF3333',
+    backgroundColor: 'green',
     width: '100%',
   },
 });

@@ -26,7 +26,7 @@ const Alerts_Error = () => {
             />
           </View>
         }
-        style={{backgroundColor: 'white'}}>
+        style={styles.alert}>
         <Text style={styles.alertText}>
           Sorry, your request cannot be processed at the moment.
         </Text>
@@ -44,7 +44,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   alert: {
-    backgroundColor: '#EEEEEE',
+    // backgroundColor: '#EEEEEE',
+    backgroundColor: 'white',
+    // backgroundColor: '#E5E3E4',
+    // backgroundColor: '#5BA199',
   },
   icon: {
     flex: 1,
