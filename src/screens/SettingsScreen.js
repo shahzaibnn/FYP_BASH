@@ -351,7 +351,7 @@ export default function SettingsScreen({navigation}) {
         <Spinner
           style={{
             position: 'absolute',
-            top: Dimensions.get('window').height * 0.5,
+            top: Dimensions.get('window').height * 0.4,
             left: Dimensions.get('window').width * 0.4,
             alignSelf: 'center',
             alignItems: 'center',
