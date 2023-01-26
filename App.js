@@ -39,16 +39,23 @@ import ToastAlert from './src/components/AlertBoxStyles/ToastAlert';
 import NotificationsTest from './src/components/AlertBoxStyles/NotificationsTest';
 import BottomTabs from './src/navigations/BottomTabs';
 import AppStack from './src/navigations/AppStack';
+import JobPostingScreen from './src/screens/JobPostingScreen';
+import TestScreen from './src/screens/TestScreen';
 // import Tip from './src/components/AlertBoxStyles/Tip';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
-      <AppStack />
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <AppStack />
+    // </NavigationContainer>
     // <SettingsScreen />
 
+    // <JobPostingScreen />
+    // <ViewJob />
+    // <JobDashboardScreen />
+    <HomeScreen />
+    // <TestScreen />
     // <NavigationContainer>
     //   <Stack.Navigator
     //     screenOptions={{
