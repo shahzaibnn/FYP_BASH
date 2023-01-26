@@ -57,7 +57,7 @@ export default function AppStack() {
       <Stack.Screen name="Login" component={LoginScreen} /> */}
       {/* <Stack.Screen name="BottomTabs" component={BottomTabs} /> */}
       <Stack.Screen name="Drawer" component={CustomDrawer} />
-      <Stack.Screen name="Settings" component={SettingsScreen} />
+      {/* <Stack.Screen name="Settings" component={SettingsScreen} /> */}
     </Stack.Navigator>
     // </NavigationContainer>
   );
