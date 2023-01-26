@@ -33,6 +33,7 @@ export default function JobPostingScreen() {
   const [title, setTitle] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
+  const [name, setName] = useState('');
 
   const [salary, setSalary] = useState('');
   const [description, setDescription] = useState('');
@@ -46,7 +47,17 @@ export default function JobPostingScreen() {
     {label: 'CHINA', value: 'china'},
   ]);
 
+  // const [value3, setValue3] = useState(null);
+  // const [open3, setOpen3] = useState(false);
+
+  // const [cities, setcities] = useState([
+  //   {label: 'Pakistan', value: 'Karachi'},
+  //   {label: 'USA', value: 'Washington'},
+  //   {label: 'JAPAN', value: 'Tokyo'},
+  //   {label: 'CHINA', value: 'Beijing'},
+  // ]);
   const [open2, setOpen2] = useState(false);
+  const [city, setCity] = useState(false);
   const [value2, setValue2] = useState(null);
   const [items2, setItems2] = useState([
     {label: 'Remote', value: 'remote'},
@@ -88,8 +99,10 @@ export default function JobPostingScreen() {
           jobSalary: salary,
           jobDescription: description,
           jobLocation: value,
+          jobCity: city,
           jobMode: value2,
           image: url,
+          hrName: name,
         })
         .then(() => {
           console.log('Post Added!');
@@ -198,6 +211,7 @@ export default function JobPostingScreen() {
           setOpen={setOpen}
           setValue={setValue}
           setItems={setItems}
+          placeholder="Select country"
           style={{
             marginVertical: '5%',
             backgroundColor: '#BBC6C8',
@@ -213,6 +227,54 @@ export default function JobPostingScreen() {
           //   labelStyle={{color: 'white'}}
           listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
         />
+      </View>
+
+      <View style={{marginHorizontal: '5%'}}>
+        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+          City
+        </Text>
+
+        <View
+          style={{
+            marginVertical: '5%',
+            // height: Dimensions.get('window').height * 0.25,
+            backgroundColor: '#BBC6C8',
+            // marginHorizontal: '5%',
+            borderRadius: 16,
+          }}>
+          <TextInput
+            style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
+            // multiline
+            onChangeText={setCity}
+            value={city}
+            placeholder="City name"
+            placeholderTextColor={'#5BA199'}
+          />
+        </View>
+      </View>
+
+      <View style={{marginHorizontal: '5%'}}>
+        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+          Name
+        </Text>
+
+        <View
+          style={{
+            marginVertical: '5%',
+            // height: Dimensions.get('window').height * 0.25,
+            backgroundColor: '#BBC6C8',
+            // marginHorizontal: '5%',
+            borderRadius: 16,
+          }}>
+          <TextInput
+            style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
+            // multiline
+            onChangeText={setName}
+            value={name}
+            placeholder="Your name here..."
+            placeholderTextColor={'#5BA199'}
+          />
+        </View>
       </View>
 
       <View style={{marginHorizontal: '5%'}}>
