@@ -46,9 +46,9 @@ import TestScreen from './src/screens/TestScreen';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    // <NavigationContainer>
-    //   <AppStack />
-    // </NavigationContainer>
+    <NavigationContainer>
+      <AppStack />
+    </NavigationContainer>
     // <SettingsScreen />
 
     // <JobPostingScreen />
@@ -94,7 +94,7 @@ export default function App() {
     // Testing email
     // <Email />
     // <NotificationsTest />
-    <ForgotPassword />
+    // <ForgotPassword />
     // <RegistrationScreenStudent />
     // <Test />
     // <RegistrationScreen />

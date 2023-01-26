@@ -38,6 +38,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import SettingsScreen from './SettingsScreen';
 import CreatePostScreen from './CreatePostScreen';
 import RNSmtpMailer from 'react-native-smtp-mailer';
+import {Grid} from 'react-native-animated-spinkit';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -406,20 +407,20 @@ export default function RegistrationScreenAlumni({navigation}) {
             </TouchableOpacity>
           </View>
 
-          <Spinner
-            style={{
-              position: 'absolute',
-              top: Dimensions.get('window').height * 0.4,
-              left: Dimensions.get('window').width * 0.4,
-              alignSelf: 'center',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            isVisible={spinnerLoader}
-            size={Dimensions.get('window').width * 0.2}
-            type={'9CubeGrid'}
-            color={'#5BA199'}
-          />
+          {spinnerLoader ? (
+            <Grid
+              style={{
+                position: 'absolute',
+                top: Dimensions.get('window').height * 0.5,
+                left: Dimensions.get('window').width * 0.4,
+                alignSelf: 'center',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              size={Dimensions.get('window').width * 0.2}
+              color="#5BA199"
+            />
+          ) : null}
         </KeyboardAvoidingView>
       </ScrollView>
     </View>

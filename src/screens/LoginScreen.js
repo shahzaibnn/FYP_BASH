@@ -26,6 +26,7 @@ import {
 } from 'firebase/auth';
 
 import {CommonActions} from '@react-navigation/native';
+import {Grid} from 'react-native-animated-spinkit';
 
 export default function LoginScreen({navigation}) {
   // export default function LoginScreen() {
@@ -47,30 +48,37 @@ export default function LoginScreen({navigation}) {
     // setSpinnerLoader(true);
 
     // e.preventDefault();
-    setFlag(false);
-    signInWithEmailAndPassword(auth, email, password)
-      .then(cred => {
-        console.log(cred);
-        console.log('success');
-        const user = cred.user;
-        console.log('Logged in as ', user.email);
-        setFlag(true);
-        navigation.navigate('BottomTabs');
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{name: 'BottomTabs'}],
-          }),
-        );
-      })
-      .catch(error => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert(errorMessage);
-        setFlag(true);
 
-        // ..
-      });
+    if (!email) {
+      alert('Please fill Email');
+    } else if (!password) {
+      alert('Please fill Password');
+    } else {
+      setFlag(false);
+      signInWithEmailAndPassword(auth, email, password)
+        .then(cred => {
+          console.log(cred);
+          console.log('success');
+          const user = cred.user;
+          console.log('Logged in as ', user.email);
+          setFlag(true);
+          navigation.navigate('BottomTabs');
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [{name: 'BottomTabs'}],
+            }),
+          );
+        })
+        .catch(error => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorMessage);
+          setFlag(true);
+
+          // ..
+        });
+    }
   };
 
   useEffect(() => {
@@ -142,7 +150,7 @@ export default function LoginScreen({navigation}) {
             style={{flex: 1}}
             onChangeText={email => setEmail(email)}
             value={email}
-            placeholder="UserName / ID"
+            placeholder="Email Address"
           />
         </View>
 
@@ -239,20 +247,20 @@ export default function LoginScreen({navigation}) {
             </Text>
           </TouchableOpacity>
         </View>
-        <Spinner
-          style={{
-            position: 'absolute',
-            top: Dimensions.get('window').height * 0.5,
-            left: Dimensions.get('window').width * 0.4,
-            alignSelf: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          isVisible={spinnerLoader}
-          size={Dimensions.get('window').width * 0.2}
-          type={'9CubeGrid'}
-          color={'#5BA199'}
-        />
+        {spinnerLoader ? (
+          <Grid
+            style={{
+              position: 'absolute',
+              top: Dimensions.get('window').height * 0.5,
+              left: Dimensions.get('window').width * 0.4,
+              alignSelf: 'center',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            size={Dimensions.get('window').width * 0.2}
+            color="#5BA199"
+          />
+        ) : null}
       </View>
     </ScrollView>
   );

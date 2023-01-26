@@ -81,6 +81,7 @@ export default function App() {
       .collection('Users')
       .doc('roles')
       .collection('student')
+      .where('languages', 'in', ['en', 'fr'])
       .get()
       .then(querySnapshot => {
         console.log('Total users: ', querySnapshot.size);

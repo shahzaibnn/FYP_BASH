@@ -30,6 +30,7 @@
     "react-native": "0.70.4",
     "react-native-actions-sheet": "^0.8.10",
     "react-native-animated-icons": "^1.0.5",
+    "react-native-animated-spinkit": "^1.5.2",
     "react-native-blob-util": "^0.16.4",
     "react-native-collapsible": "^1.6.0",
     "react-native-communications": "^2.2.1",
