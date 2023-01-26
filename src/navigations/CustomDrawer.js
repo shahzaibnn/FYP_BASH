@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
     marginLeft: '6%',
   },
   mainDrawer: {
-    fontSize: 19,
+    fontSize: 18,
     // fontStyle: 'italic',
     // marginRight: '-10%',
     // color: 'black',
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     // fontStyle: 'italic',
     // marginRight: '-10%',
-    color: 'black',
+    // color: 'black',
     alignSelf: 'center',
     marginBottom: 15,
     // fontWeight: 'bold',
