@@ -42,15 +42,20 @@ import AppStack from './src/navigations/AppStack';
 import JobPostingScreen from './src/screens/JobPostingScreen';
 import TestScreen from './src/screens/TestScreen';
 import CustomDrawer from './src/navigations/CustomDrawer';
+import DrawerNav from './src/navigations/DrawerNav';
 // import Tip from './src/components/AlertBoxStyles/Tip';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
-      {/* <AppStack /> */}
-      <CustomDrawer />
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   {/* <AppStack /> */}
+    //   {/* <CustomDrawer /> */}
+    //   <DrawerNav />
+    // </NavigationContainer>
+    <Alerts_Success />
+    // <Alerts_Error />
+
     // <SettingsScreen />
 
     // <JobPostingScreen />
