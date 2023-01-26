@@ -37,17 +37,35 @@ export default function ForgotPassword({navigation}) {
   const [id, setId] = useState('');
   const [emailGenerated, setemailGenerated] = useState('');
   const [email, setEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   console.log(id);
   console.log(email);
-  console.log(
-    new RandExp(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&//.])[A-Za-z\d@$!%*?&//.]{8,10}$/,
-    ).gen(),
-  );
 
   const forgotPassword = () => {
     // firebase
     // authorization()
+
+    while (true) {
+      let randomPassword = new RandExp(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&//.])[A-Za-z\d@$!%*?&//.]{8,10}$/,
+      ).gen();
+
+      if (
+        !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&//.])[A-Za-z\d@$!%*?&//.]{8,}$/.test(
+          randomPassword,
+        )
+      ) {
+        console.log(randomPassword);
+        console.log('Invalid');
+      } else {
+        console.log(randomPassword);
+        console.log('Password Valid');
+        setNewPassword(randomPassword);
+        break;
+      }
+    }
+
+    console.log(newPassword);
     console.log('reset email sent to ' + email);
     sendPasswordResetEmail(auth, email, null)
       .then(function (user) {
