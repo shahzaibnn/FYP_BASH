@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
+  Alert,
   TextInput,
 } from 'react-native';
 import {user, jobs, posts, experience} from '../model/data';
@@ -23,13 +24,16 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageModal from 'react-native-image-modal';
+import {db, dbFirestore} from '../Firebase/Config';
 
 import DocumentPicker, {types} from 'react-native-document-picker';
+import storage from '@react-native-firebase/storage';
 
 export default function JobPostingScreen() {
   const [title, setTitle] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
+  const [name, setName] = useState('');
 
   const [salary, setSalary] = useState('');
   const [description, setDescription] = useState('');
@@ -43,21 +47,85 @@ export default function JobPostingScreen() {
     {label: 'CHINA', value: 'china'},
   ]);
 
+  // const [value3, setValue3] = useState(null);
+  // const [open3, setOpen3] = useState(false);
+
+  // const [cities, setcities] = useState([
+  //   {label: 'Pakistan', value: 'Karachi'},
+  //   {label: 'USA', value: 'Washington'},
+  //   {label: 'JAPAN', value: 'Tokyo'},
+  //   {label: 'CHINA', value: 'Beijing'},
+  // ]);
   const [open2, setOpen2] = useState(false);
+  const [city, setCity] = useState(false);
   const [value2, setValue2] = useState(null);
   const [items2, setItems2] = useState([
     {label: 'Remote', value: 'remote'},
     {label: 'Hybrid', value: 'hybrid'},
     {label: 'Onsite', value: 'onsite'},
   ]);
+  const [filePath, setfilePath] = useState();
 
   const [singleFile, setSingleFile] = useState();
   const [uploaded, setUploaded] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
+
+  const addtoDB = async () => {
+    const filename = filePath.fileCopyUri.substring(
+      filePath.fileCopyUri.lastIndexOf('/') + 1,
+    );
+    const uploadUri =
+      Platform.OS === 'ios'
+        ? filePath.fileCopyUri.replace('file://', '')
+        : filePath.fileCopyUri;
+    setUploading(true);
+    setTransferred(0);
+    const task = await storage().ref(filename).putFile(uploadUri);
+    // console.log(task.ref.getDownloadURL);
+    // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
+    console.log('working');
+    const url = await storage().ref(filename).getDownloadURL();
+    console.log('url is: ' + url);
+
+    try {
+      task;
+      dbFirestore()
+        .collection('Jobs')
+        .add({
+          jobTitle: title,
+          jobEmail: email,
+          jobCompany: company,
+          jobSalary: salary,
+          jobDescription: description,
+          jobLocation: value,
+          jobCity: city,
+          jobMode: value2,
+          image: url,
+          hrName: name,
+        })
+        .then(() => {
+          console.log('Post Added!');
+        });
+    } catch (e) {
+      console.error(e);
+    }
+    setUploading(false);
+    Alert.alert(
+      'Photo uploaded!',
+      'Your photo has been uploaded to Firebase Cloud Storage!',
+    );
+    // setImage(null);
+    setfilePath({});
+  };
+
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
         type: DocumentPicker.types.images,
+        copyTo: 'cachesDirectory',
       });
+      setfilePath(results);
 
       console.log(results.uri);
       console.log(results.type);
@@ -143,6 +211,7 @@ export default function JobPostingScreen() {
           setOpen={setOpen}
           setValue={setValue}
           setItems={setItems}
+          placeholder="Select country"
           style={{
             marginVertical: '5%',
             backgroundColor: '#BBC6C8',
@@ -162,7 +231,55 @@ export default function JobPostingScreen() {
 
       <View style={{marginHorizontal: '5%'}}>
         <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-          Job Title
+          City
+        </Text>
+
+        <View
+          style={{
+            marginVertical: '5%',
+            // height: Dimensions.get('window').height * 0.25,
+            backgroundColor: '#BBC6C8',
+            // marginHorizontal: '5%',
+            borderRadius: 16,
+          }}>
+          <TextInput
+            style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
+            // multiline
+            onChangeText={setCity}
+            value={city}
+            placeholder="City name"
+            placeholderTextColor={'#5BA199'}
+          />
+        </View>
+      </View>
+
+      <View style={{marginHorizontal: '5%'}}>
+        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+          Name
+        </Text>
+
+        <View
+          style={{
+            marginVertical: '5%',
+            // height: Dimensions.get('window').height * 0.25,
+            backgroundColor: '#BBC6C8',
+            // marginHorizontal: '5%',
+            borderRadius: 16,
+          }}>
+          <TextInput
+            style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
+            // multiline
+            onChangeText={setName}
+            value={name}
+            placeholder="Your name here..."
+            placeholderTextColor={'#5BA199'}
+          />
+        </View>
+      </View>
+
+      <View style={{marginHorizontal: '5%'}}>
+        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+          Contact Email
         </Text>
 
         <View
@@ -354,7 +471,8 @@ export default function JobPostingScreen() {
           backgroundColor: '#469597',
           borderRadius: 32,
           marginVertical: '3%',
-        }}>
+        }}
+        onPress={addtoDB}>
         <Text
           style={{
             fontSize: 25,
