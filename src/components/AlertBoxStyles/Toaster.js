@@ -14,66 +14,47 @@ export const Toaster = props => {
       exiting={FadeOutUp}
       style={{
         width: Dimensions.get('window').width * 0.9,
-        height: Dimensions.get('window').height * 0.15,
+        height: Dimensions.get('window').height * 0.12,
         backgroundColor: '#4CA6A8',
         position: 'absolute',
         padding: 10,
-        // alignItems: 'center',
-        // top: 50,
         marginRight: '15%',
         marginLeft: '15%',
-        // paddingTop: '45%',
         marginTop: '30%',
-        // marginTop: '25%',
-        // left: '20',
-        // right: 20,
         borderRadius: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
       }}>
-      <View
-        style={
-          {
-            //   backgroundColor: '#777777',
-            // width: Dimensions.get('window').width * 0.8,
-            // //   height: Dimensions.get('window').height * 0.8,
-            // marginHorizontal: '10%',
-            // marginTop: '40%',
-            // borderRadius: 16,
-            // flexDirection: 'row',
-            // alignItems: 'center',
-            // marginBottom: '7%',
-            // justifyContent: 'center',
-          }
-        }>
-        <MaterialIcons
-          name="mark-email-read"
-          size={25}
-          color="green"
-          style={{
-            // alignItems: 'center',
-            // justifyContent: 'center',
-            alignSelf: 'flex-start',
-            marginLeft: '5%',
-            // marginTop: '5%',
-          }}
-        />
-        {/* <Toaster msg="Check Email Please"></Toaster> */}
+      <MaterialIcons
+        name="mark-email-read"
+        size={25}
+        color="green"
+        style={{
+          // alignItems: 'center',
+          // justifyContent: 'center',
+          // alignSelf: 'flex-start',
+          marginLeft: '5%',
+          // marginTop: '5%',
+        }}
+      />
+      {/* <Toaster msg="Check Email Please"></Toaster> */}
 
-        <Text
-          style={{
-            // alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: '-10%',
-            marginLeft: '10%',
-            fontStyle: 'italic',
-            alignSelf: 'center',
-            fontSize: 16,
-            // fontWeight: '',
-          }}>
-          {/* Email sent successfully! */}
-          {props.msg}
-          {props.emailId}
-        </Text>
-      </View>
+      <Text
+        style={{
+          // alignItems: 'center',
+          // justifyContent: 'center',
+          // marginTop: '-10%',
+          // marginLeft: '10%',
+          fontStyle: 'italic',
+          alignSelf: 'center',
+          fontSize: 16,
+          // fontWeight: '',
+        }}>
+        {/* Email sent successfully! */}
+        {props.msg}
+        {props.emailId}
+      </Text>
 
       {/* <MaterialCommunityIcons
         name="email-outline"
