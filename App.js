@@ -95,6 +95,7 @@ export default function App() {
     // <Email />
     // <NotificationsTest />
     <ForgotPassword />
+    // <RegistrationScreenStudent />
     // <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>

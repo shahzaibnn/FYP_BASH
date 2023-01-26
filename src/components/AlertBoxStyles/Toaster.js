@@ -13,23 +13,23 @@ export const Toaster = props => {
       entering={FadeInUp}
       exiting={FadeOutUp}
       style={{
-        width: Dimensions.get('window').width * 0.9,
-        height: Dimensions.get('window').height * 0.12,
+        width: Dimensions.get('window').width * 0.8,
+        height: Dimensions.get('window').height * 0.1,
         backgroundColor: '#4CA6A8',
         position: 'absolute',
         padding: 10,
-        marginRight: '15%',
-        marginLeft: '15%',
+        marginHorizontal: Dimensions.get('window').width * 0.1,
         marginTop: '30%',
-        borderRadius: 8,
+        // borderRadius: 8,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
+        borderRadius: 32,
       }}>
       <MaterialIcons
         name="mark-email-read"
         size={25}
-        color="green"
+        color="white"
         style={{
           // alignItems: 'center',
           // justifyContent: 'center',
@@ -38,44 +38,18 @@ export const Toaster = props => {
           // marginTop: '5%',
         }}
       />
-      {/* <Toaster msg="Check Email Please"></Toaster> */}
 
       <Text
         style={{
-          // alignItems: 'center',
-          // justifyContent: 'center',
-          // marginTop: '-10%',
-          // marginLeft: '10%',
           fontStyle: 'italic',
           alignSelf: 'center',
           fontSize: 16,
+          color: 'white',
           // fontWeight: '',
         }}>
-        {/* Email sent successfully! */}
         {props.msg}
         {props.emailId}
       </Text>
-
-      {/* <MaterialCommunityIcons
-        name="email-outline"
-        size={20}
-        color="#777777"
-        style={{
-          marginHorizontal: '5%',
-          width: 20,
-        }}
-      /> */}
-      {/* <Text
-        style={{
-          color: 'white',
-          fontSize: 18,
-          textAlign: 'center',
-          // fontStyle: 'italic',
-        }}>
-        {props.msg}
-        {props.emailId}
-      </Text> */}
-      {/* <Text style={{color: 'white', fontSize: 20}}>hello</Text> */}
     </Animated.View>
   );
 };
