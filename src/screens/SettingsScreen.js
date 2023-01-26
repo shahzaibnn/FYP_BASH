@@ -65,7 +65,7 @@ export default function SettingsScreen({navigation}) {
           <TouchableOpacity
             onPress={() => {
               // setSpinnerVisible(!spinnerVisible);
-              setIndexValue(indexValue + 1);
+              // setIndexValue(indexValue + 1);
             }}
             style={{}}>
             <Ionicons
