@@ -41,10 +41,10 @@ export default function JobPostingScreen() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Pakistan', value: 'pakistan'},
-    {label: 'USA', value: 'usa'},
-    {label: 'JAPAN', value: 'japan'},
-    {label: 'CHINA', value: 'china'},
+    {label: 'Pakistan', value: 'Pakistan'},
+    {label: 'USA', value: 'USA'},
+    {label: 'JAPAN', value: 'Japan'},
+    {label: 'CHINA', value: 'China'},
   ]);
 
   // const [value3, setValue3] = useState(null);
@@ -60,9 +60,9 @@ export default function JobPostingScreen() {
   const [city, setCity] = useState(false);
   const [value2, setValue2] = useState(null);
   const [items2, setItems2] = useState([
-    {label: 'Remote', value: 'remote'},
-    {label: 'Hybrid', value: 'hybrid'},
-    {label: 'Onsite', value: 'onsite'},
+    {label: 'Remote', value: 'Remote'},
+    {label: 'Hybrid', value: 'Hybrid'},
+    {label: 'Onsite', value: 'Onsite'},
   ]);
   const [filePath, setfilePath] = useState();
 
@@ -102,7 +102,7 @@ export default function JobPostingScreen() {
           jobCity: city,
           jobMode: value2,
           image: url,
-          hrName: name,
+          jobPostedBy: name,
         })
         .then(() => {
           console.log('Post Added!');
