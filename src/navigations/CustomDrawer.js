@@ -62,8 +62,8 @@ export default function CustomDrawer({navigation}) {
           <DrawerIcons
             // imagePath={require('../assets/images/icons/services.png')}
             name={'Settings'}
-            onPress={() => navigation.navigate('Settings')}
-            iconName={'settings'}
+            onPress={() => navigation.navigate(SettingsScreen)}
+            // iconName={'settings'}
           />
           <View
             style={{

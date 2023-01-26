@@ -41,13 +41,15 @@ import BottomTabs from './src/navigations/BottomTabs';
 import AppStack from './src/navigations/AppStack';
 import JobPostingScreen from './src/screens/JobPostingScreen';
 import TestScreen from './src/screens/TestScreen';
+import CustomDrawer from './src/navigations/CustomDrawer';
 // import Tip from './src/components/AlertBoxStyles/Tip';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <AppStack />
+      {/* <AppStack /> */}
+      <CustomDrawer />
     </NavigationContainer>
     // <SettingsScreen />
 
@@ -94,7 +96,7 @@ export default function App() {
     // Testing email
     // <Email />
     // <NotificationsTest />
-    <ForgotPassword />
+    // <ForgotPassword />
     // <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>
