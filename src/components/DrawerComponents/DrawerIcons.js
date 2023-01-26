@@ -5,7 +5,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 // import FontAwesome5Icon from 'react-native-vector-icons/fontawesome5';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-export default function DrawerIcons({imagePath, name, iconName}) {
+import {createDrawerNavigator} from '@react-navigation/drawer';
+
+export default function DrawerIcons({
+  imagePath,
+  name,
+  iconName,
+  path,
+  navigation,
+}) {
   return (
     <View style={{flexDirection: 'row', marginBottom: '5%'}}>
       <Image
@@ -27,6 +35,9 @@ export default function DrawerIcons({imagePath, name, iconName}) {
               marginLeft: '10%',
               color: 'black',
               // fontWeight: 'bold',
+            }}
+            onPress={() => {
+              navigation.navigate({path});
             }}>
             {name}
           </Text>
