@@ -44,24 +44,15 @@ export default function HomeScreen() {
   const [fetchedPosts, setFetchedPosts] = useState([]);
   const [fetchedJobs, setFetchedJobs] = useState([]);
 
+  const [actionParameters, setActionParameters] = useState([]);
+
   const [extraData, setExtraData] = React.useState(new Date());
-  const show = () => {
+  const show = item => {
+    // console.log(item);
+    setActionParameters(item);
+    console.log('acrtions is, ', actionParameters);
     actionSheet.current.show();
   };
-  // const updateLike = async id => {
-  //   console.log('yahan tak coming ', id);
-  //   dbFirestore()
-  //     .collection('Posts')
-  //     .doc(id)
-  //     .get()
-  //     .then(documentSnapshot => {
-  //       console.log('User exists: ', documentSnapshot.exists);
-
-  //       if (documentSnapshot.exists) {
-  //         console.log('User data: ', documentSnapshot.data().likedBy);
-  //       }
-  //     });
-  // };
 
   const writePost = async () => {
     await dbFirestore()
@@ -135,43 +126,6 @@ export default function HomeScreen() {
         });
       });
   };
-
-  // const readData = () => {
-  //   const topUserPostsRef = query(
-  //     ref(db, 'roles/students'),
-  //     orderByChild('userEmail'),
-  //     equalTo(emailAddressOfCurrentUser),
-  //   );
-
-  //   onValue(topUserPostsRef, snapshot => {
-  //     // const data = snapshot.val().postsId;
-  //     // console.log(data);
-  //     console.log('Posts Ids Are: ');
-  //     // console.log(snapshot.toJSON());
-  //     snapshot.forEach(function (data) {
-  //       console.log(data.val().postsId);
-  //       console.log(data);
-
-  //       setCurrentUserPostsId(...currentUserPostsId, data.val().postsId);
-  //     });
-  //   });
-  // };
-
-  // const readDataOfPosts = () => {
-  //   const topUserPostsRef = query(ref(db, 'Posts'));
-
-  //   onValue(topUserPostsRef, snapshot => {
-  //     // const data = snapshot.val().postsId;
-  //     // console.log(data);
-  //     snapshot.forEach(function (data) {
-  //       if (!currentUserPostsId.includes(data.key)) {
-  //         console.log('Posts Id is: ', data.key);
-
-  //         console.log(data);
-  //       }
-  //     });
-  //   });
-  // };
 
   useEffect(() => {
     searchPosts();
@@ -292,7 +246,7 @@ export default function HomeScreen() {
                 <View
                   style={{marginLeft: Dimensions.get('window').width * 0.03}}>
                   <Text style={{fontSize: 12}}>
-                    {item.hrName} posted a new job
+                    {item.jobPostedBy} posted a new job
                   </Text>
                   <Text
                     style={{
@@ -306,7 +260,7 @@ export default function HomeScreen() {
                   <Text>{item.jobCompany}</Text>
                 </View>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => show(item)}>
                   <MaterialCommunityIcons
                     name="dots-vertical"
                     size={25}
@@ -330,8 +284,7 @@ export default function HomeScreen() {
                     paddingHorizontal: Dimensions.get('window').width * 0.15,
                     paddingVertical: Dimensions.get('window').height * 0.01,
                     borderRadius: 16,
-                  }}
-                  onPress={show}>
+                  }}>
                   <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
                     Apply
                   </Text>
@@ -576,18 +529,22 @@ export default function HomeScreen() {
                 <Image
                   style={styles.header}
                   source={{
-                    uri: 'https://10pearls.com/wp-content/uploads/2017/12/Untitled-design-19-2.png',
+                    uri: actionParameters.image,
                   }}
                 />
               </View>
               {/* Post */}
               <View>
-                <Text style={styles.name}>{jobs[0].company}</Text>
+                <Text style={styles.name}>{actionParameters.jobTitle}</Text>
               </View>
               {/* Company Name with location */}
               <View style={styles.expView1}>
-                <Text style={styles.compTxt}>{jobs[0].company} </Text>
-                <Text style={styles.compTxt}>{jobs[0].city}</Text>
+                <Text style={styles.compTxt}>
+                  {actionParameters.jobCompany}{' '}
+                </Text>
+                <Text style={styles.compTxt}>
+                  {actionParameters.jobCity},{actionParameters.jobLocation}
+                </Text>
               </View>
               {/* Icons with text */}
               <View style={styles.expView1}>
@@ -600,9 +557,11 @@ export default function HomeScreen() {
                     marginTop: Dimensions.get('window').height * 0.003,
                   }}
                 />
-                <Text style={styles.compTxt}>{jobs[0].mode}</Text>
+                <Text style={styles.compTxt}>{actionParameters.jobMode}</Text>
                 {/* <Text style={styles.compTxt}> - </Text> */}
-                <Text style={styles.compTxt}>{jobs[0].salary}/Month</Text>
+                <Text style={styles.compTxt}>
+                  {actionParameters.jobSalary}/Month
+                </Text>
               </View>
               {/* Description title */}
               <View>
@@ -616,14 +575,16 @@ export default function HomeScreen() {
               </View>
 
               {/* Qualification Text */}
-              <View>
+              {/* <View>
                 <Text style={styles.qualText}>Qualification</Text>
-              </View>
+              </View> */}
 
               {/* Job desc */}
               <View style={styles.messageBodyStyle}>
                 <ScrollView>
-                  <Text style={styles.messageStyle}>{jobs[0].description}</Text>
+                  <Text style={styles.messageStyle}>
+                    {actionParameters.jobDescription}
+                  </Text>
                 </ScrollView>
               </View>
 

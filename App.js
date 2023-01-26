@@ -54,7 +54,7 @@ export default function App() {
     // <JobPostingScreen />
     // <ViewJob />
     // <JobDashboardScreen />
-    <HomeScreen />
+    // <HomeScreen />
     // <TestScreen />
     // <NavigationContainer>
     //   <Stack.Navigator
@@ -94,7 +94,7 @@ export default function App() {
     // Testing email
     // <Email />
     // <NotificationsTest />
-    // <ForgotPassword />
+    <ForgotPassword />
     // <Test />
     // <RegistrationScreen />
     // <TestReg></TestReg>

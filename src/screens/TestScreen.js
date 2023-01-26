@@ -307,9 +307,9 @@ export default function TestScreen() {
               </View>
 
               {/* Qualification Text */}
-              <View>
+              {/* <View>
                 <Text style={styles.qualText}>Qualification</Text>
-              </View>
+              </View> */}
 
               {/* Job desc */}
               <View style={styles.messageBodyStyle}>
