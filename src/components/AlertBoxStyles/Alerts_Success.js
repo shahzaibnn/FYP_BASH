@@ -21,7 +21,10 @@ const Alerts_Error = () => {
         icon={
           <View style={[styles.icon, {borderRadius: 32}]}>
             <Ionicons
-              name={Platform.select({ios: 'ios-close', android: 'checkmark'})}
+              name={Platform.select({
+                ios: 'ios-close',
+                android: 'checkmark-done-circle',
+              })}
               size={36}
               color="#FFFFFF"
             />
