@@ -39,10 +39,14 @@ import RegistrationTabs from './RegistrationTabs';
 import BottomTabs from '../navigations/BottomTabs';
 import CustomDrawer from './CustomDrawer';
 import SettingsScreen from '../screens/SettingsScreen';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import HomeScreen from '../screens/HomeScreen';
+
 // import MyTabs from '../screens/tabs';
 
 export default function AppStack() {
   const Stack = createNativeStackNavigator();
+  const Drawer = createDrawerNavigator();
 
   return (
     // <NavigationContainer>
@@ -62,3 +66,6 @@ export default function AppStack() {
     // </NavigationContainer>
   );
 }
+
+// export default AppStack;
+// }

@@ -293,7 +293,7 @@ export default function Tabs({navigation}) {
             );
           },
         }}
-        name="Settings"
+        name="customDrawer"
         listeners={({navigation}) => ({
           tabPress: e => {
             e.preventDefault();

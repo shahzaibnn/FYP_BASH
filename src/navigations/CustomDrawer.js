@@ -14,7 +14,13 @@ export default function CustomDrawer({navigation}) {
     <Drawer.Navigator
       drawerContent={props => (
         <View>
-          <View style={{flexDirection: 'row'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              backgroundColor: '#E5E3E4',
+              marginBottom: '10%',
+              // borderRadius: 120,
+            }}>
             <Image
               resizeMode="contain"
               // style={{width: '80%', height: windowHeight / 5, marginLeft: '10%'}}
@@ -32,7 +38,7 @@ export default function CustomDrawer({navigation}) {
           </View>
           <Text
             style={{
-              color: '#000000',
+              color: '#5BA199',
               marginHorizontal: '5%',
               fontSize: 25,
               // fontStyle: 'italic',
@@ -66,7 +72,7 @@ export default function CustomDrawer({navigation}) {
             <DrawerIcons
               // imagePath={require('../assets/images/icons/services.png')}
               name={'Log out'}
-              onPress={() => navigation.navigate('Settings')}
+              // onPress={() => navigation.navigate('Settings')}
             />
           </View>
           {/*
@@ -103,7 +109,7 @@ export default function CustomDrawer({navigation}) {
       detachInactiveScreens={false}
       screenOptions={{headerShown: false}}>
       <Drawer.Screen name="BottomTabs" component={BottomTabs} />
-      <Drawer.Screen name="Settings" component={SettingsScreen} />
+      {/* <Drawer.Screen name="Settings" component={SettingsScreen} /> */}
     </Drawer.Navigator>
   );
 }

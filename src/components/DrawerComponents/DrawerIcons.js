@@ -20,7 +20,14 @@ export default function DrawerIcons({imagePath, name, iconName}) {
         <View style={{flexDirection: 'row', marginLeft: '-10%'}}>
           {/* <FontAwesome5 name={iconName} size={25} /> */}
           {/* <Ionicons name={iconName} size={25} /> */}
-          <Text style={{fontSize: 18, fontStyle: 'italic', marginLeft: '10%'}}>
+          <Text
+            style={{
+              fontSize: 18,
+              // fontStyle: 'italic',
+              marginLeft: '10%',
+              color: 'black',
+              // fontWeight: 'bold',
+            }}>
             {name}
           </Text>
         </View>
