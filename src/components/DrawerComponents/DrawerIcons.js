@@ -22,7 +22,7 @@ export default function DrawerIcons({imagePath, name, iconName}) {
           {/* <Ionicons name={iconName} size={25} /> */}
           <Text
             style={{
-              fontSize: 18,
+              fontSize: 16,
               // fontStyle: 'italic',
               marginLeft: '10%',
               color: 'black',

@@ -65,9 +65,33 @@ export default function CustomDrawer({navigation}) {
             onPress={() => navigation.navigate(SettingsScreen)}
             // iconName={'settings'}
           />
+
           <View
             style={{
-              marginTop: '100%',
+              marginTop: '75%',
+              backgroundColor: '#E5E3E4',
+              marginLeft: 10,
+              marginRight: 10,
+              borderRadius: 24,
+              flexDirection: 'column',
+            }}>
+            <DrawerIcons
+              // imagePath={require('../assets/images/icons/services.png')}
+              name={'Need help? Contact Us'}
+              // onPress={() => navigation.navigate('Settings')}
+            />
+          </View>
+
+          <View
+            style={{
+              marginTop: '5%',
+              backgroundColor: '#E5E3E4',
+              marginLeft: 10,
+              marginRight: 10,
+              borderRadius: 24,
+              flexDirection: 'column',
+              // width: '95%',
+              // height: '7%',
             }}>
             <DrawerIcons
               // imagePath={require('../assets/images/icons/services.png')}
