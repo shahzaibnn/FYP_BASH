@@ -62,11 +62,11 @@ export default function LoginScreen({navigation}) {
           const user = cred.user;
           console.log('Logged in as ', user.email);
           setFlag(true);
-          navigation.navigate('BottomTabs');
+          navigation.navigate('Drawer');
           navigation.dispatch(
             CommonActions.reset({
               index: 1,
-              routes: [{name: 'BottomTabs'}],
+              routes: [{name: 'Drawer'}],
             }),
           );
         })

@@ -30,7 +30,7 @@ const DrawerNav = () => {
       }}>
       {/* <View></View> */}
       <Drawer.Screen
-        name="Home"
+        name="BottomTabs"
         component={BottomTabs}
         // options={{
         //   drawerIcon: ({color}) => (
@@ -38,7 +38,7 @@ const DrawerNav = () => {
         //   ),
         // }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Settings"
         component={SettingsScreen}
         // options={{
@@ -46,8 +46,8 @@ const DrawerNav = () => {
         //     <Ionicons name="settings-outline" size={22} color={color} />
         //   ),
         // }}
-      />
-      <Drawer.Screen
+      /> */}
+      {/* <Drawer.Screen
         name="Login"
         component={LoginScreen}
         // options={{
@@ -55,8 +55,8 @@ const DrawerNav = () => {
         //     <Ionicons name="settings-outline" size={22} color={color} />
         //   ),
         // }}
-      />
-      <Drawer.Screen
+      /> */}
+      {/* <Drawer.Screen
         name="JobDashboard"
         component={JobDashboardScreen}
         // options={{
@@ -64,8 +64,8 @@ const DrawerNav = () => {
         //     <Ionicons name="settings-outline" size={22} color={color} />
         //   ),
         // }}
-      />
-      <Drawer.Screen
+      /> */}
+      {/* <Drawer.Screen
         name="Profile"
         component={ProfileScreen}
         // options={{
@@ -73,7 +73,7 @@ const DrawerNav = () => {
         //     // <Ionicons name="settings-outline" size={22} color={color} />
         //   ),
         // }}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 };

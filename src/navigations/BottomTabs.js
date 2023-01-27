@@ -18,6 +18,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {color} from 'react-native-reanimated';
 import CustomDrawer from './CustomDrawer';
+import DrawerNav from './DrawerNav';
 
 const Tab = createBottomTabNavigator();
 
@@ -259,8 +260,8 @@ export default function Tabs({navigation}) {
           tabBarIcon: ({focused}) => {
             console.log(focused);
             return (
-              <View
-                // onPress={() => navigation.openDrawer()}
+              <TouchableOpacity
+                onPress={() => navigation.openDrawer()}
                 style={[
                   styles.container,
                   {
@@ -289,18 +290,18 @@ export default function Tabs({navigation}) {
                   style={{fontSize: 13, color: focused ? '#5BA199' : 'grey'}}>
                   More
                 </Text>
-              </View>
+              </TouchableOpacity>
             );
           },
         }}
         name="customDrawer"
-        listeners={({navigation}) => ({
-          tabPress: e => {
-            e.preventDefault();
-            navigation.openDrawer();
-          },
-        })}
-        component={CustomDrawer}
+        // listeners={({navigation}) => ({
+        //   tabPress: e => {
+        //     e.preventDefault();
+        //     navigation.openDrawer();
+        //   },
+        // })}
+        component={DrawerNav}
       />
     </Tab.Navigator>
   );
