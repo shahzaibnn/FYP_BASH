@@ -20,7 +20,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {db, authorization, auth} from '../Firebase/Config';
+import {db, authorization} from '../Firebase/Config';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -29,8 +29,11 @@ import {
   reauthenticateWithCredential,
   getAuth,
   updateCurrentUser,
+  updatePassword,
+  EmailAuthProvider,
+  signOut,
 } from 'firebase/auth';
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
 import {Toaster} from '../components/AlertBoxStyles/Toaster';
 import {dbFirestore} from '../Firebase/Config';
 import RNSmtpMailer from 'react-native-smtp-mailer';
@@ -38,25 +41,31 @@ import RNSmtpMailer from 'react-native-smtp-mailer';
 import RandExp from 'randexp';
 import Spinner from 'react-native-spinkit';
 import {Fold} from 'react-native-animated-spinkit';
+import {get} from 'firebase/database';
 
 var hereEmail = 'none';
 
-const currentPass = 123456;
-const emailCred = firebase.auth.EmailAuthProvider.credential(
-  firebase.auth().currentUser,
-  currentPass,
-);
-firebase
-  .auth()
-  .currentUser.reauthenticateWithCredential(emailCred)
-  .then(() => {
-    // User successfully reauthenticated.
-    const newPass = '1234567';
-    return firebase.auth().currentUser.updatePassword(newPass);
-  })
-  .catch(error => {
-    // Handle error.
-  });
+// const user = getAuth().currentUser;
+// const cred = EmailAuthProvider.credential('shahzaib@gmail.com', '123456');
+// console.log(cred);
+
+// var r = reauthenticateWithCredential('shahzaib@gmail.com', cred);
+// console.log('value is ', r);
+// const emailCred = firebase.auth.EmailAuthProvider.credential(
+//   firebase.auth().currentUser,
+//   currentPass,
+// );
+// firebase
+//   .auth()
+//   .currentUser.reauthenticateWithCredential(emailCred)
+//   .then(() => {
+//     // User successfully reauthenticated.
+//     const newPass = '1234567';
+//     return firebase.auth().currentUser.updatePassword(newPass);
+//   })
+//   .catch(error => {
+//     // Handle error.
+//   });
 
 export default function ForgotPassword({navigation}) {
   const [id, setId] = useState('');
@@ -75,6 +84,8 @@ export default function ForgotPassword({navigation}) {
 
   console.log(id);
   console.log(email);
+
+  const check = () => {};
 
   const forgotPassword = () => {
     // firebase
@@ -151,17 +162,37 @@ export default function ForgotPassword({navigation}) {
             // attachmentNames: ['anotherTest.pdf'],
           })
             .then(success => {
-              console.log(success);
-              console.log('Password Updated');
+              const auth = getAuth();
+              signInWithEmailAndPassword(auth, email.toLowerCase(), oldPassword)
+                .then(userCredential => {
+                  // Signed in
+                  const user = userCredential.user;
+                  console.log('firat : ', user);
+                  updatePassword(user, newPassword)
+                    .then(() =>
+                      signOut(auth).then(() => {
+                        console.log('pura done');
+                        console.log(success);
+                        console.log('Password Updated');
 
-              setemailGenerated(true);
-              notifyMessage('New Password Sent At ' + email);
-              setNewPassword('');
+                        setemailGenerated(true);
+                        notifyMessage('New Password Sent At ' + email);
+                        setNewPassword('');
 
-              console.log('toaster sent');
-              setFound(false);
-              setFlag(true);
-              navigation.navigate('Login');
+                        console.log('toaster sent');
+                        setFound(false);
+                        setFlag(true);
+                        navigation.navigate('Login');
+                      }),
+                    )
+                    .catch(error => {
+                      console.log(error);
+                    });
+                  // ...
+                })
+                .catch(error => {
+                  console.log('error');
+                });
             })
             .catch(err => {
               console.log(err);
