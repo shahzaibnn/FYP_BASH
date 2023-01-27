@@ -145,7 +145,7 @@ export default function RegistrationScreenStudent({navigation}) {
               role: 'student',
               firstName: userName,
               lastName: lastName,
-              userEmail: userEmail,
+              userEmail: userEmail.toLowerCase(),
               userPassword: userPassword,
               contactNo: contactNo,
               dateOfBirth: dateOfBirth,

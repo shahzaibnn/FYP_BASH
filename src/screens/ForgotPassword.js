@@ -43,6 +43,8 @@ import Spinner from 'react-native-spinkit';
 import {Fold} from 'react-native-animated-spinkit';
 import {get} from 'firebase/database';
 
+import DropDownPicker from 'react-native-dropdown-picker';
+
 var hereEmail = 'none';
 
 // const user = getAuth().currentUser;
@@ -75,12 +77,22 @@ export default function ForgotPassword({navigation}) {
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
+  // const [role, setRole] = useState('');
+
   const [found, setFound] = useState(false);
 
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
   const [opacity, setOpacity] = useState(1);
   const [flag, setFlag] = useState(true);
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('Student');
+  const [items, setItems] = useState([
+    {label: 'Student', value: 'Student'},
+    {label: 'Faculty', value: 'Faculty'},
+    {label: 'Alumni', value: 'Alumni'},
+  ]);
 
   console.log(id);
   console.log(email);
@@ -101,8 +113,8 @@ export default function ForgotPassword({navigation}) {
       dbFirestore()
         .collection('Users')
         .doc('roles')
-        .collection('student')
-        .where('userEmail', '==', email.toLowerCase())
+        .collection(value.toLowerCase())
+        .where('userEmail', '==', email)
         .get()
         .then(querySnapshot => {
           console.log('Total Found users: ', querySnapshot.size);
@@ -120,7 +132,11 @@ export default function ForgotPassword({navigation}) {
             });
           }
         })
-        .catch(error => alert(error));
+        .catch(error => {
+          alert(error);
+
+          setFlag(true);
+        });
     }
   };
 
@@ -137,7 +153,7 @@ export default function ForgotPassword({navigation}) {
       dbFirestore()
         .collection('Users')
         .doc('roles')
-        .collection('student')
+        .collection(value.toLowerCase())
         .doc(id)
         .update({
           userPassword: newPassword.toString(),
@@ -186,12 +202,15 @@ export default function ForgotPassword({navigation}) {
                       }),
                     )
                     .catch(error => {
+                      setFlag(true);
+
                       console.log(error);
                     });
                   // ...
                 })
                 .catch(error => {
                   console.log('error');
+                  setFlag(true);
                 });
             })
             .catch(err => {
@@ -243,17 +262,18 @@ export default function ForgotPassword({navigation}) {
         pointerEvents={pointerEvent}
         style={{opacity: opacity, height: Dimensions.get('window').height}}>
         <View>
-          {emailGenerated ? (
-            <View
-              style={{
-                //   backgroundColor: '#777777',
-                width: Dimensions.get('window').width * 0.8,
-              }}>
-              <Toaster msg="Check email at " emailId={email}></Toaster>
-            </View>
+          {/* {emailGenerated ? (
+            // <View
+            //   style={{
+            //     //   backgroundColor: '#777777',
+            //     width: Dimensions.get('window').width * 0.8,
+            //   }}>
+            //   <Toaster msg="Check email at " emailId={email}></Toaster>
+            // </View>
+            null
           ) : (
             <></>
-          )}
+          )} */}
         </View>
 
         <View style={styles.backBtnStyle}>
@@ -305,6 +325,37 @@ export default function ForgotPassword({navigation}) {
         />
       </View> */}
 
+        <DropDownPicker
+          listMode="SCROLLVIEW"
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          placeholder="Select country"
+          style={{
+            marginVertical: '5%',
+            backgroundColor: '#BBC6C8',
+            borderWidth: 0,
+            borderRadius: 16,
+            width: '80%',
+            marginHorizontal: '10%',
+            marginTop: '10%',
+          }}
+          textStyle={{color: '#000000', fontSize: 14, marginHorizontal: '2%'}}
+          dropDownContainerStyle={{
+            backgroundColor: '#ffffff',
+            borderWidth: 0,
+            marginTop: '10%',
+            width: '80%',
+            marginHorizontal: '10%',
+            // position: 'absolute',
+          }}
+          //   labelStyle={{color: 'white'}}
+          listItemLabelStyle={{color: '#000000', fontWeight: 'bold'}}
+        />
+
         <View
           style={{
             backgroundColor: '#ffffff',
@@ -313,7 +364,7 @@ export default function ForgotPassword({navigation}) {
             borderRadius: 16,
             flexDirection: 'row',
             alignItems: 'center',
-            marginTop: '40%',
+            marginTop: '20%',
           }}>
           <MaterialCommunityIcons
             name="email-outline"
@@ -351,34 +402,34 @@ export default function ForgotPassword({navigation}) {
             Generate Password
           </Text>
         </TouchableOpacity>
-        <View>
-          {emailGenerated ? (
-            <View
-              style={{
-                //   backgroundColor: '#777777',
-                width: Dimensions.get('window').width * 0.8,
-                //   height: Dimensions.get('window').height * 0.8,
-                marginHorizontal: '10%',
-                marginTop: '40%',
-                borderRadius: 16,
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: '7%',
-                justifyContent: 'center',
-              }}>
-              <MaterialIcons
-                name="mark-email-read"
-                size={30}
-                color="green"
-                style={{
-                  // alignItems: 'center',
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                }}
-              />
-              {/* <Toaster msg="Check Email Please"></Toaster> */}
+        {/* <View> */}
+        {/* {emailGenerated ? (
+            // <View
+            //   style={{
+            //     //   backgroundColor: '#777777',
+            //     width: Dimensions.get('window').width * 0.8,
+            //     //   height: Dimensions.get('window').height * 0.8,
+            //     marginHorizontal: '10%',
+            //     marginTop: '40%',
+            //     borderRadius: 16,
+            //     flexDirection: 'row',
+            //     alignItems: 'center',
+            //     marginBottom: '7%',
+            //     justifyContent: 'center',
+            //   }}>
+            //   <MaterialIcons
+            //     name="mark-email-read"
+            //     size={30}
+            //     color="green"
+            //     style={{
+            //       // alignItems: 'center',
+            //       justifyContent: 'center',
+            //       alignSelf: 'center',
+            //     }}
+            //   /> */}
+        {/* <Toaster msg="Check Email Please"></Toaster> */}
 
-              <Text
+        {/* <Text
                 style={{
                   // alignItems: 'center',
                   justifyContent: 'center',
@@ -387,14 +438,15 @@ export default function ForgotPassword({navigation}) {
                   alignSelf: 'center',
                   fontSize: 22,
                   fontWeight: 'bold',
-                }}>
-                Email sent successfully!
-              </Text>
-            </View>
-          ) : (
-            <></>
-          )}
-        </View>
+                }}> */}
+        {/* Email sent successfully! */}
+        {/* </Text> */}
+        {/* </View> */}
+        {/* // ) : ( */}
+        {/* // <></> */}
+        {/* // )} */}
+
+        {/* </View> */}
 
         {spinnerLoader ? (
           <Fold
