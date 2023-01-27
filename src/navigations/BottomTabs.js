@@ -17,6 +17,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {color} from 'react-native-reanimated';
+import CustomDrawer from './CustomDrawer';
 
 const Tab = createBottomTabNavigator();
 
@@ -206,6 +207,52 @@ export default function Tabs({navigation}) {
         name="JobDashboard"
         component={JobDashboardScreen}
       />
+
+      {/* <Tab.Screen
+        options={{
+          // tabBarLabel: 'Homwwe',
+          tabBarIcon: ({focused}) => {
+            console.log(focused);
+            return (
+              <View
+                // onPress={() => navigation.openDrawer()}
+                style={[
+                  styles.container,
+                  {
+                    // backgroundColor: focused ? 'white' : '',
+                    shadowColor: focused ? '#5BA199' : '',
+
+                    // shadowColor: focused ? '#000000' : '',
+                    shadowOpacity: focused ? 0.5 : 0,
+                    shadowRadius: focused ? 6 : 0,
+                    // elevation: focused ? 8 : 0,
+                  },
+                ]}>
+                <Ionicons
+                  name="settings"
+                  size={25}
+                  color={focused ? '#5BA199' : 'grey'}
+
+                  // color="#5BA199"
+                />
+
+                {/* <Image
+                  style={styles.image}
+                  source={require('../assets/images/bash_icon.png')}
+                /> 
+                <Text
+                  style={{fontSize: 13, color: focused ? '#5BA199' : 'grey'}}>
+                  Settings
+                </Text>
+              </View>
+            );
+          },
+        }}
+        name="Settings"
+        component={SettingsScreen}
+      /> 
+    */}
+
       <Tab.Screen
         options={{
           // tabBarLabel: 'Homwwe',
@@ -240,14 +287,20 @@ export default function Tabs({navigation}) {
                 /> */}
                 <Text
                   style={{fontSize: 13, color: focused ? '#5BA199' : 'grey'}}>
-                  Settings
+                  More
                 </Text>
               </View>
             );
           },
         }}
-        name="Settings"
-        component={SettingsScreen}
+        name="customDrawer"
+        listeners={({navigation}) => ({
+          tabPress: e => {
+            e.preventDefault();
+            navigation.openDrawer();
+          },
+        })}
+        component={CustomDrawer}
       />
     </Tab.Navigator>
   );

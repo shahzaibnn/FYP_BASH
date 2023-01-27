@@ -37,10 +37,16 @@ import RegistrationTabs from './RegistrationTabs';
 // import ToastAlert from './src/components/AlertBoxStyles/ToastAlert';
 // import NotificationsTest from './src/components/AlertBoxStyles/NotificationsTest';
 import BottomTabs from '../navigations/BottomTabs';
+import CustomDrawer from './CustomDrawer';
+import SettingsScreen from '../screens/SettingsScreen';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import HomeScreen from '../screens/HomeScreen';
+
 // import MyTabs from '../screens/tabs';
 
 export default function AppStack() {
   const Stack = createNativeStackNavigator();
+  const Drawer = createDrawerNavigator();
 
   return (
     // <NavigationContainer>
@@ -48,13 +54,18 @@ export default function AppStack() {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="Splash" component={SplashScreen} />
+      {/* <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Start" component={StartScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="Registration" component={RegistrationTabs} />
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="BottomTabs" component={BottomTabs} />
+      <Stack.Screen name="Login" component={LoginScreen} /> */}
+      {/* <Stack.Screen name="BottomTabs" component={BottomTabs} /> */}
+      <Stack.Screen name="Drawer" component={CustomDrawer} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
     </Stack.Navigator>
     // </NavigationContainer>
   );
 }
+
+// export default AppStack;
+// }
