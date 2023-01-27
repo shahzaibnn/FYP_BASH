@@ -11,6 +11,9 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
+
+import {CommonActions} from '@react-navigation/native';
+
 Drawer = createDrawerNavigator();
 
 export default function CustomDrawer({props, navigation}) {
@@ -43,45 +46,39 @@ export default function CustomDrawer({props, navigation}) {
         {/* <View style={{flexDirection: 'row', marginLeft: '-10%'}}> */}
         {/* <AntDesign name={iconName} size={25} /> */}
 
-        <TouchableOpacity style={{marginTop: '5%'}}>
+        <TouchableOpacity
+          style={{marginTop: '5%'}}
+          onPress={() => {
+            navigation.navigate('Profile');
+          }}>
           <View style={styles.drawerAlignStyle}>
             {/* <FontAwesome5 name={iconName} size={25} /> */}
             {/* <Ionicons name={iconName} size={25} /> */}
-            <Text
-              style={styles.mainDrawer}
-              onPress={() => {
-                navigation.navigate('Profile');
-              }}>
-              My Profile
-            </Text>
+            <Text style={styles.mainDrawer}>My Profile</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{marginTop: '5%'}}>
+        <TouchableOpacity
+          style={{marginTop: '5%'}}
+          onPress={() => {
+            navigation.navigate('JobPosting');
+          }}>
           <View style={styles.drawerAlignStyle}>
             {/* <FontAwesome5 name={iconName} size={25} /> */}
             {/* <Ionicons name={iconName} size={25} /> */}
-            <Text
-              style={styles.mainDrawer}
-              onPress={() => {
-                navigation.navigate('JobDashboard');
-              }}>
-              Applied Jobs
-            </Text>
+            <Text style={styles.mainDrawer}>Job Posting</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{marginTop: '5%'}}>
+        <TouchableOpacity
+          style={{marginTop: '5%'}}
+          onPress={() => {
+            navigation.navigate('Settings');
+          }}>
           <View style={styles.drawerAlignStyle}>
             {/* <FontAwesome5 name={iconName} size={25} /> */}
             {/* <Ionicons name={iconName} size={25} /> */}
-            <Text
-              style={styles.mainDrawer}
-              onPress={() => {
-                navigation.navigate('Settings');
-              }}>
-              Settings
-            </Text>
+            <Text style={styles.mainDrawer}>Settings</Text>
           </View>
         </TouchableOpacity>
 
@@ -118,16 +115,20 @@ export default function CustomDrawer({props, navigation}) {
             borderRadius: 24,
             flexDirection: 'column',
           }}>
-          <TouchableOpacity style={{marginTop: '5%'}}>
+          <TouchableOpacity
+            style={{marginTop: '5%'}}
+            onPress={() => {
+              navigation.navigate('Login');
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 1,
+                  routes: [{name: 'Login'}],
+                }),
+              );
+            }}>
             {/* <FontAwesome5 name={iconName} size={25} /> */}
             {/* <Ionicons name={iconName} size={25} /> */}
-            <Text
-              style={styles.drawerTextBottom}
-              onPress={() => {
-                navigation.navigate('Login');
-              }}>
-              Logout
-            </Text>
+            <Text style={styles.drawerTextBottom}>Logout</Text>
           </TouchableOpacity>
         </View>
         {/* </View> */}

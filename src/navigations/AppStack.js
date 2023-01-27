@@ -41,6 +41,9 @@ import CustomDrawer from './CustomDrawer';
 import SettingsScreen from '../screens/SettingsScreen';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import HomeScreen from '../screens/HomeScreen';
+import DrawerNav from './DrawerNav';
+import ProfileScreen from '../screens/ProfileScreen';
+import JobPostingScreen from '../screens/JobPostingScreen';
 
 // import MyTabs from '../screens/tabs';
 
@@ -54,14 +57,16 @@ export default function AppStack() {
       screenOptions={{
         headerShown: false,
       }}>
-      {/* <Stack.Screen name="Splash" component={SplashScreen} />
+      <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Start" component={StartScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="Registration" component={RegistrationTabs} />
-      <Stack.Screen name="Login" component={LoginScreen} /> */}
+      <Stack.Screen name="Login" component={LoginScreen} />
       {/* <Stack.Screen name="BottomTabs" component={BottomTabs} /> */}
-      <Stack.Screen name="Drawer" component={CustomDrawer} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="Drawer" component={DrawerNav} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="JobPosting" component={JobPostingScreen} />
     </Stack.Navigator>
     // </NavigationContainer>
   );

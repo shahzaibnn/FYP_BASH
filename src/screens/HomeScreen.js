@@ -33,6 +33,7 @@ import {SliderBox} from 'react-native-image-slider-box';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Circle, Fold, Grid} from 'react-native-animated-spinkit';
 
 // import {db, dbFirestore} from './Config';
 
@@ -47,6 +48,9 @@ export default function HomeScreen() {
   const [actionParameters, setActionParameters] = useState([]);
 
   const [extraData, setExtraData] = React.useState(new Date());
+
+  const [jobLoader, setJobLoader] = useState(true);
+  const [postLoader, setPostLoader] = useState(true);
   const show = item => {
     // console.log(item);
     setActionParameters(item);
@@ -54,28 +58,28 @@ export default function HomeScreen() {
     actionSheet.current.show();
   };
 
-  const writePost = async () => {
-    await dbFirestore()
-      .collection('Posts')
-      .add({
-        commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
-        date: '25th October 2022',
-        description:
-          "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
-        images: [
-          'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
-        ],
-        likedBy: ['shahzaibnn@gmail.com'],
-        name: 'Benedict',
-        profilePic:
-          'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
-        title: 'BSCS Student',
-      })
-      .then(() => {
-        console.log('Post Added!');
-      });
-  };
+  // const writePost = async () => {
+  //   await dbFirestore()
+  //     .collection('Posts')
+  //     .add({
+  //       commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
+  //       date: '25th October 2022',
+  //       description:
+  //         "Architectural styles in Dubai have changed significantly in recent years. While architecture was initially traditional, Dubai's current modernist architecture features innovative exposed-glass walls, stepped ascending spirals and designs that offer subtle nods to traditional Arabic motifs.",
+  //       images: [
+  //         'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8&w=1000&q=80',
+  //         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrvShnjnecDWQkvqXazKndlV-5ydcpJgnkVJmcuVedoadu8Ryhj_Z3Z1nho9mapLazuo0&usqp=CAU',
+  //       ],
+  //       likedBy: ['shahzaibnn@gmail.com'],
+  //       name: 'Benedict',
+  //       profilePic:
+  //         'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
+  //       title: 'BSCS Student',
+  //     })
+  //     .then(() => {
+  //       console.log('Post Added!');
+  //     });
+  // };
 
   const searchPosts = async () => {
     await dbFirestore()
@@ -87,18 +91,31 @@ export default function HomeScreen() {
       .then(querySnapshot => {
         console.log('Total posts: ', querySnapshot.size);
 
-        querySnapshot.forEach(documentSnapshot => {
-          let v = documentSnapshot.data();
-          v.id = documentSnapshot.id;
-          console.log(
-            'User ID: ',
-            documentSnapshot.id,
-            documentSnapshot.data(),
-            setFetchedPosts(fetchedPosts => [...fetchedPosts, v]),
-            //To grab a particular field use
-            //documentSnapshot.data().userEmail,
-          );
-        });
+        var total = querySnapshot.size;
+        let count = 0;
+
+        if (total == 0) {
+          setPostLoader(false);
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+            console.log(
+              'User ID: ',
+              documentSnapshot.id,
+              documentSnapshot.data(),
+              setFetchedPosts(fetchedPosts => [...fetchedPosts, v]),
+              //To grab a particular field use
+              //documentSnapshot.data().userEmail,
+            );
+
+            count++;
+            if (count == total) {
+              setPostLoader(false);
+              console.log(':runing');
+            }
+          });
+        }
       });
   };
 
@@ -110,20 +127,34 @@ export default function HomeScreen() {
       // .where('firstName', '==', 'Habiba')
       .get()
       .then(querySnapshot => {
-        console.log('Total posts: ', querySnapshot.size);
+        console.log('Total Jobs: ', querySnapshot.size);
 
-        querySnapshot.forEach(documentSnapshot => {
-          let v = documentSnapshot.data();
-          v.id = documentSnapshot.id;
-          console.log(
-            'User ID: ',
-            documentSnapshot.id,
-            documentSnapshot.data(),
-            setFetchedJobs(fetchedJobs => [...fetchedJobs, v]),
-            //To grab a particular field use
-            //documentSnapshot.data().userEmail,
-          );
-        });
+        var total = querySnapshot.size;
+        let count = 0;
+        if (total == 0) {
+          setJobLoader(false);
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            console.log('hgccgcfgcgfc');
+
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+            console.log(
+              'User ID: ',
+              documentSnapshot.id,
+              documentSnapshot.data(),
+              setFetchedJobs(fetchedJobs => [...fetchedJobs, v]),
+              //To grab a particular field use
+              //documentSnapshot.data().userEmail,
+            );
+            count++;
+            if (count == total) {
+              setJobLoader(false);
+              console.log(':runing');
+            }
+          });
+        }
+        // setJobLoader(false);
       });
   };
 
@@ -134,6 +165,12 @@ export default function HomeScreen() {
   useEffect(() => {
     searchJobs();
   }, []);
+
+  // useEffect(()=>{
+  //   console.log("Loader");
+
+  //   if(jobLoader){}
+  // },[jobLoader])
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4', width: '100%'}}>
@@ -210,95 +247,112 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
 
-      <View style={{marginHorizontal: '3%', marginVertical: '4%'}}>
-        <FlatList
-          // nestedScrollEnabled
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          data={fetchedJobs}
-          renderItem={({item}) => (
-            <View
-              style={{
-                backgroundColor: '#BBC6C8',
-                // padding: '3%',
-                borderRadius: 16,
-
-                marginHorizontal: Dimensions.get('window').width * 0.01,
-                // elevation: 5,
-              }}>
+      {jobLoader ? (
+        <Grid
+          style={{
+            // position: 'relative',
+            // top: Dimensions.get('window').height * 0.5,
+            // left: Dimensions.get('window').width * 0.4,
+            alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          size={Dimensions.get('window').width * 0.2}
+          color="#5BA199"
+        />
+      ) : (
+        <View style={{marginHorizontal: '3%', marginVertical: '4%'}}>
+          <FlatList
+            // nestedScrollEnabled
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={fetchedJobs}
+            renderItem={({item}) => (
               <View
                 style={{
-                  flexDirection: 'row',
-                  marginTop: Dimensions.get('window').height * 0.02,
-                  marginHorizontal: Dimensions.get('window').width * 0.05,
+                  backgroundColor: '#BBC6C8',
+                  // padding: '3%',
+                  borderRadius: 16,
+
+                  marginHorizontal: Dimensions.get('window').width * 0.01,
+                  // elevation: 5,
                 }}>
-                <Image
-                  style={{
-                    height: 60,
-                    width: 60,
-                    borderRadius: 16,
-                    // marginLeft: Dimensions.get('window').width * 0.1,
-                  }}
-                  source={{
-                    uri: item.image,
-                  }}
-                />
                 <View
-                  style={{marginLeft: Dimensions.get('window').width * 0.03}}>
-                  <Text style={{fontSize: 12}}>
-                    {item.jobPostedBy} posted a new job
-                  </Text>
-                  <Text
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: Dimensions.get('window').height * 0.02,
+                    marginHorizontal: Dimensions.get('window').width * 0.05,
+                  }}>
+                  <Image
                     style={{
-                      fontSize: 18,
-                      fontWeight: 'bold',
-                      marginVertical: Dimensions.get('window').height * 0.005,
-                      color: '#000000',
-                    }}>
-                    {item.jobTitle}
-                  </Text>
-                  <Text>{item.jobCompany}</Text>
+                      height: 60,
+                      width: 60,
+                      borderRadius: 16,
+                      // marginLeft: Dimensions.get('window').width * 0.1,
+                    }}
+                    source={{
+                      uri: item.image,
+                    }}
+                  />
+                  <View
+                    style={{marginLeft: Dimensions.get('window').width * 0.03}}>
+                    <Text style={{fontSize: 12}}>
+                      {item.jobPostedBy} posted a new job
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        marginVertical: Dimensions.get('window').height * 0.005,
+                        color: '#000000',
+                      }}>
+                      {item.jobTitle}
+                    </Text>
+                    <Text>{item.jobCompany}</Text>
+                  </View>
+
+                  <TouchableOpacity onPress={() => show(item)}>
+                    <MaterialCommunityIcons
+                      name="dots-vertical"
+                      size={25}
+                      color="#000000"
+                      style={{
+                        marginLeft: Dimensions.get('window').width * 0.05,
+                      }}
+                    />
+                  </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity onPress={() => show(item)}>
-                  <MaterialCommunityIcons
-                    name="dots-vertical"
-                    size={25}
-                    color="#000000"
-                    style={{marginLeft: Dimensions.get('window').width * 0.05}}
-                  />
-                </TouchableOpacity>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginHorizontal: Dimensions.get('window').width * 0.05,
-                  marginVertical: Dimensions.get('window').height * 0.02,
-                }}>
-                <TouchableOpacity
+                <View
                   style={{
-                    backgroundColor: '#5BA199',
-                    paddingHorizontal: Dimensions.get('window').width * 0.15,
-                    paddingVertical: Dimensions.get('window').height * 0.01,
-                    borderRadius: 16,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginHorizontal: Dimensions.get('window').width * 0.05,
+                    marginVertical: Dimensions.get('window').height * 0.02,
                   }}>
-                  <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
-                    Apply
-                  </Text>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#5BA199',
+                      paddingHorizontal: Dimensions.get('window').width * 0.15,
+                      paddingVertical: Dimensions.get('window').height * 0.01,
+                      borderRadius: 16,
+                    }}>
+                    <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
+                      Apply
+                    </Text>
+                  </TouchableOpacity>
 
-                <Text style={{color: '#469597', fontSize: 16}}>
-                  {item.jobCity},{item.jobLocation}
-                </Text>
+                  <Text style={{color: '#469597', fontSize: 16}}>
+                    {item.jobCity},{item.jobLocation}
+                  </Text>
+                </View>
               </View>
-            </View>
-          )}
-          keyExtractor={item => item.id}
-        />
-      </View>
+            )}
+            keyExtractor={item => item.id}
+          />
+        </View>
+      )}
 
       <Text
         style={{
@@ -310,294 +364,314 @@ export default function HomeScreen() {
         News Feed
       </Text>
 
-      <View>
-        <FlatList
-          // scrollEnabled={false}
-          showsVerticalScrollIndicator={false}
-          data={fetchedPosts}
-          extraData={extraData}
-          // key={item => item.id}
-          // keyExtractor={item => item.id}
-          ListFooterComponent={<View style={{height: 60}}></View>}
-          renderItem={({item}) => {
-            console.log('Id is : ', item.id);
-            let likeColor = '';
+      {postLoader ? (
+        <Circle
+          style={{
+            // position: 'relative',
+            // top: Dimensions.get('window').height * 0.5,
+            // left: Dimensions.get('window').width * 0.4,
+            alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          size={Dimensions.get('window').width * 0.2}
+          color="#5BA199"
+        />
+      ) : (
+        <View>
+          <FlatList
+            // scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            data={fetchedPosts}
+            extraData={extraData}
+            // key={item => item.id}
+            // keyExtractor={item => item.id}
+            ListFooterComponent={<View style={{height: 60}}></View>}
+            renderItem={({item}) => {
+              console.log('Id is : ', item.id);
+              let likeColor = '';
 
-            console.log(item.likedBy);
+              console.log(item.likedBy);
 
-            if (item.likedBy.includes(emailAddressOfCurrentUser)) {
-              likeColor = '#000000';
-              console.log('running');
-            } else {
-              likeColor = '#ffffff';
-            }
+              if (item.likedBy.includes(emailAddressOfCurrentUser)) {
+                likeColor = '#000000';
+                console.log('running');
+              } else {
+                likeColor = '#ffffff';
+              }
 
-            return (
-              <View
-                style={{
-                  // elevation: 1000,
-                  // backgroundColor: '#ffffff',
-                  marginHorizontal: Dimensions.get('window').width * 0.05,
-                  marginVertical: Dimensions.get('window').height * 0.01,
-                  borderRadius: 16,
-                }}>
+              return (
                 <View
                   style={{
-                    flexDirection: 'row',
+                    // elevation: 1000,
+                    // backgroundColor: '#ffffff',
+                    marginHorizontal: Dimensions.get('window').width * 0.05,
                     marginVertical: Dimensions.get('window').height * 0.01,
+                    borderRadius: 16,
                   }}>
-                  <Image
-                    source={{uri: item.profilePic}}
-                    style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 64,
-                      marginLeft: Dimensions.get('window').width * 0.02,
-                    }}
-                  />
                   <View
-                    style={{marginLeft: Dimensions.get('window').width * 0.05}}>
-                    <Text
+                    style={{
+                      flexDirection: 'row',
+                      marginVertical: Dimensions.get('window').height * 0.01,
+                    }}>
+                    <Image
+                      source={{uri: item.profilePic}}
                       style={{
-                        color: '#5BA199',
-                        fontWeight: 'bold',
-                        marginBottom: Dimensions.get('window').height * 0.005,
-                        fontSize: 16,
-                      }}>
-                      {item.name}
-                    </Text>
-                    <Text
+                        width: 60,
+                        height: 60,
+                        borderRadius: 64,
+                        marginLeft: Dimensions.get('window').width * 0.02,
+                      }}
+                    />
+                    <View
                       style={{
-                        color: '#5BA199',
-                        marginBottom: Dimensions.get('window').height * 0.005,
-                        fontSize: 12,
+                        marginLeft: Dimensions.get('window').width * 0.05,
                       }}>
-                      {item.title}
-                    </Text>
-                    <Text style={{color: '#777777', fontSize: 12}}>
-                      {item.date}
-                    </Text>
+                      <Text
+                        style={{
+                          color: '#5BA199',
+                          fontWeight: 'bold',
+                          marginBottom: Dimensions.get('window').height * 0.005,
+                          fontSize: 16,
+                        }}>
+                        {item.name}
+                      </Text>
+                      <Text
+                        style={{
+                          color: '#5BA199',
+                          marginBottom: Dimensions.get('window').height * 0.005,
+                          fontSize: 12,
+                        }}>
+                        {item.title}
+                      </Text>
+                      <Text style={{color: '#777777', fontSize: 12}}>
+                        {item.date}
+                      </Text>
+                    </View>
                   </View>
-                </View>
 
-                <SliderBox
-                  // onCurrentImagePressed={index => ImagePressed()}
-                  parentWidth={Dimensions.get('window').width * 0.9}
-                  ImageComponentStyle={{borderRadius: 16}}
-                  // paginationBoxStyle={styles.sliderBoxPageStyle}
-                  // ImageComponentStyle={styles.sliderBoxImageStyle}
-                  // dotStyle={{
-                  //   width: 10,
-                  //   height: 10,
-                  //   borderRadius: 5,
-                  //   marginBottom: 20,
-                  //   marginHorizontal: 0,
-                  //   padding: 0,
-                  //   margin: 0,
-                  // }}
-                  images={item.images}
-                  sliderBoxHeight={Dimensions.get('window').height * 0.3}
-                />
+                  <SliderBox
+                    // onCurrentImagePressed={index => ImagePressed()}
+                    parentWidth={Dimensions.get('window').width * 0.9}
+                    ImageComponentStyle={{borderRadius: 16}}
+                    // paginationBoxStyle={styles.sliderBoxPageStyle}
+                    // ImageComponentStyle={styles.sliderBoxImageStyle}
+                    // dotStyle={{
+                    //   width: 10,
+                    //   height: 10,
+                    //   borderRadius: 5,
+                    //   marginBottom: 20,
+                    //   marginHorizontal: 0,
+                    //   padding: 0,
+                    //   margin: 0,
+                    // }}
+                    images={item.images}
+                    sliderBoxHeight={Dimensions.get('window').height * 0.3}
+                  />
 
-                <Text
-                  style={{
-                    color: '#000000',
-                    width: '95%',
-                    marginHorizontal: '2.5%',
-                    marginVertical: '2%',
-                  }}>
-                  {item.description}
-                </Text>
+                  <Text
+                    style={{
+                      color: '#000000',
+                      width: '95%',
+                      marginHorizontal: '2.5%',
+                      marginVertical: '2%',
+                    }}>
+                    {item.description}
+                  </Text>
 
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    marginBottom: '5%',
-                  }}>
-                  <View>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        color: '#469597',
-                        fontWeight: 'bold',
-                      }}>
-                      {item.likedBy.length} Likes
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => {
-                        console.log('hdshjdsfvhddhfbhj');
-                        if (item.likedBy.includes(emailAddressOfCurrentUser)) {
-                          dbFirestore()
-                            .doc('Posts/' + item.id)
-                            .update({
-                              likedBy: dbFirestore.FieldValue.arrayRemove(
-                                emailAddressOfCurrentUser,
-                              ),
-                            })
-                            .then(() => {
-                              console.log('Like Removed!');
-                            });
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      marginBottom: '5%',
+                    }}>
+                    <View>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          color: '#469597',
+                          fontWeight: 'bold',
+                        }}>
+                        {item.likedBy.length} Likes
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          console.log('hdshjdsfvhddhfbhj');
+                          if (
+                            item.likedBy.includes(emailAddressOfCurrentUser)
+                          ) {
+                            dbFirestore()
+                              .doc('Posts/' + item.id)
+                              .update({
+                                likedBy: dbFirestore.FieldValue.arrayRemove(
+                                  emailAddressOfCurrentUser,
+                                ),
+                              })
+                              .then(() => {
+                                console.log('Like Removed!');
+                              });
 
-                          fetchedPosts.find(obj => obj.id == item.id).likedBy =
-                            item.likedBy.filter(
+                            fetchedPosts.find(
+                              obj => obj.id == item.id,
+                            ).likedBy = item.likedBy.filter(
                               e => e !== emailAddressOfCurrentUser,
                             );
-                          setExtraData(new Date());
+                            setExtraData(new Date());
 
-                          // likeColor = '#ffffff';
-                        } else {
-                          console.log('ye work');
-                          dbFirestore()
-                            .doc('Posts/' + item.id)
-                            .update({
-                              likedBy: dbFirestore.FieldValue.arrayUnion(
-                                emailAddressOfCurrentUser,
-                              ),
-                            })
-                            .then(() => {
-                              console.log('Like Placed!');
-                            });
-                          let arr = item.likedBy;
-                          arr.push(emailAddressOfCurrentUser);
-                          fetchedPosts.find(obj => obj.id == item.id).likedBy =
-                            arr;
+                            // likeColor = '#ffffff';
+                          } else {
+                            console.log('ye work');
+                            dbFirestore()
+                              .doc('Posts/' + item.id)
+                              .update({
+                                likedBy: dbFirestore.FieldValue.arrayUnion(
+                                  emailAddressOfCurrentUser,
+                                ),
+                              })
+                              .then(() => {
+                                console.log('Like Placed!');
+                              });
+                            let arr = item.likedBy;
+                            arr.push(emailAddressOfCurrentUser);
+                            fetchedPosts.find(
+                              obj => obj.id == item.id,
+                            ).likedBy = arr;
 
-                          setExtraData(new Date());
-                        }
-                        // setFetchedPosts([]);
-                        // searchPosts();
-                      }}
-                      style={{
-                        paddingHorizontal: '8%',
-                        paddingVertical: '8%',
-                        backgroundColor: '#5BA199',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 8,
-                        // width: Dimensions.get('window').width * 0.2,
-                      }}>
-                      <AntDesign name="like1" size={25} color={likeColor} />
-                    </TouchableOpacity>
-                  </View>
+                            setExtraData(new Date());
+                          }
+                          // setFetchedPosts([]);
+                          // searchPosts();
+                        }}
+                        style={{
+                          paddingHorizontal: '8%',
+                          paddingVertical: '8%',
+                          backgroundColor: '#5BA199',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderRadius: 8,
+                          // width: Dimensions.get('window').width * 0.2,
+                        }}>
+                        <AntDesign name="like1" size={25} color={likeColor} />
+                      </TouchableOpacity>
+                    </View>
 
-                  <View>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        color: '#469597',
-                        fontWeight: 'bold',
-                      }}>
-                      {item.commentedBy.length} Comments
-                    </Text>
-                    <TouchableOpacity
-                      style={{
-                        paddingHorizontal: '8%',
-                        paddingVertical: '8%',
-                        backgroundColor: '#5BA199',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 8,
-                        // width: Dimensions.get('window').width * 0.2,
-                      }}>
-                      <FontAwesome name="comment" size={25} color="#ffffff" />
-                    </TouchableOpacity>
+                    <View>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          color: '#469597',
+                          fontWeight: 'bold',
+                        }}>
+                        {item.commentedBy.length} Comments
+                      </Text>
+                      <TouchableOpacity
+                        style={{
+                          paddingHorizontal: '8%',
+                          paddingVertical: '8%',
+                          backgroundColor: '#5BA199',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderRadius: 8,
+                          // width: Dimensions.get('window').width * 0.2,
+                        }}>
+                        <FontAwesome name="comment" size={25} color="#ffffff" />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            );
-          }}
-        />
-        <ActionSheet
-          // id={sheetId}
-          data={fetchedJobs}
-          ref={actionSheet}
-          containerStyle={{
-            borderTopLeftRadius: 25,
-            borderTopRightRadius: 25,
-            backgroundColor: '#E5E3E4',
-          }}
-          indicatorStyle={{
-            width: 100,
-          }}
-          gestureEnabled={true}>
-          <View>
-            {/* action sheet */}
-            <ScrollView style={styles.SectionStyle}>
-              {/* Company Logo */}
-              <View>
-                <Image
-                  style={styles.header}
-                  source={{
-                    uri: actionParameters.image,
-                  }}
-                />
-              </View>
-              {/* Post */}
-              <View>
-                <Text style={styles.name}>{actionParameters.jobTitle}</Text>
-              </View>
-              {/* Company Name with location */}
-              <View style={styles.expView1}>
-                <Text style={styles.compTxt}>
-                  {actionParameters.jobCompany}{' '}
-                </Text>
-                <Text style={styles.compTxt}>
-                  {actionParameters.jobCity},{actionParameters.jobLocation}
-                </Text>
-              </View>
-              {/* Icons with text */}
-              <View style={styles.expView1}>
-                <MaterialCommunityIcons
-                  name="clock"
-                  size={25}
-                  color="#000000"
-                  style={{
-                    marginLeft: Dimensions.get('window').width * -0.05,
-                    marginTop: Dimensions.get('window').height * 0.003,
-                  }}
-                />
-                <Text style={styles.compTxt}>{actionParameters.jobMode}</Text>
-                {/* <Text style={styles.compTxt}> - </Text> */}
-                <Text style={styles.compTxt}>
-                  {actionParameters.jobSalary}/Month
-                </Text>
-              </View>
-              {/* Description title */}
-              <View>
-                <TouchableOpacity
-                  style={styles.buttonStyleDesc}
-                  // activeOpacity={0.5}
-                  // onPress={handleSubmitButton}
-                >
-                  <Text style={styles.buttonTextStyle}>Description</Text>
-                </TouchableOpacity>
-              </View>
+              );
+            }}
+          />
+        </View>
+      )}
 
-              {/* Qualification Text */}
-              {/* <View>
+      <ActionSheet
+        // id={sheetId}
+        data={fetchedJobs}
+        ref={actionSheet}
+        containerStyle={{
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+          backgroundColor: '#E5E3E4',
+        }}
+        indicatorStyle={{
+          width: 100,
+        }}
+        gestureEnabled={true}>
+        <View>
+          {/* action sheet */}
+          <ScrollView style={styles.SectionStyle}>
+            {/* Company Logo */}
+            <View>
+              <Image
+                style={styles.header}
+                source={{
+                  uri: actionParameters.image,
+                }}
+              />
+            </View>
+            {/* Post */}
+            <View>
+              <Text style={styles.name}>{actionParameters.jobTitle}</Text>
+            </View>
+            {/* Company Name with location */}
+            <View style={styles.expView1}>
+              <Text style={styles.compTxt}>{actionParameters.jobCompany} </Text>
+              <Text style={styles.compTxt}>
+                {actionParameters.jobCity},{actionParameters.jobLocation}
+              </Text>
+            </View>
+            {/* Icons with text */}
+            <View style={styles.expView1}>
+              <MaterialCommunityIcons
+                name="clock"
+                size={25}
+                color="#000000"
+                style={{
+                  marginLeft: Dimensions.get('window').width * -0.05,
+                  marginTop: Dimensions.get('window').height * 0.003,
+                }}
+              />
+              <Text style={styles.compTxt}>{actionParameters.jobMode}</Text>
+              {/* <Text style={styles.compTxt}> - </Text> */}
+              <Text style={styles.compTxt}>
+                {actionParameters.jobSalary}/Month
+              </Text>
+            </View>
+            {/* Description title */}
+            <View>
+              <TouchableOpacity
+                style={styles.buttonStyleDesc}
+                // activeOpacity={0.5}
+                // onPress={handleSubmitButton}
+              >
+                <Text style={styles.buttonTextStyle}>Description</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Qualification Text */}
+            {/* <View>
                 <Text style={styles.qualText}>Qualification</Text>
               </View> */}
 
-              {/* Job desc */}
-              <View style={styles.messageBodyStyle}>
-                <ScrollView>
-                  <Text style={styles.messageStyle}>
-                    {actionParameters.jobDescription}
-                  </Text>
-                </ScrollView>
-              </View>
+            {/* Job desc */}
+            <View style={styles.messageBodyStyle}>
+              <ScrollView>
+                <Text style={styles.messageStyle}>
+                  {actionParameters.jobDescription}
+                </Text>
+              </ScrollView>
+            </View>
 
-              {/* apply now */}
-              <View>
-                <TouchableOpacity style={styles.buttonStyle}>
-                  <Text style={styles.buttonTextStyle}>Apply</Text>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
-          </View>
-        </ActionSheet>
-      </View>
+            {/* apply now */}
+            <View>
+              <TouchableOpacity style={styles.buttonStyle}>
+                <Text style={styles.buttonTextStyle}>Apply</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </View>
+      </ActionSheet>
     </ScrollView>
   );
 }
