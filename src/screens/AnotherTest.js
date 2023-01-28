@@ -7,21 +7,20 @@ const AnotherTest = () => {
   const [data, setData] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [allDataFetched, setAllDataFetched] = useState(false);
 
+  let query = dbFirestore().collection('Posts').orderBy('createdAt', 'asc');
+  // .limit(2);
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
     setLoading(true);
-    let query = dbFirestore()
-      .collection('Posts')
-      .orderBy('createdAt', 'asc')
-      .limit(2);
-
     if (lastVisible) {
       query = query.startAfter(lastVisible);
     }
+    query = query.limit(2);
     const snapshot = await query.get();
     setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
     const newData = snapshot.docs.map(doc => doc.data());
