@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -70,6 +70,19 @@ export default function JobPostingScreen() {
   const [uploaded, setUploaded] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+    setCurrentDate(
+      date + '/' + month + '/' + year + ' ' + hours + ':' + min + ':' + sec,
+    );
+  }, []);
 
   const addtoDB = async () => {
     const filename = filePath.fileCopyUri.substring(
@@ -103,6 +116,7 @@ export default function JobPostingScreen() {
           jobMode: value2,
           image: url,
           jobPostedBy: name,
+          createdAt: currentDate,
         })
         .then(() => {
           console.log('Post Added!');
