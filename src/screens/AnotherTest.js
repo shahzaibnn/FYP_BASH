@@ -9,24 +9,45 @@ const AnotherTest = () => {
   const [loading, setLoading] = useState(false);
   const [allDataFetched, setAllDataFetched] = useState(false);
 
-  let query = dbFirestore().collection('Posts').orderBy('createdAt', 'asc');
-  // .limit(2);
+  //   let query = dbFirestore().collection('Posts').orderBy('createdAt', 'asc');
+  //   // .limit(2);
+  //   useEffect(() => {
+  //     fetchData();
+  //   }, []);
+
+  const [query, setQuery] = useState(
+    dbFirestore().collection('Posts').orderBy('createdAt', 'asc').limit(2),
+  );
+
   useEffect(() => {
+    if (!lastVisible) {
+      setQuery(query);
+    } else {
+      setQuery(query.startAfter(lastVisible));
+    }
     fetchData();
-  }, []);
+  }, [lastVisible]);
 
   const fetchData = async () => {
     setLoading(true);
-    if (lastVisible) {
-      query = query.startAfter(lastVisible);
-    }
-    query = query.limit(2);
     const snapshot = await query.get();
     setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
     const newData = snapshot.docs.map(doc => doc.data());
     setData(data.concat(newData));
     setLoading(false);
   };
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     if (lastVisible) {
+  //       query = query.startAfter(lastVisible);
+  //     }
+  //     query = query.limit(2);
+  //     const snapshot = await query.get();
+  //     setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
+  //     const newData = snapshot.docs.map(doc => doc.data());
+  //     setData(data.concat(newData));
+  //     setLoading(false);
+  //   };
 
   const handleEndReached = () => {
     if (!loading) {
