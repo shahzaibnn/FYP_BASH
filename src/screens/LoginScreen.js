@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
 import firebase from 'firebase/compat/app';
 import Spinner from 'react-native-spinkit';
@@ -249,14 +250,7 @@ export default function LoginScreen({navigation}) {
         </View>
         {spinnerLoader ? (
           <Grid
-            style={{
-              position: 'absolute',
-              top: Dimensions.get('window').height * 0.5,
-              left: Dimensions.get('window').width * 0.4,
-              alignSelf: 'center',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            style={styles.gridStyle}
             size={Dimensions.get('window').width * 0.2}
             color="#5BA199"
           />
@@ -265,3 +259,14 @@ export default function LoginScreen({navigation}) {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  gridStyle: {
+    position: 'absolute',
+    top: Dimensions.get('window').height * 0.5,
+    left: Dimensions.get('window').width * 0.4,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
