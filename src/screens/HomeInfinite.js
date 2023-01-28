@@ -70,23 +70,27 @@ export default function HomeInfinite() {
   const [jobQuery, setJobQuery] = useState(
     dbFirestore().collection('Jobs').orderBy('createdAt', 'desc').limit(1),
   );
-  useEffect(() => {
-    if (!lastVisible) {
-      setQuery(query);
-    } else {
-      setQuery(query.startAfter(lastVisible));
-    }
-    searchPosts();
-  }, [lastVisible]);
 
   useEffect(() => {
-    if (!lastVisibleJobs) {
-      setJobQuery(jobQuery);
-    } else {
-      setJobQuery(jobQuery.startAfter(lastVisibleJobs));
-    }
     searchJobs();
-  }, [lastVisibleJobs]);
+  }, []);
+  // useEffect(() => {
+  //   if (!lastVisible) {
+  //     setQuery(query);
+  //   } else {
+  //     setQuery(query.startAfter(lastVisible));
+  //   }
+  //   searchPosts();
+  // }, [lastVisible]);
+
+  // useEffect(() => {
+  //   if (!lastVisibleJobs) {
+  //     setJobQuery(jobQuery);
+  //   } else {
+  //     setJobQuery(jobQuery.startAfter(lastVisibleJobs));
+  //   }
+  //   searchJobs();
+  // }, [lastVisibleJobs]);
   const show = item => {
     // console.log(item);
     setActionParameters(item);
@@ -180,9 +184,9 @@ export default function HomeInfinite() {
   };
 
   const handleEndReachedJobs = () => {
-    if (!jobLoading) {
-      searchJobs();
-    }
+    console.log('end reached!!');
+    setJobQuery(jobQuery.startAfter(lastVisibleJobs));
+    searchJobs();
   };
   const renderLoaderJobs = () => {
     return jobLoading ? (
@@ -272,9 +276,7 @@ export default function HomeInfinite() {
             showsHorizontalScrollIndicator={false}
             ListFooterComponent={renderLoaderJobs}
             data={jobData}
-            onEndReached={() => {
-              setLastVisibleJobs(lastVisibleJobs);
-            }}
+            onEndReached={handleEndReachedJobs}
             keyExtractor={item => item.id}
             // onEndReached={handleEndReachedJobs}
             onEndReachedThreshold={0.1}
