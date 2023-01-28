@@ -41,14 +41,16 @@ import BottomTabs from './src/navigations/BottomTabs';
 import AppStack from './src/navigations/AppStack';
 import JobPostingScreen from './src/screens/JobPostingScreen';
 import TestScreen from './src/screens/TestScreen';
+import TestHome from './src/screens/TestHome';
+import ClassFunc from './src/screens/ClassFunc';
 // import Tip from './src/components/AlertBoxStyles/Tip';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
-      <AppStack />
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <AppStack />
+    // </NavigationContainer>
     // <SettingsScreen />
 
     // <JobPostingScreen />
@@ -56,6 +58,9 @@ export default function App() {
     // <JobDashboardScreen />
     // <HomeScreen />
     // <TestScreen />
+    // <TestHome />
+    <ClassFunc />
+
     // <NavigationContainer>
     //   <Stack.Navigator
     //     screenOptions={{
