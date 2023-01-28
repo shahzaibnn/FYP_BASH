@@ -42,7 +42,7 @@ export default function InfiniteScroll() {
 
       // .orderBy('createdAt', 'asc')
       // .orderBy('createdAt', 'desc')
-      .limit(2);
+      .limit(5);
 
     // Cloud Firestore: Query Snapshot
     let documentSnapshots = await initialQuery.get();
@@ -70,17 +70,17 @@ export default function InfiniteScroll() {
 
   // another attempt
   const retrieveMore = async () => {
-    if (isRetrievingMore) {
-      return;
-    }
-    setIsRetrievingMore(true);
-    try {
-      //... your existing retrieveMore code here
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsRetrievingMore(false);
-    }
+    // if (isRetrievingMore) {
+    //   return;
+    // }
+    // setIsRetrievingMore(true);
+    // try {
+    //   //... your existing retrieveMore code here
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   setIsRetrievingMore(false);
+    // }
 
     try {
       // Set State: Refreshing
@@ -104,10 +104,13 @@ export default function InfiniteScroll() {
         document.data(),
       );
       setLastVisible(documentData[documentData.length - 1].id);
+      // setLastVisible(documentData[documentData.length - 1].length);
       setDocumentData([...documentData, ...documentData]);
       //   setDocumentData([...documentData]);
+      // setDocumentData([...documentData]);
       setRefreshing(false);
     } catch (error) {
+      console.error('errorss');
       console.log(error);
     }
   };
@@ -194,8 +197,8 @@ export default function InfiniteScroll() {
           ListHeaderComponent={renderHeader}
           ListFooterComponent={renderFooter}
           onEndReached={retrieveMore}
-          //   onEndReachedThreshold={0}
-          // refreshing={refreshing}
+          onEndReachedThreshold={0}
+          refreshing={refreshing}
         />
       </ScrollView>
     </SafeAreaView>
