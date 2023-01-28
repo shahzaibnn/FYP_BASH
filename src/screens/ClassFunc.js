@@ -37,7 +37,10 @@ export default function InfiniteScroll() {
     let initialQuery = await dbFirestore()
       .collection('Posts')
       // .where('id', '<=', 3)
+      // .orderBy('id')
       .orderBy('id')
+
+      // .orderBy('createdAt', 'asc')
       // .orderBy('createdAt', 'desc')
       .limit(2);
 
@@ -89,6 +92,9 @@ export default function InfiniteScroll() {
       let additionalQuery = await dbFirestore()
         .collection('Posts')
         .orderBy('id')
+        // .orderBy(id)
+        // .orderBy('createdAt', 'asc')
+        // .orderBy('createdAt', 'desc')
         .startAfter(lastVisible)
         .limit(2);
       // Cloud Firestore: Query Snapshot
@@ -179,10 +185,12 @@ export default function InfiniteScroll() {
             <View>
               <Text style={styles.text}>
                 (ID: {item.id}) {item.title}
+                {item.description}
               </Text>
             </View>
           )}
-          keyExtractor={(item, index) => String(index)}
+          // keyExtractor={(item, index) => String(index)}
+          keyExtractor={item => item.id}
           ListHeaderComponent={renderHeader}
           ListFooterComponent={renderFooter}
           onEndReached={retrieveMore}
