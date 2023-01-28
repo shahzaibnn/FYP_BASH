@@ -145,7 +145,7 @@ export default function RegistrationScreenAlumni({navigation}) {
               role: 'alumni',
               firstName: userName,
               lastName: lastName,
-              userEmail: userEmail,
+              userEmail: userEmail.toLowerCase(),
               userPassword: userPassword,
               contactNo: contactNo,
               dateOfBirth: dateOfBirth,

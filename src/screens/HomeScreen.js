@@ -35,6 +35,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Circle, Fold, Grid} from 'react-native-animated-spinkit';
 
+import JobSkeleton from '../components/JobSkeleton';
+import PostSkeleton from '../components/PostSkeleton';
+
 // import {db, dbFirestore} from './Config';
 
 export default function HomeScreen() {
@@ -248,18 +251,19 @@ export default function HomeScreen() {
       </View>
 
       {jobLoader ? (
-        <Grid
-          style={{
-            // position: 'relative',
-            // top: Dimensions.get('window').height * 0.5,
-            // left: Dimensions.get('window').width * 0.4,
-            alignSelf: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          size={Dimensions.get('window').width * 0.2}
-          color="#5BA199"
-        />
+        // {/* // <Grid */}
+        // {/* //   style={{ */}
+        // {/* //     // position: 'relative',
+        //   //     // top: Dimensions.get('window').height * 0.5,
+        //   //     // left: Dimensions.get('window').width * 0.4,
+        //   //     alignSelf: 'center',
+        //   //     alignItems: 'center',
+        //   //     justifyContent: 'center',
+        //   //   }}
+        //   //   size={Dimensions.get('window').width * 0.2}
+        //   //   color="#5BA199"
+        //   // /> */}
+        <JobSkeleton />
       ) : (
         <View style={{marginHorizontal: '3%', marginVertical: '4%'}}>
           <FlatList
@@ -365,18 +369,20 @@ export default function HomeScreen() {
       </Text>
 
       {postLoader ? (
-        <Circle
-          style={{
-            // position: 'relative',
-            // top: Dimensions.get('window').height * 0.5,
-            // left: Dimensions.get('window').width * 0.4,
-            alignSelf: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          size={Dimensions.get('window').width * 0.2}
-          color="#5BA199"
-        />
+        // {/* // <Circle */}
+        // {/* //   style={{ */}
+        // {/* //     // position: 'relative',
+        //     // top: Dimensions.get('window').height * 0.5,
+        //     // left: Dimensions.get('window').width * 0.4,
+        //     alignSelf: 'center',
+        //     alignItems: 'center',
+        //     justifyContent: 'center',
+        //   }}
+        //   size={Dimensions.get('window').width * 0.2}
+        //   color="#5BA199"
+        // /> */}
+
+        <PostSkeleton />
       ) : (
         <View>
           <FlatList
