@@ -7,6 +7,7 @@ import {
   FlatList,
   Dimensions,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState, createRef} from 'react';
 import FastImage from 'react-native-fast-image';
@@ -183,6 +184,20 @@ export default function HomeInfinite() {
       searchJobs();
     }
   };
+  const renderLoaderJobs = () => {
+    return jobLoading ? (
+      <View style={styles.loaderStyle}>
+        <ActivityIndicator size="large" color="#aaa" />
+      </View>
+    ) : null;
+  };
+  const renderLoaderPosts = () => {
+    return loading ? (
+      <View style={styles.loaderStyle}>
+        <ActivityIndicator size="large" color="#aaa" />
+      </View>
+    ) : null;
+  };
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4', width: '100%'}}>
       <View
@@ -255,6 +270,7 @@ export default function HomeInfinite() {
             // nestedScrollEnabled
             horizontal={true}
             showsHorizontalScrollIndicator={false}
+            ListFooterComponent={renderLoaderJobs}
             data={jobData}
             renderItem={({item}) => (
               <View
@@ -375,9 +391,10 @@ export default function HomeInfinite() {
             extraData={extraData}
             onEndReached={handleEndReached}
             onEndReachedThreshold={0.1}
+            ListFooterComponent={renderLoaderPosts}
             // key={item => item.id}
             // keyExtractor={item => item.id}
-            ListFooterComponent={<View style={{height: 60}}></View>}
+            // ListFooterComponent={<View style={{height: 60}}></View>}
             renderItem={({item}) => {
               console.log('Id is : ', item.id);
               let likeColor = '';
@@ -902,5 +919,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  loaderStyle: {
+    marginVertical: 16,
+    alignItems: 'center',
   },
 });
