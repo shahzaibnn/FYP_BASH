@@ -146,7 +146,7 @@ export default function CreatePostScreen() {
       .collection('Posts')
       .add({
         commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
-        date: currentDate,
+        createdAt: currentDate,
         description: text,
         images: yourArray,
         likedBy: ['shahzaibnn@gmail.com'],
