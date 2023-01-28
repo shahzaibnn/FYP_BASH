@@ -43,6 +43,8 @@ import JobPostingScreen from './src/screens/JobPostingScreen';
 import TestScreen from './src/screens/TestScreen';
 import TestHome from './src/screens/TestHome';
 import ClassFunc from './src/screens/ClassFunc';
+import AnotherTest from './src/screens/AnotherTest';
+import HomeInfinite from './src/screens/HomeInfinite';
 // import Tip from './src/components/AlertBoxStyles/Tip';
 
 export default function App() {
@@ -57,10 +59,12 @@ export default function App() {
     // <ViewJob />
     // <JobDashboardScreen />
     // <HomeScreen />
+    <HomeInfinite />
+
     // <TestScreen />
     // <TestHome />
-    <ClassFunc />
-
+    // <ClassFunc />
+    // <AnotherTest />
     // <NavigationContainer>
     //   <Stack.Navigator
     //     screenOptions={{

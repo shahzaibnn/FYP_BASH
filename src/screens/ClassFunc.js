@@ -18,14 +18,10 @@ export default function InfiniteScroll() {
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [isRetrievingMore, setIsRetrievingMore] = useState(false);
-  useEffect(() => {
-    try {
-      // Cloud Firestore: Initial Query
-      retrieveData();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Cloud Firestore: Initial Query
+  //   retrieveData();
+  // }, []);
 
   const retrieveData = async () => {
     // try {
