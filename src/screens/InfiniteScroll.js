@@ -46,7 +46,11 @@ const InfiniteScroll = () => {
           </View>
         )}
         keyExtractor={item => item.id}
-        onEndReached={handleEndReached}
+        // onEndReached={handleEndReached}
+        onEndReached={() => {
+          setLastVisible(lastVisible);
+        }}
+        // onEndReached={setLoading(false)}
         onEndReachedThreshold={0.1}
       />
     </View>

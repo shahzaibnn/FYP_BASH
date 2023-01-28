@@ -55,11 +55,11 @@ export default function App() {
     // </NavigationContainer>
     // <SettingsScreen />
 
-    <JobPostingScreen />
+    // <JobPostingScreen />
     // <ViewJob />
     // <JobDashboardScreen />
     // <HomeScreen />
-    // <HomeInfinite />
+    <HomeInfinite />
 
     // <TestScreen />
     // <TestHome />

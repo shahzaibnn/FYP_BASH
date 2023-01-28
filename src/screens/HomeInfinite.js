@@ -272,6 +272,12 @@ export default function HomeInfinite() {
             showsHorizontalScrollIndicator={false}
             ListFooterComponent={renderLoaderJobs}
             data={jobData}
+            onEndReached={() => {
+              setLastVisibleJobs(lastVisibleJobs);
+            }}
+            keyExtractor={item => item.id}
+            // onEndReached={handleEndReachedJobs}
+            onEndReachedThreshold={0.1}
             renderItem={({item}) => (
               <View
                 style={{
@@ -350,9 +356,6 @@ export default function HomeInfinite() {
                 </View>
               </View>
             )}
-            keyExtractor={item => item.id}
-            onEndReached={handleEndReachedJobs}
-            onEndReachedThreshold={0.1}
           />
         </View>
       )}
@@ -389,7 +392,10 @@ export default function HomeInfinite() {
             showsVerticalScrollIndicator={false}
             data={data}
             extraData={extraData}
-            onEndReached={handleEndReached}
+            // onEndReached={handleEndReached}
+            onEndReached={() => {
+              setLastVisible(lastVisible);
+            }}
             onEndReachedThreshold={0.1}
             ListFooterComponent={renderLoaderPosts}
             // key={item => item.id}
