@@ -333,13 +333,12 @@ export default function HomeInfinite() {
   };
   return (
     <View>
-      {postLoader ? <HomeHeaderSkeleton /> : null}
-
-      {postLoader ? <JobSkeleton /> : null}
-      {postLoader ? (
-        //     // {/* // <Circle */}
-        //     // {/* //   style={{ */}
-        //     // {/* //     // position: 'relative',
+      {/* {postLoader ? <HomeHeaderSkeleton /> : null}
+      {postLoader ? <JobSkeleton /> : null} */}
+      {/* // // // <Circle */}
+      {/* // // //   style={{ */}
+      {/* // //{' '} */}
+      {/* //     // position: 'relative',
         //     //     // top: Dimensions.get('window').height * 0.5,
         //     //     // left: Dimensions.get('window').width * 0.4,
         //     //     alignSelf: 'center',
@@ -350,470 +349,466 @@ export default function HomeInfinite() {
         //     //   color="#5BA199"
         // />
         // <View>
-
-        <PostSkeleton />
-      ) : (
+{postLoader ? (
+        // <PostSkeleton />
+      // ) : (
         // {/* </View> */}
-        // <View style={{flex: 1, height: Dimensions.get('window').height}}>
-        <FlatList
-          // refreshing={loading}
-          style={{
-            backgroundColor: '#E5E3E4',
-            width: '100%',
-            // height: '100%',
-            // marginBottom: '30%',
-          }}
-          // scrollEnabled={false}
-          ListHeaderComponent={
-            <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: '3%',
-                  marginHorizontal: '5%',
+      {/* // <View style={{flex: 1, height: Dimensions.get('window').height}}> */}
+      <FlatList
+        // refreshing={loading}
+        ListEmptyComponent={<PostSkeleton />}
+        style={{
+          backgroundColor: '#E5E3E4',
+          width: '100%',
+          // height: '100%',
+          // marginBottom: '30%',
+        }}
+        // scrollEnabled={false}
+        ListHeaderComponent={
+          <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: '3%',
+                marginHorizontal: '5%',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  console.log(tempLike);
                 }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    console.log(tempLike);
-                  }}>
-                  <Image
-                    style={{height: 60, width: 60, borderRadius: 64}}
-                    source={{
-                      uri: profile[0].pic,
-                    }}
-                  />
-                </TouchableOpacity>
+                <Image
+                  style={{height: 60, width: 60, borderRadius: 64}}
+                  source={{
+                    uri: profile[0].pic,
+                  }}
+                />
+              </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() => console.log(currentUserPostsId)}
-                  style={{
-                    alignItems: 'center',
-                    marginLeft: '3%',
-                    justifyContent: 'space-between',
-                    height: 60,
-                    backgroundColor: '#ffffff',
-                    flex: 1,
-                    borderRadius: 16,
-                    flexDirection: 'row',
-                  }}>
-                  <Text style={{marginLeft: '5%'}}>Search here...</Text>
-                  <View
-                    style={{
-                      padding: 10,
-                      backgroundColor: '#5BA199',
-                      borderRadius: 16,
-                    }}>
-                    <Ionicons
-                      name="options-outline"
-                      size={40}
-                      color="#ffffff"
-                      style={{}}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
-
-              <View
+              <TouchableOpacity
+                onPress={() => console.log(currentUserPostsId)}
                 style={{
-                  marginHorizontal: '5%',
-                  marginTop: '5%',
-                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginLeft: '3%',
                   justifyContent: 'space-between',
-                  alignItems: 'baseline',
+                  height: 60,
+                  backgroundColor: '#ffffff',
+                  flex: 1,
+                  borderRadius: 16,
+                  flexDirection: 'row',
                 }}>
-                <Text
+                <Text style={{marginLeft: '5%'}}>Search here...</Text>
+                <View
                   style={{
-                    fontSize: 20,
-                    color: '#000000',
-                    fontWeight: 'bold',
+                    padding: 10,
+                    backgroundColor: '#5BA199',
+                    borderRadius: 16,
                   }}>
-                  Recommended For You
-                </Text>
-
-                <TouchableOpacity
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'flex-end',
-                    // backgroundColor: 'black',
-                  }}>
-                  <Text style={{fontSize: 12, color: '#777777'}}>Show all</Text>
-                  <Ionicons name="chevron-forward" size={12} color="#777777" />
-                </TouchableOpacity>
-              </View>
-
-              {jobLoader ? (
-                <JobSkeleton />
-              ) : (
-                <View style={{marginHorizontal: '3%', marginVertical: '4%'}}>
-                  <FlatList
-                    // nestedScrollEnabled
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    ListFooterComponent={renderLoaderJobs}
-                    data={fetchedJobs}
-                    keyExtractor={item => item.id}
-                    onEndReachedThreshold={0.1}
-                    scrollEventThrottle={150}
-                    onMomentumScrollBegin={() => {
-                      setOnEndReachedCalledDuringMomentumJob(false);
-                    }}
-                    onEndReached={() => {
-                      console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
-                      if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
-                        console.log(
-                          '0000000000000000000000000000000000000000000----------------------------------------',
-                        );
-                        handleEndReachedJobs(); // LOAD MORE DATA
-                        setOnEndReachedCalledDuringMomentumJob(true);
-                      }
-                    }}
-                    renderItem={({item}) => (
-                      <View
-                        style={{
-                          backgroundColor: '#BBC6C8',
-                          borderRadius: 16,
-                          marginHorizontal:
-                            Dimensions.get('window').width * 0.01,
-                        }}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            marginTop: Dimensions.get('window').height * 0.02,
-                            marginHorizontal:
-                              Dimensions.get('window').width * 0.05,
-                          }}>
-                          <Image
-                            style={{
-                              height: 60,
-                              width: 60,
-                              borderRadius: 16,
-                            }}
-                            source={{
-                              uri: item.image,
-                            }}
-                          />
-                          <View
-                            style={{
-                              marginLeft: Dimensions.get('window').width * 0.03,
-                            }}>
-                            <Text style={{fontSize: 12}}>
-                              {item.jobPostedBy} posted a new job
-                            </Text>
-                            <Text
-                              style={{
-                                fontSize: 18,
-                                fontWeight: 'bold',
-                                marginVertical:
-                                  Dimensions.get('window').height * 0.005,
-                                color: '#000000',
-                              }}>
-                              {item.jobTitle}
-                            </Text>
-                            <Text>{item.jobCompany}</Text>
-                          </View>
-
-                          <TouchableOpacity onPress={() => show(item)}>
-                            <MaterialCommunityIcons
-                              name="dots-vertical"
-                              size={25}
-                              color="#000000"
-                              style={{
-                                marginLeft:
-                                  Dimensions.get('window').width * 0.05,
-                              }}
-                            />
-                          </TouchableOpacity>
-                        </View>
-
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            marginHorizontal:
-                              Dimensions.get('window').width * 0.05,
-                            marginVertical:
-                              Dimensions.get('window').height * 0.02,
-                          }}>
-                          <TouchableOpacity
-                            style={{
-                              backgroundColor: '#5BA199',
-                              paddingHorizontal:
-                                Dimensions.get('window').width * 0.15,
-                              paddingVertical:
-                                Dimensions.get('window').height * 0.01,
-                              borderRadius: 16,
-                            }}>
-                            <Text
-                              style={{color: '#ffffff', fontWeight: 'bold'}}>
-                              Apply
-                            </Text>
-                          </TouchableOpacity>
-
-                          <Text style={{color: '#469597', fontSize: 16}}>
-                            {item.jobCity},{item.jobLocation}
-                          </Text>
-                        </View>
-                      </View>
-                    )}
+                  <Ionicons
+                    name="options-outline"
+                    size={40}
+                    color="#ffffff"
+                    style={{}}
                   />
                 </View>
-              )}
+              </TouchableOpacity>
+            </View>
 
+            <View
+              style={{
+                marginHorizontal: '5%',
+                marginTop: '5%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'baseline',
+              }}>
               <Text
                 style={{
-                  color: '#000000',
-                  marginHorizontal: '5%',
                   fontSize: 20,
+                  color: '#000000',
                   fontWeight: 'bold',
                 }}>
-                News Feed
+                Recommended For You
               </Text>
+
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'flex-end',
+                  // backgroundColor: 'black',
+                }}>
+                <Text style={{fontSize: 12, color: '#777777'}}>Show all</Text>
+                <Ionicons name="chevron-forward" size={12} color="#777777" />
+              </TouchableOpacity>
             </View>
-          }
-          showsVerticalScrollIndicator={false}
-          data={fetchedPosts}
-          extraData={extraData}
-          // initialNumToRender={2}
-          onEndReachedThreshold={0.1}
-          scrollEventThrottle={150}
-          onMomentumScrollBegin={() => {
-            setOnEndReachedCalledDuringMomentum(false);
-          }}
-          onEndReached={() => {
-            if (!onEndReachedCalledDuringMomentum && !lastPost) {
-              console.log(
-                '0000000000000000000000000000000000000000000----------------------------------------',
-              );
-              handleEndReached(); // LOAD MORE DATA
-              setOnEndReachedCalledDuringMomentum(true);
-            }
-          }}
-          // onEndReached={info => {
-          //   console.log(
-          //     '0000000000000000000000000000000000000000000----------------------------------------',
-          //   );
-          //   // if (!loading) {
-          //   console.log(
-          //     '0000000000000000000000000000000000000000000----------------------------------------',
-          //   );
-          //   handleEndReached();
-          //   console.log(
-          //     '------------------------------------------------------------@@@@@@@@@@@@@@@@@@@@@@@@',
-          //   );
-          // }
-          // }}
-          // scrollEventThrottle={150}
-          ListFooterComponent={
-            !lastPost ? (
-              renderLoaderPosts
-            ) : (
-              <Text
-                style={{
-                  alignSelf: 'center',
-                  fontSize: 20,
-                  color: '#000000',
-                  marginBottom: 90,
-                }}>
-                You Are Up To Date / All Posts Fetched And Displayed
-              </Text>
-            )
-          }
-          // key={item => item.id}
-          // keyExtractor={item => item.id}
-          // ListFooterComponent={<View style={{height: 60}}></View>}
-          renderItem={({item}) => {
-            // console.log('Id is : ', item.id);
-            let likeColor = '';
 
-            // console.log(item.likedBy);
-
-            if (item.likedBy.includes(emailAddressOfCurrentUser)) {
-              likeColor = '#000000';
-              // console.log('running');
-            } else {
-              likeColor = '#ffffff';
-            }
-
-            return (
-              <View
-                style={{
-                  // elevation: 1000,
-                  // backgroundColor: '#ffffff',
-                  marginHorizontal: Dimensions.get('window').width * 0.05,
-                  marginVertical: Dimensions.get('window').height * 0.01,
-                  borderRadius: 16,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginVertical: Dimensions.get('window').height * 0.01,
-                  }}>
-                  <Image
-                    source={{uri: item.profilePic}}
-                    style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 64,
-                      marginLeft: Dimensions.get('window').width * 0.02,
-                    }}
-                  />
+            {/* {jobLoader ? (
+              <JobSkeleton />
+            ) : ( */}
+            <View style={{marginHorizontal: '3%', marginVertical: '4%'}}>
+              <FlatList
+                // nestedScrollEnabled
+                ListEmptyComponent={<JobSkeleton />}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                ListFooterComponent={renderLoaderJobs}
+                data={fetchedJobs}
+                keyExtractor={item => item.id}
+                onEndReachedThreshold={0.1}
+                scrollEventThrottle={150}
+                onMomentumScrollBegin={() => {
+                  setOnEndReachedCalledDuringMomentumJob(false);
+                }}
+                onEndReached={() => {
+                  console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
+                  if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
+                    console.log(
+                      '0000000000000000000000000000000000000000000----------------------------------------',
+                    );
+                    handleEndReachedJobs(); // LOAD MORE DATA
+                    setOnEndReachedCalledDuringMomentumJob(true);
+                  }
+                }}
+                renderItem={({item}) => (
                   <View
                     style={{
-                      marginLeft: Dimensions.get('window').width * 0.05,
+                      backgroundColor: '#BBC6C8',
+                      borderRadius: 16,
+                      marginHorizontal: Dimensions.get('window').width * 0.01,
                     }}>
-                    <Text
+                    <View
                       style={{
-                        color: '#5BA199',
-                        fontWeight: 'bold',
-                        marginBottom: Dimensions.get('window').height * 0.005,
-                        fontSize: 16,
+                        flexDirection: 'row',
+                        marginTop: Dimensions.get('window').height * 0.02,
+                        marginHorizontal: Dimensions.get('window').width * 0.05,
                       }}>
-                      {item.name}
-                    </Text>
-                    <Text
+                      <Image
+                        style={{
+                          height: 60,
+                          width: 60,
+                          borderRadius: 16,
+                        }}
+                        source={{
+                          uri: item.image,
+                        }}
+                      />
+                      <View
+                        style={{
+                          marginLeft: Dimensions.get('window').width * 0.03,
+                        }}>
+                        <Text style={{fontSize: 12}}>
+                          {item.jobPostedBy} posted a new job
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                            marginVertical:
+                              Dimensions.get('window').height * 0.005,
+                            color: '#000000',
+                          }}>
+                          {item.jobTitle}
+                        </Text>
+                        <Text>{item.jobCompany}</Text>
+                      </View>
+
+                      <TouchableOpacity onPress={() => show(item)}>
+                        <MaterialCommunityIcons
+                          name="dots-vertical"
+                          size={25}
+                          color="#000000"
+                          style={{
+                            marginLeft: Dimensions.get('window').width * 0.05,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                    <View
                       style={{
-                        color: '#5BA199',
-                        marginBottom: Dimensions.get('window').height * 0.005,
-                        fontSize: 12,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginHorizontal: Dimensions.get('window').width * 0.05,
+                        marginVertical: Dimensions.get('window').height * 0.02,
                       }}>
-                      {item.title}
-                    </Text>
-                    <Text style={{color: '#777777', fontSize: 12}}>
-                      {item.date}
-                    </Text>
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: '#5BA199',
+                          paddingHorizontal:
+                            Dimensions.get('window').width * 0.15,
+                          paddingVertical:
+                            Dimensions.get('window').height * 0.01,
+                          borderRadius: 16,
+                        }}>
+                        <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
+                          Apply
+                        </Text>
+                      </TouchableOpacity>
+
+                      <Text style={{color: '#469597', fontSize: 16}}>
+                        {item.jobCity},{item.jobLocation}
+                      </Text>
+                    </View>
                   </View>
-                </View>
+                )}
+              />
+            </View>
+            {/* )} */}
 
-                <SliderBox
-                  // onCurrentImagePressed={index => ImagePressed()}
-                  parentWidth={Dimensions.get('window').width * 0.9}
-                  ImageComponentStyle={{borderRadius: 16}}
-                  // paginationBoxStyle={styles.sliderBoxPageStyle}
-                  // ImageComponentStyle={styles.sliderBoxImageStyle}
-                  // dotStyle={{
-                  //   width: 10,
-                  //   height: 10,
-                  //   borderRadius: 5,
-                  //   marginBottom: 20,
-                  //   marginHorizontal: 0,
-                  //   padding: 0,
-                  //   margin: 0,
-                  // }}
-                  images={item.images}
-                  sliderBoxHeight={Dimensions.get('window').height * 0.3}
-                />
+            <Text
+              style={{
+                color: '#000000',
+                marginHorizontal: '5%',
+                fontSize: 20,
+                fontWeight: 'bold',
+              }}>
+              News Feed
+            </Text>
+          </View>
+        }
+        showsVerticalScrollIndicator={false}
+        data={fetchedPosts}
+        extraData={extraData}
+        // initialNumToRender={2}
+        onEndReachedThreshold={0.1}
+        scrollEventThrottle={150}
+        onMomentumScrollBegin={() => {
+          setOnEndReachedCalledDuringMomentum(false);
+        }}
+        onEndReached={() => {
+          if (!onEndReachedCalledDuringMomentum && !lastPost) {
+            console.log(
+              '0000000000000000000000000000000000000000000----------------------------------------',
+            );
+            handleEndReached(); // LOAD MORE DATA
+            setOnEndReachedCalledDuringMomentum(true);
+          }
+        }}
+        // onEndReached={info => {
+        //   console.log(
+        //     '0000000000000000000000000000000000000000000----------------------------------------',
+        //   );
+        //   // if (!loading) {
+        //   console.log(
+        //     '0000000000000000000000000000000000000000000----------------------------------------',
+        //   );
+        //   handleEndReached();
+        //   console.log(
+        //     '------------------------------------------------------------@@@@@@@@@@@@@@@@@@@@@@@@',
+        //   );
+        // }
+        // }}
+        // scrollEventThrottle={150}
+        ListFooterComponent={
+          !lastPost ? (
+            renderLoaderPosts
+          ) : (
+            <Text
+              style={{
+                alignSelf: 'center',
+                fontSize: 20,
+                color: '#000000',
+                marginBottom: 90,
+              }}>
+              You Are Up To Date / All Posts Fetched And Displayed
+            </Text>
+          )
+        }
+        // key={item => item.id}
+        // keyExtractor={item => item.id}
+        // ListFooterComponent={<View style={{height: 60}}></View>}
+        renderItem={({item}) => {
+          console.log('Id is : ', item);
+          let likeColor = '';
 
-                <Text
+          // console.log(item.likedBy);
+
+          if (item.likedBy.includes(emailAddressOfCurrentUser)) {
+            likeColor = '#000000';
+            // console.log('running');
+          } else {
+            likeColor = '#ffffff';
+          }
+
+          return (
+            <View
+              style={{
+                // elevation: 1000,
+                // backgroundColor: '#ffffff',
+                marginHorizontal: Dimensions.get('window').width * 0.05,
+                marginVertical: Dimensions.get('window').height * 0.01,
+                borderRadius: 16,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginVertical: Dimensions.get('window').height * 0.01,
+                }}>
+                <Image
+                  source={{uri: item.profilePic}}
                   style={{
-                    color: '#000000',
-                    width: '95%',
-                    marginHorizontal: '2.5%',
-                    marginVertical: '2%',
-                  }}>
-                  {item.description}
-                </Text>
-
+                    width: 60,
+                    height: 60,
+                    borderRadius: 64,
+                    marginLeft: Dimensions.get('window').width * 0.02,
+                  }}
+                />
                 <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    marginBottom: '5%',
+                    marginLeft: Dimensions.get('window').width * 0.05,
                   }}>
-                  <View>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        color: '#469597',
-                        fontWeight: 'bold',
-                      }}>
-                      {item.likedBy.length} Likes
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => {
-                        console.log('hdshjdsfvhddhfbhj');
-                        if (item.likedBy.includes(emailAddressOfCurrentUser)) {
-                          dbFirestore()
-                            .doc('Posts/' + item.id)
-                            .update({
-                              likedBy: dbFirestore.FieldValue.arrayRemove(
-                                emailAddressOfCurrentUser,
-                              ),
-                            })
-                            .then(() => {
-                              console.log('Like Removed!');
-                            });
-
-                          fetchedPosts.find(obj => obj.id == item.id).likedBy =
-                            item.likedBy.filter(
-                              e => e !== emailAddressOfCurrentUser,
-                            );
-                          setExtraData(new Date());
-
-                          // likeColor = '#ffffff';
-                        } else {
-                          console.log('ye work');
-                          dbFirestore()
-                            .doc('Posts/' + item.id)
-                            .update({
-                              likedBy: dbFirestore.FieldValue.arrayUnion(
-                                emailAddressOfCurrentUser,
-                              ),
-                            })
-                            .then(() => {
-                              console.log('Like Placed!');
-                            });
-                          let arr = item.likedBy;
-                          arr.push(emailAddressOfCurrentUser);
-                          fetchedPosts.find(obj => obj.id == item.id).likedBy =
-                            arr;
-
-                          setExtraData(new Date());
-                        }
-                        // setFetchedPosts([]);
-                        // searchPosts();
-                      }}
-                      style={{
-                        paddingHorizontal: '8%',
-                        paddingVertical: '8%',
-                        backgroundColor: '#5BA199',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 8,
-                        // width: Dimensions.get('window').width * 0.2,
-                      }}>
-                      <AntDesign name="like1" size={25} color={likeColor} />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        color: '#469597',
-                        fontWeight: 'bold',
-                      }}>
-                      {item.commentedBy.length} Comments
-                    </Text>
-                    <TouchableOpacity
-                      style={{
-                        paddingHorizontal: '8%',
-                        paddingVertical: '8%',
-                        backgroundColor: '#5BA199',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 8,
-                        // width: Dimensions.get('window').width * 0.2,
-                      }}>
-                      <FontAwesome name="comment" size={25} color="#ffffff" />
-                    </TouchableOpacity>
-                  </View>
+                  <Text
+                    style={{
+                      color: '#5BA199',
+                      fontWeight: 'bold',
+                      marginBottom: Dimensions.get('window').height * 0.005,
+                      fontSize: 16,
+                    }}>
+                    {item.name}
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#5BA199',
+                      marginBottom: Dimensions.get('window').height * 0.005,
+                      fontSize: 12,
+                    }}>
+                    {item.title}
+                  </Text>
+                  <Text style={{color: '#777777', fontSize: 12}}>
+                    {item.date}
+                  </Text>
                 </View>
               </View>
-            );
-          }}
-        />
-      )}
+
+              <SliderBox
+                // onCurrentImagePressed={index => ImagePressed()}
+                parentWidth={Dimensions.get('window').width * 0.9}
+                ImageComponentStyle={{borderRadius: 16}}
+                // paginationBoxStyle={styles.sliderBoxPageStyle}
+                // ImageComponentStyle={styles.sliderBoxImageStyle}
+                // dotStyle={{
+                //   width: 10,
+                //   height: 10,
+                //   borderRadius: 5,
+                //   marginBottom: 20,
+                //   marginHorizontal: 0,
+                //   padding: 0,
+                //   margin: 0,
+                // }}
+                images={item.images}
+                sliderBoxHeight={Dimensions.get('window').height * 0.3}
+              />
+
+              <Text
+                style={{
+                  color: '#000000',
+                  width: '95%',
+                  marginHorizontal: '2.5%',
+                  marginVertical: '2%',
+                }}>
+                {item.description}
+              </Text>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  marginBottom: '5%',
+                }}>
+                <View>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      color: '#469597',
+                      fontWeight: 'bold',
+                    }}>
+                    {item.likedBy.length} Likes
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      console.log('hdshjdsfvhddhfbhj');
+                      if (item.likedBy.includes(emailAddressOfCurrentUser)) {
+                        dbFirestore()
+                          .doc('Posts/' + item.id)
+                          .update({
+                            likedBy: dbFirestore.FieldValue.arrayRemove(
+                              emailAddressOfCurrentUser,
+                            ),
+                          })
+                          .then(() => {
+                            console.log('Like Removed!');
+                          });
+
+                        fetchedPosts.find(obj => obj.id == item.id).likedBy =
+                          item.likedBy.filter(
+                            e => e !== emailAddressOfCurrentUser,
+                          );
+                        setExtraData(new Date());
+
+                        // likeColor = '#ffffff';
+                      } else {
+                        console.log('ye work');
+                        dbFirestore()
+                          .doc('Posts/' + item.id)
+                          .update({
+                            likedBy: dbFirestore.FieldValue.arrayUnion(
+                              emailAddressOfCurrentUser,
+                            ),
+                          })
+                          .then(() => {
+                            console.log('Like Placed!');
+                          });
+                        let arr = item.likedBy;
+                        arr.push(emailAddressOfCurrentUser);
+                        fetchedPosts.find(obj => obj.id == item.id).likedBy =
+                          arr;
+
+                        setExtraData(new Date());
+                      }
+                      // setFetchedPosts([]);
+                      // searchPosts();
+                    }}
+                    style={{
+                      paddingHorizontal: '8%',
+                      paddingVertical: '8%',
+                      backgroundColor: '#5BA199',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius: 8,
+                      // width: Dimensions.get('window').width * 0.2,
+                    }}>
+                    <AntDesign name="like1" size={25} color={likeColor} />
+                  </TouchableOpacity>
+                </View>
+
+                <View>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      color: '#469597',
+                      fontWeight: 'bold',
+                    }}>
+                    {item.commentedBy.length} Comments
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      paddingHorizontal: '8%',
+                      paddingVertical: '8%',
+                      backgroundColor: '#5BA199',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius: 8,
+                      // width: Dimensions.get('window').width * 0.2,
+                    }}>
+                    <FontAwesome name="comment" size={25} color="#ffffff" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          );
+        }}
+      />
+      {/* )} */}
     </View>
   );
 }

@@ -18,8 +18,9 @@ export default function SkeletonPropertyList({}) {
         style={{
           flexDirection: 'row',
           //   alignItems: 'center',
-          marginLeft: '7%',
-          marginVertical: '5%',
+          marginLeft: Dimensions.get('screen').width * 0.05,
+          marginBottom: Dimensions.get('screen').height * 0.05,
+          marginTop: Dimensions.get('screen').height * 0.02,
         }}>
         <View style={{width: 60, height: 60, borderRadius: 16}} />
         <View style={{marginLeft: 20}}>
@@ -41,30 +42,35 @@ export default function SkeletonPropertyList({}) {
               marginTop: 6,
               fontSize: 10,
               lineHeight: 10,
-              width: '40%',
+              width: Dimensions.get('screen').width * 0.4,
               borderRadius: 16,
             }}>
             Hello world
           </Text>
         </View>
         <View
-          style={{marginLeft: '6%', width: 10, height: 30, borderRadius: 32}}
+          style={{
+            marginLeft: Dimensions.get('screen').width * 0.06,
+            width: 10,
+            height: 30,
+            borderRadius: 32,
+          }}
         />
       </View>
       <View
         style={{
-          marginLeft: '7%',
+          marginLeft: Dimensions.get('screen').width * 0.07,
           flexDirection: 'row',
           alignItems: 'center',
-          marginBottom: '7%',
+          marginBottom: Dimensions.get('screen').height * 0.07,
         }}>
         <View style={{width: 120, height: 30, borderRadius: 32}} />
         <Text
           style={{
-            marginLeft: '5%',
+            marginLeft: Dimensions.get('screen').width * 0.05,
             fontSize: 10,
             lineHeight: 10,
-            width: '30%',
+            width: Dimensions.get('screen').width * 0.3,
             borderRadius: 16,
           }}>
           Hello world
