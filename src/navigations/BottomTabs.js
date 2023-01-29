@@ -19,6 +19,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {color} from 'react-native-reanimated';
 import CustomDrawer from './CustomDrawer';
 import DrawerNav from './DrawerNav';
+import HomeInfinite from '../screens/HomeInfinite';
 
 const Tab = createBottomTabNavigator();
 
@@ -77,7 +78,7 @@ export default function Tabs({navigation}) {
           },
         }}
         name="Home"
-        component={HomeScreen}
+        component={HomeInfinite}
       />
       <Tab.Screen
         options={{

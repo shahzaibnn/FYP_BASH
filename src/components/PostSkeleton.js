@@ -10,10 +10,19 @@ import {
 import React from 'react';
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import JobSkeleton from './JobSkeleton';
 
 export default function PostSkeleton({}) {
   return (
     <SkeletonPlaceholder backgroundColor="#5BA199">
+      <View
+        style={{
+          width: '20%',
+          height: 10,
+          marginHorizontal: '7%',
+          borderRadius: 16,
+        }}
+      />
       <View
         style={{
           flexDirection: 'row',
@@ -52,7 +61,12 @@ export default function PostSkeleton({}) {
       </View>
 
       <View
-        style={{width: '84%', height: 200, borderRadius: 16, marginLeft: '7%'}}
+        style={{
+          width: '84%',
+          height: 200,
+          borderRadius: 16,
+          marginLeft: '7%',
+        }}
       />
       <View
         style={{
