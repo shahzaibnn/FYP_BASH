@@ -62,7 +62,7 @@ export default function SkeletonPropertyList({}) {
           marginLeft: Dimensions.get('screen').width * 0.07,
           flexDirection: 'row',
           alignItems: 'center',
-          marginBottom: Dimensions.get('screen').height * 0.07,
+          // marginBottom: Dimensions.get('screen').height * 0.01,
         }}>
         <View style={{width: 120, height: 30, borderRadius: 32}} />
         <Text

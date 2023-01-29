@@ -44,6 +44,7 @@ import HomeScreen from '../screens/HomeScreen';
 import DrawerNav from './DrawerNav';
 import ProfileScreen from '../screens/ProfileScreen';
 import JobPostingScreen from '../screens/JobPostingScreen';
+import ExplorePage from '../screens/ExplorePage';
 
 // import MyTabs from '../screens/tabs';
 
@@ -62,7 +63,7 @@ export default function AppStack() {
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="Registration" component={RegistrationTabs} />
       <Stack.Screen name="Login" component={LoginScreen} />
-      {/* <Stack.Screen name="BottomTabs" component={BottomTabs} /> */}
+      {/* <Stack.Screen name="Explore" component={ExplorePage} /> */}
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Drawer" component={DrawerNav} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
@@ -71,6 +72,3 @@ export default function AppStack() {
     // </NavigationContainer>
   );
 }
-
-// export default AppStack;
-// }

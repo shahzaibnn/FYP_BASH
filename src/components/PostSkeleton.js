@@ -15,14 +15,14 @@ import JobSkeleton from './JobSkeleton';
 export default function PostSkeleton({}) {
   return (
     <SkeletonPlaceholder backgroundColor="#5BA199">
-      <View
+      {/* <View
         style={{
           width: '20%',
           height: 10,
           marginHorizontal: '7%',
           borderRadius: 16,
         }}
-      />
+      /> */}
       <View
         style={{
           flexDirection: 'row',

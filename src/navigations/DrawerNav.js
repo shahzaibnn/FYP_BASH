@@ -28,7 +28,6 @@ const DrawerNav = () => {
           fontSize: 15,
         },
       }}>
-      {/* <View></View> */}
       <Drawer.Screen
         name="BottomTabs"
         component={BottomTabs}

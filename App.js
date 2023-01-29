@@ -50,16 +50,16 @@ import HomeInfinite from './src/screens/HomeInfinite';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    // <NavigationContainer>
-    //   <AppStack />
-    // </NavigationContainer>
+    <NavigationContainer>
+      <AppStack />
+    </NavigationContainer>
     // <SettingsScreen />
 
     // <JobPostingScreen />
     // <ViewJob />
     // <JobDashboardScreen />
     // <HomeScreen />
-    <HomeInfinite />
+    // <HomeInfinite />
 
     // <TestScreen />
     // <TestHome />

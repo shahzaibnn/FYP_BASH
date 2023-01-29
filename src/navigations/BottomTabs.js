@@ -78,7 +78,7 @@ export default function Tabs({navigation}) {
           },
         }}
         name="Home"
-        component={HomeInfinite}
+        component={HomeScreen}
       />
       <Tab.Screen
         options={{
@@ -343,8 +343,8 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 60,
-    height: 25,
+    width: '100%',
+    height: '100%',
     // shadowColor: '#5BA199',
     // shadowColor: 'yellow',
     shadowOpacity: 1,
