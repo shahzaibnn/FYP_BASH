@@ -2,7 +2,7 @@ export const profile = [
   {
     id: 0,
     name: 'Bash',
-    pic: 'https://i.pinimg.com/736x/31/44/7e/31447e25b7bc3429f83520350ed13c15.jpg',
+    pic: 'https://www.seekpng.com/png/full/18-188802_graduation-icon-png-image-icon-male-student.png',
     title: 'BSCS Student',
   },
 ];

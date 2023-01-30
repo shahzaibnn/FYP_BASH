@@ -125,10 +125,7 @@ export default function JobPostingScreen() {
       console.error(e);
     }
     setUploading(false);
-    Alert.alert(
-      'Photo uploaded!',
-      'Your photo has been uploaded to Firebase Cloud Storage!',
-    );
+    Alert.alert('Job uploaded!', 'You will receive the responses soon! ');
     // setImage(null);
     setfilePath({});
   };
