@@ -55,6 +55,7 @@ export default function App() {
     </NavigationContainer>
     // <SettingsScreen />
 
+    //  <BottomTabs />
     // <JobPostingScreen />
     // <ViewJob />
     // <JobDashboardScreen />
