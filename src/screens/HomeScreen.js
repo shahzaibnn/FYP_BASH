@@ -39,10 +39,18 @@ import {Circle, Fold, Grid} from 'react-native-animated-spinkit';
 import JobSkeleton from '../components/JobSkeleton';
 import PostSkeleton from '../components/PostSkeleton';
 import HomeHeaderSkeleton from '../components/HomeHeaderSkeleton';
+import Toast from 'react-native-toast-message';
 
 // import {db, dbFirestore} from './Config';
 
 export default function HomeScreen() {
+  const showToastSuccess = heading => {
+    Toast.show({
+      type: 'success',
+      text1: heading,
+      // text2: text,
+    });
+  };
   const [
     onEndReachedCalledDuringMomentum,
     setOnEndReachedCalledDuringMomentum,
@@ -88,6 +96,8 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
+    showToastSuccess('Login Successful');
+
     searchPosts();
   }, []);
   // useEffect(() => {
@@ -846,6 +856,7 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
       </ActionSheet>
+      <Toast topOffset={30} />
     </View>
   );
 }

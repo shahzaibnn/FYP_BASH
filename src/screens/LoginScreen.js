@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import firebase from 'firebase/compat/app';
 import Spinner from 'react-native-spinkit';
+import Toast from 'react-native-toast-message';
 
 import React, {useEffect, useState} from 'react';
 import FastImage from 'react-native-fast-image';
@@ -31,6 +32,15 @@ import {Grid} from 'react-native-animated-spinkit';
 
 export default function LoginScreen({navigation}) {
   // export default function LoginScreen() {
+
+  const showToast = heading => {
+    Toast.show({
+      type: 'error',
+      text1: heading,
+      // text2: text,
+    });
+  };
+
   const [email, setEmail] = useState('');
 
   const [password, setPassword] = useState('');
@@ -51,9 +61,9 @@ export default function LoginScreen({navigation}) {
     // e.preventDefault();
 
     if (!email) {
-      alert('Please fill Email');
+      showToastSuccess('Please fill Email');
     } else if (!password) {
-      alert('Please fill Password');
+      showToast('Please fill Password');
     } else {
       setFlag(false);
       signInWithEmailAndPassword(auth, email, password)
@@ -74,7 +84,7 @@ export default function LoginScreen({navigation}) {
         .catch(error => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          alert(errorMessage);
+          showToast(errorMessage);
           setFlag(true);
 
           // ..
@@ -256,6 +266,7 @@ export default function LoginScreen({navigation}) {
           />
         ) : null}
       </View>
+      <Toast topOffset={30} />
     </ScrollView>
   );
 }
