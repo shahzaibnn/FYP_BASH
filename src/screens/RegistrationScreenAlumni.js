@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
 
+import Toast from 'react-native-toast-message';
+
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -59,6 +61,14 @@ export default function RegistrationScreenAlumni({navigation}) {
 
   const [flag, setFlag] = useState(true);
 
+  const showToast = heading => {
+    Toast.show({
+      type: 'error',
+      text1: heading,
+      // text2: text,
+    });
+  };
+
   const showPicker = useCallback(value => {
     setShow(value);
   }, []);
@@ -92,41 +102,46 @@ export default function RegistrationScreenAlumni({navigation}) {
 
   const signupPressed = async () => {
     if (!userName) {
-      alert('Please fill First Name');
+      // showToast('Please fill First Name');
+      showToast('Please fill First Name');
     } else if (!lastName) {
-      alert('Please fill Last Name');
+      showToast('Please fill Last Name');
+
+      // showToast('Please fill Last Name');
     } else if (!userEmail) {
-      alert('Please fill Email');
+      // showToast('Please fill Email');
+      showToast('Please fill Email');
     } else if (!userPassword) {
-      alert('Please fill Password');
+      // showToast('Please fill Password');
+      showToast('Please fill Password');
     } else if (!contactNo) {
-      alert('Please fill Contact Number');
+      showToast('Please fill Contact Number');
     } else if (!batch) {
-      alert('Please fill Batch');
+      showToast('Please fill Batch');
     } else if (!dateOfBirth) {
-      alert('Please fill Date of Birth');
+      showToast('Please fill Date of Birth');
     } else if (!/^[a-zA-Z]+$/.test(userName)) {
-      alert('First Name can only contain alphabets');
+      showToast('First Name can only contain alphabets');
     } else if (!/^[a-zA-Z]+$/.test(lastName)) {
-      alert('Last Name can only contain alphabets');
+      showToast('Last Name can only contain alphabets');
     } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(userEmail)) {
-      alert('Invalid Email');
+      showToast('Invalid Email');
     } else if (
       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&//.])[A-Za-z\d@$!%*?&//.]{8,}$/.test(
         userPassword,
       )
     ) {
-      alert(
+      showToast(
         '(Password Criteria)\nMinimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character',
       );
     } else if (!/^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/.test(contactNo)) {
-      alert('Invalid Contact Number');
+      showToast('Invalid Contact Number');
     }
     // else if (batch > 2023 || batch < 2000) {
-    //   alert('Inavlid Batch');
+    //   showToast('Inavlid Batch');
     // }
     else {
-      // alert('EVERYTHING GUD');
+      // showToast('EVERYTHING GUD');
 
       setFlag(false);
 
@@ -187,7 +202,7 @@ export default function RegistrationScreenAlumni({navigation}) {
                   setDate(new Date());
                   setDob(new Date());
                   setFlag(true);
-                  alert('Account Regsitered');
+                  showToast('Account Registered');
                   navigation.navigate('Login');
                 })
                 .catch(err => {
@@ -198,14 +213,14 @@ export default function RegistrationScreenAlumni({navigation}) {
             .catch(error => {
               // The write failed...
               const errorMessage = error.message;
-              alert(errorMessage);
+              showToast(errorMessage);
               setFlag(true);
             });
         })
         .catch(error => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          alert(errorMessage);
+          showToast(errorMessage);
           setFlag(true);
           // ..
         });
@@ -351,8 +366,8 @@ export default function RegistrationScreenAlumni({navigation}) {
             <MonthPicker
               onChange={onValueChange}
               value={date}
-              minimumDate={new Date()}
-              maximumDate={new Date(2025, 5)}
+              minimumDate={new Date(2000, 1)}
+              maximumDate={new Date()}
               mode="number"
             />
           )}
@@ -376,7 +391,7 @@ export default function RegistrationScreenAlumni({navigation}) {
           <DatePicker
             // style={{backgroundColor: 'orange'}}
             androidVariant="iosClone"
-            maximumDate={new Date(2025, 5, 30)}
+            maximumDate={new Date()}
             mode="date"
             modal
             open={open}
@@ -422,6 +437,8 @@ export default function RegistrationScreenAlumni({navigation}) {
             />
           ) : null}
         </KeyboardAvoidingView>
+
+        {/* <Toast topOffset={-60} /> */}
       </ScrollView>
     </View>
   );

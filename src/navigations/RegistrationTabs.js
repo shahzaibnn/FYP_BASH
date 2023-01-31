@@ -13,6 +13,7 @@ import MyTabBar from '../screens/tabBarChecking';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import React from 'react';
+import Toast from 'react-native-toast-message';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -55,6 +56,9 @@ export default function RegistrationTabs({navigation}) {
         <Tab.Screen name="Faculty" component={RegistrationScreenFaculty} />
         <Tab.Screen name="Alumni" component={RegistrationScreenAlumni} />
       </Tab.Navigator>
+
+      <Toast topOffset={30} />
+
       {/* </View> */}
     </>
   );
