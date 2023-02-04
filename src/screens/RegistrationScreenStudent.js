@@ -100,6 +100,14 @@ export default function RegistrationScreenStudent({navigation}) {
   const [passwordVisible, setPasswordVisible] = useState(true);
   const [eye, setEye] = useState('eye');
 
+  function notifyMessage(msg) {
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(msg, ToastAndroid.SHORT);
+    } else {
+      AlertIOS.alert(msg);
+    }
+  }
+
   const signupPressed = async () => {
     if (!userName) {
       // showToast('Please fill First Name');
@@ -154,8 +162,8 @@ export default function RegistrationScreenStudent({navigation}) {
           //adding here so first the details are verified and then saved further
           dbFirestore()
             .collection('Users')
-            .doc('roles')
-            .collection('student')
+            // .doc('roles')
+            // .collection('student')
             .add({
               role: 'student',
               firstName: userName,
@@ -204,6 +212,7 @@ export default function RegistrationScreenStudent({navigation}) {
                   setFlag(true);
                   showToast('Account Registered');
                   navigation.navigate('Login');
+                  notifyMessage('Account Registered');
                 })
                 .catch(err => {
                   console.log(err);

@@ -97,7 +97,7 @@ export default function ForgotPassword({navigation}) {
   console.log(id);
   console.log(email);
 
-  const check = () => {};
+  // const check = () => {};
 
   const forgotPassword = () => {
     // firebase
@@ -112,9 +112,9 @@ export default function ForgotPassword({navigation}) {
 
       dbFirestore()
         .collection('Users')
-        .doc('roles')
-        .collection(value.toLowerCase())
-        .where('userEmail', '==', email)
+        // .doc('roles')
+        // .collection(value.toLowerCase())
+        .where('userEmail', '==', email.toLowerCase())
         .get()
         .then(querySnapshot => {
           console.log('Total Found users: ', querySnapshot.size);
@@ -152,8 +152,8 @@ export default function ForgotPassword({navigation}) {
     if (found) {
       dbFirestore()
         .collection('Users')
-        .doc('roles')
-        .collection(value.toLowerCase())
+        // .doc('roles')
+        // .collection(value.toLowerCase())
         .doc(id)
         .update({
           userPassword: newPassword.toString(),
@@ -169,7 +169,7 @@ export default function ForgotPassword({navigation}) {
             password: 'ltdapqlallccrgss',
             // fromName: 'Some Name', // optional
             // replyTo: 'usernameEmail', // optional
-            recipients: email,
+            recipients: email.toLowerCase(),
             // bcc: ['bccEmail1', 'bccEmail2'], // optional
             // bcc: ['shahzaibnn@gmail.com'], // optional
             subject: 'Welcome To BASH',
@@ -179,8 +179,12 @@ export default function ForgotPassword({navigation}) {
           })
             .then(success => {
               const auth = getAuth();
+              console.log('----------------------------');
+
               signInWithEmailAndPassword(auth, email.toLowerCase(), oldPassword)
                 .then(userCredential => {
+                  console.log('----------------------------');
+
                   // Signed in
                   const user = userCredential.user;
                   console.log('firat : ', user);
@@ -209,7 +213,7 @@ export default function ForgotPassword({navigation}) {
                   // ...
                 })
                 .catch(error => {
-                  console.log('error');
+                  console.log(error);
                   setFlag(true);
                 });
             })
