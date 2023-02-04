@@ -51,7 +51,8 @@ export default function App() {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <AppStack />
+      {/* <AppStack /> */}
+      <ExplorePage />
     </NavigationContainer>
     // <SettingsScreen />
 
