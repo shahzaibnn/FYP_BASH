@@ -43,7 +43,13 @@ import Toast from 'react-native-toast-message';
 
 // import {db, dbFirestore} from './Config';
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation, route}) {
+  // const val = route.params;
+  // console.log('LOGGED IN NAVIGATION IS : ', navigation);
+
+  // const {userEmail} = route.params;
+  // console.log('LOGGED IN ROUTE IS : ', route);
+
   const showToastSuccess = heading => {
     Toast.show({
       type: 'success',
@@ -61,7 +67,10 @@ export default function HomeScreen() {
   ] = useState(true);
   let actionSheet = createRef();
   const profileName = 'Tony';
-  const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
+
+  const [userData, setUserData] = useState(Object);
+  const emailAddressOfCurrentUser = route.params.userEmail;
+
   const [tempLike, setTempLike] = useState([]);
   const [fetchedPosts, setFetchedPosts] = useState([]);
   const [fetchedJobs, setFetchedJobs] = useState([]);
@@ -91,15 +100,51 @@ export default function HomeScreen() {
     dbFirestore().collection('Jobs').orderBy('createdAt', 'desc').limit(1),
   );
 
+  const searchData = loggedInUser => {
+    console.log('LOGGED IN USER IS: ', loggedInUser);
+
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', loggedInUser.toLowerCase())
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        if (querySnapshot.size == 0) {
+          console.log('CANNOT RETRIEVE DATA');
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.data());
+            setUserData(documentSnapshot.data());
+          });
+        }
+      })
+      .catch(error => {
+        // alert(error);
+
+        // setFlag(true);
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    searchData(emailAddressOfCurrentUser);
+  }, []);
+
   useEffect(() => {
     searchJobs();
   }, []);
 
   useEffect(() => {
+    // console.log('LOGGED IN USER IS : ', emailAddressOfCurrentUser);
+
     showToastSuccess('Login Successful');
 
     searchPosts();
   }, []);
+
   // useEffect(() => {
   //   if (!lastVisible) {
   //     setQuery(query);
@@ -357,7 +402,7 @@ export default function HomeScreen() {
                 marginTop: '3%',
                 marginHorizontal: '5%',
               }}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => console.log(userData)}>
                 <Image
                   style={{height: 60, width: 60, borderRadius: 64}}
                   source={{
@@ -581,7 +626,7 @@ export default function HomeScreen() {
         // keyExtractor={item => item.id}
         // ListFooterComponent={<View style={{height: 60}}></View>}
         renderItem={({item}) => {
-          console.log('Id is : ', item);
+          // console.log('Id is : ', item);
           let likeColor = '';
 
           // console.log(item.likedBy);

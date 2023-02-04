@@ -61,7 +61,7 @@ export default function LoginScreen({navigation}) {
     // e.preventDefault();
 
     if (!email) {
-      showToastSuccess('Please fill Email');
+      showToast('Please fill Email');
     } else if (!password) {
       showToast('Please fill Password');
     } else {
@@ -71,15 +71,37 @@ export default function LoginScreen({navigation}) {
           console.log(cred);
           console.log('success');
           const user = cred.user;
-          console.log('Logged in as ', user.email);
+          // console.log('Logged in as ', user.email);
           setFlag(true);
-          navigation.navigate('Drawer');
           navigation.dispatch(
             CommonActions.reset({
               index: 1,
-              routes: [{name: 'Drawer'}],
+              routes: [
+                {
+                  name: 'Drawer',
+
+                  params: {
+                    screen: 'BottomTabs',
+                    params: {
+                      screen: 'Home',
+                      params: {
+                        userEmail: email.toLowerCase(),
+                      },
+                    },
+                  },
+                },
+              ],
             }),
           );
+          // navigation.navigate('Drawer', {
+          //   screen: 'BottomTabs',
+          //   params: {
+          //     screen: 'Home',
+          //     params: {
+          //       userEmail: email,
+          //     },
+          //   },
+          // });
         })
         .catch(error => {
           const errorCode = error.code;

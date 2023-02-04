@@ -23,7 +23,7 @@ import HomeInfinite from '../screens/HomeInfinite';
 
 const Tab = createBottomTabNavigator();
 
-export default function Tabs({navigation}) {
+export default function Tabs({navigation, route}) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -70,6 +70,7 @@ export default function Tabs({navigation}) {
                   source={require('../assets/images/bash_icon.png')}
                 /> */}
                 <Text
+                  onPress={() => console.log(route)}
                   style={{fontSize: 13, color: focused ? '#5BA199' : 'grey'}}>
                   Home
                 </Text>
@@ -262,7 +263,10 @@ export default function Tabs({navigation}) {
             console.log(focused);
             return (
               <TouchableOpacity
-                onPress={() => navigation.openDrawer()}
+                onPress={() => {
+                  navigation.openDrawer();
+                  console.log(route);
+                }}
                 style={[
                   styles.container,
                   {
