@@ -19,12 +19,32 @@ import {SliderBox} from 'react-native-image-slider-box';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {db, dbFirestore} from '../Firebase/Config';
 
 const ExplorePage = () => {
+  const [searchResults, setSearchResults] = useState([]);
   const [postsSelected, setpostsSelected] = useState(false);
   const [peopleSelected, setpeopleSelected] = useState(false);
   const [jobsSelected, setjobsSelected] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [searchSelected, setSearchSelected] = useState('');
   const profileName = 'Tony';
+  const search = () => {
+    setSearchSelected(true);
+    const query = dbFirestore().collection('Users');
+    query.get().then(querySnapshot => {
+      const results = [];
+      querySnapshot.forEach(documentSnapshot => {
+        const data = documentSnapshot.data();
+        const allFields = Object.values(data).join(' ');
+        if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+          results.push(data);
+        }
+      });
+      setSearchResults(results);
+    });
+  };
+
   const TitleTag = () => {
     if (postsSelected) {
       return <Text style={styles.titleTextStyle}>Posts</Text>;
@@ -32,6 +52,8 @@ const ExplorePage = () => {
       return <Text style={styles.titleTextStyle}>People</Text>;
     } else if (jobsSelected) {
       return <Text style={styles.titleTextStyle}>Jobs</Text>;
+    } else if (searchSelected) {
+      return <Text style={styles.titleTextStyle}>Search Results</Text>;
     } else {
       setpeopleSelected(true);
       return <Text style={styles.titleTextStyle}>People</Text>;
@@ -84,7 +106,15 @@ const ExplorePage = () => {
           }}>
           <TextInput
             placeholder="Search here..."
-            style={{marginLeft: '5%'}}></TextInput>
+            style={{marginLeft: '5%'}}
+            value={searchValue}
+            onSubmitEditing={search}
+            onChangeText={searchValue => setSearchValue(searchValue)}
+          />
+
+          {searchResults.map(result => (
+            <Text key={result.id}>{result.firstName}</Text>
+          ))}
           <View
             style={{padding: 10, backgroundColor: '#5BA199', borderRadius: 16}}>
             <Ionicons
