@@ -9,7 +9,7 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import {profile, jobs, posts, experience, user} from '../model/data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -27,24 +27,59 @@ const ExplorePage = () => {
   const [peopleSelected, setpeopleSelected] = useState(false);
   const [jobsSelected, setjobsSelected] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [searchSelected, setSearchSelected] = useState('');
+  const [searchSelected, setSearchSelected] = useState(false);
   const profileName = 'Tony';
   const search = () => {
     setSearchSelected(true);
-    const query = dbFirestore().collection('Users');
-    query.get().then(querySnapshot => {
-      const results = [];
-      querySnapshot.forEach(documentSnapshot => {
-        const data = documentSnapshot.data();
-        const allFields = Object.values(data).join(' ');
-        if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-          results.push(data);
-        }
+    setpostsSelected(false);
+    setjobsSelected(false);
+    setpeopleSelected(false);
+
+    if (peopleSelected) {
+      const query = dbFirestore().collection('Users');
+      query.get().then(querySnapshot => {
+        const results = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const data = documentSnapshot.data();
+          const allFields = Object.values(data).join(' ');
+          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+            results.push(data);
+          }
+        });
+        setSearchResults(results);
       });
-      setSearchResults(results);
-    });
+    }
+    if (postsSelected) {
+      const query = dbFirestore().collection('Posts');
+      query.get().then(querySnapshot => {
+        const results = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const data = documentSnapshot.data();
+          const allFields = Object.values(data).join(' ');
+          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+            results.push(data);
+          }
+        });
+        setSearchResults(results);
+      });
+    }
+    if (jobsSelected) {
+      const query = dbFirestore().collection('Jobs');
+      query.get().then(querySnapshot => {
+        const results = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const data = documentSnapshot.data();
+          const allFields = Object.values(data).join(' ');
+          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+            results.push(data);
+          }
+        });
+        setSearchResults(results);
+      });
+    }
   };
 
+  // useEffect(() => TitleTag);
   const TitleTag = () => {
     if (postsSelected) {
       return <Text style={styles.titleTextStyle}>Posts</Text>;
@@ -112,9 +147,9 @@ const ExplorePage = () => {
             onChangeText={searchValue => setSearchValue(searchValue)}
           />
 
-          {searchResults.map(result => (
+          {/* {searchResults.map(result => (
             <Text key={result.id}>{result.firstName}</Text>
-          ))}
+          ))} */}
           <View
             style={{padding: 10, backgroundColor: '#5BA199', borderRadius: 16}}>
             <Ionicons
@@ -616,6 +651,111 @@ const ExplorePage = () => {
           )}
         </View>
       </View>
+
+      {/* Search Flatlist */}
+      <View>
+        <View
+          style={{
+            marginHorizontal: '3%',
+            marginVertical: Dimensions.get('window').height * 0.00009,
+            // marginVertical: '%'
+          }}>
+          {searchSelected ? (
+            <FlatList
+              data={searchResults}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => (
+                <View
+                  style={{
+                    backgroundColor: '#BBC6C8',
+                    // padding: '3%',
+                    borderRadius: 16,
+
+                    marginVertical: Dimensions.get('window').width * 0.01,
+                    // elevation: 5,
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginTop: Dimensions.get('window').height * 0.02,
+                      marginHorizontal: Dimensions.get('window').width * 0.05,
+                    }}>
+                    <Image
+                      style={{
+                        height: 60,
+                        width: 60,
+                        borderRadius: 16,
+                        // marginLeft: Dimensions.get('window').width * 0.1,
+                      }}
+                      source={{
+                        uri: item.profilePic || item.image || item.pic,
+                      }}
+                    />
+                    <View
+                      style={{
+                        marginLeft: Dimensions.get('window').width * 0.03,
+                      }}>
+                      <Text style={{fontSize: 12}}>
+                        {item.jobCity}
+                        {item.jobLocation}
+                        {item.role}
+                        {item.title}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: 'bold',
+                          marginVertical:
+                            Dimensions.get('window').height * 0.005,
+                          color: '#000000',
+                        }}>
+                        {item.jobTitle}
+                        {item.firstName}
+                        {item.lastName}
+                        {item.name}
+                      </Text>
+                      <Text>{item.jobCompany}</Text>
+                      <Text
+                        style={{
+                          color: '#469597',
+                          fontSize: 15,
+                          marginTop: '5%',
+                          marginBottom: '5%',
+                        }}>
+                        {item.jobMode}
+                      </Text>
+                      {/* <Text style={{color: '#469597', fontSize: 15}}>
+                        {item.experience}
+                      </Text> */}
+                    </View>
+                  </View>
+                  {/* 
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginHorizontal: Dimensions.get('window').width * 0.05,
+                      marginVertical: Dimensions.get('window').height * 0.02,
+                    }}>
+                    <Text style={{color: '#469597', fontSize: 16}}>
+                      {item.jobCompany}
+                    </Text>
+                  </View> */}
+                </View>
+              )}
+            />
+          ) : (
+            // <View>
+            //   <Text>No results found</Text>
+            // </View>
+            <></>
+          )}
+        </View>
+      </View>
+      {/* end */}
+
+      {/* end */}
     </ScrollView>
   );
 };
