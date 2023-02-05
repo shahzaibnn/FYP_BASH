@@ -22,11 +22,14 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageModal from 'react-native-image-modal';
+import {useSelector, useDispatch} from 'react-redux';
 
 import DocumentPicker, {types} from 'react-native-document-picker';
 
 const ProfileScreen = () => {
   const profileName = 'Tony';
+
+  const storeData = useSelector(state => state);
 
   const [singleFile, setSingleFile] = useState();
   const [uploaded, setUploaded] = useState(false);
@@ -75,7 +78,7 @@ const ProfileScreen = () => {
           minWidth: Dimensions.get('window').width,
         }}
         source={{
-          uri: user[0].pic,
+          uri: storeData.pic,
         }}>
         <TouchableOpacity style={{position: 'absolute', left: '5%', top: '5%'}}>
           <Ionicons name="chevron-back-circle" size={50} color="#777777" />
@@ -93,9 +96,11 @@ const ProfileScreen = () => {
 
       <View style={styles.container}>
         <View style={styles.bodyContent}>
-          <Text style={styles.name}>{user[0].username}</Text>
+          <Text style={styles.name}>
+            {storeData.firstName} {storeData.lastName}
+          </Text>
           <View>
-            <Text style={styles.info}>{user[0].education}</Text>
+            <Text style={styles.info}>{storeData.title}</Text>
           </View>
 
           <View
@@ -127,7 +132,7 @@ const ProfileScreen = () => {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={user[0].skills}
+            data={storeData.skills}
             renderItem={({item}) => (
               <View style={{}}>
                 <View style={styles.skillsListBox}>
@@ -166,11 +171,11 @@ const ProfileScreen = () => {
             </View>
 
             <Text style={{fontSize: 18, marginTop: '5%', fontStyle: 'italic'}}>
-              {user[0].description}
+              {storeData.description}
             </Text>
             {/* add cv button here */}
             <View style={styles.UploadCV}>
-              {uploaded ? (
+              {storeData.cv ? (
                 <View>
                   <TouchableOpacity>
                     <MaterialCommunityIcons
@@ -241,7 +246,7 @@ const ProfileScreen = () => {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={user[0].experience}
+            data={storeData.experience}
             renderItem={({item}) => (
               <View
                 style={{
@@ -295,6 +300,8 @@ const ProfileScreen = () => {
         </View>
         {/* <View style={styles.ExpbodyContent}> */}
         {/* post content here */}
+
+        {/* THIS IS TO SEARCHED AS TO WHICH POSTS BELONG TO THIS USER */}
         <View>
           <Text
             style={{

@@ -41,6 +41,9 @@ import PostSkeleton from '../components/PostSkeleton';
 import HomeHeaderSkeleton from '../components/HomeHeaderSkeleton';
 import Toast from 'react-native-toast-message';
 
+import {useSelector, useDispatch} from 'react-redux';
+import {addition, setInititialLogin, subtraction} from '../store/action';
+
 // import {db, dbFirestore} from './Config';
 
 export default function HomeScreen({navigation, route}) {
@@ -49,6 +52,9 @@ export default function HomeScreen({navigation, route}) {
 
   // const {userEmail} = route.params;
   // console.log('LOGGED IN ROUTE IS : ', route);
+
+  const storeData = useSelector(state => state);
+  const dispatch = useDispatch();
 
   const showToastSuccess = heading => {
     Toast.show({
@@ -118,6 +124,7 @@ export default function HomeScreen({navigation, route}) {
           querySnapshot.forEach(documentSnapshot => {
             console.log(documentSnapshot.data());
             setUserData(documentSnapshot.data());
+            dispatch(setInititialLogin(documentSnapshot.data()));
           });
         }
       })
@@ -402,11 +409,14 @@ export default function HomeScreen({navigation, route}) {
                 marginTop: '3%',
                 marginHorizontal: '5%',
               }}>
-              <TouchableOpacity onPress={() => console.log(userData)}>
+              <TouchableOpacity
+                onPress={() => {
+                  console.log(userData);
+                }}>
                 <Image
                   style={{height: 60, width: 60, borderRadius: 64}}
                   source={{
-                    uri: profile[0].pic,
+                    uri: storeData.pic,
                   }}
                 />
               </TouchableOpacity>
@@ -422,7 +432,7 @@ export default function HomeScreen({navigation, route}) {
                   borderRadius: 16,
                   flexDirection: 'row',
                 }}>
-                <Text style={{marginLeft: '5%'}}>Search here...</Text>
+                <Text style={{marginLeft: '5%'}}>Search...</Text>
                 <View
                   style={{
                     padding: 10,

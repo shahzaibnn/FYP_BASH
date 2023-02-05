@@ -46,14 +46,19 @@ import ClassFunc from './src/screens/ClassFunc';
 import AnotherTest from './src/screens/AnotherTest';
 import HomeInfinite from './src/screens/HomeInfinite';
 // import Tip from './src/components/AlertBoxStyles/Tip';
+import {Provider} from 'react-redux';
+// import {Provider} from 'redux';
+import {store} from './src/store/store';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
-      <AppStack />
-      {/* <ExplorePage /> */}
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <AppStack />
+        {/* <ExplorePage /> */}
+      </NavigationContainer>
+    </Provider>
     // <SettingsScreen />
 
     //  <BottomTabs />
