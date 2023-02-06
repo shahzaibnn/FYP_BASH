@@ -8,6 +8,7 @@ import {
   Dimensions,
   StyleSheet,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState, createRef} from 'react';
 import FastImage from 'react-native-fast-image';
@@ -32,7 +33,21 @@ const ExplorePage = () => {
   const profileName = 'Tony';
   const [fetchedJobs, setFetchedJobs] = useState([]);
   const [fetchedUsers, setFetchedUsers] = useState([]);
+  const [fetchedPosts, setFetchedPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [lastVisible, setLastVisible] = useState(null);
+  const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
+
   const [actionParameters, setActionParameters] = useState([]);
+  const [
+    onEndReachedCalledDuringMomentum,
+    setOnEndReachedCalledDuringMomentum,
+  ] = useState(true);
+  const [extraData, setExtraData] = React.useState(new Date());
+
+  const [lastPost, setLastPost] = useState(false);
+  const [postLoader, setPostLoader] = useState(true);
+  const [postData, setPostData] = useState([]);
 
   const show = item => {
     // console.log(item);
@@ -70,6 +85,123 @@ const ExplorePage = () => {
     searchJobs();
   }, []);
 
+  const searchPosts = async () => {
+    setLoading(true);
+    // const snapshot = await query.get();
+    // setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
+    // const newData = snapshot.docs.map(doc => doc.data());
+    // setData(data.concat(newData));
+    // console.log('data is, ', data);
+    // setLoading(false);
+
+    dbFirestore()
+      .collection('Posts')
+      // .orderBy('id', 'desc')
+      .limit(2)
+      .get()
+      .then(querySnapshot => {
+        console.log('Total posts: ', querySnapshot.size);
+
+        var total = querySnapshot.size;
+        let count = 0;
+
+        if (total == 0) {
+          setPostLoader(false);
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+            console.log(
+              'User ID: ',
+              documentSnapshot.id,
+              documentSnapshot.data(),
+              //To grab a particular field use
+              //documentSnapshot.data().userEmail,
+            );
+            setFetchedPosts(fetchedPosts => [...fetchedPosts, v]);
+
+            count++;
+            if (count == total) {
+              setPostLoader(false);
+              console.log(':runing');
+            }
+          });
+        }
+
+        setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+      });
+  };
+  const searchMorePosts = async () => {
+    setLoading(true);
+    // const snapshot = await query.get();
+    // setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
+    // const newData = snapshot.docs.map(doc => doc.data());
+    // setData(data.concat(newData));
+    // console.log('data is, ', data);
+    // setLoading(false);
+
+    dbFirestore()
+      .collection('Posts')
+      // .orderBy('id', 'desc')
+      .startAfter(lastVisible)
+      .limit(2)
+      .get()
+      .then(querySnapshot => {
+        console.log('Total posts: ', querySnapshot.size);
+
+        var total = querySnapshot.size;
+        let count = 0;
+
+        if (total == 0) {
+          console.log('yahan pe aye!!');
+          setLoading(false);
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+            // console.log(
+            //   'User ID: ',
+            //   documentSnapshot.id,
+            //   documentSnapshot.data(),
+            //   //To grab a particular field use
+            //   //documentSnapshot.data().userEmail,
+            // );
+            setFetchedPosts(fetchedPosts => [...fetchedPosts, v]);
+
+            count++;
+            if (count == total) {
+              setLoading(false);
+              console.log(':runing');
+            }
+          });
+        }
+
+        setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        querySnapshot.size == 0 ? setLastPost(true) : setLastPost(false);
+      });
+  };
+  useEffect(() => {
+    // showToastSuccess('Login Successful');
+
+    searchPosts();
+  }, []);
+  const renderLoaderPosts = () => {
+    return loading && !lastPost ? (
+      <View style={styles.loaderStyle}>
+        <ActivityIndicator size="large" color="#aaa" />
+      </View>
+    ) : null;
+  };
+  const handleEndReached = () => {
+    // alert('reached!!');
+    setLoading(true);
+    console.log('end posts reached!!');
+    // console.log(lastVisible);
+
+    searchMorePosts();
+    // setOnEndReachedCalledDuringMomentum(true);
+  };
+
   const searchPeople = async () => {
     await dbFirestore()
       .collection('Users')
@@ -100,9 +232,9 @@ const ExplorePage = () => {
 
   const search = () => {
     setSearchSelected(true);
-    setpostsSelected(false);
-    setjobsSelected(false);
-    setpeopleSelected(false);
+    // setpostsSelected(false);
+    // setjobsSelected(false);
+    // setpeopleSelected(false);
 
     if (peopleSelected) {
       const query = dbFirestore().collection('Users');
@@ -146,6 +278,9 @@ const ExplorePage = () => {
         setSearchResults(results);
       });
     }
+    setpostsSelected(false);
+    setjobsSelected(false);
+    setpeopleSelected(false);
   };
 
   // useEffect(() => TitleTag);
@@ -212,7 +347,7 @@ const ExplorePage = () => {
             placeholder="Search here..."
             style={{marginLeft: '5%'}}
             value={searchValue}
-            onSubmitEditing={search}
+            // onSubmitEditing={search}
             onChangeText={searchValue => setSearchValue(searchValue)}
           />
 
@@ -221,12 +356,14 @@ const ExplorePage = () => {
           ))} */}
           <View
             style={{padding: 10, backgroundColor: '#5BA199', borderRadius: 16}}>
-            <Ionicons
-              name="options-outline"
-              size={40}
-              color="#ffffff"
-              style={{}}
-            />
+            <TouchableOpacity onPress={search}>
+              <Ionicons
+                name="options-outline"
+                size={40}
+                color="#ffffff"
+                style={{}}
+              />
+            </TouchableOpacity>
           </View>
         </TouchableOpacity>
       </View>
@@ -242,7 +379,7 @@ const ExplorePage = () => {
                   setpostsSelected(false);
                   setjobsSelected(false);
                   setpeopleSelected(true);
-                  console.log(postsSelected);
+                  console.log('testing', peopleSelected);
                 }}>
                 <MaterialCommunityIcons
                   name="abacus"
@@ -262,7 +399,7 @@ const ExplorePage = () => {
                   setpostsSelected(false);
                   setjobsSelected(false);
                   setpeopleSelected(true);
-                  console.log(postsSelected);
+                  console.log('posts', postsSelected);
                 }}>
                 <MaterialCommunityIcons
                   name="abacus"
@@ -286,7 +423,8 @@ const ExplorePage = () => {
                   setpostsSelected(true);
                   setjobsSelected(false);
                   setpeopleSelected(false);
-                  console.log(postsSelected);
+                  setSearchSelected(false);
+                  console.log('posts', postsSelected);
                 }}>
                 <MaterialCommunityIcons
                   name="abacus"
@@ -306,7 +444,8 @@ const ExplorePage = () => {
                   setpostsSelected(true);
                   setjobsSelected(false);
                   setpeopleSelected(false);
-                  console.log(postsSelected);
+                  setSearchSelected(false);
+                  console.log('posts  ', postsSelected);
                 }}>
                 <MaterialCommunityIcons
                   name="abacus"
@@ -331,6 +470,7 @@ const ExplorePage = () => {
                   setpostsSelected(false);
                   setjobsSelected(true);
                   setpeopleSelected(false);
+                  setSearchSelected(false);
                   console.log(setjobsSelected);
                 }}>
                 <MaterialCommunityIcons
@@ -444,17 +584,49 @@ const ExplorePage = () => {
           {postsSelected ? (
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={posts}
+              data={fetchedPosts}
+              extraData={extraData}
+              // initialNumToRender={2}
+              onEndReachedThreshold={0.1}
+              scrollEventThrottle={150}
               keyExtractor={item => item.id}
-              ListFooterComponent={<View style={{height: 60}}></View>}
+              onMomentumScrollBegin={() => {
+                setOnEndReachedCalledDuringMomentum(false);
+              }}
+              onEndReached={() => {
+                if (!onEndReachedCalledDuringMomentum && !lastPost) {
+                  console.log(
+                    '0000000000000000000000000000000000000000000----------------------------------------',
+                  );
+                  handleEndReached(); // LOAD MORE DATA
+                  setOnEndReachedCalledDuringMomentum(true);
+                }
+              }}
+              ListFooterComponent={
+                !lastPost ? (
+                  renderLoaderPosts
+                ) : (
+                  <Text
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 20,
+                      color: '#000000',
+                      marginBottom: 90,
+                      textAlign: 'center',
+                    }}>
+                    You Are Up To Date / All Posts Fetched And Displayed
+                  </Text>
+                )
+              }
               renderItem={({item}) => {
+                console.log('Id is : ', item);
                 let likeColor = '';
 
-                console.log(item.likedBy);
+                // console.log(item.likedBy);
 
-                if (item.likedBy.includes(profileName)) {
+                if (item.likedBy.includes(emailAddressOfCurrentUser)) {
                   likeColor = '#000000';
-                  console.log('running');
+                  // console.log('running');
                 } else {
                   likeColor = '#ffffff';
                 }
@@ -462,8 +634,6 @@ const ExplorePage = () => {
                 return (
                   <View
                     style={{
-                      // elevation: 1000,
-                      // backgroundColor: '#ffffff',
                       marginHorizontal: Dimensions.get('window').width * 0.05,
                       marginVertical: Dimensions.get('window').height * 0.01,
                       borderRadius: 16,
@@ -474,7 +644,7 @@ const ExplorePage = () => {
                         marginVertical: Dimensions.get('window').height * 0.01,
                       }}>
                       <Image
-                        source={{uri: item.imageUrl}}
+                        source={{uri: item.profilePic}}
                         style={{
                           width: 60,
                           height: 60,
@@ -506,21 +676,9 @@ const ExplorePage = () => {
                           {item.title}
                         </Text>
                         <Text style={{color: '#777777', fontSize: 12}}>
-                          {item.datePosted}
+                          {item.date}
                         </Text>
                       </View>
-                      {/* looks fine here */}
-                      <TouchableOpacity onPress={() => show(item)}>
-                        <MaterialCommunityIcons
-                          name="dots-vertical"
-                          size={30}
-                          color="#000000"
-                          style={{
-                            marginLeft: Dimensions.get('window').width * 0.09,
-                            marginTop: Dimensions.get('window').height * 0.005,
-                          }}
-                        />
-                      </TouchableOpacity>
                     </View>
 
                     <SliderBox
@@ -549,7 +707,7 @@ const ExplorePage = () => {
                         marginHorizontal: '2.5%',
                         marginVertical: '2%',
                       }}>
-                      {item.descriptionText}
+                      {item.description}
                     </Text>
 
                     <View
@@ -568,6 +726,53 @@ const ExplorePage = () => {
                           {item.likedBy.length} Likes
                         </Text>
                         <TouchableOpacity
+                          onPress={() => {
+                            console.log('hdshjdsfvhddhfbhj');
+                            if (
+                              item.likedBy.includes(emailAddressOfCurrentUser)
+                            ) {
+                              dbFirestore()
+                                .doc('Posts/' + item.id)
+                                .update({
+                                  likedBy: dbFirestore.FieldValue.arrayRemove(
+                                    emailAddressOfCurrentUser,
+                                  ),
+                                })
+                                .then(() => {
+                                  console.log('Like Removed!');
+                                });
+
+                              fetchedPosts.find(
+                                obj => obj.id == item.id,
+                              ).likedBy = item.likedBy.filter(
+                                e => e !== emailAddressOfCurrentUser,
+                              );
+                              setExtraData(new Date());
+
+                              // likeColor = '#ffffff';
+                            } else {
+                              console.log('ye work');
+                              dbFirestore()
+                                .doc('Posts/' + item.id)
+                                .update({
+                                  likedBy: dbFirestore.FieldValue.arrayUnion(
+                                    emailAddressOfCurrentUser,
+                                  ),
+                                })
+                                .then(() => {
+                                  console.log('Like Placed!');
+                                });
+                              let arr = item.likedBy;
+                              arr.push(emailAddressOfCurrentUser);
+                              fetchedPosts.find(
+                                obj => obj.id == item.id,
+                              ).likedBy = arr;
+
+                              setExtraData(new Date());
+                            }
+                            // setFetchedPosts([]);
+                            // searchPosts();
+                          }}
                           style={{
                             paddingHorizontal: '8%',
                             paddingVertical: '8%',
@@ -581,7 +786,7 @@ const ExplorePage = () => {
                         </TouchableOpacity>
                       </View>
 
-                      <View>
+                      {/* <View>
                         <Text
                           style={{
                             textAlign: 'center',
@@ -600,19 +805,185 @@ const ExplorePage = () => {
                             borderRadius: 8,
                             // width: Dimensions.get('window').width * 0.2,
                           }}>
-                          <FontAwesome
-                            name="comment"
-                            size={25}
-                            color="#ffffff"
-                          />
+                          <FontAwesome name="comment" size={25} color="#ffffff" />
                         </TouchableOpacity>
-                      </View>
+                      </View> */}
                     </View>
                   </View>
                 );
               }}
             />
           ) : (
+            // <FlatList
+            //   showsVerticalScrollIndicator={false}
+            //   data={posts}
+            //   keyExtractor={item => item.id}
+            //   ListFooterComponent={<View style={{height: 60}}></View>}
+            //   renderItem={({item}) => {
+            //     let likeColor = '';
+
+            //     console.log(item.likedBy);
+
+            //     if (item.likedBy.includes(profileName)) {
+            //       likeColor = '#000000';
+            //       console.log('running');
+            //     } else {
+            //       likeColor = '#ffffff';
+            //     }
+
+            //     return (
+            //       <View
+            //         style={{
+            //           // elevation: 1000,
+            //           // backgroundColor: '#ffffff',
+            //           marginHorizontal: Dimensions.get('window').width * 0.05,
+            //           marginVertical: Dimensions.get('window').height * 0.01,
+            //           borderRadius: 16,
+            //         }}>
+            //         <View
+            //           style={{
+            //             flexDirection: 'row',
+            //             marginVertical: Dimensions.get('window').height * 0.01,
+            //           }}>
+            //           <Image
+            //             source={{uri: item.imageUrl}}
+            //             style={{
+            //               width: 60,
+            //               height: 60,
+            //               borderRadius: 64,
+            //               marginLeft: Dimensions.get('window').width * 0.02,
+            //             }}
+            //           />
+            //           <View
+            //             style={{
+            //               marginLeft: Dimensions.get('window').width * 0.05,
+            //             }}>
+            //             <Text
+            //               style={{
+            //                 color: '#5BA199',
+            //                 fontWeight: 'bold',
+            //                 marginBottom:
+            //                   Dimensions.get('window').height * 0.005,
+            //                 fontSize: 16,
+            //               }}>
+            //               {item.name}
+            //             </Text>
+            //             <Text
+            //               style={{
+            //                 color: '#5BA199',
+            //                 marginBottom:
+            //                   Dimensions.get('window').height * 0.005,
+            //                 fontSize: 12,
+            //               }}>
+            //               {item.title}
+            //             </Text>
+            //             <Text style={{color: '#777777', fontSize: 12}}>
+            //               {item.datePosted}
+            //             </Text>
+            //           </View>
+            //           {/* looks fine here */}
+            //           <TouchableOpacity onPress={() => show(item)}>
+            //             <MaterialCommunityIcons
+            //               name="dots-vertical"
+            //               size={30}
+            //               color="#000000"
+            //               style={{
+            //                 marginLeft: Dimensions.get('window').width * 0.09,
+            //                 marginTop: Dimensions.get('window').height * 0.005,
+            //               }}
+            //             />
+            //           </TouchableOpacity>
+            //         </View>
+
+            //         <SliderBox
+            //           // onCurrentImagePressed={index => ImagePressed()}
+            //           parentWidth={Dimensions.get('window').width * 0.9}
+            //           ImageComponentStyle={{borderRadius: 16}}
+            //           // paginationBoxStyle={styles.sliderBoxPageStyle}
+            //           // ImageComponentStyle={styles.sliderBoxImageStyle}
+            //           // dotStyle={{
+            //           //   width: 10,
+            //           //   height: 10,
+            //           //   borderRadius: 5,
+            //           //   marginBottom: 20,
+            //           //   marginHorizontal: 0,
+            //           //   padding: 0,
+            //           //   margin: 0,
+            //           // }}
+            //           images={item.images}
+            //           sliderBoxHeight={Dimensions.get('window').height * 0.3}
+            //         />
+
+            //         <Text
+            //           style={{
+            //             color: '#000000',
+            //             width: '95%',
+            //             marginHorizontal: '2.5%',
+            //             marginVertical: '2%',
+            //           }}>
+            //           {item.descriptionText}
+            //         </Text>
+
+            //         <View
+            //           style={{
+            //             flexDirection: 'row',
+            //             justifyContent: 'space-evenly',
+            //             marginBottom: '5%',
+            //           }}>
+            //           <View>
+            //             <Text
+            //               style={{
+            //                 textAlign: 'center',
+            //                 color: '#469597',
+            //                 fontWeight: 'bold',
+            //               }}>
+            //               {item.likedBy.length} Likes
+            //             </Text>
+            //             <TouchableOpacity
+            //               style={{
+            //                 paddingHorizontal: '8%',
+            //                 paddingVertical: '8%',
+            //                 backgroundColor: '#5BA199',
+            //                 justifyContent: 'center',
+            //                 alignItems: 'center',
+            //                 borderRadius: 8,
+            //                 // width: Dimensions.get('window').width * 0.2,
+            //               }}>
+            //               <AntDesign name="like1" size={25} color={likeColor} />
+            //             </TouchableOpacity>
+            //           </View>
+
+            //           <View>
+            //             <Text
+            //               style={{
+            //                 textAlign: 'center',
+            //                 color: '#469597',
+            //                 fontWeight: 'bold',
+            //               }}>
+            //               {item.commentedBy.length} Comments
+            //             </Text>
+            //             <TouchableOpacity
+            //               style={{
+            //                 paddingHorizontal: '8%',
+            //                 paddingVertical: '8%',
+            //                 backgroundColor: '#5BA199',
+            //                 justifyContent: 'center',
+            //                 alignItems: 'center',
+            //                 borderRadius: 8,
+            //                 // width: Dimensions.get('window').width * 0.2,
+            //               }}>
+            //               <FontAwesome
+            //                 name="comment"
+            //                 size={25}
+            //                 color="#ffffff"
+            //               />
+            //             </TouchableOpacity>
+            //           </View>
+            //         </View>
+            //       </View>
+            //     );
+            //   }}
+            // />
             <></>
           )}
         </View>
