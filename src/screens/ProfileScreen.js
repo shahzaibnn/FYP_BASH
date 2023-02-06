@@ -26,7 +26,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import DocumentPicker, {types} from 'react-native-document-picker';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
   const profileName = 'Tony';
 
   const storeData = useSelector(state => state);
@@ -96,9 +96,26 @@ const ProfileScreen = () => {
 
       <View style={styles.container}>
         <View style={styles.bodyContent}>
-          <Text style={styles.name}>
-            {storeData.firstName} {storeData.lastName}
-          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <Text style={styles.name}>
+              {storeData.firstName} {storeData.lastName}
+            </Text>
+
+            <TouchableOpacity
+              style={styles.skillsBox}
+              onPress={() => navigation.navigate('EditProfile')}>
+              <Text
+                style={[styles.skillsText, {color: '#ffffff', fontSize: 18}]}>
+                Edit Profile
+              </Text>
+              <Ionicons name="chevron-forward" size={22} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
           <View>
             <Text style={styles.info}>{storeData.title}</Text>
           </View>
@@ -120,12 +137,12 @@ const ProfileScreen = () => {
               }}>
               Skills
             </Text>
-            <TouchableOpacity style={styles.skillsBox}>
+            {/* <TouchableOpacity style={styles.skillsBox}>
               <Text style={[styles.skillsText, {color: '#ffffff'}]}>
                 Add Skills
               </Text>
               <Ionicons name="chevron-forward" size={20} color="#ffffff" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           {/* Skills here */}
@@ -162,12 +179,14 @@ const ProfileScreen = () => {
                 }}>
                 Description
               </Text>
-              <TouchableOpacity style={styles.skillsBox}>
+              {/* <TouchableOpacity
+                style={styles.skillsBox}
+                onPress={() => navigation.navigate('EditProfile')}>
                 <Text style={[styles.skillsText, {color: '#ffffff'}]}>
                   Edit Description
                 </Text>
                 <Ionicons name="chevron-forward" size={20} color="#ffffff" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             <Text style={{fontSize: 18, marginTop: '5%', fontStyle: 'italic'}}>
@@ -230,12 +249,14 @@ const ProfileScreen = () => {
                 }}>
                 Experience
               </Text>
-              <TouchableOpacity style={styles.skillsBox}>
+              {/* <TouchableOpacity
+                style={styles.skillsBox}
+                onPress={() => navigation.navigate('EditProfile')}>
                 <Text style={[styles.skillsText, {color: '#ffffff'}]}>
                   Edit Experience
                 </Text>
                 <Ionicons name="chevron-forward" size={20} color="#ffffff" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             {/* </View> */}
 
@@ -557,7 +578,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontWeight: 'bold',
     marginTop: '5%',
-    width: Dimensions.get('window').width * 0.5,
+    // width: Dimensions.get('window').width * 0.5,
   },
   info: {
     fontSize: 18,

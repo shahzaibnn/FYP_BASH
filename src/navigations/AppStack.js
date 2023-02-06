@@ -45,6 +45,7 @@ import DrawerNav from './DrawerNav';
 import ProfileScreen from '../screens/ProfileScreen';
 import JobPostingScreen from '../screens/JobPostingScreen';
 import ExplorePage from '../screens/ExplorePage';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
 // import MyTabs from '../screens/tabs';
 
@@ -68,6 +69,7 @@ export default function AppStack() {
       <Stack.Screen name="Drawer" component={DrawerNav} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="JobPosting" component={JobPostingScreen} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
     </Stack.Navigator>
     // </NavigationContainer>
   );

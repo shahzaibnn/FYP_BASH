@@ -25,30 +25,70 @@ import DocumentPicker, {types} from 'react-native-document-picker';
 
 import ImageModal from 'react-native-image-modal';
 
+import {useSelector, useDispatch} from 'react-redux';
+import {db, dbFirestore} from '../Firebase/Config';
+
 export default function EditProfileScreen() {
+  const storeData = useSelector(state => state);
+
   const [titleDisplay, setTitleDisplay] = useState(false);
-  const [title, setTitle] = useState(user[0].education);
+  const [title, setTitle] = useState(storeData?.title);
 
   const [skillsDisplay, setSkillsDisplay] = useState(false);
-  const [skills, setSkills] = useState(user[0].skills);
+  const [skills, setSkills] = useState(storeData?.skills);
 
   const [addSkill, setAddSkill] = useState('');
 
   const [descriptionDisplay, setDescriptionDisplay] = useState(false);
-  const [description, setDescription] = useState(user[0].description);
+  const [description, setDescription] = useState(storeData?.description);
 
   const [experienceDisplay, setExperienceDisplay] = useState(false);
-  const [experience, setExperience] = useState(user[0]?.experience);
+  const [experience, setExperience] = useState(storeData?.experience);
 
   const [experienceTitle, setExperienceTitle] = useState('');
   const [experienceDate, setExperienceDate] = useState('');
   const [experienceCompany, setExperienceCompany] = useState('');
+  const [experienceLocation, setExperienceLocation] = useState('');
 
   const [appliedJobsDisplay, setAppliedJobsDisplay] = useState(false);
-  const [appliedJobs, setAppliedJobs] = useState(user[0]?.applied);
+  const [appliedJobs, setAppliedJobs] = useState(storeData?.applied);
 
   const [singleFile, setSingleFile] = useState();
   const [uploaded, setUploaded] = useState(false);
+
+  const updateField = (field, value) => {
+    console.log(field);
+    console.log(value);
+    var object = {};
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', storeData.userEmail)
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(documentSnapshot.id);
+          dbFirestore()
+            .collection('Users')
+            .doc(documentSnapshot.id)
+            .update({
+              [field]: value,
+            })
+            .then(() => {
+              alert('User updated');
+              console.log('User updated!');
+            });
+        });
+      })
+      .catch(error => {
+        alert(error);
+
+        // setFlag(true);
+      });
+  };
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
@@ -178,6 +218,7 @@ export default function EditProfileScreen() {
           </View>
 
           <TouchableOpacity
+            onPress={() => updateField('title', title)}
             style={{
               justifyContent: 'center',
               alignItems: 'center',
@@ -248,7 +289,7 @@ export default function EditProfileScreen() {
             showsHorizontalScrollIndicator={false}
             // numColumns={4}
             key={'_'}
-            data={user[0].skills}
+            data={skills}
             renderItem={({item}) => (
               <View
               // style={{marginStart: Dimensions.get('window').width * 0.03}}
@@ -610,6 +651,25 @@ export default function EditProfileScreen() {
               onChangeText={setExperienceCompany}
               value={experienceCompany}
               placeholder="Organization"
+            />
+          </View>
+
+          <View
+            style={{
+              backgroundColor: '#ffffff',
+              // width: Dimensions.get('window').width * 0.8,
+              marginHorizontal: '10%',
+              borderRadius: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+              // marginBottom: '7%',
+              marginVertical: '3%',
+            }}>
+            <TextInput
+              style={{}}
+              onChangeText={setExperienceLocation}
+              value={experienceLocation}
+              placeholder="Location"
             />
           </View>
           {/* 
