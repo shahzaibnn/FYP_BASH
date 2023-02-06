@@ -322,6 +322,9 @@ const ExplorePage = () => {
           }
         });
         setSearchResults(results);
+        setpostsSelected(false);
+        setjobsSelected(false);
+        setpeopleSelected(false);
       });
     }
     if (postsSelected) {
@@ -336,6 +339,9 @@ const ExplorePage = () => {
           }
         });
         setSearchResults(results);
+        setpostsSelected(false);
+        setjobsSelected(false);
+        setpeopleSelected(false);
       });
     }
     if (jobsSelected) {
@@ -350,11 +356,14 @@ const ExplorePage = () => {
           }
         });
         setSearchResults(results);
+        setpostsSelected(false);
+        setjobsSelected(false);
+        setpeopleSelected(false);
       });
     }
-    setpostsSelected(false);
-    setjobsSelected(false);
-    setpeopleSelected(false);
+    // setpostsSelected(false);
+    // setjobsSelected(false);
+    // setpeopleSelected(false);
   };
 
   // useEffect(() => TitleTag);
