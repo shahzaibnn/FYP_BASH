@@ -31,6 +31,8 @@ const ExplorePage = () => {
   const [searchValue, setSearchValue] = useState('');
   const [searchSelected, setSearchSelected] = useState(false);
   const profileName = 'Tony';
+  const [jobLoader, setJobLoader] = useState(true);
+  const [jobLoading, setJobLoading] = useState(false);
   const [fetchedJobs, setFetchedJobs] = useState([]);
   const [fetchedUsers, setFetchedUsers] = useState([]);
   const [fetchedPosts, setFetchedPosts] = useState([]);
@@ -46,6 +48,13 @@ const ExplorePage = () => {
   const [lastPost, setLastPost] = useState(false);
   const [postLoader, setPostLoader] = useState(true);
   const [postData, setPostData] = useState([]);
+  const [lastVisibleJobs, setLastVisibleJobs] = useState(null);
+
+  const [lastJob, setLastJob] = useState(false);
+  const [
+    onEndReachedCalledDuringMomentumJob,
+    setOnEndReachedCalledDuringMomentumJob,
+  ] = useState(true);
 
   const show = item => {
     // console.log(item);
@@ -56,28 +65,110 @@ const ExplorePage = () => {
   let actionSheet = createRef();
 
   const searchJobs = async () => {
-    await dbFirestore()
+    setJobLoading(true);
+    // const snapshot = await jobQuery.get();
+    // setLastVisibleJobs(snapshot.docs[snapshot.docs.length - 1]);
+    // const newJobData = snapshot.docs.map(doc => doc.data());
+    // setJobData(jobData.concat(newJobData));
+    // console.log('job data is, ', jobData);
+
+    dbFirestore()
       .collection('Jobs')
-      // Filter results
-      // .where('userEmail', '==', 'habibafaisal8@gmail.com')
-      // .where('firstName', '==', 'Habiba')
+      .orderBy('createdAt', 'desc')
+      .limit(2)
       .get()
       .then(querySnapshot => {
-        console.log('Total posts: ', querySnapshot.size);
+        console.log('Total Jobs: ', querySnapshot.size);
 
-        querySnapshot.forEach(documentSnapshot => {
-          let v = documentSnapshot.data();
-          v.id = documentSnapshot.id;
-          console.log(
-            'User ID: ',
-            documentSnapshot.id,
-            documentSnapshot.data(),
-            setFetchedJobs(fetchedJobs => [...fetchedJobs, v]),
-            //To grab a particular field use
-            //documentSnapshot.data().userEmail,
-          );
-        });
+        var total = querySnapshot.size;
+        let count = 0;
+        if (total == 0) {
+          setJobLoader(false);
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            console.log('hgccgcfgcgfc');
+
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+            // console.log(
+            //   'User ID: ',
+            //   documentSnapshot.id,
+            //   documentSnapshot.data(),
+            //   //To grab a particular field use
+            //   //documentSnapshot.data().userEmail,
+            // );
+            setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
+
+            count++;
+            if (count == total) {
+              setJobLoader(false);
+              console.log(':runing');
+            }
+          });
+        }
+        setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
       });
+    // setJobLoading(false);
+  };
+  useEffect(() => {
+    searchJobs();
+  }, []);
+  const searchMoreJobs = async () => {
+    setJobLoading(true);
+
+    dbFirestore()
+      .collection('Jobs')
+      .orderBy('createdAt', 'desc')
+      .startAfter(lastVisibleJobs)
+      .limit(1)
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Jobs: ', querySnapshot.size);
+
+        var total = querySnapshot.size;
+        let count = 0;
+        if (total == 0) {
+          setJobLoading(false);
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            console.log('hgccgcfgcgfc');
+
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+            // console.log(
+            //   'User ID: ',
+            //   documentSnapshot.id,
+            //   documentSnapshot.data(),
+            //   //To grab a particular field use
+            //   //documentSnapshot.data().userEmail,
+            // );
+            setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
+
+            count++;
+            if (count == total) {
+              setJobLoading(false);
+              console.log(':runing');
+            }
+          });
+        }
+        setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        querySnapshot.size == 0 ? setLastJob(true) : setLastJob(false);
+      });
+  };
+
+  const handleEndReachedJobs = () => {
+    setJobLoading(true);
+    console.log('end reached!!');
+    // console.log(lastVisibleJobs);
+
+    searchMoreJobs();
+  };
+  const renderLoaderJobs = () => {
+    return jobLoading && !lastJob ? (
+      <View style={styles.loaderStyle}>
+        <ActivityIndicator size="large" color="#aaa" />
+      </View>
+    ) : null;
   };
   useEffect(() => {
     searchJobs();
@@ -982,26 +1073,37 @@ const ExplorePage = () => {
           }}>
           {jobsSelected ? (
             <FlatList
-              // nestedScrollEnabled
               // horizontal={true}
               // showsHorizontalScrollIndicator={false}
+              ListFooterComponent={renderLoaderJobs}
               data={fetchedJobs}
+              keyExtractor={item => item.id}
+              onEndReachedThreshold={0.1}
+              scrollEventThrottle={150}
+              onMomentumScrollBegin={() => {
+                setOnEndReachedCalledDuringMomentumJob(false);
+              }}
+              onEndReached={() => {
+                console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
+                if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
+                  console.log(
+                    '0000000000000000000000000000000000000000000----------------------------------------',
+                  );
+                  handleEndReachedJobs(); // LOAD MORE DATA
+                  setOnEndReachedCalledDuringMomentumJob(true);
+                }
+              }}
               renderItem={({item}) => (
                 <View
                   style={{
                     backgroundColor: '#BBC6C8',
-                    // padding: '3%',
                     borderRadius: 16,
-
                     marginHorizontal: Dimensions.get('window').width * 0.01,
-                    marginBottom: Dimensions.get('window').height * 0.02,
-                    // elevation: 5,
                   }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       marginTop: Dimensions.get('window').height * 0.02,
-                      // marginBottom: Dimensions.get('window').height * 0.02,
                       marginHorizontal: Dimensions.get('window').width * 0.05,
                     }}>
                     <Image
@@ -1009,7 +1111,6 @@ const ExplorePage = () => {
                         height: 60,
                         width: 60,
                         borderRadius: 16,
-                        // marginLeft: Dimensions.get('window').width * 0.1,
                       }}
                       source={{
                         uri: item.image,
@@ -1074,7 +1175,6 @@ const ExplorePage = () => {
                   </View>
                 </View>
               )}
-              keyExtractor={item => item.id}
             />
           ) : (
             // <FlatList
