@@ -37,14 +37,12 @@ const ExplorePage = () => {
   const [loading, setLoading] = useState(false);
   const [lastVisible, setLastVisible] = useState(null);
   const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
-
   const [actionParameters, setActionParameters] = useState([]);
   const [
     onEndReachedCalledDuringMomentum,
     setOnEndReachedCalledDuringMomentum,
   ] = useState(true);
   const [extraData, setExtraData] = React.useState(new Date());
-
   const [lastPost, setLastPost] = useState(false);
   const [postLoader, setPostLoader] = useState(true);
   const [postData, setPostData] = useState([]);
@@ -84,15 +82,13 @@ const ExplorePage = () => {
   useEffect(() => {
     searchJobs();
   }, []);
+  useEffect(() => {
+    // showToastSuccess('Login Successful');
 
+    searchPosts();
+  }, []);
   const searchPosts = async () => {
     setLoading(true);
-    // const snapshot = await query.get();
-    // setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
-    // const newData = snapshot.docs.map(doc => doc.data());
-    // setData(data.concat(newData));
-    // console.log('data is, ', data);
-    // setLoading(false);
 
     dbFirestore()
       .collection('Posts')
@@ -133,16 +129,8 @@ const ExplorePage = () => {
   };
   const searchMorePosts = async () => {
     setLoading(true);
-    // const snapshot = await query.get();
-    // setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
-    // const newData = snapshot.docs.map(doc => doc.data());
-    // setData(data.concat(newData));
-    // console.log('data is, ', data);
-    // setLoading(false);
-
     dbFirestore()
       .collection('Posts')
-      // .orderBy('id', 'desc')
       .startAfter(lastVisible)
       .limit(2)
       .get()
@@ -159,32 +147,27 @@ const ExplorePage = () => {
           querySnapshot.forEach(documentSnapshot => {
             let v = documentSnapshot.data();
             v.id = documentSnapshot.id;
-            // console.log(
-            //   'User ID: ',
-            //   documentSnapshot.id,
-            //   documentSnapshot.data(),
-            //   //To grab a particular field use
-            //   //documentSnapshot.data().userEmail,
-            // );
+            console.log(
+              'More data User ID: ',
+              documentSnapshot.id,
+              documentSnapshot.data(),
+              //To grab a particular field use
+              //documentSnapshot.data().userEmail,
+            );
             setFetchedPosts(fetchedPosts => [...fetchedPosts, v]);
 
             count++;
             if (count == total) {
               setLoading(false);
-              console.log(':runing');
+              console.log(':running moreeee');
             }
           });
         }
-
         setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
         querySnapshot.size == 0 ? setLastPost(true) : setLastPost(false);
       });
   };
-  useEffect(() => {
-    // showToastSuccess('Login Successful');
 
-    searchPosts();
-  }, []);
   const renderLoaderPosts = () => {
     return loading && !lastPost ? (
       <View style={styles.loaderStyle}>
@@ -594,14 +577,15 @@ const ExplorePage = () => {
                 setOnEndReachedCalledDuringMomentum(false);
               }}
               onEndReached={() => {
-                if (!onEndReachedCalledDuringMomentum && !lastPost) {
-                  console.log(
-                    '0000000000000000000000000000000000000000000----------------------------------------',
-                  );
-                  handleEndReached(); // LOAD MORE DATA
-                  setOnEndReachedCalledDuringMomentum(true);
-                }
+                // console.log('check----------------------------------------');
+                // if (!onEndReachedCalledDuringMomentum && !lastPost) {
+                console.log(
+                  '0000000000000000000000000000000000000000000----------------------------------------',
+                );
+                handleEndReached(); // LOAD MORE DATA
+                setOnEndReachedCalledDuringMomentum(true);
               }}
+              // }
               ListFooterComponent={
                 !lastPost ? (
                   renderLoaderPosts
