@@ -437,6 +437,7 @@ const ExploreTest = () => {
                   setpostsSelected(false);
                   setjobsSelected(false);
                   setpeopleSelected(true);
+                  setSearchSelected(false);
                   console.log('testing', peopleSelected);
                 }}>
                 <MaterialCommunityIcons
@@ -455,6 +456,7 @@ const ExploreTest = () => {
                   setpostsSelected(false);
                   setjobsSelected(false);
                   setpeopleSelected(true);
+                  setSearchSelected(false);
                   console.log('posts', postsSelected);
                 }}>
                 <MaterialCommunityIcons
@@ -539,6 +541,7 @@ const ExploreTest = () => {
                   setpostsSelected(false);
                   setjobsSelected(true);
                   setpeopleSelected(false);
+                  setSearchSelected(false);
                   console.log(setjobsSelected);
                 }}>
                 <MaterialCommunityIcons
@@ -960,7 +963,7 @@ const ExploreTest = () => {
                         {item.jobCity}
                         {item.jobLocation}
                         {item.role}
-                        {item.title}
+                        {/* {item.title} */}
                       </Text>
                       <Text
                         style={{
@@ -975,7 +978,10 @@ const ExploreTest = () => {
                         {item.lastName}
                         {item.name}
                       </Text>
-                      <Text>{item.jobCompany}</Text>
+                      <Text>
+                        {item.jobCompany}
+                        {item.userEmail}
+                      </Text>
                       <Text
                         style={{
                           color: '#469597',
@@ -984,6 +990,8 @@ const ExploreTest = () => {
                           marginBottom: '5%',
                         }}>
                         {item.jobMode}
+                        {item.skills}
+                        {/* {item.skills.join(', ')} */}
                       </Text>
                       {/* <Text style={{color: '#469597', fontSize: 15}}>
                         {item.experience}
