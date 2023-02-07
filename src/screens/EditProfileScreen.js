@@ -27,9 +27,13 @@ import ImageModal from 'react-native-image-modal';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {db, dbFirestore} from '../Firebase/Config';
+import {changeUserProfile, addSkillRedux} from '../store/action';
 
 export default function EditProfileScreen() {
   const storeData = useSelector(state => state);
+  const dispatch = useDispatch();
+
+  const [extraData, setExtraData] = useState(new Date());
 
   const [titleDisplay, setTitleDisplay] = useState(false);
   const [title, setTitle] = useState(storeData?.title);
@@ -56,9 +60,47 @@ export default function EditProfileScreen() {
   const [singleFile, setSingleFile] = useState();
   const [uploaded, setUploaded] = useState(false);
 
+  const updateArray = value => {
+    // console.log(field);
+    console.log(value);
+    console.log(storeData.userEmail);
+    // var object = {};
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', storeData.userEmail)
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(documentSnapshot.id);
+          dbFirestore()
+            .doc('Users/' + documentSnapshot.id)
+            .update({
+              skills: dbFirestore.FieldValue.arrayUnion(value),
+            })
+            .then(() => {
+              dispatch(addSkillRedux(value));
+              alert('skill added!');
+              setExtraData(new Date());
+
+              console.log('skills updated');
+            });
+        });
+      })
+      .catch(error => {
+        alert(error);
+
+        // setFlag(true);
+      });
+  };
+
   const updateField = (field, value) => {
     console.log(field);
     console.log(value);
+    console.log(storeData.userEmail);
     var object = {};
     dbFirestore()
       .collection('Users')
@@ -78,6 +120,8 @@ export default function EditProfileScreen() {
               [field]: value,
             })
             .then(() => {
+              dispatch(changeUserProfile(field, value));
+
               alert('User updated');
               console.log('User updated!');
             });
@@ -89,6 +133,7 @@ export default function EditProfileScreen() {
         // setFlag(true);
       });
   };
+
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
@@ -129,7 +174,7 @@ export default function EditProfileScreen() {
           marginVertical: '5%',
           //   justifyContent: 'center',
         }}>
-        <TouchableOpacity style={{}}>
+        <TouchableOpacity style={{}} onPress={() => console.log(storeData)}>
           <Ionicons
             name="chevron-back-circle-sharp"
             size={35}
@@ -290,6 +335,7 @@ export default function EditProfileScreen() {
             // numColumns={4}
             key={'_'}
             data={skills}
+            extraData={extraData}
             renderItem={({item}) => (
               <View
               // style={{marginStart: Dimensions.get('window').width * 0.03}}
@@ -357,6 +403,7 @@ export default function EditProfileScreen() {
           </View>
 
           <TouchableOpacity
+            onPress={() => updateArray(addSkill)}
             style={{
               justifyContent: 'center',
               alignItems: 'center',
@@ -454,6 +501,7 @@ export default function EditProfileScreen() {
           </View>
 
           <TouchableOpacity
+            onPress={() => updateField('description', description)}
             style={{
               justifyContent: 'center',
               alignItems: 'center',

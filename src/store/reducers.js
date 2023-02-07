@@ -1,4 +1,10 @@
-import {ADDITION, SUBTRACTION, SETINITIALLOGIN} from './actionTypes';
+import {
+  ADDITION,
+  SUBTRACTION,
+  SETINITIALLOGIN,
+  CHANGEUSERPROFILE,
+  ADDSKILLREDUX,
+} from './actionTypes';
 
 const initialState = Object;
 export const mainReducer = (state = initialState, action) => {
@@ -6,6 +12,14 @@ export const mainReducer = (state = initialState, action) => {
     case SETINITIALLOGIN: {
       console.log('yahan se araha hey store se: ', action.payload);
       return action.payload;
+    }
+
+    case CHANGEUSERPROFILE: {
+      return {...state, [action.payload]: action.payload2};
+    }
+
+    case ADDSKILLREDUX: {
+      return {...state, skills: [...state.skills, action.payload]};
     }
 
     case ADDITION:
