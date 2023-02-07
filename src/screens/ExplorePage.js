@@ -55,260 +55,257 @@ const ExplorePage = () => {
     onEndReachedCalledDuringMomentumJob,
     setOnEndReachedCalledDuringMomentumJob,
   ] = useState(true);
-
+  let actionSheet = createRef();
   const show = item => {
-    // console.log(item);
     setActionParameters(item);
     console.log('acrtions is, ', actionParameters);
     actionSheet.current.show();
   };
-  let actionSheet = createRef();
 
-  const searchJobs = async () => {
-    setJobLoading(true);
-    // const snapshot = await jobQuery.get();
-    // setLastVisibleJobs(snapshot.docs[snapshot.docs.length - 1]);
-    // const newJobData = snapshot.docs.map(doc => doc.data());
-    // setJobData(jobData.concat(newJobData));
-    // console.log('job data is, ', jobData);
+  // const searchJobs = async () => {
+  //   dbFirestore()
+  //     .collection('Jobs')
+  //     .orderBy('createdAt', 'desc')
 
-    dbFirestore()
-      .collection('Jobs')
-      .orderBy('createdAt', 'desc')
-      .limit(2)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Jobs: ', querySnapshot.size);
+  //     .get()
+  //     .then(querySnapshot => {
+  //       console.log('Total Jobs: ', querySnapshot.size);
 
-        var total = querySnapshot.size;
-        let count = 0;
-        if (total == 0) {
-          setJobLoader(false);
-        } else {
-          querySnapshot.forEach(documentSnapshot => {
-            console.log('hgccgcfgcgfc');
+  //       var total = querySnapshot.size;
+  //       let count = 0;
+  //       if (total == 0) {
+  //         setJobLoader(false);
+  //       } else {
+  //         querySnapshot.forEach(documentSnapshot => {
+  //           console.log('hgccgcfgcgfc');
 
-            let v = documentSnapshot.data();
-            v.id = documentSnapshot.id;
-            // console.log(
-            //   'User ID: ',
-            //   documentSnapshot.id,
-            //   documentSnapshot.data(),
-            //   //To grab a particular field use
-            //   //documentSnapshot.data().userEmail,
-            // );
-            setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
+  //           let v = documentSnapshot.data();
+  //           v.id = documentSnapshot.id;
 
-            count++;
-            if (count == total) {
-              setJobLoader(false);
-              console.log(':runing');
-            }
-          });
-        }
-        setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
-      });
-    // setJobLoading(false);
-  };
+  //           setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
+
+  //           count++;
+  //           if (count == total) {
+  //             setJobLoader(false);
+  //             console.log(':runing');
+  //           }
+  //         });
+  //       }
+  //     });
+  // };
+
+  // const searchMoreJobs = async () => {
+  //   setJobLoading(true);
+
+  //   dbFirestore()
+  //     .collection('Jobs')
+  //     .orderBy('createdAt', 'desc')
+  //     .startAfter(lastVisibleJobs)
+  //     .limit(1)
+  //     .get()
+  //     .then(querySnapshot => {
+  //       console.log('Total Jobs: ', querySnapshot.size);
+
+  //       var total = querySnapshot.size;
+  //       let count = 0;
+  //       if (total == 0) {
+  //         setJobLoading(false);
+  //       } else {
+  //         querySnapshot.forEach(documentSnapshot => {
+  //           console.log('hgccgcfgcgfc');
+
+  //           let v = documentSnapshot.data();
+  //           v.id = documentSnapshot.id;
+
+  //           setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
+
+  //           count++;
+  //           if (count == total) {
+  //             setJobLoading(false);
+  //             console.log(':runing');
+  //           }
+  //         });
+  //       }
+  //       setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
+  //       querySnapshot.size == 0 ? setLastJob(true) : setLastJob(false);
+  //     });
+  // };
+
+  // const handleEndReachedJobs = () => {
+  //   setJobLoading(true);
+  //   console.log('end reached!!');
+
+  //   searchMoreJobs();
+  // };
+  // const renderLoaderJobs = () => {
+  //   return jobLoading && !lastJob ? (
+  //     <View style={styles.loaderStyle}>
+  //       <ActivityIndicator size="large" color="#aaa" />
+  //     </View>
+  //   ) : null;
+  // };
+
+  // const [search, setSearch] = useState('');
+
+  // useEffect(() => {
+  //   let subscriber;
+  //   if (search) {
+  //     subscriber = dbFirestore()
+  //       .collection('myCollection')
+  //       .where(dbFirestore.FieldPath.documentId(), '>=', search)
+  //       .where(dbFirestore.FieldPath.documentId(), '<=', `${search}\uf8ff`)
+  //       .onSnapshot(querySnapshot => {
+  //         const updatedData = [];
+  //         querySnapshot.forEach(doc => {
+  //           updatedData.push({ id: doc.id, ...doc.data() });
+  //         });
+  //         setData(updatedData);
+  //         setLoading(false);
+  //       });
+  //   } else {
+  //     subscriber = dbFirestore()
+  //       .collection('myCollection')
+  //       .onSnapshot(querySnapshot => {
+  //         const updatedData = [];
+  //         querySnapshot.forEach(doc => {
+  //           updatedData.push({ id: doc.id, ...doc.data() });
+  //         });
+  //         setData(updatedData);
+  //         setLoading(false);
+  //       });
+  //   }
+
+  //   return () => subscriber();
+  // }, [search]);
+
   useEffect(() => {
-    searchJobs();
-  }, []);
-  const searchMoreJobs = async () => {
-    setJobLoading(true);
-
-    dbFirestore()
-      .collection('Jobs')
-      .orderBy('createdAt', 'desc')
-      .startAfter(lastVisibleJobs)
-      .limit(1)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Jobs: ', querySnapshot.size);
-
-        var total = querySnapshot.size;
-        let count = 0;
-        if (total == 0) {
-          setJobLoading(false);
-        } else {
-          querySnapshot.forEach(documentSnapshot => {
-            console.log('hgccgcfgcgfc');
-
-            let v = documentSnapshot.data();
-            v.id = documentSnapshot.id;
-            // console.log(
-            //   'User ID: ',
-            //   documentSnapshot.id,
-            //   documentSnapshot.data(),
-            //   //To grab a particular field use
-            //   //documentSnapshot.data().userEmail,
-            // );
-            setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
-
-            count++;
-            if (count == total) {
-              setJobLoading(false);
-              console.log(':runing');
-            }
-          });
-        }
-        setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
-        querySnapshot.size == 0 ? setLastJob(true) : setLastJob(false);
-      });
-  };
-
-  const handleEndReachedJobs = () => {
-    setJobLoading(true);
-    console.log('end reached!!');
-    // console.log(lastVisibleJobs);
-
-    searchMoreJobs();
-  };
-  const renderLoaderJobs = () => {
-    return jobLoading && !lastJob ? (
-      <View style={styles.loaderStyle}>
-        <ActivityIndicator size="large" color="#aaa" />
-      </View>
-    ) : null;
-  };
-  useEffect(() => {
-    searchJobs();
-  }, []);
-  useEffect(() => {
-    // showToastSuccess('Login Successful');
-
-    searchPosts();
-  }, []);
-  const searchPosts = async () => {
-    setLoading(true);
-
-    dbFirestore()
-      .collection('Posts')
-      // .orderBy('id', 'desc')
-      .limit(2)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total posts: ', querySnapshot.size);
-
-        var total = querySnapshot.size;
-        let count = 0;
-
-        if (total == 0) {
-          setPostLoader(false);
-        } else {
-          querySnapshot.forEach(documentSnapshot => {
-            let v = documentSnapshot.data();
-            v.id = documentSnapshot.id;
-            console.log(
-              'User ID: ',
-              documentSnapshot.id,
-              documentSnapshot.data(),
-              //To grab a particular field use
-              //documentSnapshot.data().userEmail,
-            );
-            setFetchedPosts(fetchedPosts => [...fetchedPosts, v]);
-
-            count++;
-            if (count == total) {
-              setPostLoader(false);
-              console.log(':runing');
-            }
-          });
-        }
-
-        setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
-      });
-  };
-  const searchMorePosts = async () => {
-    setLoading(true);
-    dbFirestore()
-      .collection('Posts')
-      .startAfter(lastVisible)
-      .limit(2)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total posts: ', querySnapshot.size);
-
-        var total = querySnapshot.size;
-        let count = 0;
-
-        if (total == 0) {
-          console.log('yahan pe aye!!');
-          setLoading(false);
-        } else {
-          querySnapshot.forEach(documentSnapshot => {
-            let v = documentSnapshot.data();
-            v.id = documentSnapshot.id;
-            console.log(
-              'More data User ID: ',
-              documentSnapshot.id,
-              documentSnapshot.data(),
-              //To grab a particular field use
-              //documentSnapshot.data().userEmail,
-            );
-            setFetchedPosts(fetchedPosts => [...fetchedPosts, v]);
-
-            count++;
-            if (count == total) {
-              setLoading(false);
-              console.log(':running moreeee');
-            }
-          });
-        }
-        setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
-        querySnapshot.size == 0 ? setLastPost(true) : setLastPost(false);
-      });
-  };
-
-  const renderLoaderPosts = () => {
-    return loading && !lastPost ? (
-      <View style={styles.loaderStyle}>
-        <ActivityIndicator size="large" color="#aaa" />
-      </View>
-    ) : null;
-  };
-  const handleEndReached = () => {
-    // alert('reached!!');
-    setLoading(true);
-    console.log('end posts reached!!');
-    // console.log(lastVisible);
-
-    searchMorePosts();
-    // setOnEndReachedCalledDuringMomentum(true);
-  };
-
-  const searchPeople = async () => {
-    await dbFirestore()
+    const subscriber = dbFirestore()
       .collection('Users')
-      // Filter results
-      // .where('userEmail', '==', 'habibafaisal8@gmail.com')
-      // .where('firstName', '==', 'Habiba')
-      .get()
-      .then(querySnapshot => {
-        console.log('Total posts: ', querySnapshot.size);
 
-        querySnapshot.forEach(documentSnapshot => {
-          let v = documentSnapshot.data();
-          v.id = documentSnapshot.id;
-          console.log(
-            'User ID: ',
-            documentSnapshot.id,
-            documentSnapshot.data(),
-            setFetchedUsers(fetchedUsers => [...fetchedUsers, v]),
-            //To grab a particular field use
-            //documentSnapshot.data().userEmail,
-          );
+      // .get()
+      .onSnapshot(querySnapshot => {
+        const updatedData = [];
+        querySnapshot.forEach(doc => {
+          updatedData.push({id: doc.id, ...doc.data()});
         });
+        setFetchedUsers(updatedData);
+        setLoading(false);
       });
-  };
-  useEffect(() => {
-    searchPeople();
+
+    return () => subscriber();
   }, []);
 
+  useEffect(() => {
+    const subscriber = dbFirestore()
+      .collection('Posts')
+      .onSnapshot(querySnapshot => {
+        const updatedData = [];
+        querySnapshot.forEach(doc => {
+          updatedData.push({id: doc.id, ...doc.data()});
+        });
+        setFetchedPosts(updatedData);
+        setLoading(false);
+      });
+
+    return () => subscriber();
+  }, []);
+
+  useEffect(() => {
+    const subscriber = dbFirestore()
+      .collection('Jobs')
+      .onSnapshot(querySnapshot => {
+        const updatedData = [];
+        querySnapshot.forEach(doc => {
+          updatedData.push({id: doc.id, ...doc.data()});
+        });
+        setFetchedJobs(updatedData);
+        setLoading(false);
+      });
+
+    return () => subscriber();
+  }, []);
+  // useEffect(() => {
+  //   searchPeople();
+  // }, []);
+  // useEffect(() => {
+  //   searchJobs();
+  // }, []);
+  // useEffect(() => {
+  //   searchPosts();
+  // }, []);
+
+  // const search = () => {
+  //   setSearchSelected(true);
+
+  //   if (peopleSelected) {
+  //     const query = dbFirestore().collection('Users');
+  //     query.get().then(querySnapshot => {
+  //       const results = [];
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         const data = documentSnapshot.data();
+  //         const allFields = Object.values(data).join(' ');
+  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+  //           results.push(data);
+  //         }
+  //       });
+  //       setSearchResults(results);
+  //       setpostsSelected(false);
+  //       setjobsSelected(false);
+  //       setpeopleSelected(false);
+  //     });
+  //   }
+  //   if (postsSelected) {
+  //     const query = dbFirestore().collection('Posts');
+  //     query.get().then(querySnapshot => {
+  //       const results = [];
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         const data = documentSnapshot.data();
+  //         const allFields = Object.values(data).join(' ');
+  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+  //           results.push(data);
+  //         }
+  //       });
+  //       setSearchResults(results);
+  //       setpostsSelected(false);
+  //       setjobsSelected(false);
+  //       setpeopleSelected(false);
+  //     });
+  //   }
+  //   if (jobsSelected) {
+  //     const query = dbFirestore().collection('Jobs');
+  //     query.get().then(querySnapshot => {
+  //       const results = [];
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         const data = documentSnapshot.data();
+  //         const allFields = Object.values(data).join(' ');
+  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+  //           results.push(data);
+  //         }
+  //       });
+  //       setSearchResults(results);
+  //       setpostsSelected(false);
+  //       setjobsSelected(false);
+  //       setpeopleSelected(false);
+  //     });
+  //   }
+  // };
+
+  const TitleTag = () => {
+    if (postsSelected) {
+      return <Text style={styles.titleTextStyle}>Posts</Text>;
+    } else if (peopleSelected) {
+      return <Text style={styles.titleTextStyle}>People</Text>;
+    } else if (jobsSelected) {
+      return <Text style={styles.titleTextStyle}>Jobs</Text>;
+    } else if (searchSelected) {
+      return <Text style={styles.titleTextStyle}>Search Results</Text>;
+    } else {
+      setpeopleSelected(true);
+      return <Text style={styles.titleTextStyle}>People</Text>;
+    }
+  };
   const search = () => {
     setSearchSelected(true);
-    // setpostsSelected(false);
-    // setjobsSelected(false);
-    // setpeopleSelected(false);
 
     if (peopleSelected) {
       const query = dbFirestore().collection('Users');
@@ -326,7 +323,10 @@ const ExplorePage = () => {
         setjobsSelected(false);
         setpeopleSelected(false);
       });
+    } else {
+      setSearchResults([]);
     }
+
     if (postsSelected) {
       const query = dbFirestore().collection('Posts');
       query.get().then(querySnapshot => {
@@ -343,7 +343,10 @@ const ExplorePage = () => {
         setjobsSelected(false);
         setpeopleSelected(false);
       });
+    } else {
+      setSearchResults([]);
     }
+
     if (jobsSelected) {
       const query = dbFirestore().collection('Jobs');
       query.get().then(querySnapshot => {
@@ -360,31 +363,8 @@ const ExplorePage = () => {
         setjobsSelected(false);
         setpeopleSelected(false);
       });
-    }
-    // setpostsSelected(false);
-    // setjobsSelected(false);
-    // setpeopleSelected(false);
-  };
-
-  // useEffect(() => TitleTag);
-  const TitleTag = () => {
-    if (postsSelected) {
-      return <Text style={styles.titleTextStyle}>Posts</Text>;
-    } else if (peopleSelected) {
-      return <Text style={styles.titleTextStyle}>People</Text>;
-    } else if (jobsSelected) {
-      return <Text style={styles.titleTextStyle}>Jobs</Text>;
-    } else if (searchSelected) {
-      return <Text style={styles.titleTextStyle}>Search Results</Text>;
     } else {
-      setpeopleSelected(true);
-      return <Text style={styles.titleTextStyle}>People</Text>;
-      // return
-      // (
-      //   <Text style={styles.titleTextStyle_italic}>
-      //     What do you want to search for?
-      //   </Text>
-      // );
+      setSearchResults([]);
     }
   };
 
@@ -402,10 +382,6 @@ const ExplorePage = () => {
             fontWeight: 'bold',
             textAlign: 'center',
             marginTop: '5%',
-            // marginHorizontal: Dimensions.get('window').width / 5,
-            // marginEnd: '30%',
-
-            // marginHorizontal: '25%',
           }}>
           Explore
         </Text>
@@ -417,7 +393,7 @@ const ExplorePage = () => {
             alignItems: 'center',
             marginLeft: '3%',
             marginTop: '3%',
-            // marginRight: '5%',
+
             justifyContent: 'space-between',
 
             height: 60,
@@ -430,7 +406,6 @@ const ExplorePage = () => {
             placeholder="Search here..."
             style={{marginLeft: '5%'}}
             value={searchValue}
-            // onSubmitEditing={search}
             onChangeText={searchValue => setSearchValue(searchValue)}
           />
 
@@ -468,8 +443,6 @@ const ExplorePage = () => {
                   name="abacus"
                   size={50}
                   color="white"
-                  // backgroundColor="green"
-                  // style={styles.iconStyle}
                   style={styles.icon}
                   backgroundColor="blue"
                 />
@@ -488,8 +461,6 @@ const ExplorePage = () => {
                   name="abacus"
                   size={50}
                   color="#4CA6A8"
-                  // backgroundColor="green"
-                  // style={styles.iconStyle}
                   style={styles.icon}
                 />
               </TouchableOpacity>
@@ -513,8 +484,6 @@ const ExplorePage = () => {
                   name="abacus"
                   size={50}
                   color="white"
-                  // backgroundColor="green"
-                  // style={styles.iconStyle}
                   style={styles.icon}
                   backgroundColor="blue"
                 />
@@ -534,8 +503,6 @@ const ExplorePage = () => {
                   name="abacus"
                   size={50}
                   color="#4CA6A8"
-                  // backgroundColor="green"
-                  // style={styles.iconStyle}
                   style={styles.icon}
                 />
               </TouchableOpacity>
@@ -560,8 +527,6 @@ const ExplorePage = () => {
                   name="abacus"
                   size={50}
                   color="white"
-                  // backgroundColor="green"
-                  // style={styles.iconStyle}
                   style={styles.icon}
                   backgroundColor="blue"
                 />
@@ -580,8 +545,6 @@ const ExplorePage = () => {
                   name="abacus"
                   size={50}
                   color="#4CA6A8"
-                  // backgroundColor="green"
-                  // style={styles.iconStyle}
                   style={styles.icon}
                 />
               </TouchableOpacity>
@@ -652,7 +615,6 @@ const ExplorePage = () => {
               keyExtractor={item => item.id}
             />
           ) : (
-            // <Text>other</Text>
             <></>
           )}
         </View>
@@ -669,48 +631,15 @@ const ExplorePage = () => {
               showsVerticalScrollIndicator={false}
               data={fetchedPosts}
               extraData={extraData}
-              // initialNumToRender={2}
               onEndReachedThreshold={0.1}
               scrollEventThrottle={150}
               keyExtractor={item => item.id}
-              onMomentumScrollBegin={() => {
-                setOnEndReachedCalledDuringMomentum(false);
-              }}
-              onEndReached={() => {
-                // console.log('check----------------------------------------');
-                // if (!onEndReachedCalledDuringMomentum && !lastPost) {
-                console.log(
-                  '0000000000000000000000000000000000000000000----------------------------------------',
-                );
-                handleEndReached(); // LOAD MORE DATA
-                setOnEndReachedCalledDuringMomentum(true);
-              }}
-              // }
-              ListFooterComponent={
-                !lastPost ? (
-                  renderLoaderPosts
-                ) : (
-                  <Text
-                    style={{
-                      alignSelf: 'center',
-                      fontSize: 20,
-                      color: '#000000',
-                      marginBottom: 90,
-                      textAlign: 'center',
-                    }}>
-                    You Are Up To Date / All Posts Fetched And Displayed
-                  </Text>
-                )
-              }
               renderItem={({item}) => {
                 console.log('Id is : ', item);
                 let likeColor = '';
 
-                // console.log(item.likedBy);
-
                 if (item.likedBy.includes(emailAddressOfCurrentUser)) {
                   likeColor = '#000000';
-                  // console.log('running');
                 } else {
                   likeColor = '#ffffff';
                 }
@@ -766,20 +695,8 @@ const ExplorePage = () => {
                     </View>
 
                     <SliderBox
-                      // onCurrentImagePressed={index => ImagePressed()}
                       parentWidth={Dimensions.get('window').width * 0.9}
                       ImageComponentStyle={{borderRadius: 16}}
-                      // paginationBoxStyle={styles.sliderBoxPageStyle}
-                      // ImageComponentStyle={styles.sliderBoxImageStyle}
-                      // dotStyle={{
-                      //   width: 10,
-                      //   height: 10,
-                      //   borderRadius: 5,
-                      //   marginBottom: 20,
-                      //   marginHorizontal: 0,
-                      //   padding: 0,
-                      //   margin: 0,
-                      // }}
                       images={item.images}
                       sliderBoxHeight={Dimensions.get('window').height * 0.3}
                     />
@@ -832,8 +749,6 @@ const ExplorePage = () => {
                                 e => e !== emailAddressOfCurrentUser,
                               );
                               setExtraData(new Date());
-
-                              // likeColor = '#ffffff';
                             } else {
                               console.log('ye work');
                               dbFirestore()
@@ -854,8 +769,6 @@ const ExplorePage = () => {
 
                               setExtraData(new Date());
                             }
-                            // setFetchedPosts([]);
-                            // searchPosts();
                           }}
                           style={{
                             paddingHorizontal: '8%',
@@ -864,7 +777,6 @@ const ExplorePage = () => {
                             justifyContent: 'center',
                             alignItems: 'center',
                             borderRadius: 8,
-                            // width: Dimensions.get('window').width * 0.2,
                           }}>
                           <AntDesign name="like1" size={25} color={likeColor} />
                         </TouchableOpacity>
@@ -887,7 +799,7 @@ const ExplorePage = () => {
                             justifyContent: 'center',
                             alignItems: 'center',
                             borderRadius: 8,
-                            // width: Dimensions.get('window').width * 0.2,
+                            
                           }}>
                           <FontAwesome name="comment" size={25} color="#ffffff" />
                         </TouchableOpacity>
@@ -898,176 +810,6 @@ const ExplorePage = () => {
               }}
             />
           ) : (
-            // <FlatList
-            //   showsVerticalScrollIndicator={false}
-            //   data={posts}
-            //   keyExtractor={item => item.id}
-            //   ListFooterComponent={<View style={{height: 60}}></View>}
-            //   renderItem={({item}) => {
-            //     let likeColor = '';
-
-            //     console.log(item.likedBy);
-
-            //     if (item.likedBy.includes(profileName)) {
-            //       likeColor = '#000000';
-            //       console.log('running');
-            //     } else {
-            //       likeColor = '#ffffff';
-            //     }
-
-            //     return (
-            //       <View
-            //         style={{
-            //           // elevation: 1000,
-            //           // backgroundColor: '#ffffff',
-            //           marginHorizontal: Dimensions.get('window').width * 0.05,
-            //           marginVertical: Dimensions.get('window').height * 0.01,
-            //           borderRadius: 16,
-            //         }}>
-            //         <View
-            //           style={{
-            //             flexDirection: 'row',
-            //             marginVertical: Dimensions.get('window').height * 0.01,
-            //           }}>
-            //           <Image
-            //             source={{uri: item.imageUrl}}
-            //             style={{
-            //               width: 60,
-            //               height: 60,
-            //               borderRadius: 64,
-            //               marginLeft: Dimensions.get('window').width * 0.02,
-            //             }}
-            //           />
-            //           <View
-            //             style={{
-            //               marginLeft: Dimensions.get('window').width * 0.05,
-            //             }}>
-            //             <Text
-            //               style={{
-            //                 color: '#5BA199',
-            //                 fontWeight: 'bold',
-            //                 marginBottom:
-            //                   Dimensions.get('window').height * 0.005,
-            //                 fontSize: 16,
-            //               }}>
-            //               {item.name}
-            //             </Text>
-            //             <Text
-            //               style={{
-            //                 color: '#5BA199',
-            //                 marginBottom:
-            //                   Dimensions.get('window').height * 0.005,
-            //                 fontSize: 12,
-            //               }}>
-            //               {item.title}
-            //             </Text>
-            //             <Text style={{color: '#777777', fontSize: 12}}>
-            //               {item.datePosted}
-            //             </Text>
-            //           </View>
-            //           {/* looks fine here */}
-            //           <TouchableOpacity onPress={() => show(item)}>
-            //             <MaterialCommunityIcons
-            //               name="dots-vertical"
-            //               size={30}
-            //               color="#000000"
-            //               style={{
-            //                 marginLeft: Dimensions.get('window').width * 0.09,
-            //                 marginTop: Dimensions.get('window').height * 0.005,
-            //               }}
-            //             />
-            //           </TouchableOpacity>
-            //         </View>
-
-            //         <SliderBox
-            //           // onCurrentImagePressed={index => ImagePressed()}
-            //           parentWidth={Dimensions.get('window').width * 0.9}
-            //           ImageComponentStyle={{borderRadius: 16}}
-            //           // paginationBoxStyle={styles.sliderBoxPageStyle}
-            //           // ImageComponentStyle={styles.sliderBoxImageStyle}
-            //           // dotStyle={{
-            //           //   width: 10,
-            //           //   height: 10,
-            //           //   borderRadius: 5,
-            //           //   marginBottom: 20,
-            //           //   marginHorizontal: 0,
-            //           //   padding: 0,
-            //           //   margin: 0,
-            //           // }}
-            //           images={item.images}
-            //           sliderBoxHeight={Dimensions.get('window').height * 0.3}
-            //         />
-
-            //         <Text
-            //           style={{
-            //             color: '#000000',
-            //             width: '95%',
-            //             marginHorizontal: '2.5%',
-            //             marginVertical: '2%',
-            //           }}>
-            //           {item.descriptionText}
-            //         </Text>
-
-            //         <View
-            //           style={{
-            //             flexDirection: 'row',
-            //             justifyContent: 'space-evenly',
-            //             marginBottom: '5%',
-            //           }}>
-            //           <View>
-            //             <Text
-            //               style={{
-            //                 textAlign: 'center',
-            //                 color: '#469597',
-            //                 fontWeight: 'bold',
-            //               }}>
-            //               {item.likedBy.length} Likes
-            //             </Text>
-            //             <TouchableOpacity
-            //               style={{
-            //                 paddingHorizontal: '8%',
-            //                 paddingVertical: '8%',
-            //                 backgroundColor: '#5BA199',
-            //                 justifyContent: 'center',
-            //                 alignItems: 'center',
-            //                 borderRadius: 8,
-            //                 // width: Dimensions.get('window').width * 0.2,
-            //               }}>
-            //               <AntDesign name="like1" size={25} color={likeColor} />
-            //             </TouchableOpacity>
-            //           </View>
-
-            //           <View>
-            //             <Text
-            //               style={{
-            //                 textAlign: 'center',
-            //                 color: '#469597',
-            //                 fontWeight: 'bold',
-            //               }}>
-            //               {item.commentedBy.length} Comments
-            //             </Text>
-            //             <TouchableOpacity
-            //               style={{
-            //                 paddingHorizontal: '8%',
-            //                 paddingVertical: '8%',
-            //                 backgroundColor: '#5BA199',
-            //                 justifyContent: 'center',
-            //                 alignItems: 'center',
-            //                 borderRadius: 8,
-            //                 // width: Dimensions.get('window').width * 0.2,
-            //               }}>
-            //               <FontAwesome
-            //                 name="comment"
-            //                 size={25}
-            //                 color="#ffffff"
-            //               />
-            //             </TouchableOpacity>
-            //           </View>
-            //         </View>
-            //       </View>
-            //     );
-            //   }}
-            // />
             <></>
           )}
         </View>
@@ -1078,41 +820,25 @@ const ExplorePage = () => {
           style={{
             marginHorizontal: '3%',
             marginVertical: Dimensions.get('window').height * 0.00009,
-            // marginVertical: '%'
           }}>
           {jobsSelected ? (
             <FlatList
-              // horizontal={true}
-              // showsHorizontalScrollIndicator={false}
-              ListFooterComponent={renderLoaderJobs}
               data={fetchedJobs}
-              keyExtractor={item => item.id}
-              onEndReachedThreshold={0.1}
-              scrollEventThrottle={150}
-              onMomentumScrollBegin={() => {
-                setOnEndReachedCalledDuringMomentumJob(false);
-              }}
-              onEndReached={() => {
-                console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
-                if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
-                  console.log(
-                    '0000000000000000000000000000000000000000000----------------------------------------',
-                  );
-                  handleEndReachedJobs(); // LOAD MORE DATA
-                  setOnEndReachedCalledDuringMomentumJob(true);
-                }
-              }}
               renderItem={({item}) => (
                 <View
                   style={{
                     backgroundColor: '#BBC6C8',
+
                     borderRadius: 16,
+
                     marginHorizontal: Dimensions.get('window').width * 0.01,
+                    marginBottom: Dimensions.get('window').height * 0.02,
                   }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       marginTop: Dimensions.get('window').height * 0.02,
+
                       marginHorizontal: Dimensions.get('window').width * 0.05,
                     }}>
                     <Image
@@ -1184,101 +910,9 @@ const ExplorePage = () => {
                   </View>
                 </View>
               )}
+              keyExtractor={item => item.id}
             />
           ) : (
-            // <FlatList
-            //   horizontal={false}
-            //   showsHorizontalScrollIndicator={false}
-            //   data={jobs}
-            //   ListFooterComponent={<View style={{height: 60}}></View>}
-            //   renderItem={({item}) => (
-            //     <View
-            //       style={{
-            //         backgroundColor: '#BBC6C8',
-            //         // padding: '3%',
-            //         borderRadius: 16,
-
-            //         marginVertical: Dimensions.get('window').width * 0.01,
-            //         // elevation: 5,
-            //       }}>
-            //       <View
-            //         style={{
-            //           flexDirection: 'row',
-            //           marginTop: Dimensions.get('window').height * 0.02,
-            //           marginHorizontal: Dimensions.get('window').width * 0.05,
-            //         }}>
-            //         <Image
-            //           style={{
-            //             height: 60,
-            //             width: 60,
-            //             borderRadius: 16,
-            //             // marginLeft: Dimensions.get('window').width * 0.1,
-            //           }}
-            //           source={{
-            //             uri: item.postedByPic,
-            //           }}
-            //         />
-            //         <View
-            //           style={{
-            //             marginLeft: Dimensions.get('window').width * 0.03,
-            //           }}>
-            //           <Text style={{fontSize: 12}}>
-            //             {item.postedBy} posted a new job
-            //           </Text>
-            //           <Text
-            //             style={{
-            //               fontSize: 18,
-            //               fontWeight: 'bold',
-            //               marginVertical:
-            //                 Dimensions.get('window').height * 0.005,
-            //               color: '#000000',
-            //             }}>
-            //             {item.title}
-            //           </Text>
-            //           <Text>{item.company}</Text>
-            //         </View>
-
-            //         <TouchableOpacity>
-            //           <MaterialCommunityIcons
-            //             name="dots-vertical"
-            //             size={25}
-            //             color="#000000"
-            //             style={{
-            //               marginLeft: Dimensions.get('window').width * 0.05,
-            //             }}
-            //           />
-            //         </TouchableOpacity>
-            //       </View>
-
-            //       <View
-            //         style={{
-            //           flexDirection: 'row',
-            //           justifyContent: 'space-between',
-            //           alignItems: 'center',
-            //           marginHorizontal: Dimensions.get('window').width * 0.05,
-            //           marginVertical: Dimensions.get('window').height * 0.02,
-            //         }}>
-            //         <TouchableOpacity
-            //           style={{
-            //             backgroundColor: '#5BA199',
-            //             paddingHorizontal:
-            //               Dimensions.get('window').width * 0.15,
-            //             paddingVertical: Dimensions.get('window').height * 0.01,
-            //             borderRadius: 16,
-            //           }}>
-            //           <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
-            //             Apply
-            //           </Text>
-            //         </TouchableOpacity>
-
-            //         <Text style={{color: '#469597', fontSize: 16}}>
-            //           {item.city},{item.country}
-            //         </Text>
-            //       </View>
-            //     </View>
-            //   )}
-            //   keyExtractor={item => item.id}
-            // />
             <></>
           )}
         </View>
@@ -1290,7 +924,6 @@ const ExplorePage = () => {
           style={{
             marginHorizontal: '3%',
             marginVertical: Dimensions.get('window').height * 0.00009,
-            // marginVertical: '%'
           }}>
           {searchSelected ? (
             <FlatList
@@ -1300,11 +933,8 @@ const ExplorePage = () => {
                 <View
                   style={{
                     backgroundColor: '#BBC6C8',
-                    // padding: '3%',
                     borderRadius: 16,
-
                     marginVertical: Dimensions.get('window').width * 0.01,
-                    // elevation: 5,
                   }}>
                   <View
                     style={{
@@ -1317,7 +947,6 @@ const ExplorePage = () => {
                         height: 60,
                         width: 60,
                         borderRadius: 16,
-                        // marginLeft: Dimensions.get('window').width * 0.1,
                       }}
                       source={{
                         uri: item.profilePic || item.image || item.pic,
@@ -1378,16 +1007,12 @@ const ExplorePage = () => {
               )}
             />
           ) : (
-            // <View>
-            //   <Text>No results found</Text>
-            // </View>
             <></>
           )}
         </View>
       </View>
       {/* end */}
       <ActionSheet
-        // id={sheetId}
         data={fetchedJobs}
         ref={actionSheet}
         containerStyle={{
@@ -1441,11 +1066,7 @@ const ExplorePage = () => {
             </View>
             {/* Description title */}
             <View>
-              <TouchableOpacity
-                style={styles.buttonStyleDesc}
-                // activeOpacity={0.5}
-                // onPress={handleSubmitButton}
-              >
+              <TouchableOpacity style={styles.buttonStyleDesc}>
                 <Text style={styles.buttonTextStyle}>Description</Text>
               </TouchableOpacity>
             </View>
@@ -1498,7 +1119,6 @@ const styles = StyleSheet.create({
     marginRight: Dimensions.get('window').height * 0.04,
   },
   titleStyle: {
-    // marginVertical: Dimensions.get('window').height * 0.07,
     color: '#000000',
     marginTop: Dimensions.get('window').height * 0.05,
     marginBottom: Dimensions.get('window').height * 0.0009,
@@ -1507,17 +1127,12 @@ const styles = StyleSheet.create({
   titleTextStyle: {
     fontSize: 24,
     fontWeight: 'bold',
-    // marginVertical: Dimensions.get('window').height * 0.006,
+
     color: '#000000',
-    // marginTop: Dimensions.get('window').height * 0.02,
   },
   titleTextStyle_italic: {
     fontSize: 24,
     fontWeight: 'bold',
-    // fontStyle: 'italic',
-    // marginVertical: Dimensions.get('window').height * 0.006,
-    // color: '#E5E3E4',
-    // marginTop: Dimensions.get('window').height * 0.02,
   },
   designationStyle: {
     fontSize: 18,
@@ -1537,7 +1152,7 @@ const styles = StyleSheet.create({
     marginTop: Dimensions.get('window').width * 0.04,
     backgroundColor: 'white',
     borderRadius: 100,
-    // borderWidth: 1,
+
     height: Dimensions.get('window').height * 0.1,
     width: Dimensions.get('window').width * 0.2,
   },
@@ -1546,7 +1161,7 @@ const styles = StyleSheet.create({
     marginTop: Dimensions.get('window').width * 0.04,
     backgroundColor: '#4CA6A8',
     borderRadius: 100,
-    // borderWidth: 1,
+
     height: Dimensions.get('window').height * 0.1,
     width: Dimensions.get('window').width * 0.2,
   },
@@ -1562,15 +1177,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     justifyContent: 'space-between',
     alignSelf: 'center',
-    // marginLeft: 5,
-    // marginTop: 20,
   },
   SectionStyle: {
-    // flexDirection: 'row',
     backgroundColor: '#E5E3E4',
-    // height: 500,
-
-    // backgroundColor: 'white',
   },
   UploadCV: {
     alignSelf: 'center',
@@ -1586,7 +1195,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
     fontWeight: '500',
-    // marginTop: 5,
+
     marginLeft: Dimensions.get('window').width * 0.12,
     alignSelf: 'flex-start',
   },
@@ -1602,12 +1211,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 10,
   },
-  //   Header: {
-  //     flexDirection: 'row',
-  //     justifyContent: 'flex-start',
-  //     alignItems: 'center',
-  //     // height: 500,
-  //   },
+
   titleText: {
     fontSize: 30,
     fontWeight: 'bold',
@@ -1631,7 +1235,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     fontSize: 15,
     alignContent: 'center',
-    // alignSelf: 'center',
   },
   Row: {
     flexDirection: 'row',
@@ -1646,11 +1249,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   SectionStyle: {
-    // flexDirection: 'row',
     backgroundColor: '#E5E3E4',
-    // height: 500,
-
-    // backgroundColor: 'white',
   },
   inputStyle: {
     flex: 1,
@@ -1669,13 +1268,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   detStyle_1: {
-    // justifyContent: 'flex-end',
-    // alignSelf: 'flex-end',
-    // alignItems: 'flex-end',
     fontSize: 14,
     color: 'black',
     justifyContent: 'space-between',
-    // alignSelf: 'center',
   },
   ExpLocation: {
     textAlign: 'right',
@@ -1689,8 +1284,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: Dimensions.get('window').width * 0.5,
     alignSelf: 'center',
-    /* Not doing anything. */
-    // flex: 1,
   },
   expView1: {
     flexDirection: 'row',
@@ -1698,12 +1291,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: Dimensions.get('window').width * 0.5,
     alignSelf: 'center',
-    // alignItems: 'flex-end',
-    /* Not doing anything. */
-    // flex: 1,
   },
   editExpView: {
-    // alignItems: 'center',
     flex: 1,
   },
   resumeText: {
@@ -1718,7 +1307,7 @@ const styles = StyleSheet.create({
   lastNameStyle: {
     textAlign: 'right',
     marginRight: 70,
-    // paddingLeft: 15,
+
     fontSize: 15,
     color: '#6A6A6A',
     fontWeight: 'bold',
@@ -1734,7 +1323,6 @@ const styles = StyleSheet.create({
     borderWidth: 10,
     resizeMode: 'cover',
     alignSelf: 'center',
-    // marginTop: -20,
   },
   Header: {
     flexDirection: 'row',
@@ -1747,8 +1335,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginLeft: 5,
     marginTop: 20,
-    // borderRadius: 15,
-    // borderWidth: 5,
   },
   dropdownContainer: {
     backgroundColor: 'white',
@@ -1789,10 +1375,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignSelf: 'center',
     borderRadius: 15,
-    // marginLeft: 25,
-    // marginRight: 25,
-    // marginTop: 20,
-    // marginBottom: 20,
   },
   buttonTextStyle: {
     color: '#FFFFFF',
