@@ -46,13 +46,18 @@ import ClassFunc from './src/screens/ClassFunc';
 import AnotherTest from './src/screens/AnotherTest';
 import HomeInfinite from './src/screens/HomeInfinite';
 // import Tip from './src/components/AlertBoxStyles/Tip';
-
+import TestSearch from './src/screens/TestSearch';
+import ExploreTest from './src/screens/ExploreTest';
+import ExploreTestAnother from './src/screens/ExploreTestAnother';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
       {/* <AppStack /> */}
       <ExplorePage />
+      {/* <TestSearch /> */}
+      {/* <ExploreTest /> */}
+      {/* <ExploreTestAnother /> */}
     </NavigationContainer>
     // <SettingsScreen />
 
