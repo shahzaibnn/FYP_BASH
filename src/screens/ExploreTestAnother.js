@@ -55,6 +55,11 @@ const ExploreTestAnother = () => {
     onEndReachedCalledDuringMomentumJob,
     setOnEndReachedCalledDuringMomentumJob,
   ] = useState(true);
+
+  const [searchPeople, setSearchPeople] = useState(false);
+  const [searchPosts, setSearchPosts] = useState(false);
+  const [searchJobs, setSearchJobs] = useState(false);
+
   let actionSheet = createRef();
   const show = item => {
     setActionParameters(item);
@@ -62,127 +67,10 @@ const ExploreTestAnother = () => {
     actionSheet.current.show();
   };
 
-  // const searchJobs = async () => {
-  //   dbFirestore()
-  //     .collection('Jobs')
-  //     .orderBy('createdAt', 'desc')
-
-  //     .get()
-  //     .then(querySnapshot => {
-  //       console.log('Total Jobs: ', querySnapshot.size);
-
-  //       var total = querySnapshot.size;
-  //       let count = 0;
-  //       if (total == 0) {
-  //         setJobLoader(false);
-  //       } else {
-  //         querySnapshot.forEach(documentSnapshot => {
-  //           console.log('hgccgcfgcgfc');
-
-  //           let v = documentSnapshot.data();
-  //           v.id = documentSnapshot.id;
-
-  //           setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
-
-  //           count++;
-  //           if (count == total) {
-  //             setJobLoader(false);
-  //             console.log(':runing');
-  //           }
-  //         });
-  //       }
-  //     });
-  // };
-
-  // const searchMoreJobs = async () => {
-  //   setJobLoading(true);
-
-  //   dbFirestore()
-  //     .collection('Jobs')
-  //     .orderBy('createdAt', 'desc')
-  //     .startAfter(lastVisibleJobs)
-  //     .limit(1)
-  //     .get()
-  //     .then(querySnapshot => {
-  //       console.log('Total Jobs: ', querySnapshot.size);
-
-  //       var total = querySnapshot.size;
-  //       let count = 0;
-  //       if (total == 0) {
-  //         setJobLoading(false);
-  //       } else {
-  //         querySnapshot.forEach(documentSnapshot => {
-  //           console.log('hgccgcfgcgfc');
-
-  //           let v = documentSnapshot.data();
-  //           v.id = documentSnapshot.id;
-
-  //           setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
-
-  //           count++;
-  //           if (count == total) {
-  //             setJobLoading(false);
-  //             console.log(':runing');
-  //           }
-  //         });
-  //       }
-  //       setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
-  //       querySnapshot.size == 0 ? setLastJob(true) : setLastJob(false);
-  //     });
-  // };
-
-  // const handleEndReachedJobs = () => {
-  //   setJobLoading(true);
-  //   console.log('end reached!!');
-
-  //   searchMoreJobs();
-  // };
-  // const renderLoaderJobs = () => {
-  //   return jobLoading && !lastJob ? (
-  //     <View style={styles.loaderStyle}>
-  //       <ActivityIndicator size="large" color="#aaa" />
-  //     </View>
-  //   ) : null;
-  // };
-
-  // const [search, setSearch] = useState('');
-
-  // useEffect(() => {
-  //   let subscriber;
-  //   if (search) {
-  //     subscriber = dbFirestore()
-  //       .collection('myCollection')
-  //       .where(dbFirestore.FieldPath.documentId(), '>=', search)
-  //       .where(dbFirestore.FieldPath.documentId(), '<=', `${search}\uf8ff`)
-  //       .onSnapshot(querySnapshot => {
-  //         const updatedData = [];
-  //         querySnapshot.forEach(doc => {
-  //           updatedData.push({ id: doc.id, ...doc.data() });
-  //         });
-  //         setData(updatedData);
-  //         setLoading(false);
-  //       });
-  //   } else {
-  //     subscriber = dbFirestore()
-  //       .collection('myCollection')
-  //       .onSnapshot(querySnapshot => {
-  //         const updatedData = [];
-  //         querySnapshot.forEach(doc => {
-  //           updatedData.push({ id: doc.id, ...doc.data() });
-  //         });
-  //         setData(updatedData);
-  //         setLoading(false);
-  //       });
-  //   }
-
-  //   return () => subscriber();
-  // }, [search]);
-
   useEffect(() => {
     const subscriber = dbFirestore()
       .collection('Users')
 
-      // .get()
       .onSnapshot(querySnapshot => {
         const updatedData = [];
         querySnapshot.forEach(doc => {
@@ -224,71 +112,6 @@ const ExploreTestAnother = () => {
 
     return () => subscriber();
   }, []);
-  // useEffect(() => {
-  //   searchPeople();
-  // }, []);
-  // useEffect(() => {
-  //   searchJobs();
-  // }, []);
-  // useEffect(() => {
-  //   searchPosts();
-  // }, []);
-
-  // const search = () => {
-  //   setSearchSelected(true);
-
-  //   if (peopleSelected) {
-  //     const query = dbFirestore().collection('Users');
-  //     query.get().then(querySnapshot => {
-  //       const results = [];
-  //       querySnapshot.forEach(documentSnapshot => {
-  //         const data = documentSnapshot.data();
-  //         const allFields = Object.values(data).join(' ');
-  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-  //           results.push(data);
-  //         }
-  //       });
-  //       setSearchResults(results);
-  //       setpostsSelected(false);
-  //       setjobsSelected(false);
-  //       setpeopleSelected(false);
-  //     });
-  //   }
-  //   if (postsSelected) {
-  //     const query = dbFirestore().collection('Posts');
-  //     query.get().then(querySnapshot => {
-  //       const results = [];
-  //       querySnapshot.forEach(documentSnapshot => {
-  //         const data = documentSnapshot.data();
-  //         const allFields = Object.values(data).join(' ');
-  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-  //           results.push(data);
-  //         }
-  //       });
-  //       setSearchResults(results);
-  //       setpostsSelected(false);
-  //       setjobsSelected(false);
-  //       setpeopleSelected(false);
-  //     });
-  //   }
-  //   if (jobsSelected) {
-  //     const query = dbFirestore().collection('Jobs');
-  //     query.get().then(querySnapshot => {
-  //       const results = [];
-  //       querySnapshot.forEach(documentSnapshot => {
-  //         const data = documentSnapshot.data();
-  //         const allFields = Object.values(data).join(' ');
-  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-  //           results.push(data);
-  //         }
-  //       });
-  //       setSearchResults(results);
-  //       setpostsSelected(false);
-  //       setjobsSelected(false);
-  //       setpeopleSelected(false);
-  //     });
-  //   }
-  // };
 
   const TitleTag = () => {
     if (postsSelected) {
@@ -318,6 +141,10 @@ const ExploreTestAnother = () => {
             results.push(data);
           }
         });
+        setSearchPeople(true);
+        setSearchPosts(false);
+        setSearchJobs(false);
+
         setSearchResults(results);
         setpostsSelected(false);
         setjobsSelected(false);
@@ -338,6 +165,9 @@ const ExploreTestAnother = () => {
             results.push(data);
           }
         });
+        setSearchPeople(false);
+        setSearchPosts(true);
+        setSearchJobs(false);
         setSearchResults(results);
         setpostsSelected(false);
         setjobsSelected(false);
@@ -358,6 +188,10 @@ const ExploreTestAnother = () => {
             results.push(data);
           }
         });
+        // setSearchJobs(true);
+        setSearchPeople(false);
+        setSearchPosts(false);
+        setSearchJobs(true);
         setSearchResults(results);
         setpostsSelected(false);
         setjobsSelected(false);
@@ -574,15 +408,20 @@ const ExploreTestAnother = () => {
                 <View
                   style={{
                     backgroundColor: 'rgba(187, 198, 200, 0.5)',
+                    // borderRadius: 16,
+                    // marginLeft: Dimensions.get('window').width * 0.02,
+                    // marginTop: Dimensions.get('window').width * 0.05,
+                    // height: Dimensions.get('window').height * 0.18,
+                    // width: Dimensions.get('window').width * 0.9,
+                    // backgroundColor: '#BBC6C8',
                     borderRadius: 16,
-                    marginLeft: Dimensions.get('window').width * 0.02,
-                    marginTop: Dimensions.get('window').width * 0.05,
-                    height: Dimensions.get('window').height * 0.15,
-                    width: Dimensions.get('window').width * 0.9,
+                    marginVertical: Dimensions.get('window').width * 0.01,
                   }}>
                   <View
                     style={{
                       flexDirection: 'row',
+                      // marginTop: Dimensions.get('window').height * 0.02,
+                      // marginHorizontal: Dimensions.get('window').width * 0.05,
                     }}>
                     <Image
                       style={{
@@ -602,14 +441,22 @@ const ExploreTestAnother = () => {
                         marginLeft: Dimensions.get('window').width * 0.03,
                       }}>
                       <Text style={styles.designationStyle}>People</Text>
-                      <Text>
-                        {item.firstName}
-                        {item.lastName}
-                      </Text>
+                      <Text>{item.firstName + ' ' + item.lastName}</Text>
                       <View style={styles.ExpBoxView}>
-                        <Text>{item.designation}</Text>
-                        <Text> </Text>
+                        {/* <Text>{item.designation}</Text> */}
                         <Text style={styles.ExpLocation}>{item.userEmail}</Text>
+                        <Text
+                          style={{
+                            color: '#469597',
+                            fontSize: 15,
+                            marginTop: '2%',
+                            marginBottom: '2%',
+                            marginHorizontal: '6%',
+                            marginLeft: '-1%',
+                            marginRight: '-5%',
+                          }}>
+                          {item.skills.join(', ')}
+                        </Text>
                       </View>
                     </View>
                   </View>
@@ -928,25 +775,31 @@ const ExploreTestAnother = () => {
             marginHorizontal: '3%',
             marginVertical: Dimensions.get('window').height * 0.00009,
           }}>
-          {searchSelected && peopleSelected ? (
+          {/* user search flatlist */}
+          {searchSelected && searchPeople ? (
             <FlatList
               horizontal={false}
               showsHorizontalScrollIndicator={false}
-              data={fetchedUsers}
+              data={searchResults}
               ListFooterComponent={<View style={{height: 60}}></View>}
               renderItem={({item}) => (
                 <View
                   style={{
                     backgroundColor: 'rgba(187, 198, 200, 0.5)',
+                    // borderRadius: 16,
+                    // marginLeft: Dimensions.get('window').width * 0.02,
+                    // marginTop: Dimensions.get('window').width * 0.05,
+                    // height: Dimensions.get('window').height * 0.18,
+                    // width: Dimensions.get('window').width * 0.9,
+                    // backgroundColor: '#BBC6C8',
                     borderRadius: 16,
-                    marginLeft: Dimensions.get('window').width * 0.02,
-                    marginTop: Dimensions.get('window').width * 0.05,
-                    height: Dimensions.get('window').height * 0.15,
-                    width: Dimensions.get('window').width * 0.9,
+                    marginVertical: Dimensions.get('window').width * 0.01,
                   }}>
                   <View
                     style={{
                       flexDirection: 'row',
+                      // marginTop: Dimensions.get('window').height * 0.02,
+                      // marginHorizontal: Dimensions.get('window').width * 0.05,
                     }}>
                     <Image
                       style={{
@@ -966,14 +819,22 @@ const ExploreTestAnother = () => {
                         marginLeft: Dimensions.get('window').width * 0.03,
                       }}>
                       <Text style={styles.designationStyle}>People</Text>
-                      <Text>
-                        {item.firstName}
-                        {item.lastName}
-                      </Text>
+                      <Text>{item.firstName + ' ' + item.lastName}</Text>
                       <View style={styles.ExpBoxView}>
-                        <Text>{item.designation}</Text>
-                        <Text> </Text>
+                        {/* <Text>{item.designation}</Text> */}
                         <Text style={styles.ExpLocation}>{item.userEmail}</Text>
+                        <Text
+                          style={{
+                            color: '#469597',
+                            fontSize: 15,
+                            marginTop: '2%',
+                            marginBottom: '2%',
+                            marginHorizontal: '6%',
+                            marginLeft: '-1%',
+                            marginRight: '-5%',
+                          }}>
+                          {item.skills.join(', ')}
+                        </Text>
                       </View>
                     </View>
                   </View>
@@ -987,10 +848,10 @@ const ExploreTestAnother = () => {
 
           {/* if search along with posts */}
 
-          {searchSelected && postsSelected ? (
+          {searchSelected && searchPosts ? (
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={fetchedPosts}
+              data={searchResults}
               extraData={extraData}
               onEndReachedThreshold={0.1}
               scrollEventThrottle={150}
@@ -1175,16 +1036,16 @@ const ExploreTestAnother = () => {
           )}
 
           {/* if search along with jobs */}
-          {searchSelected && jobsSelected ? (
+          {searchSelected && searchJobs ? (
             <FlatList
-              data={fetchedJobs}
+              data={searchResults}
               renderItem={({item}) => (
                 <View
                   style={{
                     backgroundColor: '#BBC6C8',
 
                     borderRadius: 16,
-
+                    // borderColor: 'black',
                     marginHorizontal: Dimensions.get('window').width * 0.01,
                     marginBottom: Dimensions.get('window').height * 0.02,
                   }}>
@@ -1354,7 +1215,7 @@ const ExploreTestAnother = () => {
           </ScrollView>
         </View>
       </ActionSheet>
-      <Toast topOffset={30} />
+      {/* <Toast topOffset={30} /> */}
       {/* end */}
     </ScrollView>
   );
@@ -1366,7 +1227,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5E3E4',
   },
   ExpBoxView: {
-    flexDirection: 'row',
+    // flexDirection: 'column',
     justifyContent: 'space-between',
     marginTop: 10,
   },
@@ -1398,15 +1259,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginVertical: Dimensions.get('window').height * 0.006,
+    // marginHorizontal: Dimensions.get('window').width * 0.06,
     color: '#000000',
     marginTop: Dimensions.get('window').height * 0.02,
   },
-  ExpLocation: {
-    textAlign: 'right',
-    justifyContent: 'flex-end',
-    alignSelf: 'flex-end',
-    alignItems: 'flex-end',
-  },
+  // ExpLocation: {
+  //   textAlign: 'right',
+  //   justifyContent: 'flex-end',
+  //   alignSelf: 'flex-end',
+  //   alignItems: 'flex-end',
+  // },
   iconStyle: {
     marginLeft: Dimensions.get('window').width * 0.04,
     marginTop: Dimensions.get('window').width * 0.04,
@@ -1465,11 +1327,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  ExpBoxView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
   },
 
   titleText: {
@@ -1533,11 +1390,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   ExpLocation: {
-    textAlign: 'right',
-    fontStyle: 'italic',
-    justifyContent: 'flex-end',
-    alignSelf: 'flex-end',
-    alignItems: 'flex-end',
+    textAlign: 'left',
+    // fontStyle: 'italic',
+    // justifyContent: 'flex-end',
+    // alignSelf: 'flex-end',
+    // alignItems: 'flex-end',
   },
   expView: {
     flexDirection: 'row',

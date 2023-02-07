@@ -990,8 +990,13 @@ const ExploreTest = () => {
                           marginBottom: '5%',
                         }}>
                         {item.jobMode}
+                        {/* {item.skills.map((skill, index) =>
+                          index === item.skills.length - 1
+                            ? skill
+                            : skill + ', ',
+                        )} */}
                         {item.skills}
-                        {/* {item.skills.join(', ')} */}
+                        {/* {item.skills.join(', ')}  */}
                       </Text>
                       {/* <Text style={{color: '#469597', fontSize: 15}}>
                         {item.experience}
