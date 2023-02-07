@@ -4,6 +4,7 @@ import {
   SETINITIALLOGIN,
   CHANGEUSERPROFILE,
   ADDSKILLREDUX,
+  REMOVESKILLREDUX,
 } from './actionTypes';
 
 const initialState = Object;
@@ -20,6 +21,13 @@ export const mainReducer = (state = initialState, action) => {
 
     case ADDSKILLREDUX: {
       return {...state, skills: [...state.skills, action.payload]};
+    }
+
+    case REMOVESKILLREDUX: {
+      return {
+        ...state,
+        skills: [...state.skills.filter(e => e !== action.payload)],
+      };
     }
 
     case ADDITION:

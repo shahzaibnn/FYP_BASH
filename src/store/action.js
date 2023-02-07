@@ -4,6 +4,7 @@ import {
   SETINITIALLOGIN,
   CHANGEUSERPROFILE,
   ADDSKILLREDUX,
+  REMOVESKILLREDUX,
 } from './actionTypes';
 
 export const addition = () => ({
@@ -27,5 +28,10 @@ export const changeUserProfile = (data, data2) => ({
 
 export const addSkillRedux = data => ({
   type: ADDSKILLREDUX,
+  payload: data,
+});
+
+export const removeSkillRedux = data => ({
+  type: REMOVESKILLREDUX,
   payload: data,
 });

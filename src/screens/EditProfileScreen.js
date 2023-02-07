@@ -27,7 +27,11 @@ import ImageModal from 'react-native-image-modal';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {db, dbFirestore} from '../Firebase/Config';
-import {changeUserProfile, addSkillRedux} from '../store/action';
+import {
+  changeUserProfile,
+  addSkillRedux,
+  removeSkillRedux,
+} from '../store/action';
 
 export default function EditProfileScreen() {
   const storeData = useSelector(state => state);
@@ -53,12 +57,50 @@ export default function EditProfileScreen() {
   const [experienceDate, setExperienceDate] = useState('');
   const [experienceCompany, setExperienceCompany] = useState('');
   const [experienceLocation, setExperienceLocation] = useState('');
+  const [experienceCountry, setExperienceCountry] = useState('');
 
   const [appliedJobsDisplay, setAppliedJobsDisplay] = useState(false);
   const [appliedJobs, setAppliedJobs] = useState(storeData?.applied);
 
   const [singleFile, setSingleFile] = useState();
   const [uploaded, setUploaded] = useState(false);
+
+  const removeFromArray = value => {
+    // console.log(field);
+    console.log(value);
+    console.log(storeData.userEmail);
+    // var object = {};
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', storeData.userEmail)
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(documentSnapshot.id);
+          dbFirestore()
+            .doc('Users/' + documentSnapshot.id)
+            .update({
+              skills: dbFirestore.FieldValue.arrayRemove(value),
+            })
+            .then(() => {
+              dispatch(removeSkillRedux(value));
+              alert('skill removed!');
+              setExtraData(new Date());
+
+              console.log('skills updated');
+            });
+        });
+      })
+      .catch(error => {
+        alert(error);
+
+        // setFlag(true);
+      });
+  };
 
   const updateArray = value => {
     // console.log(field);
@@ -334,8 +376,8 @@ export default function EditProfileScreen() {
             showsHorizontalScrollIndicator={false}
             // numColumns={4}
             key={'_'}
-            data={skills}
-            extraData={extraData}
+            data={storeData?.skills}
+            // extraData={extraData}
             renderItem={({item}) => (
               <View
               // style={{marginStart: Dimensions.get('window').width * 0.03}}
@@ -366,9 +408,10 @@ export default function EditProfileScreen() {
 
                   <TouchableOpacity
                     style={{marginTop: 5}}
-                    onPress={() => {
-                      console.log('Selected skill to be removed is : ', item);
-                    }}>
+                    onPress={
+                      () => removeFromArray(item)
+                      // console.log('Selected skill to be removed is : ', item);
+                    }>
                     <Entypo
                       name="circle-with-cross"
                       size={20}
@@ -720,6 +763,25 @@ export default function EditProfileScreen() {
               placeholder="Location"
             />
           </View>
+
+          <View
+            style={{
+              backgroundColor: '#ffffff',
+              // width: Dimensions.get('window').width * 0.8,
+              marginHorizontal: '10%',
+              borderRadius: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+              // marginBottom: '7%',
+              marginVertical: '3%',
+            }}>
+            <TextInput
+              style={{}}
+              onChangeText={setExperienceCountry}
+              value={experienceCountry}
+              placeholder="Location"
+            />
+          </View>
           {/* 
           <View style={{marginHorizontal: '5%'}}>
             <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
@@ -802,7 +864,7 @@ export default function EditProfileScreen() {
 
       {/* Applied Jobs */}
 
-      <View
+      {/* <View
         style={{
           marginHorizontal: '5%',
           marginTop: '10%',
@@ -835,127 +897,7 @@ export default function EditProfileScreen() {
           style={{marginRight: '2%'}}>
           <FontAwesome name="plus-circle" size={25} color="#777777" />
         </TouchableOpacity>
-      </View>
-
-      <Collapsible collapsed={!appliedJobsDisplay}>
-        <View
-          style={{
-            marginHorizontal: '5%',
-            backgroundColor: '#BBC6C8',
-            borderBottomLeftRadius: 8,
-            borderBottomRightRadius: 8,
-          }}>
-          <View style={{}}>
-            <FlatList
-              // nestedScrollEnabled
-              style={{marginVertical: '5%', marginHorizontal: '2%'}}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              data={appliedJobs}
-              renderItem={({item}) => (
-                <View
-                  style={{
-                    backgroundColor: '#ffffff',
-                    // padding: '3%',
-                    borderRadius: 16,
-                    // marginBottom: Dimensions.get('window').height * 0.1,
-
-                    marginHorizontal: Dimensions.get('window').width * 0.01,
-                    // elevation: 5,
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginTop: Dimensions.get('window').height * 0.02,
-                      marginHorizontal: Dimensions.get('window').width * 0.05,
-                    }}>
-                    <Image
-                      style={{
-                        height: 60,
-                        width: 60,
-                        borderRadius: 16,
-                        // marginLeft: Dimensions.get('window').width * 0.1,
-                      }}
-                      source={{
-                        uri: item.postedByPic,
-                      }}
-                    />
-                    <View
-                      style={{
-                        marginLeft: Dimensions.get('window').width * 0.03,
-                      }}>
-                      <Text style={{fontSize: 12}}>
-                        {item.postedBy} posted a new job
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          fontWeight: 'bold',
-                          marginVertical:
-                            Dimensions.get('window').height * 0.005,
-                          color: '#000000',
-                        }}>
-                        {item.title}
-                      </Text>
-                      <Text>{item.company}</Text>
-                    </View>
-
-                    {/* <TouchableOpacity>
-                      <MaterialCommunityIcons
-                        name="dots-vertical"
-                        size={25}
-                        color="#000000"
-                        style={{
-                          marginLeft: Dimensions.get('window').width * 0.05,
-                        }}
-                      />
-                    </TouchableOpacity> */}
-                  </View>
-
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      //   justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginHorizontal: Dimensions.get('window').width * 0.05,
-                      marginVertical: Dimensions.get('window').height * 0.01,
-                    }}>
-                    <TouchableOpacity
-                      disabled
-                      style={{
-                        backgroundColor: '#5BA199',
-
-                        paddingHorizontal: Dimensions.get('window').width * 0.1,
-                        paddingVertical: Dimensions.get('window').height * 0.01,
-                        borderRadius: 16,
-                      }}>
-                      <Text
-                        style={{
-                          color: '#ffffff',
-                          fontWeight: 'bold',
-                        }}>
-                        Applied
-                      </Text>
-                    </TouchableOpacity>
-
-                    <Text
-                      style={{
-                        color: '#469597',
-                        fontSize: 16,
-                        marginLeft: Dimensions.get('window').width * 0.05,
-                      }}>
-                      {item.city},{item.country}
-                    </Text>
-                  </View>
-                </View>
-              )}
-              keyExtractor={item => item.id}
-            />
-
-            {/* <Text>jhfvsdjvfjhvj</Text> */}
-          </View>
-        </View>
-      </Collapsible>
+      </View> */}
     </ScrollView>
   );
 }
