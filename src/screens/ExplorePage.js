@@ -23,7 +23,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {db, dbFirestore} from '../Firebase/Config';
 
-const ExplorePage = () => {
+const ExploreTest = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [postsSelected, setpostsSelected] = useState(false);
   const [peopleSelected, setpeopleSelected] = useState(false);
@@ -437,6 +437,7 @@ const ExplorePage = () => {
                   setpostsSelected(false);
                   setjobsSelected(false);
                   setpeopleSelected(true);
+                  setSearchSelected(false);
                   console.log('testing', peopleSelected);
                 }}>
                 <MaterialCommunityIcons
@@ -455,6 +456,7 @@ const ExplorePage = () => {
                   setpostsSelected(false);
                   setjobsSelected(false);
                   setpeopleSelected(true);
+                  setSearchSelected(false);
                   console.log('posts', postsSelected);
                 }}>
                 <MaterialCommunityIcons
@@ -539,6 +541,7 @@ const ExplorePage = () => {
                   setpostsSelected(false);
                   setjobsSelected(true);
                   setpeopleSelected(false);
+                  setSearchSelected(false);
                   console.log(setjobsSelected);
                 }}>
                 <MaterialCommunityIcons
@@ -960,7 +963,7 @@ const ExplorePage = () => {
                         {item.jobCity}
                         {item.jobLocation}
                         {item.role}
-                        {item.title}
+                        {/* {item.title} */}
                       </Text>
                       <Text
                         style={{
@@ -975,7 +978,10 @@ const ExplorePage = () => {
                         {item.lastName}
                         {item.name}
                       </Text>
-                      <Text>{item.jobCompany}</Text>
+                      <Text>
+                        {item.jobCompany}
+                        {item.userEmail}
+                      </Text>
                       <Text
                         style={{
                           color: '#469597',
@@ -984,6 +990,8 @@ const ExplorePage = () => {
                           marginBottom: '5%',
                         }}>
                         {item.jobMode}
+                        {item.skills}
+                        {/* {item.skills.join(', ')} */}
                       </Text>
                       {/* <Text style={{color: '#469597', fontSize: 15}}>
                         {item.experience}
@@ -1100,7 +1108,7 @@ const ExplorePage = () => {
   );
 };
 
-export default ExplorePage;
+export default ExploreTest;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#E5E3E4',
