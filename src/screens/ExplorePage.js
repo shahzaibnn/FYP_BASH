@@ -26,37 +26,18 @@ import {db, dbFirestore} from '../Firebase/Config';
 const ExplorePage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [postsSelected, setpostsSelected] = useState(false);
-  const [peopleSelected, setpeopleSelected] = useState(false);
+  const [peopleSelected, setpeopleSelected] = useState(true);
   const [jobsSelected, setjobsSelected] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [searchSelected, setSearchSelected] = useState(false);
-  const profileName = 'Tony';
-  const [jobLoader, setJobLoader] = useState(true);
-  const [jobLoading, setJobLoading] = useState(false);
   const [fetchedJobs, setFetchedJobs] = useState([]);
   const [fetchedUsers, setFetchedUsers] = useState([]);
   const [fetchedPosts, setFetchedPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [lastVisible, setLastVisible] = useState(null);
   const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
   const [actionParameters, setActionParameters] = useState([]);
-  const [
-    onEndReachedCalledDuringMomentum,
-    setOnEndReachedCalledDuringMomentum,
-  ] = useState(true);
   const [extraData, setExtraData] = React.useState(new Date());
-  const [lastPost, setLastPost] = useState(false);
-  const [postLoader, setPostLoader] = useState(true);
-  const [postData, setPostData] = useState([]);
-  const [lastVisibleJobs, setLastVisibleJobs] = useState(null);
-
-  const [lastJob, setLastJob] = useState(false);
-  const [
-    onEndReachedCalledDuringMomentumJob,
-    setOnEndReachedCalledDuringMomentumJob,
-  ] = useState(true);
-
-  const [searchPeople, setSearchPeople] = useState(false);
+  const [searchPeople, setSearchPeople] = useState(true);
   const [searchPosts, setSearchPosts] = useState(false);
   const [searchJobs, setSearchJobs] = useState(false);
 
@@ -66,7 +47,6 @@ const ExplorePage = () => {
     console.log('acrtions is, ', actionParameters);
     actionSheet.current.show();
   };
-
   useEffect(() => {
     const subscriber = dbFirestore()
       .collection('Users')
@@ -120,13 +100,105 @@ const ExplorePage = () => {
       return <Text style={styles.titleTextStyle}>People</Text>;
     } else if (jobsSelected) {
       return <Text style={styles.titleTextStyle}>Jobs</Text>;
-    } else if (searchSelected) {
-      return <Text style={styles.titleTextStyle}>Search Results</Text>;
+    } else if (searchSelected == true && searchPeople == true) {
+      return (
+        <Text style={styles.titleTextStyle}>Search Results For People</Text>
+      );
+    } else if (searchSelected == true && searchJobs == true) {
+      return <Text style={styles.titleTextStyle}>Search Results For Jobs</Text>;
+    } else if (searchSelected == true && searchPosts == true) {
+      return (
+        <Text style={styles.titleTextStyle}>Search Results For Posts</Text>
+      );
+    } else if (
+      searchSelected == true &&
+      searchPosts == false &&
+      searchPeople == false &&
+      searchJobs == false
+    ) {
+      setpeopleSelected(true);
+      return <Text style={styles.titleTextStyle}>Search Results test</Text>;
     } else {
       setpeopleSelected(true);
       return <Text style={styles.titleTextStyle}>People</Text>;
     }
   };
+
+  // useEffect(() => {
+  //   // your search logic here, using the current value of searchValue
+  //   setSearchSelected(true);
+  //   if (peopleSelected) {
+  //     const query = dbFirestore().collection('Users');
+  //     query.get().then(querySnapshot => {
+  //       const results = [];
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         const data = documentSnapshot.data();
+  //         const allFields = Object.values(data).join(' ');
+  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+  //           results.push(data);
+  //         }
+  //       });
+  //       setSearchPeople(true);
+  //       setSearchPosts(false);
+  //       setSearchJobs(false);
+
+  //       setSearchResults(results);
+  //       setpostsSelected(false);
+  //       setjobsSelected(false);
+  //       setpeopleSelected(false);
+  //     });
+  //   } else {
+  //     setSearchResults([]);
+  //   }
+
+  //   if (postsSelected) {
+  //     const query = dbFirestore().collection('Posts');
+  //     query.get().then(querySnapshot => {
+  //       const results = [];
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         const data = documentSnapshot.data();
+  //         const allFields = Object.values(data).join(' ');
+  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+  //           results.push(data);
+  //         }
+  //       });
+  //       setSearchPeople(false);
+  //       setSearchPosts(true);
+  //       setSearchJobs(false);
+  //       setSearchResults(results);
+  //       setpostsSelected(false);
+  //       setjobsSelected(false);
+  //       setpeopleSelected(false);
+  //     });
+  //   } else {
+  //     setSearchResults([]);
+  //   }
+
+  //   if (jobsSelected) {
+  //     const query = dbFirestore().collection('Jobs');
+  //     query.get().then(querySnapshot => {
+  //       const results = [];
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         const data = documentSnapshot.data();
+  //         const allFields = Object.values(data).join(' ');
+  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+  //           results.push(data);
+  //         }
+  //       });
+  //       // setSearchJobs(true);
+  //       setSearchPeople(false);
+  //       setSearchPosts(false);
+  //       setSearchJobs(true);
+  //       setSearchResults(results);
+  //       setpostsSelected(false);
+  //       setjobsSelected(false);
+  //       setpeopleSelected(false);
+  //     });
+  //   } else {
+  //     // setSearchResults([]);
+  //   }
+  //   console.log(searchValue);
+  // }, [searchValue]);
   const search = () => {
     setSearchSelected(true);
 
@@ -202,6 +274,82 @@ const ExplorePage = () => {
     }
   };
 
+  const UpdatedSearch = () => {
+    setSearchSelected(true);
+
+    if (peopleSelected) {
+      const query = dbFirestore().collection('Users');
+      query.get().then(querySnapshot => {
+        const results = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const data = documentSnapshot.data();
+          const allFields = Object.values(data).join(' ');
+          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+            results.push(data);
+          }
+        });
+        setSearchPeople(true);
+        setSearchPosts(false);
+        setSearchJobs(false);
+
+        setSearchResults(results);
+        setpostsSelected(false);
+        setjobsSelected(false);
+        setpeopleSelected(false);
+      });
+    }
+
+    if (postsSelected) {
+      const query = dbFirestore().collection('Posts');
+      query.get().then(querySnapshot => {
+        const results = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const data = documentSnapshot.data();
+          const allFields = Object.values(data).join(' ');
+          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+            results.push(data);
+          }
+        });
+        setSearchPeople(false);
+        setSearchPosts(true);
+        setSearchJobs(false);
+        setSearchResults(results);
+        setpostsSelected(false);
+        setjobsSelected(false);
+        setpeopleSelected(false);
+      });
+    }
+
+    if (jobsSelected) {
+      const query = dbFirestore().collection('Jobs');
+      query.get().then(querySnapshot => {
+        const results = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const data = documentSnapshot.data();
+          const allFields = Object.values(data).join(' ');
+          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+            results.push(data);
+          }
+        });
+        setSearchPeople(false);
+        setSearchPosts(false);
+        setSearchJobs(true);
+        setSearchResults(results);
+        setpostsSelected(false);
+        setjobsSelected(false);
+        setpeopleSelected(false);
+      });
+    }
+
+    if (!peopleSelected && !postsSelected && !jobsSelected) {
+      setSearchResults([]);
+      // by default people
+      setpeopleSelected(true);
+    }
+    // for clearing the field
+    setSearchValue('');
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -240,6 +388,7 @@ const ExplorePage = () => {
             placeholder="Search here..."
             style={{marginLeft: '5%'}}
             value={searchValue}
+            // onChangeText={setSearchValue}
             onChangeText={searchValue => setSearchValue(searchValue)}
           />
 
@@ -248,7 +397,9 @@ const ExplorePage = () => {
             ))} */}
           <View
             style={{padding: 10, backgroundColor: '#5BA199', borderRadius: 16}}>
-            <TouchableOpacity onPress={search}>
+            {/* <TouchableOpacity onPress={search}> */}
+            <TouchableOpacity onPress={UpdatedSearch}>
+              {/* <TouchableOpacity onPress={() => setSearchValue(searchValue)}> */}
               <Ionicons
                 name="options-outline"
                 size={40}
@@ -965,7 +1116,7 @@ const ExplorePage = () => {
                                   console.log('Like Removed!');
                                 });
 
-                              fetchedPosts.find(
+                              searchResults.find(
                                 obj => obj.id == item.id,
                               ).likedBy = item.likedBy.filter(
                                 e => e !== emailAddressOfCurrentUser,
@@ -985,7 +1136,7 @@ const ExplorePage = () => {
                                 });
                               let arr = item.likedBy;
                               arr.push(emailAddressOfCurrentUser);
-                              fetchedPosts.find(
+                              searchResults.find(
                                 obj => obj.id == item.id,
                               ).likedBy = arr;
 
@@ -1033,6 +1184,7 @@ const ExplorePage = () => {
             />
           ) : (
             <></>
+            // setSearchPosts(false)
           )}
 
           {/* if search along with jobs */}
