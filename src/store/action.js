@@ -5,6 +5,8 @@ import {
   CHANGEUSERPROFILE,
   ADDSKILLREDUX,
   REMOVESKILLREDUX,
+  ADDEXPREDUX,
+  REMOVEEXPREDUX,
 } from './actionTypes';
 
 export const addition = () => ({
@@ -33,5 +35,15 @@ export const addSkillRedux = data => ({
 
 export const removeSkillRedux = data => ({
   type: REMOVESKILLREDUX,
+  payload: data,
+});
+
+export const addExpRedux = data => ({
+  type: ADDEXPREDUX,
+  payload: data,
+});
+
+export const removeExpRedux = data => ({
+  type: REMOVEEXPREDUX,
   payload: data,
 });

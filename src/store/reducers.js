@@ -5,6 +5,8 @@ import {
   CHANGEUSERPROFILE,
   ADDSKILLREDUX,
   REMOVESKILLREDUX,
+  ADDEXPREDUX,
+  REMOVEEXPREDUX,
 } from './actionTypes';
 
 const initialState = Object;
@@ -27,6 +29,15 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         skills: [...state.skills.filter(e => e !== action.payload)],
+      };
+    }
+    case ADDEXPREDUX: {
+      return {...state, experience: [...state.experience, action.payload]};
+    }
+    case REMOVEEXPREDUX: {
+      return {
+        ...state,
+        experience: [...state.experience.filter(e => e !== action.payload)],
       };
     }
 

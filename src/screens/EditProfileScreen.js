@@ -31,7 +31,10 @@ import {
   changeUserProfile,
   addSkillRedux,
   removeSkillRedux,
+  addExpRedux,
+  removeExpRedux,
 } from '../store/action';
+import storage from '@react-native-firebase/storage';
 
 export default function EditProfileScreen() {
   const storeData = useSelector(state => state);
@@ -65,33 +68,81 @@ export default function EditProfileScreen() {
   const [singleFile, setSingleFile] = useState();
   const [uploaded, setUploaded] = useState(false);
 
-  const removeFromArray = value => {
+  const [filePath, setfilePath] = useState();
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
+
+  const removeArrayExp = async (
+    expTitle,
+    expTime,
+    expOrg,
+    expLoc,
+    expCountry,
+    expImage,
+  ) => {
     // console.log(field);
-    console.log(value);
+    console.log(expTitle, expTime, expOrg, expLoc, expCountry, expImage);
     console.log(storeData.userEmail);
+
+    const filename = filePath.fileCopyUri.substring(
+      filePath.fileCopyUri.lastIndexOf('/') + 1,
+    );
+    const uploadUri =
+      Platform.OS === 'ios'
+        ? filePath.fileCopyUri.replace('file://', '')
+        : filePath.fileCopyUri;
+    setUploading(true);
+    setTransferred(0);
+    const task = await storage().ref(filename).putFile(uploadUri);
+    // console.log(task.ref.getDownloadURL);
+    // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
+    console.log('working');
+    const url = await storage().ref(filename).getDownloadURL();
+    console.log('url is: ' + url);
     // var object = {};
     dbFirestore()
       .collection('Users')
       // .doc('roles')
       // .collection(value.toLowerCase())
       .where('userEmail', '==', storeData.userEmail)
+      // .where('userEmail', '==', 'bashfyp@gmail.com')
       .get()
       .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
+        console.log('Total Found users: for removing ', querySnapshot.size);
 
         querySnapshot.forEach(documentSnapshot => {
           console.log(documentSnapshot.id);
+          let experience = [
+            {
+              title: expTitle,
+              period: expTime,
+              company: expOrg,
+              city: expLoc,
+              country: expCountry,
+              image: url,
+            },
+          ];
           dbFirestore()
             .doc('Users/' + documentSnapshot.id)
             .update({
-              skills: dbFirestore.FieldValue.arrayRemove(value),
+              experience: dbFirestore.FieldValue.arrayRemove(...experience),
             })
             .then(() => {
-              dispatch(removeSkillRedux(value));
-              alert('skill removed!');
+              dispatch(
+                removeExpRedux(
+                  // expTitle,
+                  // expTime,
+                  // expOrg,
+                  // expLoc,
+                  // expCountry,
+                  // url,
+                  experience,
+                ),
+              );
+              alert('experience removed!');
               setExtraData(new Date());
 
-              console.log('skills updated');
+              console.log('experience removed');
             });
         });
       })
@@ -101,8 +152,44 @@ export default function EditProfileScreen() {
         // setFlag(true);
       });
   };
+  // const removeFromArrayExp = value => {
+  //   // console.log(field);
+  //   console.log(value);
+  //   console.log(storeData.userEmail);
+  //   // var object = {};
+  //   dbFirestore()
+  //     .collection('Users')
+  //     // .doc('roles')
+  //     // .collection(value.toLowerCase())
+  //     .where('userEmail', '==', storeData.userEmail)
+  //     .get()
+  //     .then(querySnapshot => {
+  //       console.log('Total Found users: ', querySnapshot.size);
 
-  const updateArray = value => {
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         console.log(documentSnapshot.id);
+  //         dbFirestore()
+  //           .doc('Users/' + documentSnapshot.id)
+  //           .update({
+  //             skills: dbFirestore.FieldValue.arrayRemove(value),
+  //           })
+  //           .then(() => {
+  //             dispatch(removeSkillRedux(value));
+  //             alert('skill removed!');
+  //             setExtraData(new Date());
+
+  //             console.log('skills updated');
+  //           });
+  //       });
+  //     })
+  //     .catch(error => {
+  //       alert(error);
+
+  //       // setFlag(true);
+  //     });
+  // };
+
+  const updateArraySkill = value => {
     // console.log(field);
     console.log(value);
     console.log(storeData.userEmail);
@@ -126,6 +213,135 @@ export default function EditProfileScreen() {
             .then(() => {
               dispatch(addSkillRedux(value));
               alert('skill added!');
+              setExtraData(new Date());
+
+              console.log('skills updated');
+            });
+        });
+      })
+      .catch(error => {
+        alert(error);
+
+        // setFlag(true);
+      });
+  };
+
+  const updateArrayExp = async (
+    expTitle,
+    expTime,
+    expOrg,
+    expLoc,
+    expCountry,
+    expImage,
+  ) => {
+    // console.log(field);
+    console.log(expTitle, expTime, expOrg, expLoc, expCountry, expImage);
+    console.log(storeData.userEmail);
+
+    const filename = filePath.fileCopyUri.substring(
+      filePath.fileCopyUri.lastIndexOf('/') + 1,
+    );
+    const uploadUri =
+      Platform.OS === 'ios'
+        ? filePath.fileCopyUri.replace('file://', '')
+        : filePath.fileCopyUri;
+    setUploading(true);
+    setTransferred(0);
+    const task = await storage().ref(filename).putFile(uploadUri);
+    // console.log(task.ref.getDownloadURL);
+    // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
+    console.log('working');
+    const url = await storage().ref(filename).getDownloadURL();
+    console.log('url is: ' + url);
+    // var object = {};
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', storeData.userEmail)
+      // .where('userEmail', '==', 'bashfyp@gmail.com')
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(documentSnapshot.id);
+          let experience = [
+            {
+              title: expTitle,
+              period: expTime,
+              company: expOrg,
+              city: expLoc,
+              country: expCountry,
+              image: url,
+            },
+          ];
+          // dbFirestore()
+          //   .doc('Users/' + documentSnapshot.id)
+          //   .update({
+          //     experience: dbFirestore.FieldValue.arrayUnion(
+          //       expTitle,
+          //       expTime,
+          //       expOrg,
+          //       expLoc,
+          //       expCountry,
+          //       value6,
+          //     ),
+          //   })
+          dbFirestore()
+            .doc('Users/' + documentSnapshot.id)
+            .update({
+              experience: dbFirestore.FieldValue.arrayUnion(...experience),
+            })
+            .then(() => {
+              dispatch(
+                addExpRedux(
+                  expTitle,
+                  expTime,
+                  expOrg,
+                  expLoc,
+                  expCountry,
+                  expImage,
+                ),
+              );
+              alert('experience added!');
+              setExtraData(new Date());
+
+              console.log('experience updated');
+            });
+        });
+      })
+      .catch(error => {
+        alert(error);
+
+        // setFlag(true);
+      });
+  };
+
+  const removeFromArraySkill = value => {
+    // console.log(field);
+    console.log(value);
+    console.log(storeData.userEmail);
+    // var object = {};
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', storeData.userEmail)
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(documentSnapshot.id);
+          dbFirestore()
+            .doc('Users/' + documentSnapshot.id)
+            .update({
+              skills: dbFirestore.FieldValue.arrayRemove(value),
+            })
+            .then(() => {
+              dispatch(removeExpRedux(value));
+              alert('skill removed!');
               setExtraData(new Date());
 
               console.log('skills updated');
@@ -176,11 +392,29 @@ export default function EditProfileScreen() {
       });
   };
 
+  // const selectFile = async () => {
+  //   try {
+  //     const results = await DocumentPicker.pickSingle({
+  //       type: DocumentPicker.types.images,
+  //     });
+
+  //     console.log(results.uri);
+  //     console.log(results.type);
+
+  //     setSingleFile(results.uri);
+  //     setUploaded(true);
+  //   } catch (err) {
+  //     console.log('Some Error!!!');
+  //   }
+  // };
+
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
         type: DocumentPicker.types.images,
+        copyTo: 'cachesDirectory',
       });
+      setfilePath(results);
 
       console.log(results.uri);
       console.log(results.type);
@@ -191,7 +425,6 @@ export default function EditProfileScreen() {
       console.log('Some Error!!!');
     }
   };
-
   const removeFile = key => {
     setSingleFile(null);
     setUploaded(false);
@@ -409,7 +642,7 @@ export default function EditProfileScreen() {
                   <TouchableOpacity
                     style={{marginTop: 5}}
                     onPress={
-                      () => removeFromArray(item)
+                      () => removeFromArraySkill(item)
                       // console.log('Selected skill to be removed is : ', item);
                     }>
                     <Entypo
@@ -446,7 +679,7 @@ export default function EditProfileScreen() {
           </View>
 
           <TouchableOpacity
-            onPress={() => updateArray(addSkill)}
+            onPress={() => updateArraySkill(addSkill)}
             style={{
               justifyContent: 'center',
               alignItems: 'center',
@@ -610,7 +843,8 @@ export default function EditProfileScreen() {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={user[0].experience}
+            // data={user[0].experience}
+            data={storeData?.experience}
             renderItem={({item}) => (
               <View
                 style={{
@@ -637,7 +871,7 @@ export default function EditProfileScreen() {
                       // marginLeft: 10,
                     }}
                     source={{
-                      uri: item.pic,
+                      uri: item.image,
                     }}
                   />
 
@@ -653,17 +887,18 @@ export default function EditProfileScreen() {
                         color: '#000000',
                         // marginTop: 12,
                       }}>
-                      {item.designation}
+                      {item.title}
                     </Text>
                     <Text style={{fontWeight: 'bold'}}>{item.timePeriod}</Text>
                     <View
                       style={{
                         flexDirection: 'row',
                       }}>
-                      <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
+                      <Text style={{fontWeight: 'bold'}}>{item.period}</Text>
                       <Text style={{fontWeight: 'bold'}}> - </Text>
                       <Text style={{fontWeight: 'bold', fontStyle: 'italic'}}>
-                        {item.location}
+                        {item.city}
+                        {item.country}
                       </Text>
                     </View>
                   </View>
@@ -671,9 +906,16 @@ export default function EditProfileScreen() {
                   <TouchableOpacity
                     style={{marginLeft: 10}}
                     onPress={() => {
-                      console.log(
-                        'Selected skill to be removed is : ',
-                        item.id,
+                      // console.log('Selected exp to be removed is : ', item.id);
+                      removeArrayExp(
+                        item,
+                        // experienceTitle,
+                        // experienceDate,
+                        // experienceCompany,
+                        // experienceLocation,
+                        // experienceCountry,
+                        // singleFile,
+                        // experienceDisplay,
                       );
                     }}>
                     <Entypo
@@ -779,7 +1021,7 @@ export default function EditProfileScreen() {
               style={{}}
               onChangeText={setExperienceCountry}
               value={experienceCountry}
-              placeholder="Location"
+              placeholder="Country"
             />
           </View>
           {/* 
@@ -854,7 +1096,18 @@ export default function EditProfileScreen() {
               paddingVertical: '3%',
               borderRadius: 16,
               marginVertical: '5%',
-            }}>
+            }}
+            onPress={() =>
+              updateArrayExp(
+                experienceTitle,
+                experienceDate,
+                experienceCompany,
+                experienceLocation,
+                experienceCountry,
+                singleFile,
+                // experienceDisplay,
+              )
+            }>
             <Text style={{color: '#ffffff', fontSize: 30, fontWeight: 'bold'}}>
               Add Experience
             </Text>
