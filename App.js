@@ -56,9 +56,11 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <AppStack />
-        {/* <ExplorePage /> */}
       </NavigationContainer>
     </Provider>
+
+    // <EditProfileScreen />
+    //  <ExplorePage />
     // <SettingsScreen />
 
     //  <BottomTabs />

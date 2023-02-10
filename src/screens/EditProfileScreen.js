@@ -213,7 +213,16 @@ export default function EditProfileScreen() {
       expImage,
     );
     console.log('email', storeData.userEmail);
-
+    let experience = [
+      {
+        title: expTitle,
+        period: expTime,
+        company: expOrg,
+        city: expLoc,
+        country: expCountry,
+        image: expImage,
+      },
+    ];
     dbFirestore()
       .collection('Users')
       .where('userEmail', '==', storeData.userEmail)
@@ -223,16 +232,7 @@ export default function EditProfileScreen() {
 
         querySnapshot.forEach(documentSnapshot => {
           console.log(documentSnapshot.id);
-          let experience = [
-            {
-              title: expTitle,
-              period: expTime,
-              company: expOrg,
-              city: expLoc,
-              country: expCountry,
-              image: expImage,
-            },
-          ];
+
           console.log('experience check!');
 
           dbFirestore()
@@ -929,7 +929,9 @@ export default function EditProfileScreen() {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             // data={user[0].experience}
+            key={'_'}
             data={storeData?.experience}
+            keyExtractor={item => item.id + '_'}
             renderItem={({item}) => (
               <View
                 style={{
@@ -1013,7 +1015,7 @@ export default function EditProfileScreen() {
                 </View>
               </View>
             )}
-            keyExtractor={item => item.id}
+            // keyExtractor={item => item.id}
           />
 
           <View
@@ -1173,16 +1175,6 @@ export default function EditProfileScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#469597',
-              alignSelf: 'center',
-              paddingHorizontal: '12%',
-              paddingVertical: '3%',
-              borderRadius: 16,
-              marginVertical: '5%',
-            }}
             onPress={() =>
               updateArrayExp(
                 experienceTitle,
@@ -1200,6 +1192,17 @@ export default function EditProfileScreen() {
                 // expImage,
               )
             }
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#469597',
+              alignSelf: 'center',
+              paddingHorizontal: '12%',
+              paddingVertical: '3%',
+              borderRadius: 16,
+              marginVertical: '5%',
+            }}
+
             // onPress={updateArrayExp}
           >
             <Text style={{color: '#ffffff', fontSize: 30, fontWeight: 'bold'}}>

@@ -50,3 +50,19 @@ export const mainReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+// case REMOVEEXPREDUX: {
+//   return {
+//     ...state,
+//     experience: state.experience.filter(e => {
+//       return (
+//         e.title !== action.payload.title ||
+//         e.period !== action.payload.period ||
+//         e.company !== action.payload.company ||
+//         e.city !== action.payload.city ||
+//         e.country !== action.payload.country ||
+//         e.image !== action.payload.image
+//       );
+//     }),
+//   };
+// }
