@@ -72,86 +72,87 @@ export default function EditProfileScreen() {
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
 
-  const removeArrayExp = async (
-    expTitle,
-    expTime,
-    expOrg,
-    expLoc,
-    expCountry,
-    expImage,
-  ) => {
-    // console.log(field);
-    console.log(expTitle, expTime, expOrg, expLoc, expCountry, expImage);
-    console.log(storeData.userEmail);
+  // const removeArrayExp = async (
+  //   expTitle,
+  //   expTime,
+  //   expOrg,
+  //   expLoc,
+  //   expCountry,
+  //   expImage,
+  // ) => {
+  //   // console.log(field);
+  //   console.log(expTitle, expTime, expOrg, expLoc, expCountry, expImage);
+  //   console.log(storeData.userEmail);
 
-    const filename = filePath.fileCopyUri.substring(
-      filePath.fileCopyUri.lastIndexOf('/') + 1,
-    );
-    const uploadUri =
-      Platform.OS === 'ios'
-        ? filePath.fileCopyUri.replace('file://', '')
-        : filePath.fileCopyUri;
-    setUploading(true);
-    setTransferred(0);
-    const task = await storage().ref(filename).putFile(uploadUri);
-    // console.log(task.ref.getDownloadURL);
-    // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
-    console.log('working');
-    const url = await storage().ref(filename).getDownloadURL();
-    console.log('url is: ' + url);
-    // var object = {};
-    dbFirestore()
-      .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
-      .where('userEmail', '==', storeData.userEmail)
-      // .where('userEmail', '==', 'bashfyp@gmail.com')
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: for removing ', querySnapshot.size);
+  //   const filename = filePath.fileCopyUri.substring(
+  //     filePath.fileCopyUri.lastIndexOf('/') + 1,
+  //   );
+  //   const uploadUri =
+  //     Platform.OS === 'ios'
+  //       ? filePath.fileCopyUri.replace('file://', '')
+  //       : filePath.fileCopyUri;
+  //   setUploading(true);
+  //   setTransferred(0);
+  //   const task = await storage().ref(filename).putFile(uploadUri);
+  //   // console.log(task.ref.getDownloadURL);
+  //   // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
+  //   console.log('working');
+  //   const url = await storage().ref(filename).getDownloadURL();
+  //   console.log('url is: ' + url);
+  //   // var object = {};
+  //   dbFirestore()
+  //     .collection('Users')
+  //     // .doc('roles')
+  //     // .collection(value.toLowerCase())
+  //     .where('userEmail', '==', storeData.userEmail)
+  //     // .where('userEmail', '==', 'bashfyp@gmail.com')
+  //     .get()
+  //     .then(querySnapshot => {
+  //       console.log('Total Found users: for removing ', querySnapshot.size);
 
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(documentSnapshot.id);
-          let experience = [
-            {
-              title: expTitle,
-              period: expTime,
-              company: expOrg,
-              city: expLoc,
-              country: expCountry,
-              image: url,
-            },
-          ];
-          dbFirestore()
-            .doc('Users/' + documentSnapshot.id)
-            .update({
-              experience: dbFirestore.FieldValue.arrayRemove(...experience),
-            })
-            .then(() => {
-              dispatch(
-                removeExpRedux(
-                  // expTitle,
-                  // expTime,
-                  // expOrg,
-                  // expLoc,
-                  // expCountry,
-                  // url,
-                  experience,
-                ),
-              );
-              alert('experience removed!');
-              setExtraData(new Date());
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         console.log(documentSnapshot.id);
+  //         let experience = [
+  //           {
+  //             title: expTitle,
+  //             period: expTime,
+  //             company: expOrg,
+  //             city: expLoc,
+  //             country: expCountry,
+  //             image: url,
+  //           },
+  //         ];
+  //         dbFirestore()
+  //           .doc('Users/' + documentSnapshot.id)
+  //           .update({
+  //             experience: dbFirestore.FieldValue.arrayRemove(...experience),
+  //           })
+  //           .then(() => {
+  //             dispatch(
+  //               removeExpRedux(
+  //                 // expTitle,
+  //                 // expTime,
+  //                 // expOrg,
+  //                 // expLoc,
+  //                 // expCountry,
+  //                 // url,
+  //                 experience,
+  //               ),
+  //             );
+  //             alert('experience removed!');
+  //             setExtraData(new Date());
 
-              console.log('experience removed');
-            });
-        });
-      })
-      .catch(error => {
-        alert(error);
+  //             console.log('experience removed');
+  //           });
+  //       });
+  //     })
+  //     .catch(error => {
+  //       alert(error);
 
-        // setFlag(true);
-      });
-  };
+  //       // setFlag(true);
+  //     });
+  // };
+
   // const removeFromArrayExp = value => {
   //   // console.log(field);
   //   console.log(value);
@@ -189,15 +190,32 @@ export default function EditProfileScreen() {
   //     });
   // };
 
-  const updateArraySkill = value => {
-    // console.log(field);
-    console.log(value);
-    console.log(storeData.userEmail);
-    // var object = {};
+  const removeArrayExp = async (
+    expTitle,
+    expTime,
+    expOrg,
+    expLoc,
+    expCountry,
+    expImage,
+  ) => {
+    console.log(expTitle);
+    console.log(
+      'test',
+      expTitle,
+      'test1',
+      expTime,
+      'test2',
+      expOrg,
+      'test3',
+      expLoc,
+      'test4',
+      expCountry,
+      expImage,
+    );
+    console.log('email', storeData.userEmail);
+
     dbFirestore()
       .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
       .where('userEmail', '==', storeData.userEmail)
       .get()
       .then(querySnapshot => {
@@ -205,27 +223,45 @@ export default function EditProfileScreen() {
 
         querySnapshot.forEach(documentSnapshot => {
           console.log(documentSnapshot.id);
+          let experience = [
+            {
+              title: expTitle,
+              period: expTime,
+              company: expOrg,
+              city: expLoc,
+              country: expCountry,
+              image: expImage,
+            },
+          ];
+          console.log('experience check!');
+
           dbFirestore()
             .doc('Users/' + documentSnapshot.id)
             .update({
-              skills: dbFirestore.FieldValue.arrayUnion(value),
+              experience: dbFirestore.FieldValue.arrayRemove(...experience),
             })
             .then(() => {
-              dispatch(addSkillRedux(value));
-              alert('skill added!');
+              dispatch(
+                removeExpRedux(
+                  expTitle,
+                  expTime,
+                  expOrg,
+                  expLoc,
+                  expCountry,
+                  expImage,
+                ),
+              );
+              alert('experience removed!');
               setExtraData(new Date());
 
-              console.log('skills updated');
+              console.log('experience removed');
             });
         });
       })
       .catch(error => {
         alert(error);
-
-        // setFlag(true);
       });
   };
-
   const updateArrayExp = async (
     expTitle,
     expTime,
@@ -235,7 +271,15 @@ export default function EditProfileScreen() {
     expImage,
   ) => {
     // console.log(field);
-    console.log(expTitle, expTime, expOrg, expLoc, expCountry, expImage);
+    console.log(
+      'testing',
+      expTitle,
+      expTime,
+      expOrg,
+      expLoc,
+      expCountry,
+      expImage,
+    );
     console.log(storeData.userEmail);
 
     const filename = filePath.fileCopyUri.substring(
@@ -318,6 +362,43 @@ export default function EditProfileScreen() {
       });
   };
 
+  const updateArraySkill = value => {
+    // console.log(field);
+    console.log(value);
+    console.log(storeData.userEmail);
+    // var object = {};
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', storeData.userEmail)
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(documentSnapshot.id);
+          dbFirestore()
+            .doc('Users/' + documentSnapshot.id)
+            .update({
+              skills: dbFirestore.FieldValue.arrayUnion(value),
+            })
+            .then(() => {
+              dispatch(addSkillRedux(value));
+              alert('skill added!');
+              setExtraData(new Date());
+
+              console.log('skills updated');
+            });
+        });
+      })
+      .catch(error => {
+        alert(error);
+
+        // setFlag(true);
+      });
+  };
+
   const removeFromArraySkill = value => {
     // console.log(field);
     console.log(value);
@@ -340,7 +421,7 @@ export default function EditProfileScreen() {
               skills: dbFirestore.FieldValue.arrayRemove(value),
             })
             .then(() => {
-              dispatch(removeExpRedux(value));
+              dispatch(removeSkillRedux(value));
               alert('skill removed!');
               setExtraData(new Date());
 
@@ -438,6 +519,10 @@ export default function EditProfileScreen() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleRemove = () => {
+    removeArrayExp(expTitle, expTime, expOrg, expLoc, expCountry, expImage);
+  };
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -889,35 +974,36 @@ export default function EditProfileScreen() {
                       }}>
                       {item.title}
                     </Text>
-                    <Text style={{fontWeight: 'bold'}}>{item.timePeriod}</Text>
+                    <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
                     <View
                       style={{
                         flexDirection: 'row',
                       }}>
-                      <Text style={{fontWeight: 'bold'}}>{item.period}</Text>
+                      <Text style={{fontWeight: '500'}}>{item.period}</Text>
                       <Text style={{fontWeight: 'bold'}}> - </Text>
-                      <Text style={{fontWeight: 'bold', fontStyle: 'italic'}}>
-                        {item.city}
-                        {item.country}
+                      <Text style={{fontWeight: '500'}}>
+                        {item.city + ', ' + item.country}
                       </Text>
                     </View>
                   </View>
 
                   <TouchableOpacity
                     style={{marginLeft: 10}}
-                    onPress={() => {
-                      // console.log('Selected exp to be removed is : ', item.id);
-                      removeArrayExp(
-                        item,
-                        // experienceTitle,
-                        // experienceDate,
-                        // experienceCompany,
-                        // experienceLocation,
-                        // experienceCountry,
-                        // singleFile,
-                        // experienceDisplay,
-                      );
-                    }}>
+                    onPress={
+                      () =>
+                        // console.log('Selected exp to be removed is : ', item.id);
+                        removeArrayExp(
+                          // item,
+                          item.title,
+                          item.period,
+                          item.company,
+                          item.city,
+                          item.country,
+                          item.image,
+                          // experienceDisplay,
+                        )
+                      // handleRemove
+                    }>
                     <Entypo
                       name="circle-with-cross"
                       size={20}
@@ -1105,9 +1191,17 @@ export default function EditProfileScreen() {
                 experienceLocation,
                 experienceCountry,
                 singleFile,
-                // experienceDisplay,
+
+                //             expTitle,
+                // expTime,
+                // expOrg,
+                // expLoc,
+                // expCountry,
+                // expImage,
               )
-            }>
+            }
+            // onPress={updateArrayExp}
+          >
             <Text style={{color: '#ffffff', fontSize: 30, fontWeight: 'bold'}}>
               Add Experience
             </Text>
