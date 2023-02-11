@@ -38,63 +38,12 @@ export const removeSkillRedux = data => ({
   payload: data,
 });
 
-export const addExpRedux = (
-  expTitle,
-  expTime,
-  expOrg,
-  expLoc,
-  expCountry,
-  expImage,
-) => ({
+export const addExpRedux = data => ({
   type: ADDEXPREDUX,
-  payload1: expTitle,
-  payload2: expTime,
-  payload3: expOrg,
-  payload4: expLoc,
-  payload5: expCountry,
-  payload6: expImage,
-  // payload: {
-  //   expTitle,
-  //   expTime,
-  //   expOrg,
-  //   expLoc,
-  //   expCountry,
-  //   expImage,
-  // },
+  payload: data,
 });
 
-export const removeExpRedux = (
-  expTitle,
-  expTime,
-  expOrg,
-  expLoc,
-  expCountry,
-  expImage,
-) => ({
+export const removeExpRedux = index => ({
   type: REMOVEEXPREDUX,
-  payload1: expTitle,
-  payload2: expTime,
-  payload3: expOrg,
-  payload4: expLoc,
-  payload5: expCountry,
-  payload6: expImage,
+  payload: index,
 });
-
-// export const removeExpRedux = (
-//   expTitle,
-//   expTime,
-//   expOrg,
-//   expLoc,
-//   expCountry,
-//   expImage,
-// ) => ({
-//   type: REMOVEEXPREDUX,
-//   payload: {
-//     expTitle,
-//     expTime,
-//     expOrg,
-//     expLoc,
-//     expCountry,
-//     expImage,
-//   },
-// });

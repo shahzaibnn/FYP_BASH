@@ -267,7 +267,7 @@ const ProfileScreen = ({navigation}) => {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={storeData.experience}
+            data={user[0].experience}
             renderItem={({item}) => (
               <View
                 style={{

@@ -197,6 +197,7 @@ export default function EditProfileScreen() {
     expLoc,
     expCountry,
     expImage,
+    index,
   ) => {
     console.log(expTitle);
     console.log(
@@ -241,18 +242,7 @@ export default function EditProfileScreen() {
               experience: dbFirestore.FieldValue.arrayRemove(...experience),
             })
             .then(() => {
-              dispatch(
-                removeExpRedux(
-                  expTitle,
-                  expTime,
-                  expOrg,
-                  expLoc,
-                  expCountry,
-                  expImage,
-                ),
-              );
-              alert('experience removed!');
-              setExtraData(new Date());
+              dispatch(removeExpRedux(index));
 
               console.log('experience removed');
             });
@@ -262,25 +252,15 @@ export default function EditProfileScreen() {
         alert(error);
       });
   };
-  const updateArrayExp = async (
-    expTitle,
-    expTime,
-    expOrg,
-    expLoc,
-    expCountry,
-    expImage,
-  ) => {
+  const updateArrayExp = async () => {
     // console.log(field);
-    console.log(
-      'testing',
-      expTitle,
-      expTime,
-      expOrg,
-      expLoc,
-      expCountry,
-      expImage,
-    );
-    console.log(storeData.userEmail);
+    console.log(experienceTitle);
+    console.log(experienceCompany);
+    console.log(experienceCountry);
+    console.log(experienceDate);
+    console.log(experienceLocation);
+    console.log(singleFile);
+    // console.log(storeData.userEmail);
 
     const filename = filePath.fileCopyUri.substring(
       filePath.fileCopyUri.lastIndexOf('/') + 1,
@@ -312,44 +292,43 @@ export default function EditProfileScreen() {
           console.log(documentSnapshot.id);
           let experience = [
             {
-              title: expTitle,
-              period: expTime,
-              company: expOrg,
-              city: expLoc,
-              country: expCountry,
+              title: experienceTitle,
+              period: experienceDate,
+              company: experienceCompany,
+              city: experienceLocation,
+              country: experienceCountry,
               image: url,
             },
           ];
-          // dbFirestore()
-          //   .doc('Users/' + documentSnapshot.id)
-          //   .update({
-          //     experience: dbFirestore.FieldValue.arrayUnion(
-          //       expTitle,
-          //       expTime,
-          //       expOrg,
-          //       expLoc,
-          //       expCountry,
-          //       value6,
-          //     ),
-          //   })
+
           dbFirestore()
             .doc('Users/' + documentSnapshot.id)
             .update({
               experience: dbFirestore.FieldValue.arrayUnion(...experience),
             })
             .then(() => {
-              dispatch(
-                addExpRedux(
-                  expTitle,
-                  expTime,
-                  expOrg,
-                  expLoc,
-                  expCountry,
-                  expImage,
-                ),
-              );
-              alert('experience added!');
-              setExtraData(new Date());
+              let experienceRedux = {
+                title: experienceTitle,
+                period: experienceDate,
+                company: experienceCompany,
+                city: experienceLocation,
+                country: experienceCountry,
+                image: url,
+              };
+
+              dispatch(addExpRedux(experienceRedux));
+              // dispatch(
+              //   addExpRedux(
+              //     expTitle,
+              //     expTime,
+              //     expOrg,
+              //     expLoc,
+              //     expCountry,
+              //     expImage,
+              //   ),
+              // );
+              // alert('experience added!');
+              // setExtraData(new Date());
 
               console.log('experience updated');
             });
@@ -931,8 +910,8 @@ export default function EditProfileScreen() {
             // data={user[0].experience}
             key={'_'}
             data={storeData?.experience}
-            keyExtractor={item => item.id + '_'}
-            renderItem={({item}) => (
+            // keyExtractor={item => item.id + '_'}
+            renderItem={({item, index}) => (
               <View
                 style={{
                   //   backgroundColor: 'rgba(187, 198, 200, 0.5)',
@@ -993,15 +972,15 @@ export default function EditProfileScreen() {
                     style={{marginLeft: 10}}
                     onPress={
                       () =>
-                        // console.log('Selected exp to be removed is : ', item.id);
+                        // console.log('Selected exp to be removed is : ', index)
                         removeArrayExp(
-                          // item,
                           item.title,
                           item.period,
                           item.company,
                           item.city,
                           item.country,
                           item.image,
+                          index,
                           // experienceDisplay,
                         )
                       // handleRemove
@@ -1175,23 +1154,7 @@ export default function EditProfileScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() =>
-              updateArrayExp(
-                experienceTitle,
-                experienceDate,
-                experienceCompany,
-                experienceLocation,
-                experienceCountry,
-                singleFile,
-
-                //             expTitle,
-                // expTime,
-                // expOrg,
-                // expLoc,
-                // expCountry,
-                // expImage,
-              )
-            }
+            onPress={() => updateArrayExp()}
             style={{
               justifyContent: 'center',
               alignItems: 'center',

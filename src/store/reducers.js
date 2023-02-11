@@ -35,9 +35,10 @@ export const mainReducer = (state = initialState, action) => {
       return {...state, experience: [...state.experience, action.payload]};
     }
     case REMOVEEXPREDUX: {
+      console.log('yahan araha hey!!!!!!');
       return {
         ...state,
-        experience: [...state.experience.filter(e => e !== action.payload)],
+        experience: state.experience.filter((_, i) => i !== action.payload),
       };
     }
 
