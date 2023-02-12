@@ -29,6 +29,8 @@ import {db, dbFirestore} from '../Firebase/Config';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage';
 
+import {addJob} from '../store/action';
+
 export default function JobPostingScreen() {
   const [title, setTitle] = useState('');
   const [email, setEmail] = useState('');
@@ -120,6 +122,21 @@ export default function JobPostingScreen() {
         })
         .then(() => {
           console.log('Post Added!');
+          dispatch(
+            addJob({
+              jobTitle: title,
+              jobEmail: email,
+              jobCompany: company,
+              jobSalary: salary,
+              jobDescription: description,
+              jobLocation: value,
+              jobCity: city,
+              jobMode: value2,
+              image: url,
+              jobPostedBy: name,
+              createdAt: currentDate,
+            }),
+          );
         });
     } catch (e) {
       console.error(e);

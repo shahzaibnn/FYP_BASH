@@ -24,7 +24,11 @@ import ImageModal from 'react-native-image-modal';
 import RNSmtpMailer from 'react-native-smtp-mailer';
 import RNFS from 'react-native-fs';
 
-const ApplyToJob = () => {
+import {useSelector, useDispatch} from 'react-redux';
+import {addition, setInititialLogin, subtraction} from '../store/action';
+import {dbFirestore} from '../Firebase/Config';
+
+const ApplyToJob = ({navigation, route}) => {
   const [name, setName] = useState('');
   const [lastName, setlastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -35,11 +39,54 @@ const ApplyToJob = () => {
     {label: 'Pakistan', value: 'pakistan'},
     {label: 'USA', value: 'usa'},
   ]);
+  // const emailAddressOfCurrentUser = route.params.userEmail;
+
   // const [singleFile, setSingleFile] = useState();
   const [singleFile, setSingleFile] = useState([]);
   const [uploaded, setUploaded] = useState(false);
   const [fileName, setfileName] = useState(false);
   const [message, setMessage] = useState(false);
+
+  const storeData = useSelector(state => state);
+  const dispatch = useDispatch();
+  const {job} = route.params;
+  // const emailAddressOfCurrentUser = route.params.userEmail;
+
+  // useEffect(() => {
+  //   searchData(emailAddressOfCurrentUser);
+  //   console.log(emailAddressOfCurrentUser);
+  // }, []);
+
+  // const searchData = loggedInUser => {
+  //   console.log('LOGGED IN USER IS: ', loggedInUser);
+
+  //   dbFirestore()
+  //     .collection('Users')
+  //     // .doc('roles')
+  //     // .collection(value.toLowerCase())
+  //     .where('userEmail', '==', loggedInUser.toLowerCase())
+  //     .get()
+  //     .then(querySnapshot => {
+  //       console.log('Total Found users: ', querySnapshot.size);
+
+  //       if (querySnapshot.size == 0) {
+  //         console.log('CANNOT RETRIEVE DATA');
+  //       } else {
+  //         querySnapshot.forEach(documentSnapshot => {
+  //           console.log(documentSnapshot.data());
+  //           setUserData(documentSnapshot.data());
+  //           dispatch(setInititialLogin(documentSnapshot.data()));
+  //           console.log('apply', documentSnapshot.data());
+  //         });
+  //       }
+  //     })
+  //     .catch(error => {
+  //       // alert(error);
+
+  //       // setFlag(true);
+  //       console.log(error);
+  //     });
+  // };
 
   const sendEmail = async () => {
     var path = RNFS.DownloadDirectoryPath + '/test.pdf';
@@ -47,8 +94,11 @@ const ApplyToJob = () => {
     RNFS.copyFile(singleFile, path)
       .then(success => {
         console.log('worksss!');
+        console.log(job.jobEmail);
+        console.log('check route', {job});
       })
       .catch(err => {
+        console.log('error');
         console.log(err.message);
       });
     RNSmtpMailer.sendMail({
@@ -60,15 +110,33 @@ const ApplyToJob = () => {
       // fromName: 'Some Name', // optional
       // replyTo: 'usernameEmail', // optional
       recipients: 'habibafaisal8@gmail.com',
+      // recipients: job.jobEmail,
+
       // bcc: ['bccEmail1', 'bccEmail2'], // optional
-      bcc: ['shahzaibnn@gmail.com'], // optional
+      // bcc: ['shahzaibnn@gmail.com'], // optional
       subject: 'Testing after code cleaning',
-      htmlBody: '<h1>header</h1><p>Report Submission</p>',
+      // subject: job.jobTitle,
+      // htmlBody: job.jobTitle,
+      // job.jobCountry,
+
       attachmentPaths: [path],
       attachmentNames: ['anotherTest.pdf'],
     })
+
+      // dbFirestore()
+      //   .functions()
+      //   .httpsCallable('sendEmail')({
+      //     to: job.jobEmail,
+      //     subject: 'Application for ${job.jobTitle}',
+      //     text: 'hii',
+      //     // text: `
+      //     //     Name: ${name}
+      //     //     Email: ${email}
+      //     //     Message: ${message}
+      //     //   `,
+      //   })
       .then(success => console.log(success))
-      .catch(err => console.log(err));
+      .catch(err => console.log('error', err));
   };
 
   const selectFile = async () => {
@@ -115,18 +183,22 @@ const ApplyToJob = () => {
         <View style={styles.ExpBoxView}>
           <TextInput
             style={styles.inputStyle}
-            onChangeText={name => setName(name)}
+            // onChangeText={name => setName(name)}
             placeholder="First Name"
             placeholderTextColor="#6A6A6A"
             blurOnSubmit={false}
+            value={storeData.firstName}
+            editable={false}
           />
           <View style={{flex: 0.1}}></View>
           <TextInput
             style={styles.inputStyle}
-            onChangeText={lastName => setlastName(lastName)}
+            // onChangeText={lastName => setlastName(lastName)}
             placeholder="Last Name"
             placeholderTextColor="#6A6A6A"
             blurOnSubmit={false}
+            value={storeData.lastName}
+            editable={false}
           />
         </View>
         <View style={styles.ExpBoxView}>
@@ -135,10 +207,12 @@ const ApplyToJob = () => {
         <View style={styles.ExpBoxView}>
           <TextInput
             style={styles.inputStyle}
-            onChangeText={userEmail => setUserEmail(userEmail)}
+            value={storeData.userEmail}
+            // onChangeText={userEmail => setUserEmail(userEmail)}
             placeholder="Email"
             placeholderTextColor="#6A6A6A"
             blurOnSubmit={false}
+            editable={false}
           />
         </View>
         {/* Dropdown Menu */}

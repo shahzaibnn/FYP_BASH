@@ -7,6 +7,8 @@ import {
   REMOVESKILLREDUX,
   ADDEXPREDUX,
   REMOVEEXPREDUX,
+  ADD_JOB,
+  SETJOBS,
 } from './actionTypes';
 
 export const addition = () => ({
@@ -19,6 +21,11 @@ export const subtraction = () => ({
 
 export const setInititialLogin = data => ({
   type: SETINITIALLOGIN,
+  payload: data,
+});
+
+export const setJobs = data => ({
+  type: SETJOBS,
   payload: data,
 });
 
@@ -47,3 +54,10 @@ export const removeExpRedux = index => ({
   type: REMOVEEXPREDUX,
   payload: index,
 });
+
+export const addJob = job => {
+  return {
+    type: ADD_JOB,
+    payload: job,
+  };
+};

@@ -6,3 +6,5 @@ export const ADDSKILLREDUX = 'ADDSKILLREDUX';
 export const ADDEXPREDUX = 'ADDEXPREDUX';
 export const REMOVESKILLREDUX = 'REMOVESKILLREDUX';
 export const REMOVEEXPREDUX = 'REMOVEEXPREDUX';
+export const ADD_JOB = 'ADD_JOB';
+export const SETJOBS = 'SETJOBS';

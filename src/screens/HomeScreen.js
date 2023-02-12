@@ -43,7 +43,7 @@ import Toast from 'react-native-toast-message';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {addition, setInititialLogin, subtraction} from '../store/action';
-
+import {setJobs} from '../store/action';
 // import {db, dbFirestore} from './Config';
 
 export default function HomeScreen({navigation, route}) {
@@ -105,6 +105,19 @@ export default function HomeScreen({navigation, route}) {
   const [jobQuery, setJobQuery] = useState(
     dbFirestore().collection('Jobs').orderBy('createdAt', 'desc').limit(1),
   );
+
+  const handleApply = job => {
+    // Pass the job information as props to the Apply to Job screen
+    console.log('checking jobs: ', job);
+    console.log('checking again: ', {job});
+
+    navigation.navigate('ApplyToJob', {job});
+    // navigation.navigate('ApplytoJob', {
+    //   jobTitle: job.jobTitle,
+    //   jobCompany: job.jobCompany,
+    //   jobEmail: job.jobEmail,
+    // });
+  };
 
   const searchData = loggedInUser => {
     console.log('LOGGED IN USER IS: ', loggedInUser);
@@ -287,6 +300,10 @@ export default function HomeScreen({navigation, route}) {
       .limit(2)
       .get()
       .then(querySnapshot => {
+        const jobs = [];
+        querySnapshot.forEach(doc => {
+          jobs.push({id: doc.id, ...doc.data()});
+        });
         console.log('Total Jobs: ', querySnapshot.size);
 
         var total = querySnapshot.size;
@@ -317,6 +334,7 @@ export default function HomeScreen({navigation, route}) {
         }
         setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
       });
+    dispatch(setJobs(jobs));
     // setJobLoading(false);
   };
 
@@ -572,7 +590,9 @@ export default function HomeScreen({navigation, route}) {
                           paddingVertical:
                             Dimensions.get('window').height * 0.01,
                           borderRadius: 16,
-                        }}>
+                        }}
+                        // onPress={navigation.navigate('ApplyToJob')}
+                      >
                         <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
                           Apply
                         </Text>
@@ -904,8 +924,15 @@ export default function HomeScreen({navigation, route}) {
 
             {/* apply now */}
             <View>
-              <TouchableOpacity style={styles.buttonStyle}>
-                <Text style={styles.buttonTextStyle}>Apply</Text>
+              <TouchableOpacity
+                style={styles.buttonStyle}
+                onPress={handleApply(actionParameters)}>
+                <Text
+                  style={styles.buttonTextStyle}
+                  // onPress={navigation.navigate('ApplyToJob')}
+                >
+                  Apply
+                </Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
