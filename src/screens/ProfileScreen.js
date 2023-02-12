@@ -23,16 +23,23 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageModal from 'react-native-image-modal';
 import {useSelector, useDispatch} from 'react-redux';
+import {db, dbFirestore} from '../Firebase/Config';
 
 import DocumentPicker, {types} from 'react-native-document-picker';
+import {useEffect} from 'react';
 
 const ProfileScreen = ({navigation}) => {
   const profileName = 'Tony';
 
   const storeData = useSelector(state => state);
+  const emailAddressOfCurrentUser = storeData.userEmail;
+
+  const [fetchedPosts, setFetchedPosts] = useState([]);
 
   const [singleFile, setSingleFile] = useState();
   const [uploaded, setUploaded] = useState(false);
+  const [extraData, setExtraData] = React.useState(new Date());
+
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
@@ -55,11 +62,50 @@ const ProfileScreen = ({navigation}) => {
     console.log('clicked!!!');
   };
 
-  // console.log(multipleFile);
+  const findPosts = () => {
+    dbFirestore()
+      .collection('Posts')
+      .where('postedBy', '==', storeData.userEmail)
+      // .limit(2)
+      .get()
+      .then(querySnapshot => {
+        console.log('User logged in is: ', storeData.userEmail);
+        console.log('YE ASAL CHECKING KE LIYE HEY!!!!');
+        console.log('Total posts: ', querySnapshot.size);
 
-  console.log('Saved value is: ', singleFile);
+        var total = querySnapshot.size;
+        let count = 0;
 
-  // const data = posts();
+        if (total == 0) {
+          // setPostLoader(false);
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+            // console.log(
+            //   'User ID: ',
+            //   documentSnapshot.id,
+            //   documentSnapshot.data(),
+            //   //To grab a particular field use
+            //   //documentSnapshot.data().userEmail,
+            // );
+            setFetchedPosts(fetchedPosts => [...fetchedPosts, v]);
+
+            count++;
+            if (count == total) {
+              // setPostLoader(false);
+              console.log(':runing');
+            }
+          });
+        }
+
+        // setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+      });
+  };
+
+  useEffect(() => {
+    findPosts();
+  }, []);
   return (
     <ScrollView>
       {/* back button with 3 dots button */}
@@ -85,6 +131,7 @@ const ProfileScreen = ({navigation}) => {
         </TouchableOpacity>
 
         <TouchableOpacity
+          onPress={() => console.log(fetchedPosts)}
           style={{position: 'absolute', right: '5%', top: '5%'}}>
           <MaterialCommunityIcons
             name="dots-vertical"
@@ -334,16 +381,17 @@ const ProfileScreen = ({navigation}) => {
           </Text>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={posts}
+            data={fetchedPosts}
             keyExtractor={item => item.id}
             renderItem={({item}) => {
+              // console.log('Id is : ', item);
               let likeColor = '';
 
-              console.log(item.likedBy);
+              // console.log(item.likedBy);
 
-              if (item.likedBy.includes(profileName)) {
+              if (item.likedBy.includes(emailAddressOfCurrentUser)) {
                 likeColor = '#000000';
-                console.log('running');
+                // console.log('running');
               } else {
                 likeColor = '#ffffff';
               }
@@ -351,8 +399,6 @@ const ProfileScreen = ({navigation}) => {
               return (
                 <View
                   style={{
-                    // elevation: 1000,
-                    // backgroundColor: '#ffffff',
                     marginHorizontal: Dimensions.get('window').width * 0.05,
                     marginVertical: Dimensions.get('window').height * 0.01,
                     borderRadius: 16,
@@ -363,7 +409,7 @@ const ProfileScreen = ({navigation}) => {
                       marginVertical: Dimensions.get('window').height * 0.01,
                     }}>
                     <Image
-                      source={{uri: item.imageUrl}}
+                      source={{uri: item.profilePic}}
                       style={{
                         width: 60,
                         height: 60,
@@ -393,28 +439,9 @@ const ProfileScreen = ({navigation}) => {
                         {item.title}
                       </Text>
                       <Text style={{color: '#777777', fontSize: 12}}>
-                        {item.datePosted}
+                        {item.date}
                       </Text>
                     </View>
-                    {/* looks fine here */}
-
-                    <TouchableOpacity
-                      style={{
-                        marginLeft: '18%',
-                      }}>
-                      <MaterialCommunityIcons
-                        name="dots-vertical"
-                        size={30}
-                        color="#000000"
-                        style={
-                          {
-                            // marginLeft: Dimensions.get('window').width * 0.15,
-                            // alignSelf: 'flex-end',
-                            // marginTop: Dimensions.get('window').height * 0.005,
-                          }
-                        }
-                      />
-                    </TouchableOpacity>
                   </View>
 
                   <SliderBox
@@ -443,7 +470,7 @@ const ProfileScreen = ({navigation}) => {
                       marginHorizontal: '2.5%',
                       marginVertical: '2%',
                     }}>
-                    {item.descriptionText}
+                    {item.description}
                   </Text>
 
                   <View
@@ -462,6 +489,53 @@ const ProfileScreen = ({navigation}) => {
                         {item.likedBy.length} Likes
                       </Text>
                       <TouchableOpacity
+                        onPress={() => {
+                          console.log('hdshjdsfvhddhfbhj');
+                          if (
+                            item.likedBy.includes(emailAddressOfCurrentUser)
+                          ) {
+                            dbFirestore()
+                              .doc('Posts/' + item.id)
+                              .update({
+                                likedBy: dbFirestore.FieldValue.arrayRemove(
+                                  emailAddressOfCurrentUser,
+                                ),
+                              })
+                              .then(() => {
+                                console.log('Like Removed!');
+                              });
+
+                            fetchedPosts.find(
+                              obj => obj.id == item.id,
+                            ).likedBy = item.likedBy.filter(
+                              e => e !== emailAddressOfCurrentUser,
+                            );
+                            setExtraData(new Date());
+
+                            // likeColor = '#ffffff';
+                          } else {
+                            console.log('ye work');
+                            dbFirestore()
+                              .doc('Posts/' + item.id)
+                              .update({
+                                likedBy: dbFirestore.FieldValue.arrayUnion(
+                                  emailAddressOfCurrentUser,
+                                ),
+                              })
+                              .then(() => {
+                                console.log('Like Placed!');
+                              });
+                            let arr = item.likedBy;
+                            arr.push(emailAddressOfCurrentUser);
+                            fetchedPosts.find(
+                              obj => obj.id == item.id,
+                            ).likedBy = arr;
+
+                            setExtraData(new Date());
+                          }
+                          // setFetchedPosts([]);
+                          // searchPosts();
+                        }}
                         style={{
                           paddingHorizontal: '8%',
                           paddingVertical: '8%',
@@ -475,7 +549,7 @@ const ProfileScreen = ({navigation}) => {
                       </TouchableOpacity>
                     </View>
 
-                    <View>
+                    {/* <View>
                       <Text
                         style={{
                           textAlign: 'center',
@@ -496,7 +570,7 @@ const ProfileScreen = ({navigation}) => {
                         }}>
                         <FontAwesome name="comment" size={25} color="#ffffff" />
                       </TouchableOpacity>
-                    </View>
+                    </View> */}
                   </View>
                 </View>
               );

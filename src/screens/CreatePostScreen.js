@@ -19,6 +19,8 @@ import ImageModal from 'react-native-image-modal';
 
 import storage from '@react-native-firebase/storage';
 import {db, dbFirestore} from '../Firebase/Config';
+import {useSelector, useDispatch} from 'react-redux';
+
 import {
   ref,
   set,
@@ -34,6 +36,9 @@ import {
 import {waitForPendingWrites} from 'firebase/firestore';
 
 export default function CreatePostScreen() {
+  const storeData = useSelector(state => state);
+  const dispatch = useDispatch();
+
   const [text, setText] = useState('');
 
   const [multipleFile, setMultipleFile] = useState([]);
@@ -145,15 +150,15 @@ export default function CreatePostScreen() {
     await dbFirestore()
       .collection('Posts')
       .add({
-        commentedBy: ['shahzaibnn@gmail.com', 'habibafaisal8@gmail.com'],
+        commentedBy: [],
         createdAt: currentDate,
         description: text,
         images: yourArray,
-        likedBy: ['shahzaibnn@gmail.com'],
-        name: 'Canada',
-        profilePic:
-          'https://www.seekpng.com/png/detail/1008-10080082_27-2011-photoshop-pernalonga-baby-looney-tunes.png',
-        title: 'BSCS Student',
+        likedBy: [],
+        name: storeData.firstName,
+        profilePic: storeData.pic,
+        title: storeData.title,
+        postedBy: storeData.userEmail,
       })
       .then(() => {
         console.log('Post Added!');
@@ -248,7 +253,9 @@ export default function CreatePostScreen() {
           marginVertical: '3%',
           justifyContent: 'center',
         }}>
-        <TouchableOpacity style={{position: 'absolute', left: 0}}>
+        <TouchableOpacity
+          style={{position: 'absolute', left: 0}}
+          onPress={() => console.log(storeData)}>
           <Entypo name="circle-with-cross" size={25} color="#777777" />
         </TouchableOpacity>
 
