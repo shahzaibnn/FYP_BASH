@@ -808,7 +808,7 @@ export default function EditProfileScreen() {
           }}>
           <View
             style={{
-              backgroundColor: '#ffffff',
+              backgroundColor: '#BBC6C8',
               // width: Dimensions.get('window').width * 0.8,
               marginHorizontal: '10%',
               borderRadius: 16,
@@ -830,12 +830,14 @@ export default function EditProfileScreen() {
                   // marginHorizontal: '5%',
 
                   fontSize: 18,
+                  backgroundColor: '#BBC6C8',
+                  color: '#5BA199',
                 }}
                 multiline
                 onChangeText={setDescription}
                 value={description}
-                placeholder="Write post here..."
-                placeholderTextColor={'#5BA199'}
+                placeholder="Write Description here..."
+                placeholderTextColor={'#777777'}
               />
             </View>
           </View>
@@ -955,12 +957,12 @@ export default function EditProfileScreen() {
                       }}>
                       {item.title}
                     </Text>
-                    <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
+                    <Text style={{fontWeight: 'bold'}}>{item.period}</Text>
                     <View
                       style={{
                         flexDirection: 'row',
                       }}>
-                      <Text style={{fontWeight: '500'}}>{item.period}</Text>
+                      <Text style={{fontWeight: '500'}}>{item.company}</Text>
                       <Text style={{fontWeight: 'bold'}}> - </Text>
                       <Text style={{fontWeight: '500'}}>
                         {item.city + ', ' + item.country}

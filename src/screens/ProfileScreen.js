@@ -267,7 +267,7 @@ const ProfileScreen = ({navigation}) => {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={user[0].experience}
+            data={storeData.experience}
             renderItem={({item}) => (
               <View
                 style={{
@@ -293,7 +293,7 @@ const ProfileScreen = ({navigation}) => {
                       // marginLeft: 10,
                     }}
                     source={{
-                      uri: item.pic,
+                      uri: item.image,
                     }}
                   />
 
@@ -301,15 +301,13 @@ const ProfileScreen = ({navigation}) => {
                     style={{
                       marginLeft: Dimensions.get('window').width * 0.03,
                     }}>
-                    <Text style={styles.designationStyle}>
-                      {item.designation}
-                    </Text>
-                    <Text style={{fontWeight: 'bold'}}>{item.timePeriod}</Text>
+                    <Text style={styles.designationStyle}>{item.title}</Text>
+                    <Text style={{fontWeight: 'bold'}}>{item.period}</Text>
                     <View style={styles.ExpBoxView}>
                       <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
                       <Text style={{fontWeight: 'bold'}}> - </Text>
                       <Text style={{fontWeight: 'bold', fontStyle: 'italic'}}>
-                        {item.location}
+                        {item.city + ', ' + item.country}
                       </Text>
                     </View>
                   </View>
