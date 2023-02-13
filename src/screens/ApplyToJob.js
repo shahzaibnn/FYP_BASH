@@ -91,6 +91,9 @@ const ApplyToJob = ({navigation, route}) => {
   const sendEmail = async () => {
     var path = RNFS.DownloadDirectoryPath + '/test.pdf';
     // write the file
+
+    console.log('EMAIL ', job.jobEmail);
+
     RNFS.copyFile(singleFile, path)
       .then(success => {
         console.log('worksss!');
@@ -107,16 +110,18 @@ const ApplyToJob = ({navigation, route}) => {
       ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
       username: 'bashfyp@gmail.com',
       password: 'ltdapqlallccrgss',
+      // password: 'adjofwuxqsyqetmw',
       // fromName: 'Some Name', // optional
       // replyTo: 'usernameEmail', // optional
-      recipients: 'habibafaisal8@gmail.com',
-      // recipients: job.jobEmail,
+      // recipients: 'habibafaisal8@gmail.com',
+      recipients: job.jobEmail,
 
       // bcc: ['bccEmail1', 'bccEmail2'], // optional
       // bcc: ['shahzaibnn@gmail.com'], // optional
       subject: 'Testing after code cleaning',
+      // htmlBody: '<h1>header</h1><p>Report Submission</p>',
       // subject: job.jobTitle,
-      // htmlBody: job.jobTitle,
+      htmlBody: job.jobTitle,
       // job.jobCountry,
 
       attachmentPaths: [path],
@@ -136,7 +141,7 @@ const ApplyToJob = ({navigation, route}) => {
       //     //   `,
       //   })
       .then(success => console.log(success))
-      .catch(err => console.log('error', err));
+      .catch(err => console.log('error heree', err));
   };
 
   const selectFile = async () => {
