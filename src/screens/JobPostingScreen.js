@@ -30,6 +30,7 @@ import DocumentPicker, {types} from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage';
 
 import {addJob} from '../store/action';
+import {useSelector, useDispatch} from 'react-redux';
 
 export default function JobPostingScreen() {
   const [title, setTitle] = useState('');
@@ -74,6 +75,8 @@ export default function JobPostingScreen() {
   const [transferred, setTransferred] = useState(0);
   const [currentDate, setCurrentDate] = useState('');
 
+  const storeData = useSelector(state => state);
+  const dispatch = useDispatch();
   useEffect(() => {
     var date = new Date().getDate(); //Current Date
     var month = new Date().getMonth() + 1; //Current Month
@@ -122,21 +125,20 @@ export default function JobPostingScreen() {
         })
         .then(() => {
           console.log('Post Added!');
-          dispatch(
-            addJob({
-              jobTitle: title,
-              jobEmail: email,
-              jobCompany: company,
-              jobSalary: salary,
-              jobDescription: description,
-              jobLocation: value,
-              jobCity: city,
-              jobMode: value2,
-              image: url,
-              jobPostedBy: name,
-              createdAt: currentDate,
-            }),
-          );
+          let jobRedux = {
+            jobTitle: title,
+            jobEmail: email,
+            jobCompany: company,
+            jobSalary: salary,
+            jobDescription: description,
+            jobLocation: value,
+            jobCity: city,
+            jobMode: value2,
+            image: url,
+            jobPostedBy: name,
+            createdAt: currentDate,
+          };
+          dispatch(addJob(jobRedux));
         });
     } catch (e) {
       console.error(e);

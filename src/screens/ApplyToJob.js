@@ -1,4 +1,4 @@
-import React, {useState, createRef, useCallback} from 'react';
+import React, {useState, createRef, useCallback, useEffect} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -11,6 +11,7 @@ import {
   ScrollView,
   Dimensions,
   FlatList,
+  Alert,
 } from 'react-native';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {user, jobs, posts} from '../model/data';
@@ -36,8 +37,8 @@ const ApplyToJob = ({navigation, route}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Pakistan', value: 'pakistan'},
-    {label: 'USA', value: 'usa'},
+    {label: 'Pakistan', value: 'Pakistan'},
+    {label: 'USA', value: 'USA'},
   ]);
   // const emailAddressOfCurrentUser = route.params.userEmail;
 
@@ -50,49 +51,54 @@ const ApplyToJob = ({navigation, route}) => {
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
   const {job} = route.params;
-  // const emailAddressOfCurrentUser = route.params.userEmail;
 
-  // useEffect(() => {
-  //   searchData(emailAddressOfCurrentUser);
-  //   console.log(emailAddressOfCurrentUser);
-  // }, []);
+  async function addJobToProfile() {
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', storeData.userEmail)
+      // .where('userEmail', '==', 'bashfyp@gmail.com')
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
 
-  // const searchData = loggedInUser => {
-  //   console.log('LOGGED IN USER IS: ', loggedInUser);
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(documentSnapshot.id);
+          let appliedJobss = [
+            {
+              jobId: job.id,
+              jobTitle: job.jobTitle,
+              jobCompany: job.jobCompany,
+              jobMode: job.jobMode,
+              jobEmail: job.jobEmail,
+              jobSalary: job.jobSalary,
+              dateApplied: dbFirestore.Timestamp.now(),
+            },
+          ];
 
-  //   dbFirestore()
-  //     .collection('Users')
-  //     // .doc('roles')
-  //     // .collection(value.toLowerCase())
-  //     .where('userEmail', '==', loggedInUser.toLowerCase())
-  //     .get()
-  //     .then(querySnapshot => {
-  //       console.log('Total Found users: ', querySnapshot.size);
+          dbFirestore()
+            .doc('Users/' + documentSnapshot.id)
+            .update({
+              appliedJobId: dbFirestore.FieldValue.arrayUnion(...appliedJobss),
+            })
+            .then(() => {
+              console.log('Added in firestore');
+            });
+        });
+      })
+      .catch(error => {
+        alert(error);
 
-  //       if (querySnapshot.size == 0) {
-  //         console.log('CANNOT RETRIEVE DATA');
-  //       } else {
-  //         querySnapshot.forEach(documentSnapshot => {
-  //           console.log(documentSnapshot.data());
-  //           setUserData(documentSnapshot.data());
-  //           dispatch(setInititialLogin(documentSnapshot.data()));
-  //           console.log('apply', documentSnapshot.data());
-  //         });
-  //       }
-  //     })
-  //     .catch(error => {
-  //       // alert(error);
-
-  //       // setFlag(true);
-  //       console.log(error);
-  //     });
-  // };
-
+        // setFlag(true);
+      });
+  }
   const sendEmail = async () => {
     var path = RNFS.DownloadDirectoryPath + '/test.pdf';
     // write the file
 
     console.log('EMAIL ', job.jobEmail);
+    console.log('store ', storeData);
 
     RNFS.copyFile(singleFile, path)
       .then(success => {
@@ -118,29 +124,51 @@ const ApplyToJob = ({navigation, route}) => {
 
       // bcc: ['bccEmail1', 'bccEmail2'], // optional
       // bcc: ['shahzaibnn@gmail.com'], // optional
-      subject: 'Testing after code cleaning',
-      // htmlBody: '<h1>header</h1><p>Report Submission</p>',
-      // subject: job.jobTitle,
-      htmlBody: job.jobTitle,
-      // job.jobCountry,
+      bcc: [storeData.userEmail], // optional
+      subject: 'For the post of ' + job.jobTitle,
+      // htmlBody:
+      //   'Respected ' +
+      //   job.jobPostedBy +
+      //   ',<p>I hope this email finds you well. I am reaching out to express my interest in the <b>' +
+      //   job.jobTitle +
+      //   '</b> role at <b>' +
+      //   job.jobCompany +
+      //   '</b>' +
+      //   ' that I found on BASH Application.</p><p>I am confident that my skills and experiences align well with the requirements of the role.' +
+      //   'I have attached my updated CV for your review.</p><p>My skills match the criteria of your job requirements. I am eager to bring my expertise and contribute to the success of <b>' +
+      //   job.jobCompany +
+      //   '</b>.</p>' +
+      //   '<p>Thank you for considering my application. I look forward to the opportunity to discuss my qualifications further.' +
+      //   'My contact email is ' +
+      //   storeData.userEmail +
+      //   '</p><p>Best regards,<br>' +
+      //   storeData.firstName +
+      //   ' ' +
+      //   storeData.lastName +
+      //   '</p>',
 
+      htmlBody:
+        '  <label><b>First Name:' +
+        storeData.firstName +
+        '</label>' +
+        '  <label><b>Last Name:' +
+        storeData.lastName +
+        '</label>' +
+        '  <label><b>Message:' +
+        message +
+        '</label>' +
+        '  <label><b>Country:' +
+        value +
+        '</label>' +
+        '  <label><b>Email:' +
+        storeData.userEmail +
+        '</label>',
       attachmentPaths: [path],
-      attachmentNames: ['anotherTest.pdf'],
+      attachmentNames: ['CV.pdf'],
     })
-
-      // dbFirestore()
-      //   .functions()
-      //   .httpsCallable('sendEmail')({
-      //     to: job.jobEmail,
-      //     subject: 'Application for ${job.jobTitle}',
-      //     text: 'hii',
-      //     // text: `
-      //     //     Name: ${name}
-      //     //     Email: ${email}
-      //     //     Message: ${message}
-      //     //   `,
-      //   })
       .then(success => console.log(success))
+      .then(addJobToProfile())
+      .then(Alert.alert('Applied Successfully '))
       .catch(err => console.log('error heree', err));
   };
 
