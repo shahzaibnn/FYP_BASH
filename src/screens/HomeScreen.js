@@ -15,6 +15,7 @@ import {profile, jobs, posts} from '../model/data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actions-sheet';
+import {CommonActions} from '@react-navigation/native';
 
 import {
   ref,
@@ -42,8 +43,13 @@ import HomeHeaderSkeleton from '../components/HomeHeaderSkeleton';
 import Toast from 'react-native-toast-message';
 
 import {useSelector, useDispatch} from 'react-redux';
-import {addition, setInititialLogin, subtraction} from '../store/action';
-import {setJobs} from '../store/action';
+import {
+  addition,
+  setInititialLogin,
+  subtraction,
+  setJobs,
+} from '../store/action';
+// import {setJobs} from '../store/action';
 // import {db, dbFirestore} from './Config';
 
 export default function HomeScreen({navigation, route}) {
@@ -55,6 +61,9 @@ export default function HomeScreen({navigation, route}) {
 
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
+  // useEffect(() => {
+  //   console.log('checking store now: ', storeData);
+  // }, []);
 
   const showToastSuccess = heading => {
     Toast.show({
@@ -112,6 +121,18 @@ export default function HomeScreen({navigation, route}) {
     console.log('checking again: ', {job});
 
     navigation.navigate('ApplyToJob', {job});
+
+    // navigation.dispatch(
+    //   CommonActions.navigate({
+    //     // index: 1,
+    //     routes: [
+    //       {
+    //         name: 'ApplyToJob',
+    //         params: {job},
+    //       },
+    //     ],
+    //   }),
+    // );
     // navigation.navigate('ApplytoJob', {
     //   jobTitle: job.jobTitle,
     //   jobCompany: job.jobCompany,
@@ -330,11 +351,15 @@ export default function HomeScreen({navigation, route}) {
               setJobLoader(false);
               console.log(':runing');
             }
+            // dispatch(setJobs(documentSnapshot.data()));
           });
         }
+        // dispatch(setJobs(fetchedJobs));
+        // dispatch(setJobs(documentSnapshot.data()));
+
         setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
       });
-    dispatch(setJobs(jobs));
+    // dispatch(setJobs(jobs));
     // setJobLoading(false);
   };
 
@@ -368,6 +393,7 @@ export default function HomeScreen({navigation, route}) {
             //   //documentSnapshot.data().userEmail,
             // );
             setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
+            // dispatch(setJobs(documentSnapshot.data()));
 
             count++;
             if (count == total) {
@@ -430,6 +456,7 @@ export default function HomeScreen({navigation, route}) {
               <TouchableOpacity
                 onPress={() => {
                   console.log(userData);
+                  console.log('checking store now: ', storeData);
                 }}>
                 <Image
                   style={{height: 60, width: 60, borderRadius: 64}}
