@@ -7,6 +7,7 @@ import {
   REMOVESKILLREDUX,
   ADDEXPREDUX,
   REMOVEEXPREDUX,
+  ADD_JOB,
 } from './actionTypes';
 
 const initialState = Object;
@@ -23,6 +24,12 @@ export const mainReducer = (state = initialState, action) => {
 
     case ADDSKILLREDUX: {
       return {...state, skills: [...state.skills, action.payload]};
+    }
+
+    case ADD_JOB: {
+      console.log('ADDED JOBS: ', action.payload);
+
+      return {...state, jobs: [...state.jobs, action.payload]};
     }
 
     case REMOVESKILLREDUX: {
