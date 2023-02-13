@@ -195,8 +195,10 @@ export default function RegistrationScreenStudent({navigation}) {
                 recipients: userEmail,
                 // bcc: ['bccEmail1', 'bccEmail2'], // optional
                 // bcc: ['shahzaibnn@gmail.com'], // optional
-                subject: 'Welcome To BASH',
-                htmlBody: '<h1>Account Registered</h1>',
+                subject: 'BASH Account Registered',
+                htmlBody:
+                  '<h1>Welcome</h1>' +
+                  '<p>Thank you for registering with BASH Application</p',
                 // attachmentPaths: [path],
                 // attachmentNames: ['anotherTest.pdf'],
               })
