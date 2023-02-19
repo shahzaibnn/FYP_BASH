@@ -953,7 +953,7 @@ export default function HomeScreen({navigation, route}) {
             <View>
               <TouchableOpacity
                 style={styles.buttonStyle}
-                onPress={handleApply(actionParameters)}>
+                onPress={() => handleApply(actionParameters)}>
                 <Text
                   style={styles.buttonTextStyle}
                   // onPress={navigation.navigate('ApplyToJob')}
