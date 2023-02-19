@@ -300,24 +300,31 @@ const ExplorePage = () => {
     }
 
     if (postsSelected) {
-      const query = dbFirestore().collection('Posts');
-      query.get().then(querySnapshot => {
-        const results = [];
-        querySnapshot.forEach(documentSnapshot => {
-          const data = documentSnapshot.data();
-          const allFields = Object.values(data).join(' ');
-          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-            results.push(data);
-          }
+      try {
+        const query = dbFirestore().collection('Posts');
+        query.get().then(querySnapshot => {
+          const results = [];
+          querySnapshot.forEach(documentSnapshot => {
+            const data = documentSnapshot.data();
+            const allFields = Object.values(data).join(' ');
+            if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+              results.push(data);
+            }
+          });
+          setSearchPeople(false);
+          setSearchPosts(true);
+          setSearchJobs(false);
+          setSearchResults(results);
+          setpostsSelected(false);
+          setjobsSelected(false);
+          setpeopleSelected(false);
         });
-        setSearchPeople(false);
-        setSearchPosts(true);
-        setSearchJobs(false);
-        setSearchResults(results);
-        setpostsSelected(false);
-        setjobsSelected(false);
-        setpeopleSelected(false);
-      });
+      } catch (error) {
+        if (error.code === 'not-found') {
+          // Handle the case where the document doesn't exist
+          console.log('not found');
+        }
+      }
     }
 
     if (jobsSelected) {
@@ -643,8 +650,10 @@ const ExplorePage = () => {
 
                 if (item.likedBy.includes(emailAddressOfCurrentUser)) {
                   likeColor = '#000000';
+                  console.log('liked', emailAddressOfCurrentUser);
                 } else {
                   likeColor = '#ffffff';
+                  console.log('liked again', emailAddressOfCurrentUser);
                 }
 
                 return (
