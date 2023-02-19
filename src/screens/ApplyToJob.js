@@ -327,7 +327,7 @@ const ApplyToJob = ({navigation, route}) => {
             onChangeText={message => {
               setMessage(message);
               setMessageLength(message.length);
-              setErrorMessage('');
+              // setErrorMessage('');
             }}
             multiline={true}
             // textAlignVertical={true}
@@ -398,7 +398,7 @@ const ApplyToJob = ({navigation, route}) => {
 
       {/* testing upload */}
 
-      <Toast topOffset={30} />
+      {/* <Toast topOffset={30} /> */}
     </ScrollView>
     /*  </View> */
   );
