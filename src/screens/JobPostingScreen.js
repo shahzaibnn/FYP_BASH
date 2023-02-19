@@ -48,6 +48,8 @@ export default function JobPostingScreen() {
     {label: 'USA', value: 'USA'},
     {label: 'JAPAN', value: 'Japan'},
     {label: 'CHINA', value: 'China'},
+    {label: 'UK', value: 'uk'},
+    {label: 'France', value: 'france'},
   ]);
 
   // const [value3, setValue3] = useState(null);
@@ -74,6 +76,12 @@ export default function JobPostingScreen() {
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
   const [currentDate, setCurrentDate] = useState('');
+  const [descriptionLength, setDescriptionLength] = useState(0);
+  const [salaryLength, setSalaryLength] = useState(0);
+  const [companyNameLength, setCompanyNameLength] = useState(0);
+  const [nameLength, setNameLength] = useState(0);
+  const [cityLength, setCityLength] = useState(0);
+  const [titleLength, setTitleLength] = useState(0);
 
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
@@ -89,6 +97,70 @@ export default function JobPostingScreen() {
     );
   }, []);
 
+  const handleSubmit = () => {
+    if (!title) {
+      Alert.alert('Empty Field', 'Please enter a job title.');
+    } else if (!value) {
+      Alert.alert('Empty Field', 'Please select a country.');
+    } else if (!city) {
+      Alert.alert('Empty Field', 'Please enter a city.');
+    } else if (!email) {
+      Alert.alert('Empty Field', 'Please enter a email.');
+    } else if (!singleFile) {
+      Alert.alert('Empty Field', 'Please upload an image.');
+    } else if (!name) {
+      Alert.alert('Empty Field', 'Please enter a name.');
+    } else if (!value2) {
+      Alert.alert('Empty Field', 'Please select a job mode.');
+    } else if (!description) {
+      Alert.alert('Empty Field', 'Please select a job description.');
+    } else if (!salary) {
+      Alert.alert('Empty Field', 'Please select a job salary.');
+    } else if (!company) {
+      Alert.alert('Empty Field', 'Please select a job company.');
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(email)) {
+      Alert.alert('Invalid Email', 'Please enter a valid email.');
+    } else if (!/^[0-9]*\.?[0-9]+$/.test(salary)) {
+      Alert.alert('Invalid Salary Value', 'Please enter a valid salary value.');
+    } else if (description.length > 50) {
+      // Display an error message if the input is too long
+      Alert.alert(
+        'Exceeded Length',
+        'Message is too long. Maximum length is 50 characters.',
+      );
+      showToast('Message is too long. Maximum length is 50 characters.');
+    } else if (name.length > 15) {
+      // Display an error message if the input is too long
+      Alert.alert(
+        'Exceeded Length',
+        'Name is too long. Maximum length is 15 characters.',
+      );
+      // showToast('Message is too long. Maximum length is 50 characters.');
+    } else if (city.length > 15) {
+      // Display an error message if the input is too long
+      Alert.alert(
+        'Exceeded Length',
+        'City is too long. Maximum length is 15 characters.',
+      );
+      // showToast('Message is too long. Maximum length is 50 characters.');
+    } else if (company.length > 15) {
+      // Display an error message if the input is too long
+      Alert.alert(
+        'Exceeded Length',
+        'Company is too long. Maximum length is 15 characters.',
+      );
+      // showToast('Message is too long. Maximum length is 50 characters.');
+    } else if (title.length > 15) {
+      // Display an error message if the input is too long
+      Alert.alert(
+        'Exceeded Length',
+        'Title is too long. Maximum length is 15 characters.',
+      );
+      // showToast('Message is too long. Maximum length is 50 characters.');
+    } else {
+      addtoDB();
+    }
+  };
   const addtoDB = async () => {
     const filename = filePath.fileCopyUri.substring(
       filePath.fileCopyUri.lastIndexOf('/') + 1,
@@ -206,22 +278,37 @@ export default function JobPostingScreen() {
       </View>
 
       <View style={{marginHorizontal: '5%'}}>
-        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+        {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
           Job Title
-        </Text>
+        </Text> */}
+
+        <View style={styles.ExpBoxView}>
+          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+            Job Title
+          </Text>
+          <Text
+            style={[styles.lengthText, titleLength >= 15 && {color: 'red'}]}>
+            {titleLength}/15
+          </Text>
+        </View>
 
         <View
           style={{
             marginVertical: '5%',
             // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'white',
             // marginHorizontal: '5%',
             borderRadius: 16,
           }}>
           <TextInput
             style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
             // multiline
-            onChangeText={setTitle}
+            // onChangeText={setTitle}
+            onChangeText={title => {
+              setTitle(title);
+              setTitleLength(title.length);
+              // setErrorMessage('');
+            }}
             value={title}
             placeholder="Job title here..."
             placeholderTextColor={'#5BA199'}
@@ -244,38 +331,55 @@ export default function JobPostingScreen() {
           placeholder="Select country"
           style={{
             marginVertical: '5%',
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'white',
             borderWidth: 0,
             borderRadius: 16,
           }}
           textStyle={{color: '#5BA199', fontSize: 14, marginHorizontal: '2%'}}
           dropDownContainerStyle={{
-            backgroundColor: '#469597',
+            // backgroundColor: '#469597',
+            backgroundColor: 'white',
             borderWidth: 0,
             marginTop: 10,
+            borderRadius: 30,
           }}
           //   labelStyle={{color: 'white'}}
-          listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
+          // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
+          listItemLabelStyle={{color: '#6A6A6A'}}
         />
       </View>
 
       <View style={{marginHorizontal: '5%'}}>
-        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+        {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
           City
-        </Text>
+        </Text> */}
+
+        <View style={styles.ExpBoxView}>
+          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+            City
+          </Text>
+          <Text style={[styles.lengthText, cityLength >= 15 && {color: 'red'}]}>
+            {cityLength}/15
+          </Text>
+        </View>
 
         <View
           style={{
             marginVertical: '5%',
             // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'white',
             // marginHorizontal: '5%',
             borderRadius: 16,
           }}>
           <TextInput
             style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
             // multiline
-            onChangeText={setCity}
+            // onChangeText={setCity}
+            onChangeText={city => {
+              setCity(city);
+              setCityLength(city.length);
+              // setErrorMessage('');
+            }}
             value={city}
             placeholder="City name"
             placeholderTextColor={'#5BA199'}
@@ -284,22 +388,35 @@ export default function JobPostingScreen() {
       </View>
 
       <View style={{marginHorizontal: '5%'}}>
-        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+        {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
           Name
-        </Text>
+        </Text> */}
+        <View style={styles.ExpBoxView}>
+          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+            Name
+          </Text>
+          <Text style={[styles.lengthText, nameLength >= 15 && {color: 'red'}]}>
+            {nameLength}/15
+          </Text>
+        </View>
 
         <View
           style={{
             marginVertical: '5%',
             // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'white',
             // marginHorizontal: '5%',
             borderRadius: 16,
           }}>
           <TextInput
             style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
             // multiline
-            onChangeText={setName}
+            // onChangeText={setName}
+            onChangeText={name => {
+              setName(name);
+              setNameLength(name.length);
+              // setErrorMessage('');
+            }}
             value={name}
             placeholder="Your name here..."
             placeholderTextColor={'#5BA199'}
@@ -316,7 +433,7 @@ export default function JobPostingScreen() {
           style={{
             marginVertical: '5%',
             // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'white',
             // marginHorizontal: '5%',
             borderRadius: 16,
           }}>
@@ -332,22 +449,40 @@ export default function JobPostingScreen() {
       </View>
 
       <View style={{marginHorizontal: '5%'}}>
-        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+        {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
           Company Name
-        </Text>
+        </Text> */}
+
+        <View style={styles.ExpBoxView}>
+          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+            Company Name
+          </Text>
+          <Text
+            style={[
+              styles.lengthText,
+              companyNameLength >= 15 && {color: 'red'},
+            ]}>
+            {companyNameLength}/15
+          </Text>
+        </View>
 
         <View
           style={{
             marginVertical: '5%',
             // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'white',
             // marginHorizontal: '5%',
             borderRadius: 16,
           }}>
           <TextInput
             style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
             // multiline
-            onChangeText={setCompany}
+            // onChangeText={setCompany}
+            onChangeText={company => {
+              setCompany(company);
+              setCompanyNameLength(company.length);
+              // setErrorMessage('');
+            }}
             value={company}
             placeholder="Company name here..."
             placeholderTextColor={'#5BA199'}
@@ -369,7 +504,7 @@ export default function JobPostingScreen() {
           setItems={setItems2}
           style={{
             marginVertical: '5%',
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'white',
             borderWidth: 0,
             borderRadius: 16,
           }}
@@ -446,46 +581,77 @@ export default function JobPostingScreen() {
       </TouchableOpacity>
 
       <View style={{marginHorizontal: '5%'}}>
-        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+        {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
           Salary
-        </Text>
+        </Text> */}
+
+        <View style={styles.ExpBoxView}>
+          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+            Salary
+          </Text>
+          <Text
+            style={[styles.lengthText, salaryLength >= 15 && {color: 'red'}]}>
+            {salaryLength}/15
+          </Text>
+        </View>
 
         <View
           style={{
             marginVertical: '5%',
             // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'white',
+            // backgroundColor: '#BBC6C8',
             // marginHorizontal: '5%',
             borderRadius: 16,
           }}>
           <TextInput
             style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
             // multiline
-            onChangeText={setSalary}
+            // onChangeText={setSalary}
+            onChangeText={salary => {
+              setSalary(salary);
+              setSalaryLength(salary.length);
+              // setErrorMessage('');
+            }}
             value={salary}
             placeholder="Salary here..."
             placeholderTextColor={'#5BA199'}
+            keyboardType="numeric"
           />
         </View>
       </View>
 
       <View style={{marginHorizontal: '5%'}}>
-        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-          Job Description
-        </Text>
+        <View style={styles.ExpBoxView}>
+          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+            Job Description
+          </Text>
+          <Text
+            style={[
+              styles.lengthText,
+              descriptionLength >= 50 && {color: 'red'},
+            ]}>
+            {descriptionLength}/50
+          </Text>
+        </View>
 
         <View
           style={{
             marginVertical: '5%',
             height: Dimensions.get('window').height * 0.25,
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'white',
             // marginHorizontal: '5%',
             borderRadius: 16,
           }}>
           <TextInput
             style={{marginHorizontal: '5%', fontSize: 14}}
-            multiline
-            onChangeText={setDescription}
+            multiline={true}
+            // onChangeText={setDescription}
+            onChangeText={description => {
+              setDescription(description);
+              setDescriptionLength(description.length);
+              // setErrorMessage('');
+            }}
             value={description}
             placeholder="Job description here..."
             placeholderTextColor={'#5BA199'}
@@ -502,7 +668,7 @@ export default function JobPostingScreen() {
           borderRadius: 32,
           marginVertical: '3%',
         }}
-        onPress={addtoDB}>
+        onPress={() => handleSubmit()}>
         <Text
           style={{
             fontSize: 25,
@@ -515,3 +681,20 @@ export default function JobPostingScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  ExpBoxView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // marginTop: 10,
+  },
+  lengthText: {
+    fontSize: 12,
+    color: '#6A6A6A',
+    // paddingBottom: 5,
+    // paddingTop: 8,
+    paddingTop: '2%',
+    // paddingLeft: '5%',
+    // marginLeft: '25%',
+  },
+});
