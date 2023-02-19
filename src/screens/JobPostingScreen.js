@@ -19,6 +19,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import DropDownPicker from 'react-native-dropdown-picker';
+import Toast from 'react-native-toast-message';
 
 // import {SliderBox} from 'react-native-image-slider-box';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -96,6 +97,14 @@ export default function JobPostingScreen() {
       date + '/' + month + '/' + year + ' ' + hours + ':' + min + ':' + sec,
     );
   }, []);
+
+  const showToast = heading => {
+    Toast.show({
+      type: 'error',
+      text1: heading,
+      // text2: text,
+    });
+  };
 
   const handleSubmit = () => {
     if (!title) {
@@ -442,6 +451,7 @@ export default function JobPostingScreen() {
             // multiline
             onChangeText={setEmail}
             value={email}
+            keyboardType="email-address"
             placeholder="Email here..."
             placeholderTextColor={'#5BA199'}
           />
