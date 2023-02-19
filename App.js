@@ -49,15 +49,17 @@ import HomeInfinite from './src/screens/HomeInfinite';
 import {Provider} from 'react-redux';
 // import {Provider} from 'redux';
 import {store} from './src/store/store';
+import DropDownCheck from './src/screens/DropdownCheck';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <AppStack />
-      </NavigationContainer>
-    </Provider>
+    <DropDownCheck />
+    // <Provider store={store}>
+    //   <NavigationContainer>
+    //     <AppStack />
+    //   </NavigationContainer>
+    // </Provider>
 
     // <EditProfileScreen />
     //  <ExplorePage />
