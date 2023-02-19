@@ -24,6 +24,7 @@ import FileViewer from 'react-native-file-viewer';
 import ImageModal from 'react-native-image-modal';
 import RNSmtpMailer from 'react-native-smtp-mailer';
 import RNFS from 'react-native-fs';
+import Toast from 'react-native-toast-message';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {addition, setInititialLogin, subtraction} from '../store/action';
@@ -31,7 +32,7 @@ import {dbFirestore} from '../Firebase/Config';
 
 const ApplyToJob = ({navigation, route}) => {
   const [name, setName] = useState('');
-  const [lastName, setlastName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [imageURL, setimageURL] = useState(null);
   const [open, setOpen] = useState(false);
@@ -39,6 +40,8 @@ const ApplyToJob = ({navigation, route}) => {
   const [items, setItems] = useState([
     {label: 'Pakistan', value: 'Pakistan'},
     {label: 'USA', value: 'USA'},
+    {label: 'India', value: 'INDIA'},
+    {label: 'China', value: 'CHINA'},
   ]);
   // const emailAddressOfCurrentUser = route.params.userEmail;
 
@@ -47,11 +50,42 @@ const ApplyToJob = ({navigation, route}) => {
   const [uploaded, setUploaded] = useState(false);
   const [fileName, setfileName] = useState(false);
   const [message, setMessage] = useState(false);
-
+  const [messageLength, setMessageLength] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
   const {job} = route.params;
 
+  const showToast = heading => {
+    Toast.show({
+      type: 'error',
+      text1: heading,
+      // text2: text,
+    });
+  };
+
+  const applySubmitted = async () => {
+    if (!message) {
+      // showToast('Please fill First Name');
+      Alert.alert('Empty Field', 'Please do not leave the message field empty');
+      showToast('Please fill message body');
+    } else if (message.length > 50) {
+      // Display an error message if the input is too long
+      Alert.alert(
+        'Exceeded Length',
+        'Message is too long. Maximum length is 50 characters.',
+      );
+      showToast('Message is too long. Maximum length is 50 characters.');
+    } else if (!value) {
+      // Display an error message if the dropdown value is empty
+      Alert.alert('Empty Field', 'Please select a country');
+    } else if (!uploaded) {
+      // Display an error message if the resume file is not uploaded
+      Alert.alert('Resume Not Uploaded', 'Please upload a resume file');
+    } else {
+      sendEmail();
+    }
+  };
   async function addJobToProfile() {
     dbFirestore()
       .collection('Users')
@@ -168,7 +202,7 @@ const ApplyToJob = ({navigation, route}) => {
     })
       .then(success => console.log(success))
       .then(addJobToProfile())
-      .then(Alert.alert('Applied Successfully '))
+      .then(Alert.alert('Applied Successfully ', 'Best of luck'))
       .catch(err => console.log('error heree', err));
   };
 
@@ -226,7 +260,7 @@ const ApplyToJob = ({navigation, route}) => {
           <View style={{flex: 0.1}}></View>
           <TextInput
             style={styles.inputStyle}
-            // onChangeText={lastName => setlastName(lastName)}
+            // onChangeText={lastName => setLastName(lastName)}
             placeholder="Last Name"
             placeholderTextColor="#6A6A6A"
             blurOnSubmit={false}
@@ -261,22 +295,46 @@ const ApplyToJob = ({navigation, route}) => {
             setValue={setValue}
             setItems={setItems}
             style={styles.dropdownContainer}
+            textStyle={styles.dropdownText}
+            containerStyle={styles.dropdownWrapper}
+            arrowColor="#707070"
+            dropDownContainerStyle={{
+              backgroundColor: 'white',
+              borderWidth: 0.5,
+              borderColor: '#6A6A6A',
+              // borderColor: 'red',
+              borderRadius: 30,
+            }}
           />
+          {value === null && (
+            <Text>{showToast('Please fill message body')}</Text>
+          )}
         </View>
         {/*  */}
         {/* Message Input Field */}
         <View style={styles.ExpBoxView}>
           <Text style={styles.text}>Message</Text>
+          {/* <Text style={styles.lengthText}>{messageLength}/50</Text> */}
+          <Text
+            style={[styles.lengthText, messageLength >= 50 && {color: 'red'}]}>
+            {messageLength}/50
+          </Text>
         </View>
         <View style={styles.messageBodyStyle}>
           <TextInput
-            style={styles.messageStyle}
-            onChangeText={message => setMessage(message)}
+            // style={styles.messageStyle}
+            style={[styles.messageStyle, messageLength >= 50 && {color: 'red'}]}
+            onChangeText={message => {
+              setMessage(message);
+              setMessageLength(message.length);
+              setErrorMessage('');
+            }}
             multiline={true}
             // textAlignVertical={true}
             placeholder="What sets you different from others?"
             placeholderTextColor="#6A6A6A"
             blurOnSubmit={false}
+            // maxLength={50}
           />
         </View>
         {/* CV + Icon */}
@@ -329,13 +387,18 @@ const ApplyToJob = ({navigation, route}) => {
         <TouchableOpacity
           style={styles.buttonStyle}
           // activeOpacity={0.5}
-          onPress={sendEmail}>
+          // onPress={sendEmail}>
+          onPress={() => {
+            applySubmitted();
+          }}>
           <Text style={styles.buttonTextStyle}>Apply</Text>
         </TouchableOpacity>
         {/* <Image source={{uri: source}} /> */}
       </View>
 
       {/* testing upload */}
+
+      <Toast topOffset={30} />
     </ScrollView>
     /*  </View> */
   );
@@ -427,6 +490,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   text: {fontSize: 20, fontWeight: 'bold', color: '#6A6A6A', paddingTop: 15},
+  lengthText: {
+    fontSize: 12,
+    color: '#6A6A6A',
+    // paddingBottom: 5,
+    paddingTop: 25,
+    marginLeft: '25%',
+  },
 
   lastNameStyle: {
     textAlign: 'right',
@@ -453,17 +523,41 @@ const styles = StyleSheet.create({
     // borderRadius: 15,
     // borderWidth: 5,
   },
+  // dropdownContainer: {
+  //   backgroundColor: 'white',
+  //   margin: 10,
+  //   borderWidth: 0.5,
+  //   borderColor: 'white',
+  //   borderRadius: 20,
+  //   height: 50,
+  //   width: 300,
+  //   justifyContent: 'center',
+  //   textAlign: 'center',
+  //   alignSelf: 'center',
+  // },
+
   dropdownContainer: {
+    // backgroundColor: '#F5F5F5',
     backgroundColor: 'white',
-    margin: 10,
-    borderWidth: 0.5,
-    borderColor: 'white',
-    borderRadius: 20,
+    color: '#6A6A6A',
+
+    borderWidth: 1,
+    // borderColor: '#707070',
+    borderColor: '#F5F5F5',
+    borderRadius: 12,
+    padding: 10,
+    marginVertical: 10,
+    // fontSize: 12,
+  },
+  dropdownText: {
+    fontSize: 14,
+    // color: '#707070',
+    color: '#6A6A6A',
+  },
+  dropdownWrapper: {
+    // borderColor: '#F5F5F5',
+    width: '100%',
     height: 50,
-    width: 300,
-    justifyContent: 'center',
-    textAlign: 'center',
-    alignSelf: 'center',
   },
   menuContent: {
     color: '#000',
