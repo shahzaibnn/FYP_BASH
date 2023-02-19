@@ -554,6 +554,7 @@ const ExplorePage = () => {
               horizontal={false}
               showsHorizontalScrollIndicator={false}
               data={fetchedUsers}
+              contentContainerStyle={{paddingBottom: 60}}
               ListFooterComponent={<View style={{height: 60}}></View>}
               renderItem={({item}) => (
                 <View
@@ -634,6 +635,7 @@ const ExplorePage = () => {
               extraData={extraData}
               onEndReachedThreshold={0.1}
               scrollEventThrottle={150}
+              contentContainerStyle={{paddingBottom: 60}}
               keyExtractor={item => item.id}
               renderItem={({item}) => {
                 console.log('Id is : ', item);
@@ -825,6 +827,7 @@ const ExplorePage = () => {
           {jobsSelected ? (
             <FlatList
               data={fetchedJobs}
+              contentContainerStyle={{paddingBottom: 60}}
               renderItem={({item}) => (
                 <View
                   style={{
@@ -932,6 +935,7 @@ const ExplorePage = () => {
               horizontal={false}
               showsHorizontalScrollIndicator={false}
               data={searchResults}
+              contentContainerStyle={{paddingBottom: 60}}
               ListFooterComponent={<View style={{height: 60}}></View>}
               renderItem={({item}) => (
                 <View
@@ -1005,6 +1009,7 @@ const ExplorePage = () => {
               data={searchResults}
               extraData={extraData}
               onEndReachedThreshold={0.1}
+              contentContainerStyle={{paddingBottom: 60}}
               scrollEventThrottle={150}
               keyExtractor={item => item.id}
               renderItem={({item}) => {
@@ -1191,6 +1196,7 @@ const ExplorePage = () => {
           {searchSelected && searchJobs ? (
             <FlatList
               data={searchResults}
+              contentContainerStyle={{paddingBottom: 60}}
               renderItem={({item}) => (
                 <View
                   style={{
