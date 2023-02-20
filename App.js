@@ -54,12 +54,12 @@ import DropDownCheck from './src/screens/DropdownCheck';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <DropDownCheck />
-    // <Provider store={store}>
-    //   <NavigationContainer>
-    //     <AppStack />
-    //   </NavigationContainer>
-    // </Provider>
+    // <DropDownCheck />
+    <Provider store={store}>
+      <NavigationContainer>
+        <AppStack />
+      </NavigationContainer>
+    </Provider>
 
     // <EditProfileScreen />
     //  <ExplorePage />

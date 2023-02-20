@@ -5,10 +5,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 const countryList = [
   {label: 'Pakistan', value: 'Pakistan'},
   {label: 'USA', value: 'USA'},
-  {label: 'Japan', value: 'Japan'},
-  {label: 'China', value: 'China'},
-  {label: 'UK', value: 'UK'},
-  {label: 'France', value: 'France'},
 ];
 
 const cityList = {
@@ -22,33 +18,13 @@ const cityList = {
     {label: 'Los Angeles', value: 'Los Angeles'},
     {label: 'Chicago', value: 'Chicago'},
   ],
-  Japan: [
-    {label: 'Tokyo', value: 'Tokyo'},
-    {label: 'Osaka', value: 'Osaka'},
-    {label: 'Kyoto', value: 'Kyoto'},
-  ],
-  China: [
-    {label: 'Beijing', value: 'Beijing'},
-    {label: 'Shanghai', value: 'Shanghai'},
-    {label: 'Guangzhou', value: 'Guangzhou'},
-  ],
-  UK: [
-    {label: 'London', value: 'London'},
-    {label: 'Manchester', value: 'Manchester'},
-    {label: 'Liverpool', value: 'Liverpool'},
-  ],
-  France: [
-    {label: 'Paris', value: 'Paris'},
-    {label: 'Marseille', value: 'Marseille'},
-    {label: 'Lyon', value: 'Lyon'},
-  ],
 };
 
-const DropDownCheck = () => {
+const DropdownCheck = () => {
   const [country, setCountry] = useState(null);
   const [city, setCity] = useState(null);
-
   const handleCountryChange = value => {
+    console.log('handleCountryChange ', value);
     setCountry(value);
     setCity(null);
   };
@@ -58,21 +34,22 @@ const DropDownCheck = () => {
   return (
     <View style={{flex: 1, justifyContent: 'center'}}>
       <DropDownPicker
-        open={!!country}
+        open={country === null} // Open the first dropdown when country is null
         value={country}
         items={countryList}
         placeholder="Select country"
-        onChangeValue={handleCountryChange}
+        onChangeValue={handleCountryChange} // pass `value` instead of `country`
+        setOpen={setCountry} // Close the dropdown after a selection is made
       />
       <DropDownPicker
-        open={!!city}
+        open={city === null} // Open the second dropdown when city is null
         value={city}
         items={cityItems}
-        placeholder="Select city"
+        placeholder="Select a city"
         onChangeValue={setCity}
       />
     </View>
   );
 };
 
-export default DropDownCheck;
+export default DropdownCheck;
