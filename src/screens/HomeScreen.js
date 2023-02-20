@@ -618,7 +618,7 @@ export default function HomeScreen({navigation, route}) {
                             Dimensions.get('window').height * 0.01,
                           borderRadius: 16,
                         }}
-                        onPress={() => handleApply(actionParameters)}
+                        onPress={() => handleApply(fetchedJobs)}
 
                         // onPress={navigation.navigate('ApplyToJob')}
                       >

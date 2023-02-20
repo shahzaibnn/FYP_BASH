@@ -30,6 +30,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import {addition, setInititialLogin, subtraction} from '../store/action';
 import {dbFirestore} from '../Firebase/Config';
 
+import {Grid} from 'react-native-animated-spinkit';
+
 const ApplyToJob = ({navigation, route}) => {
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -55,6 +57,12 @@ const ApplyToJob = ({navigation, route}) => {
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
   const {job} = route.params;
+
+  // for loader
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
+  const [pointerEvent, setPointerEvent] = useState('auto');
+  const [opacity, setOpacity] = useState(1);
+  const [flag, setFlag] = useState(true);
 
   const showToast = heading => {
     Toast.show({
@@ -83,6 +91,8 @@ const ApplyToJob = ({navigation, route}) => {
       // Display an error message if the resume file is not uploaded
       Alert.alert('Resume Not Uploaded', 'Please upload a resume file');
     } else {
+      // setFlag(true);
+
       sendEmail();
     }
   };
@@ -108,6 +118,7 @@ const ApplyToJob = ({navigation, route}) => {
               jobEmail: job.jobEmail,
               jobSalary: job.jobSalary,
               dateApplied: dbFirestore.Timestamp.now(),
+              // dateApplied: dbFirestore.Timestamp.now().toDate(),
             },
           ];
 
@@ -118,6 +129,9 @@ const ApplyToJob = ({navigation, route}) => {
             })
             .then(() => {
               console.log('Added in firestore');
+            })
+            .catch(err => {
+              console.log('not working');
             });
         });
       })
@@ -127,6 +141,18 @@ const ApplyToJob = ({navigation, route}) => {
         // setFlag(true);
       });
   }
+
+  useEffect(() => {
+    if (flag) {
+      setSpinnerLoader(false);
+      setPointerEvent('auto');
+      setOpacity(1);
+    } else {
+      setSpinnerLoader(true);
+      setPointerEvent('none');
+      setOpacity(0.8);
+    }
+  }, [flag]);
   const sendEmail = async () => {
     var path = RNFS.DownloadDirectoryPath + '/test.pdf';
     // write the file
@@ -201,7 +227,9 @@ const ApplyToJob = ({navigation, route}) => {
       attachmentNames: ['CV.pdf'],
     })
       .then(success => console.log(success))
+      // .then(setFlag(true))
       .then(addJobToProfile())
+      // .then(setFlag(false))
       .then(Alert.alert('Applied Successfully ', 'Best of luck'))
       .catch(err => console.log('error heree', err));
   };
@@ -397,6 +425,13 @@ const ApplyToJob = ({navigation, route}) => {
         </TouchableOpacity>
         {/* <Image source={{uri: source}} /> */}
       </View>
+      {spinnerLoader ? (
+        <Grid
+          style={styles.gridStyle}
+          size={Dimensions.get('window').width * 0.2}
+          color="#5BA199"
+        />
+      ) : null}
 
       {/* testing upload */}
 
@@ -409,6 +444,14 @@ const ApplyToJob = ({navigation, route}) => {
 export default ApplyToJob;
 
 const styles = StyleSheet.create({
+  gridStyle: {
+    position: 'absolute',
+    top: Dimensions.get('window').height * 0.5,
+    left: Dimensions.get('window').width * 0.4,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   ExpBoxView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
