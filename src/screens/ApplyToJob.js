@@ -323,13 +323,15 @@ const ApplyToJob = ({navigation, route}) => {
         <View style={styles.messageBodyStyle}>
           <TextInput
             // style={styles.messageStyle}
-            style={[styles.messageStyle, messageLength >= 50 && {color: 'red'}]}
+            // style={[styles.messageStyle, messageLength >= 50 && {color: 'red'}]}
+            style={styles.messageStyle}
             onChangeText={message => {
               setMessage(message);
               setMessageLength(message.length);
               // setErrorMessage('');
             }}
             multiline={true}
+            value={message}
             // textAlignVertical={true}
             placeholder="What sets you different from others?"
             placeholderTextColor="#6A6A6A"
