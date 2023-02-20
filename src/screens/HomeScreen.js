@@ -618,6 +618,8 @@ export default function HomeScreen({navigation, route}) {
                             Dimensions.get('window').height * 0.01,
                           borderRadius: 16,
                         }}
+                        onPress={() => handleApply(actionParameters)}
+
                         // onPress={navigation.navigate('ApplyToJob')}
                       >
                         <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
