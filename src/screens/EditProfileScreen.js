@@ -427,7 +427,8 @@ export default function EditProfileScreen() {
           marginTop: '10%',
           flexDirection: 'row',
           alignItems: 'center',
-          backgroundColor: '#BBC6C8',
+          backgroundColor: '#4CA6A8',
+          // backgroundColor: '#BBC6C8',
           //   borderRadius: 8,
           padding: '2%',
           justifyContent: 'space-between',
@@ -441,10 +442,12 @@ export default function EditProfileScreen() {
           <MaterialIcons
             name="title"
             size={25}
-            color="#777777"
+            color="white"
+            // color="#777777"
             style={{marginLeft: '0%'}}
           />
-          <Text style={{fontSize: 25, color: '#000000', marginLeft: 10}}>
+          {/* <Text style={{fontSize: 25, color: '#000000', marginLeft: 10}}> */}
+          <Text style={{fontSize: 25, color: 'white', marginLeft: 10}}>
             Title
           </Text>
         </View>
@@ -452,7 +455,12 @@ export default function EditProfileScreen() {
         <TouchableOpacity
           onPress={() => setTitleDisplay(!titleDisplay)}
           style={{marginRight: '2%'}}>
-          <FontAwesome name="plus-circle" size={25} color="#777777" />
+          <FontAwesome
+            name="plus-circle"
+            size={25}
+            // color="#777777"
+            color="white"
+          />
         </TouchableOpacity>
       </View>
 
@@ -469,8 +477,8 @@ export default function EditProfileScreen() {
               backgroundColor: '#ffffff',
               // width: Dimensions.get('window').width * 0.8,
               marginHorizontal: '10%',
-              borderRadius: 16,
-              flexDirection: 'row',
+              borderRadius: 22,
+              // flexDirection: 'row',
               alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '3%',
@@ -492,10 +500,10 @@ export default function EditProfileScreen() {
               alignSelf: 'center',
               paddingHorizontal: '12%',
               paddingVertical: '3%',
-              borderRadius: 16,
+              borderRadius: 30,
               marginVertical: '5%',
             }}>
-            <Text style={{color: '#ffffff', fontSize: 30, fontWeight: 'bold'}}>
+            <Text style={{color: '#ffffff', fontSize: 20, fontWeight: 'bold'}}>
               Confirm Change
             </Text>
           </TouchableOpacity>
@@ -510,8 +518,9 @@ export default function EditProfileScreen() {
           marginTop: '10%',
           flexDirection: 'row',
           alignItems: 'center',
-          backgroundColor: '#BBC6C8',
+          // backgroundColor: '#BBC6C8',
           //   borderRadius: 8,
+          backgroundColor: '#4CA6A8',
           padding: '2%',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -524,10 +533,11 @@ export default function EditProfileScreen() {
           <MaterialCommunityIcons
             name="shape-plus"
             size={25}
-            color="#777777"
+            // color="#777777"
+            color="white"
             style={{}}
           />
-          <Text style={{fontSize: 25, color: '#000000', marginLeft: 10}}>
+          <Text style={{fontSize: 25, color: 'white', marginLeft: 10}}>
             Skills
           </Text>
         </View>
@@ -535,7 +545,7 @@ export default function EditProfileScreen() {
         <TouchableOpacity
           onPress={() => setSkillsDisplay(!skillsDisplay)}
           style={{marginRight: '2%'}}>
-          <FontAwesome name="plus-circle" size={25} color="#777777" />
+          <FontAwesome name="plus-circle" size={25} color="white" />
         </TouchableOpacity>
       </View>
 
@@ -610,8 +620,8 @@ export default function EditProfileScreen() {
               backgroundColor: '#ffffff',
               // width: Dimensions.get('window').width * 0.8,
               marginHorizontal: '10%',
-              borderRadius: 16,
-              flexDirection: 'row',
+              borderRadius: 22,
+              // flexDirection: 'row',
               alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '3%',
@@ -627,16 +637,16 @@ export default function EditProfileScreen() {
           <TouchableOpacity
             onPress={() => updateArraySkill(addSkill)}
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
+              // justifyContent: 'center',
+              // alignItems: 'center',
               backgroundColor: '#469597',
               alignSelf: 'center',
               paddingHorizontal: '12%',
               paddingVertical: '3%',
-              borderRadius: 16,
+              borderRadius: 30,
               marginVertical: '5%',
             }}>
-            <Text style={{color: '#ffffff', fontSize: 30, fontWeight: 'bold'}}>
+            <Text style={{color: '#ffffff', fontSize: 20, fontWeight: 'bold'}}>
               Add Skill
             </Text>
           </TouchableOpacity>
@@ -651,7 +661,9 @@ export default function EditProfileScreen() {
           marginTop: '10%',
           flexDirection: 'row',
           alignItems: 'center',
-          backgroundColor: '#BBC6C8',
+          // backgroundColor: '#BBC6C8',
+          backgroundColor: '#4CA6A8',
+
           //   borderRadius: 8,
           padding: '2%',
           justifyContent: 'space-between',
@@ -665,10 +677,12 @@ export default function EditProfileScreen() {
           <MaterialIcons
             name="description"
             size={25}
-            color="#777777"
+            color="white"
+            // color="#777777"
+
             style={{marginLeft: '0%'}}
           />
-          <Text style={{fontSize: 25, color: '#000000', marginLeft: 10}}>
+          <Text style={{fontSize: 25, color: 'white', marginLeft: 10}}>
             Description
           </Text>
         </View>
@@ -676,7 +690,7 @@ export default function EditProfileScreen() {
         <TouchableOpacity
           onPress={() => setDescriptionDisplay(!descriptionDisplay)}
           style={{marginRight: '2%'}}>
-          <FontAwesome name="plus-circle" size={25} color="#777777" />
+          <FontAwesome name="plus-circle" size={25} color="white" />
         </TouchableOpacity>
       </View>
 
@@ -701,25 +715,43 @@ export default function EditProfileScreen() {
             }}>
             <View
               style={{
-                // marginVertical: '5%',
-                // height: Dimensions.get('window').height * 0.25,
-                backgroundColor: '#BBC6C8',
+                // backgroundColor: '#BBC6C8',
+                // borderRadius: 16,
+                // marginVertical: '3%',
+
+                // alignSelf: 'center',
+                // width: Dimensions.get('window').width * 0.25,
                 // marginHorizontal: '5%',
-                borderRadius: 16,
+
+                backgroundColor: '#ffffff',
+                // width: Dimensions.get('window').width * 0.8,
+                marginHorizontal: '15%',
+                borderRadius: 22,
+                // flexDirection: 'row',
+                alignItems: 'center',
+                // marginBottom: '7%',
+                marginVertical: '3%',
               }}>
               <TextInput
                 style={{
                   // marginHorizontal: '5%',
-
-                  fontSize: 18,
-                  backgroundColor: '#BBC6C8',
+                  fontSize: 15,
+                  // backgroundColor: '#BBC6C8',
+                  backgroundColor: 'white',
                   color: '#5BA199',
+                  borderRadius: 22,
+                  // justifyContent: 'center',
+                  // alignItems: 'center',
+                  marginHorizontal: '3%',
+
+                  // width: Dimensions.get('window').width * 0.25,
                 }}
                 multiline
                 onChangeText={setDescription}
                 value={description}
                 placeholder="Write Description here..."
                 placeholderTextColor={'#777777'}
+                // placeholderTextColor={'white'}
               />
             </View>
           </View>
@@ -733,10 +765,10 @@ export default function EditProfileScreen() {
               alignSelf: 'center',
               paddingHorizontal: '12%',
               paddingVertical: '3%',
-              borderRadius: 16,
+              borderRadius: 30,
               marginVertical: '5%',
             }}>
-            <Text style={{color: '#ffffff', fontSize: 30, fontWeight: 'bold'}}>
+            <Text style={{color: '#ffffff', fontSize: 20, fontWeight: 'bold'}}>
               Confirm Change
             </Text>
           </TouchableOpacity>
@@ -751,7 +783,10 @@ export default function EditProfileScreen() {
           marginTop: '10%',
           flexDirection: 'row',
           alignItems: 'center',
-          backgroundColor: '#BBC6C8',
+          // backgroundColor: '#BBC6C8',
+          // backgroundColor: '#469597',
+          backgroundColor: '#4CA6A8',
+
           //   borderRadius: 8,
           padding: '2%',
           justifyContent: 'space-between',
@@ -765,10 +800,11 @@ export default function EditProfileScreen() {
           <FontAwesome
             name="graduation-cap"
             size={25}
-            color="#777777"
+            // color="#777777"
+            color="white"
             style={{marginLeft: '0%'}}
           />
-          <Text style={{fontSize: 25, color: '#000000', marginLeft: 10}}>
+          <Text style={{fontSize: 25, color: 'white', marginLeft: 10}}>
             Experience
           </Text>
         </View>
@@ -776,7 +812,7 @@ export default function EditProfileScreen() {
         <TouchableOpacity
           onPress={() => setExperienceDisplay(!experienceDisplay)}
           style={{marginRight: '2%'}}>
-          <FontAwesome name="plus-circle" size={25} color="#777777" />
+          <FontAwesome name="plus-circle" size={25} color="white" />
         </TouchableOpacity>
       </View>
 
@@ -802,7 +838,7 @@ export default function EditProfileScreen() {
                   backgroundColor: '#ffffff',
                   borderRadius: 16,
                   marginHorizontal: Dimensions.get('window').width * 0.02,
-
+                  marginTop: 15,
                   // height: Dimensions.get('window').height * 0.12,
                   // width: Dimensions.get('window').width * 0.9,
                 }}>
@@ -910,9 +946,14 @@ export default function EditProfileScreen() {
               alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '3%',
+              // textAlign: 'center',
             }}>
             <TextInput
-              style={{}}
+              style={
+                {
+                  // textAlign: 'center',
+                }
+              }
               onChangeText={setExperienceDate}
               value={experienceDate}
               placeholder="Time Period"
@@ -969,7 +1010,11 @@ export default function EditProfileScreen() {
               marginVertical: '3%',
             }}>
             <TextInput
-              style={{}}
+              style={
+                {
+                  // alignContent: 'center',
+                }
+              }
               onChangeText={setExperienceCountry}
               value={experienceCountry}
               placeholder="Country"
@@ -1026,9 +1071,9 @@ export default function EditProfileScreen() {
               justifyContent: 'center',
               alignItems: 'center',
               backgroundColor: '#469597',
-              borderRadius: 12,
+              borderRadius: 60,
               marginTop: '3%',
-              height: 30,
+              height: 40,
               width: 150,
             }}
             onPress={() => selectFile()}>
@@ -1046,13 +1091,13 @@ export default function EditProfileScreen() {
               alignSelf: 'center',
               paddingHorizontal: '12%',
               paddingVertical: '3%',
-              borderRadius: 16,
+              borderRadius: 30,
               marginVertical: '5%',
             }}
 
             // onPress={updateArrayExp}
           >
-            <Text style={{color: '#ffffff', fontSize: 30, fontWeight: 'bold'}}>
+            <Text style={{color: '#ffffff', fontSize: 20, fontWeight: 'bold'}}>
               Add Experience
             </Text>
           </TouchableOpacity>
