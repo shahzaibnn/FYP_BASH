@@ -1011,7 +1011,12 @@ export default function EditProfileScreen() {
               <TextInput
                 editable={false}
                 style={{
-                  backgroundColor: 'red',
+                  // backgroundColor: 'red',
+                  // backgroundColor: 'red',
+                  // backgroundColor: '#469597',
+                  backgroundColor: 'rgba(70,149,151,0.7)',
+                  // backgroundColor: ,
+                  color: 'white',
                   borderRadius: 16,
                   paddingHorizontal: Dimensions.get('screen').width * 0.1,
                 }}
@@ -1035,9 +1040,12 @@ export default function EditProfileScreen() {
               <TextInput
                 editable={false}
                 style={{
-                  backgroundColor: 'orange',
+                  // backgroundColor: '#469597',
+                  backgroundColor: 'rgba(70,149,151,0.7)',
+
                   borderRadius: 16,
                   paddingHorizontal: Dimensions.get('screen').width * 0.1,
+                  color: 'white',
                 }}
                 onChangeText={setExperienceDateEnd}
                 value={experienceDateEnd}
