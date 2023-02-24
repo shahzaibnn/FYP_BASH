@@ -29,7 +29,9 @@ import {
 
 import {CommonActions} from '@react-navigation/native';
 import {Grid} from 'react-native-animated-spinkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import {getAuth} from 'firebase/auth';
 export default function LoginScreen({navigation}) {
   // export default function LoginScreen() {
 
@@ -55,6 +57,71 @@ export default function LoginScreen({navigation}) {
   console.log(email);
   console.log(password);
 
+  useEffect(() => {
+    console.log('checking');
+    checkIfUserIsLoggedIn();
+  }, []);
+  const checkIfUserIsLoggedIn = async () => {
+    const authToken = await AsyncStorage.getItem('authToken');
+    if (authToken) {
+      const auth = getAuth();
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          setFlag(true);
+          const userEmail = user.email.toLowerCase();
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [
+                {
+                  name: 'Drawer',
+
+                  params: {
+                    screen: 'BottomTabs',
+                    params: {
+                      screen: 'Home',
+                      params: {
+                        userEmail,
+                      },
+                    },
+                  },
+                },
+              ],
+            }),
+          );
+        }
+      });
+      // auth
+      // signInWithCustomToken(authToken)
+      //   .then(() => {
+      //     setFlag(true);
+      //     navigation.dispatch(
+      //       CommonActions.reset({
+      //         index: 1,
+      //         routes: [
+      //           {
+      //             name: 'Drawer',
+
+      //             params: {
+      //               screen: 'BottomTabs',
+      //               params: {
+      //                 screen: 'Home',
+      //                 params: {
+      //                   userEmail: email.toLowerCase(),
+      //                 },
+      //               },
+      //             },
+      //           },
+      //         ],
+      //       }),
+      //     );
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //   });
+    }
+  };
+
   const handleLogin = () => {
     // setSpinnerLoader(true);
 
@@ -70,29 +137,54 @@ export default function LoginScreen({navigation}) {
         .then(cred => {
           console.log(cred);
           console.log('success');
-          const user = cred.user;
-          // console.log('Logged in as ', user.email);
-          setFlag(true);
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 1,
-              routes: [
-                {
-                  name: 'Drawer',
+          const authToken = cred.user.getIdToken();
+          AsyncStorage.setItem('authToken', authToken.toString())
+            // const user = cred.user;
+            .then(() => {
+              setFlag(true);
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 1,
+                  routes: [
+                    {
+                      name: 'Drawer',
 
-                  params: {
-                    screen: 'BottomTabs',
-                    params: {
-                      screen: 'Home',
                       params: {
-                        userEmail: email.toLowerCase(),
+                        screen: 'BottomTabs',
+                        params: {
+                          screen: 'Home',
+                          params: {
+                            userEmail: email.toLowerCase(),
+                          },
+                        },
                       },
                     },
-                  },
-                },
-              ],
-            }),
-          );
+                  ],
+                }),
+              );
+            });
+          // console.log('Logged in as ', user.email);
+          // setFlag(true);
+          // navigation.dispatch(
+          //   CommonActions.reset({
+          //     index: 1,
+          //     routes: [
+          //       {
+          //         name: 'Drawer',
+
+          //         params: {
+          //           screen: 'BottomTabs',
+          //           params: {
+          //             screen: 'Home',
+          //             params: {
+          //               userEmail: email.toLowerCase(),
+          //             },
+          //           },
+          //         },
+          //       },
+          //     ],
+          //   }),
+          // );
           // navigation.navigate('Drawer', {
           //   screen: 'BottomTabs',
           //   params: {
