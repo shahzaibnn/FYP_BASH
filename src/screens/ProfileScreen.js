@@ -349,7 +349,9 @@ const ProfileScreen = ({navigation}) => {
                       marginLeft: Dimensions.get('window').width * 0.03,
                     }}>
                     <Text style={styles.designationStyle}>{item.title}</Text>
-                    <Text style={{fontWeight: 'bold'}}>{item.period}</Text>
+                    <Text style={{fontWeight: 'bold'}}>
+                      {item.period} To {item.periodEnd}
+                    </Text>
                     <View style={styles.ExpBoxView}>
                       <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
                       <Text style={{fontWeight: 'bold'}}> - </Text>

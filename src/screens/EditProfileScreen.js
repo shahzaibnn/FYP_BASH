@@ -8,7 +8,7 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Collapsible from 'react-native-collapsible';
@@ -36,6 +36,8 @@ import {
 } from '../store/action';
 import storage from '@react-native-firebase/storage';
 
+import MonthPicker from 'react-native-month-year-picker';
+
 export default function EditProfileScreen() {
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
@@ -57,7 +59,9 @@ export default function EditProfileScreen() {
   const [experience, setExperience] = useState(storeData?.experience);
 
   const [experienceTitle, setExperienceTitle] = useState('');
-  const [experienceDate, setExperienceDate] = useState('');
+  const [experienceDateStart, setExperienceDateStart] = useState('');
+  const [experienceDateEnd, setExperienceDateEnd] = useState('');
+
   const [experienceCompany, setExperienceCompany] = useState('');
   const [experienceLocation, setExperienceLocation] = useState('');
   const [experienceCountry, setExperienceCountry] = useState('');
@@ -72,9 +76,54 @@ export default function EditProfileScreen() {
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
 
+  const [show, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [date2, setDate2] = useState(new Date());
+  const [show2, setShow2] = useState(false);
+
+  var moment = require('moment'); // require
+
+  const showPicker = useCallback(value => {
+    setShow(value);
+  }, []);
+
+  const onValueChange = useCallback(
+    (event, newDate) => {
+      const selectedDate = newDate || date;
+
+      showPicker(false);
+      setDate(selectedDate);
+    },
+    [date, showPicker],
+
+    console.log(moment(date).format('MM-YYYY')),
+  );
+
+  const showPicker2 = useCallback(value => {
+    setShow2(value);
+  }, []);
+
+  const onValueChange2 = useCallback(
+    (event, newDate) => {
+      const selectedDate = newDate || date2;
+
+      showPicker2(false);
+      setDate2(selectedDate);
+    },
+    [date2, showPicker2],
+
+    console.log(moment(date2).format('MM-YYYY')),
+  );
+
+  useEffect(() => {
+    setExperienceDateStart(moment(date).format('MM-YYYY'));
+    setExperienceDateEnd(moment(date2).format('MM-YYYY'));
+  }, [date, date2]);
+
   const removeArrayExp = async (
     expTitle,
     expTime,
+    expTimeEnd,
     expOrg,
     expLoc,
     expCountry,
@@ -88,6 +137,8 @@ export default function EditProfileScreen() {
       'test1',
       expTime,
       'test2',
+      expTimeEnd,
+      'test2',
       expOrg,
       'test3',
       expLoc,
@@ -100,6 +151,7 @@ export default function EditProfileScreen() {
       {
         title: expTitle,
         period: expTime,
+        periodEnd: expTimeEnd,
         company: expOrg,
         city: expLoc,
         country: expCountry,
@@ -139,7 +191,9 @@ export default function EditProfileScreen() {
     console.log(experienceTitle);
     console.log(experienceCompany);
     console.log(experienceCountry);
-    console.log(experienceDate);
+    console.log(experienceDateStart);
+    console.log(experienceDateEnd);
+
     console.log(experienceLocation);
     console.log(singleFile);
     // console.log(storeData.userEmail);
@@ -175,7 +229,8 @@ export default function EditProfileScreen() {
           let experience = [
             {
               title: experienceTitle,
-              period: experienceDate,
+              period: experienceDateStart,
+              periodEnd: experienceDateEnd,
               company: experienceCompany,
               city: experienceLocation,
               country: experienceCountry,
@@ -191,7 +246,8 @@ export default function EditProfileScreen() {
             .then(() => {
               let experienceRedux = {
                 title: experienceTitle,
-                period: experienceDate,
+                period: experienceDateStart,
+                periodEnd: experienceDateEnd,
                 company: experienceCompany,
                 city: experienceLocation,
                 country: experienceCountry,
@@ -381,9 +437,9 @@ export default function EditProfileScreen() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleRemove = () => {
-    removeArrayExp(expTitle, expTime, expOrg, expLoc, expCountry, expImage);
-  };
+  // const handleRemove = () => {
+  //   removeArrayExp(expTitle, expTime, expOrg, expLoc, expCountry, expImage);
+  // };
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -875,7 +931,9 @@ export default function EditProfileScreen() {
                       }}>
                       {item.title}
                     </Text>
-                    <Text style={{fontWeight: 'bold'}}>{item.period}</Text>
+                    <Text style={{fontWeight: 'bold'}}>
+                      {item.period} To {item.periodEnd}
+                    </Text>
                     <View
                       style={{
                         flexDirection: 'row',
@@ -896,6 +954,7 @@ export default function EditProfileScreen() {
                         removeArrayExp(
                           item.title,
                           item.period,
+                          item.periodEnd,
                           item.company,
                           item.city,
                           item.country,
@@ -938,26 +997,63 @@ export default function EditProfileScreen() {
 
           <View
             style={{
-              backgroundColor: '#ffffff',
+              // backgroundColor: '#ffffff',
               // width: Dimensions.get('window').width * 0.8,
               marginHorizontal: '10%',
               borderRadius: 16,
               flexDirection: 'row',
-              alignItems: 'center',
+              // alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '3%',
-              // textAlign: 'center',
+              justifyContent: 'space-between',
             }}>
-            <TextInput
-              style={
-                {
-                  // textAlign: 'center',
-                }
-              }
-              onChangeText={setExperienceDate}
-              value={experienceDate}
-              placeholder="Time Period"
-            />
+            <TouchableOpacity onPress={() => showPicker(true)}>
+              <TextInput
+                editable={false}
+                style={{
+                  backgroundColor: 'red',
+                  borderRadius: 16,
+                  paddingHorizontal: Dimensions.get('screen').width * 0.1,
+                }}
+                onChangeText={setExperienceDateStart}
+                value={experienceDateStart}
+                placeholder="Start"
+              />
+            </TouchableOpacity>
+
+            {show && (
+              <MonthPicker
+                onChange={onValueChange}
+                value={date}
+                minimumDate={new Date(2000, 1)}
+                maximumDate={new Date(date2)}
+                mode="number"
+              />
+            )}
+
+            <TouchableOpacity onPress={() => showPicker2(true)}>
+              <TextInput
+                editable={false}
+                style={{
+                  backgroundColor: 'orange',
+                  borderRadius: 16,
+                  paddingHorizontal: Dimensions.get('screen').width * 0.1,
+                }}
+                onChangeText={setExperienceDateEnd}
+                value={experienceDateEnd}
+                placeholder="End"
+              />
+            </TouchableOpacity>
+
+            {show2 && (
+              <MonthPicker
+                onChange={onValueChange2}
+                value={date2}
+                minimumDate={new Date(2000, 1)}
+                maximumDate={new Date()}
+                mode="number"
+              />
+            )}
           </View>
 
           <View
