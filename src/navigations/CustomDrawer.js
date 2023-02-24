@@ -21,7 +21,14 @@ import {
 
 import {CommonActions} from '@react-navigation/native';
 import {Grid} from 'react-native-animated-spinkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from 'firebase/auth';
 Drawer = createDrawerNavigator();
 
 export default function CustomDrawer({props, navigation}) {
@@ -34,10 +41,15 @@ export default function CustomDrawer({props, navigation}) {
       setSpinnerLoader(true);
       setPointerEvent('none');
       setOpacity(0.8);
-      setTimeout(function () {
+      setTimeout(async function () {
         setSpinnerLoader(false);
         setPointerEvent('auto');
         setOpacity(1);
+
+        const auth = getAuth();
+        await signOut(auth);
+        await AsyncStorage.removeItem('authToken');
+
         navigation.navigate('Login');
         navigation.dispatch(
           CommonActions.reset({
