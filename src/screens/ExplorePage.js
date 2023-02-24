@@ -18,23 +18,26 @@ import Toast from 'react-native-toast-message';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actions-sheet';
 import {SliderBox} from 'react-native-image-slider-box';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {db, dbFirestore} from '../Firebase/Config';
 
 const ExplorePage = () => {
+  const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
+
   const [searchResults, setSearchResults] = useState([]);
-  const [postsSelected, setpostsSelected] = useState(false);
+
   const [peopleSelected, setpeopleSelected] = useState(true);
+  const [postsSelected, setpostsSelected] = useState(false);
   const [jobsSelected, setjobsSelected] = useState(false);
+
   const [searchValue, setSearchValue] = useState('');
   const [searchSelected, setSearchSelected] = useState(false);
   const [fetchedJobs, setFetchedJobs] = useState([]);
   const [fetchedUsers, setFetchedUsers] = useState([]);
   const [fetchedPosts, setFetchedPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
   const [actionParameters, setActionParameters] = useState([]);
   const [extraData, setExtraData] = React.useState(new Date());
   const [searchPeople, setSearchPeople] = useState(true);
@@ -44,240 +47,97 @@ const ExplorePage = () => {
   let actionSheet = createRef();
   const show = item => {
     setActionParameters(item);
-    console.log('acrtions is, ', actionParameters);
+    console.log('actions is, ', actionParameters);
     actionSheet.current.show();
   };
-  useEffect(() => {
-    const subscriber = dbFirestore()
-      .collection('Users')
+  // useEffect(() => {
+  //   const subscriber = dbFirestore()
+  //     .collection('Users')
 
-      .onSnapshot(querySnapshot => {
-        const updatedData = [];
-        querySnapshot.forEach(doc => {
-          updatedData.push({id: doc.id, ...doc.data()});
-        });
-        setFetchedUsers(updatedData);
-        setLoading(false);
-      });
+  //     .onSnapshot(querySnapshot => {
+  //       const updatedData = [];
+  //       querySnapshot.forEach(doc => {
+  //         updatedData.push({id: doc.id, ...doc.data()});
+  //       });
+  //       setFetchedUsers(updatedData);
+  //       setLoading(false);
+  //     });
 
-    return () => subscriber();
-  }, []);
-
-  useEffect(() => {
-    const subscriber = dbFirestore()
-      .collection('Posts')
-      .onSnapshot(querySnapshot => {
-        const updatedData = [];
-        querySnapshot.forEach(doc => {
-          updatedData.push({id: doc.id, ...doc.data()});
-        });
-        setFetchedPosts(updatedData);
-        setLoading(false);
-      });
-
-    return () => subscriber();
-  }, []);
-
-  useEffect(() => {
-    const subscriber = dbFirestore()
-      .collection('Jobs')
-      .onSnapshot(querySnapshot => {
-        const updatedData = [];
-        querySnapshot.forEach(doc => {
-          updatedData.push({id: doc.id, ...doc.data()});
-        });
-        setFetchedJobs(updatedData);
-        setLoading(false);
-      });
-
-    return () => subscriber();
-  }, []);
-
-  const TitleTag = () => {
-    if (postsSelected) {
-      return <Text style={styles.titleTextStyle}>Posts</Text>;
-    } else if (peopleSelected) {
-      return <Text style={styles.titleTextStyle}>People</Text>;
-    } else if (jobsSelected) {
-      return <Text style={styles.titleTextStyle}>Jobs</Text>;
-    } else if (searchSelected == true && searchPeople == true) {
-      return (
-        <Text style={styles.titleTextStyle}>Search Results For People</Text>
-      );
-    } else if (searchSelected == true && searchJobs == true) {
-      return <Text style={styles.titleTextStyle}>Search Results For Jobs</Text>;
-    } else if (searchSelected == true && searchPosts == true) {
-      return (
-        <Text style={styles.titleTextStyle}>Search Results For Posts</Text>
-      );
-    } else if (
-      searchSelected == true &&
-      searchPosts == false &&
-      searchPeople == false &&
-      searchJobs == false
-    ) {
-      setpeopleSelected(true);
-      return <Text style={styles.titleTextStyle}>Search Results test</Text>;
-    } else {
-      setpeopleSelected(true);
-      return <Text style={styles.titleTextStyle}>People</Text>;
-    }
-  };
+  //   return () => subscriber();
+  // }, []);
 
   // useEffect(() => {
-  //   // your search logic here, using the current value of searchValue
-  //   setSearchSelected(true);
-  //   if (peopleSelected) {
-  //     const query = dbFirestore().collection('Users');
-  //     query.get().then(querySnapshot => {
-  //       const results = [];
-  //       querySnapshot.forEach(documentSnapshot => {
-  //         const data = documentSnapshot.data();
-  //         const allFields = Object.values(data).join(' ');
-  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-  //           results.push(data);
-  //         }
+  //   const subscriber = dbFirestore()
+  //     .collection('Posts')
+  //     .onSnapshot(querySnapshot => {
+  //       const updatedData = [];
+  //       querySnapshot.forEach(doc => {
+  //         updatedData.push({id: doc.id, ...doc.data()});
   //       });
-  //       setSearchPeople(true);
-  //       setSearchPosts(false);
-  //       setSearchJobs(false);
-
-  //       setSearchResults(results);
-  //       setpostsSelected(false);
-  //       setjobsSelected(false);
-  //       setpeopleSelected(false);
+  //       setFetchedPosts(updatedData);
+  //       setLoading(false);
   //     });
-  //   } else {
-  //     setSearchResults([]);
-  //   }
 
+  //   return () => subscriber();
+  // }, []);
+
+  // useEffect(() => {
+  //   const subscriber = dbFirestore()
+  //     .collection('Jobs')
+  //     .onSnapshot(querySnapshot => {
+  //       const updatedData = [];
+  //       querySnapshot.forEach(doc => {
+  //         updatedData.push({id: doc.id, ...doc.data()});
+  //       });
+  //       setFetchedJobs(updatedData);
+  //       setLoading(false);
+  //     });
+
+  //   return () => subscriber();
+  // }, []);
+
+  // const TitleTag = () => {
   //   if (postsSelected) {
-  //     const query = dbFirestore().collection('Posts');
-  //     query.get().then(querySnapshot => {
-  //       const results = [];
-  //       querySnapshot.forEach(documentSnapshot => {
-  //         const data = documentSnapshot.data();
-  //         const allFields = Object.values(data).join(' ');
-  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-  //           results.push(data);
-  //         }
-  //       });
-  //       setSearchPeople(false);
-  //       setSearchPosts(true);
-  //       setSearchJobs(false);
-  //       setSearchResults(results);
-  //       setpostsSelected(false);
-  //       setjobsSelected(false);
-  //       setpeopleSelected(false);
-  //     });
+  //     return <Text style={styles.titleTextStyle}>Posts</Text>;
+  //   } else if (peopleSelected) {
+  //     return <Text style={styles.titleTextStyle}>People</Text>;
+  //   } else if (jobsSelected) {
+  //     return <Text style={styles.titleTextStyle}>Jobs</Text>;
+  //   } else if (searchSelected == true && searchPeople == true) {
+  //     return (
+  //       <Text style={styles.titleTextStyle}>Search Results For People</Text>
+  //     );
+  //   } else if (searchSelected == true && searchJobs == true) {
+  //     return <Text style={styles.titleTextStyle}>Search Results For Jobs</Text>;
+  //   } else if (searchSelected == true && searchPosts == true) {
+  //     return (
+  //       <Text style={styles.titleTextStyle}>Search Results For Posts</Text>
+  //     );
+  //   } else if (
+  //     searchSelected == true &&
+  //     searchPosts == false &&
+  //     searchPeople == false &&
+  //     searchJobs == false
+  //   ) {
+  //     setpeopleSelected(true);
+  //     return <Text style={styles.titleTextStyle}>Search Results test</Text>;
   //   } else {
-  //     setSearchResults([]);
+  //     setpeopleSelected(true);
+  //     return <Text style={styles.titleTextStyle}>People</Text>;
   //   }
-
-  //   if (jobsSelected) {
-  //     const query = dbFirestore().collection('Jobs');
-  //     query.get().then(querySnapshot => {
-  //       const results = [];
-  //       querySnapshot.forEach(documentSnapshot => {
-  //         const data = documentSnapshot.data();
-  //         const allFields = Object.values(data).join(' ');
-  //         if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-  //           results.push(data);
-  //         }
-  //       });
-  //       // setSearchJobs(true);
-  //       setSearchPeople(false);
-  //       setSearchPosts(false);
-  //       setSearchJobs(true);
-  //       setSearchResults(results);
-  //       setpostsSelected(false);
-  //       setjobsSelected(false);
-  //       setpeopleSelected(false);
-  //     });
-  //   } else {
-  //     // setSearchResults([]);
-  //   }
-  //   console.log(searchValue);
-  // }, [searchValue]);
-  const search = () => {
-    setSearchSelected(true);
-
-    if (peopleSelected) {
-      const query = dbFirestore().collection('Users');
-      query.get().then(querySnapshot => {
-        const results = [];
-        querySnapshot.forEach(documentSnapshot => {
-          const data = documentSnapshot.data();
-          const allFields = Object.values(data).join(' ');
-          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-            results.push(data);
-          }
-        });
-        setSearchPeople(true);
-        setSearchPosts(false);
-        setSearchJobs(false);
-
-        setSearchResults(results);
-        setpostsSelected(false);
-        setjobsSelected(false);
-        setpeopleSelected(false);
-      });
-    } else {
-      setSearchResults([]);
-    }
-
-    if (postsSelected) {
-      const query = dbFirestore().collection('Posts');
-      query.get().then(querySnapshot => {
-        const results = [];
-        querySnapshot.forEach(documentSnapshot => {
-          const data = documentSnapshot.data();
-          const allFields = Object.values(data).join(' ');
-          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-            results.push(data);
-          }
-        });
-        setSearchPeople(false);
-        setSearchPosts(true);
-        setSearchJobs(false);
-        setSearchResults(results);
-        setpostsSelected(false);
-        setjobsSelected(false);
-        setpeopleSelected(false);
-      });
-    } else {
-      setSearchResults([]);
-    }
-
-    if (jobsSelected) {
-      const query = dbFirestore().collection('Jobs');
-      query.get().then(querySnapshot => {
-        const results = [];
-        querySnapshot.forEach(documentSnapshot => {
-          const data = documentSnapshot.data();
-          const allFields = Object.values(data).join(' ');
-          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-            results.push(data);
-          }
-        });
-        // setSearchJobs(true);
-        setSearchPeople(false);
-        setSearchPosts(false);
-        setSearchJobs(true);
-        setSearchResults(results);
-        setpostsSelected(false);
-        setjobsSelected(false);
-        setpeopleSelected(false);
-      });
-    } else {
-      setSearchResults([]);
-    }
-  };
+  // };
 
   const UpdatedSearch = () => {
-    setSearchSelected(true);
+    if (!searchValue) {
+      setSearchSelected(false);
 
-    if (peopleSelected) {
+      alert('Enter value to search!!');
+    } else {
+      setSearchSelected(true);
+
+      // if (peopleSelected) {
+
+      //Users Fetching
       const query = dbFirestore().collection('Users');
       query.get().then(querySnapshot => {
         const results = [];
@@ -286,6 +146,8 @@ const ExplorePage = () => {
           const allFields = Object.values(data).join(' ');
           if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
             results.push(data);
+            console.log(results);
+            console.log('search value is: ', searchValue.toLowerCase());
           }
         });
         setSearchPeople(true);
@@ -293,31 +155,36 @@ const ExplorePage = () => {
         setSearchJobs(false);
 
         setSearchResults(results);
-        setpostsSelected(false);
-        setjobsSelected(false);
-        setpeopleSelected(false);
+        setFetchedUsers(results);
+        // setpostsSelected(false);
+        // setjobsSelected(false);
+        // setpeopleSelected(false);
       });
-    }
+      // }
 
-    if (postsSelected) {
+      //Posts Fetching
+      // if (postsSelected) {
       try {
-        const query = dbFirestore().collection('Posts');
-        query.get().then(querySnapshot => {
+        const query1 = dbFirestore().collection('Posts');
+        query1.get().then(querySnapshot => {
           const results = [];
           querySnapshot.forEach(documentSnapshot => {
             const data = documentSnapshot.data();
             const allFields = Object.values(data).join(' ');
             if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
               results.push(data);
+              console.log(results);
+              console.log('search value is: ', searchValue.toLowerCase());
             }
           });
           setSearchPeople(false);
           setSearchPosts(true);
           setSearchJobs(false);
           setSearchResults(results);
-          setpostsSelected(false);
-          setjobsSelected(false);
-          setpeopleSelected(false);
+          setFetchedPosts(results);
+          // setpostsSelected(false);
+          // setjobsSelected(false);
+          // setpeopleSelected(false);
         });
       } catch (error) {
         if (error.code === 'not-found') {
@@ -325,11 +192,12 @@ const ExplorePage = () => {
           console.log('not found');
         }
       }
-    }
+      // }
 
-    if (jobsSelected) {
-      const query = dbFirestore().collection('Jobs');
-      query.get().then(querySnapshot => {
+      // if (jobsSelected) {
+      // Fetching Jobs
+      const query2 = dbFirestore().collection('Jobs');
+      query2.get().then(querySnapshot => {
         const results = [];
         querySnapshot.forEach(documentSnapshot => {
           const data = documentSnapshot.data();
@@ -342,19 +210,20 @@ const ExplorePage = () => {
         setSearchPosts(false);
         setSearchJobs(true);
         setSearchResults(results);
-        setpostsSelected(false);
-        setjobsSelected(false);
-        setpeopleSelected(false);
+        setFetchedJobs(results);
+        // setpostsSelected(false);
+        // setjobsSelected(false);
+        // setpeopleSelected(false);
       });
     }
 
-    if (!peopleSelected && !postsSelected && !jobsSelected) {
-      setSearchResults([]);
-      // by default people
-      setpeopleSelected(true);
-    }
+    // if (!peopleSelected && !postsSelected && !jobsSelected) {
+    //   setSearchResults([]);
+    //   // by default people
+    //   setpeopleSelected(true);
+    // }
     // for clearing the field
-    setSearchValue('');
+    // setSearchValue('');
   };
 
   return (
@@ -377,7 +246,7 @@ const ExplorePage = () => {
       </View>
       <View
         style={{flexDirection: 'row', marginTop: '3%', marginHorizontal: '5%'}}>
-        <TouchableOpacity
+        <View
           style={{
             alignItems: 'center',
             marginLeft: '3%',
@@ -406,154 +275,144 @@ const ExplorePage = () => {
             style={{padding: 10, backgroundColor: '#5BA199', borderRadius: 16}}>
             {/* <TouchableOpacity onPress={search}> */}
             <TouchableOpacity onPress={UpdatedSearch}>
-              {/* <TouchableOpacity onPress={() => setSearchValue(searchValue)}> */}
-              <Ionicons
-                name="options-outline"
-                size={40}
-                color="#ffffff"
-                style={{}}
-              />
+              <Ionicons name="search" size={40} color="#ffffff" style={{}} />
             </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        </View>
       </View>
 
       {/* Another view for options */}
-      <View style={styles.iconBoxView}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          marginTop: Dimensions.get('screen').height * 0.05,
+        }}>
         {/* user profile icon */}
-        <View>
-          {peopleSelected ? (
-            <View style={styles.iconSelected}>
-              <TouchableOpacity
-                onPress={() => {
-                  setpostsSelected(false);
-                  setjobsSelected(false);
-                  setpeopleSelected(true);
-                  setSearchSelected(false);
-                  console.log('testing', peopleSelected);
-                }}>
-                <MaterialCommunityIcons
-                  name="abacus"
-                  size={50}
-                  color="white"
-                  style={styles.icon}
-                  backgroundColor="blue"
-                />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View style={styles.iconStyle}>
-              <TouchableOpacity
-                onPress={() => {
-                  setpostsSelected(false);
-                  setjobsSelected(false);
-                  setpeopleSelected(true);
-                  setSearchSelected(false);
-                  console.log('posts', postsSelected);
-                }}>
-                <MaterialCommunityIcons
-                  name="abacus"
-                  size={50}
-                  color="#4CA6A8"
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
+        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          <View
+            style={{
+              // marginLeft: Dimensions.get('window').width * 0.04,
+              // marginTop: Dimensions.get('window').width * 0.04,
+              backgroundColor: peopleSelected ? '#4CA6A8' : '#ffffff',
+              borderRadius: 100,
+
+              height: Dimensions.get('window').height * 0.1,
+              width: Dimensions.get('window').width * 0.2,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                setpeopleSelected(true);
+                setpostsSelected(false);
+                setjobsSelected(false);
+
+                // setSearchSelected(false);
+                console.log('posts', postsSelected);
+              }}>
+              <Ionicons
+                name="people"
+                size={50}
+                color={peopleSelected ? '#ffffff' : '#4CA6A8'}
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+          </View>
+
           <Text style={styles.iconText}>People</Text>
         </View>
         {/* posts icon */}
-        <View>
-          {postsSelected ? (
-            <View style={styles.iconSelected}>
-              <TouchableOpacity
-                onPress={() => {
-                  setpostsSelected(true);
-                  setjobsSelected(false);
-                  setpeopleSelected(false);
-                  setSearchSelected(false);
-                  console.log('posts', postsSelected);
-                }}>
-                <MaterialCommunityIcons
-                  name="abacus"
-                  size={50}
-                  color="white"
-                  style={styles.icon}
-                  backgroundColor="blue"
-                />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View style={styles.iconStyle}>
-              <TouchableOpacity
-                onPress={() => {
-                  setpostsSelected(true);
-                  setjobsSelected(false);
-                  setpeopleSelected(false);
-                  setSearchSelected(false);
-                  console.log('posts  ', postsSelected);
-                }}>
-                <MaterialCommunityIcons
-                  name="abacus"
-                  size={50}
-                  color="#4CA6A8"
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
+        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          <View
+            style={{
+              // marginLeft: Dimensions.get('window').width * 0.04,
+              // marginTop: Dimensions.get('window').width * 0.04,
+              backgroundColor: postsSelected ? '#4CA6A8' : '#ffffff',
+              borderRadius: 100,
+
+              height: Dimensions.get('window').height * 0.1,
+              width: Dimensions.get('window').width * 0.2,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                setpostsSelected(true);
+                setjobsSelected(false);
+                setpeopleSelected(false);
+                // setSearchSelected(false);
+                console.log('posts  ', postsSelected);
+              }}>
+              <MaterialIcons
+                name="post-add"
+                size={50}
+                color={postsSelected ? '#ffffff' : '#4CA6A8'}
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+          </View>
+
           <Text style={styles.iconText}>Posts</Text>
         </View>
         {/* job icon */}
 
-        <View>
-          {jobsSelected ? (
-            <View style={styles.iconSelected}>
-              <TouchableOpacity
-                onPress={() => {
-                  setpostsSelected(false);
-                  setjobsSelected(true);
-                  setpeopleSelected(false);
-                  setSearchSelected(false);
-                  console.log(setjobsSelected);
-                }}>
-                <MaterialCommunityIcons
-                  name="abacus"
-                  size={50}
-                  color="white"
-                  style={styles.icon}
-                  backgroundColor="blue"
-                />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View style={styles.iconStyle}>
-              <TouchableOpacity
-                onPress={() => {
-                  setpostsSelected(false);
-                  setjobsSelected(true);
-                  setpeopleSelected(false);
-                  setSearchSelected(false);
-                  console.log(setjobsSelected);
-                }}>
-                <MaterialCommunityIcons
-                  name="abacus"
-                  size={50}
-                  color="#4CA6A8"
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <View
+            style={{
+              // marginLeft: Dimensions.get('window').width * 0.04,
+              // marginTop: Dimensions.get('window').width * 0.04,
+              backgroundColor: jobsSelected ? '#4CA6A8' : '#ffffff',
+              borderRadius: 100,
+
+              height: Dimensions.get('window').height * 0.1,
+              width: Dimensions.get('window').width * 0.2,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <TouchableOpacity
+              style={{alignItems: 'center', justifyContent: 'center'}}
+              onPress={() => {
+                setjobsSelected(true);
+                setpostsSelected(false);
+
+                setpeopleSelected(false);
+                // setSearchSelected(false);
+                console.log(setjobsSelected);
+              }}>
+              <Ionicons
+                name="briefcase"
+                size={50}
+                color={jobsSelected ? '#ffffff' : '#4CA6A8'}
+                style={styles.icon}
+                backgroundColor="blue"
+              />
+            </TouchableOpacity>
+          </View>
+
           <Text style={styles.iconText}>Jobs</Text>
         </View>
       </View>
       <View style={styles.titleStyle}>
         {/* <Text>{TitleTag}</Text> */}
-        <Text>{TitleTag()}</Text>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: 'bold',
+
+            color: '#000000',
+          }}>
+          {peopleSelected
+            ? 'People'
+            : postsSelected
+            ? 'Posts'
+            : jobsSelected
+            ? 'Jobs'
+            : null}
+        </Text>
       </View>
       {/* Flatlists */}
-      {/* Users Flatlist */}
+      {/* Users Flatlist 
       <View>
         <View style={{marginHorizontal: '3%', marginVertical: '4%'}}>
           {peopleSelected ? (
@@ -602,7 +461,7 @@ const ExplorePage = () => {
                       <Text style={styles.designationStyle}>People</Text>
                       <Text>{item.firstName + ' ' + item.lastName}</Text>
                       <View style={styles.ExpBoxView}>
-                        {/* <Text>{item.designation}</Text> */}
+                        // {/* <Text>{item.designation}</Text> 
                         <Text style={styles.ExpLocation}>{item.userEmail}</Text>
                         <Text
                           style={{
@@ -627,8 +486,9 @@ const ExplorePage = () => {
             <></>
           )}
         </View>
-      </View>
-      {/* Posts Flatlist */}
+      </View> */}
+
+      {/* Posts Flatlist
       <View>
         <View
           style={{
@@ -794,28 +654,28 @@ const ExplorePage = () => {
                         </TouchableOpacity>
                       </View>
 
-                      {/* <View>
-                          <Text
-                            style={{
-                              textAlign: 'center',
-                              color: '#469597',
-                              fontWeight: 'bold',
-                            }}>
-                            {item.commentedBy.length} Comments
-                          </Text>
-                          <TouchableOpacity
-                            style={{
-                              paddingHorizontal: '8%',
-                              paddingVertical: '8%',
-                              backgroundColor: '#5BA199',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              borderRadius: 8,
+                      //  <View>
+                      //     <Text
+                      //       style={{
+                      //         textAlign: 'center',
+                      //         color: '#469597',
+                      //         fontWeight: 'bold',
+                      //       }}>
+                      //       {item.commentedBy.length} Comments
+                      //     </Text>
+                      //     <TouchableOpacity
+                      //       style={{
+                      //         paddingHorizontal: '8%',
+                      //         paddingVertical: '8%',
+                      //         backgroundColor: '#5BA199',
+                      //         justifyContent: 'center',
+                      //         alignItems: 'center',
+                      //         borderRadius: 8,
                               
-                            }}>
-                            <FontAwesome name="comment" size={25} color="#ffffff" />
-                          </TouchableOpacity>
-                        </View> */}
+                      //       }}>
+                      //       <FontAwesome name="comment" size={25} color="#ffffff" />
+                      //     </TouchableOpacity>
+                      //   </View> 
                     </View>
                   </View>
                 );
@@ -825,8 +685,9 @@ const ExplorePage = () => {
             <></>
           )}
         </View>
-      </View>
-      {/* Jobs Flatlist*/}
+      </View> */}
+
+      {/* Jobs Flatlist
       <View>
         <View
           style={{
@@ -929,7 +790,7 @@ const ExplorePage = () => {
             <></>
           )}
         </View>
-      </View>
+      </View> */}
 
       {/* Search Flatlist */}
       <View>
@@ -939,11 +800,27 @@ const ExplorePage = () => {
             marginVertical: Dimensions.get('window').height * 0.00009,
           }}>
           {/* user search flatlist */}
-          {searchSelected && searchPeople ? (
+          {peopleSelected ? (
             <FlatList
               horizontal={false}
               showsHorizontalScrollIndicator={false}
-              data={searchResults}
+              data={fetchedUsers}
+              ListEmptyComponent={
+                searchSelected ? (
+                  <View
+                    style={{
+                      marginHorizontal: Dimensions.get('screen').width * 0.05,
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={{fontSize: 20}}>No Results found for </Text>
+                    <Text style={{fontSize: 20, fontWeight: '900'}}>
+                      ({searchValue})
+                    </Text>
+                  </View>
+                ) : (
+                  <></>
+                )
+              }
               contentContainerStyle={{paddingBottom: 60}}
               ListFooterComponent={<View style={{height: 60}}></View>}
               renderItem={({item}) => (
@@ -1012,11 +889,27 @@ const ExplorePage = () => {
 
           {/* if search along with posts */}
 
-          {searchSelected && searchPosts ? (
+          {postsSelected ? (
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={searchResults}
+              data={fetchedPosts}
               extraData={extraData}
+              ListEmptyComponent={
+                searchSelected ? (
+                  <View
+                    style={{
+                      marginHorizontal: Dimensions.get('screen').width * 0.05,
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={{fontSize: 20}}>No Results found for </Text>
+                    <Text style={{fontSize: 20, fontWeight: '900'}}>
+                      ({searchValue})
+                    </Text>
+                  </View>
+                ) : (
+                  <></>
+                )
+              }
               onEndReachedThreshold={0.1}
               contentContainerStyle={{paddingBottom: 60}}
               scrollEventThrottle={150}
@@ -1202,10 +1095,26 @@ const ExplorePage = () => {
           )}
 
           {/* if search along with jobs */}
-          {searchSelected && searchJobs ? (
+          {jobsSelected ? (
             <FlatList
-              data={searchResults}
+              data={fetchedJobs}
               contentContainerStyle={{paddingBottom: 60}}
+              ListEmptyComponent={
+                searchSelected ? (
+                  <View
+                    style={{
+                      marginHorizontal: Dimensions.get('screen').width * 0.05,
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={{fontSize: 20}}>No Results found for </Text>
+                    <Text style={{fontSize: 20, fontWeight: '900'}}>
+                      ({searchValue})
+                    </Text>
+                  </View>
+                ) : (
+                  <></>
+                )
+              }
               renderItem={({item}) => (
                 <View
                   style={{
@@ -1399,12 +1308,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   iconBoxView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: Dimensions.get('window').height * 0.02,
-    marginBottom: Dimensions.get('window').height * 0.0009,
-    marginLeft: Dimensions.get('window').height * 0.02,
-    marginRight: Dimensions.get('window').height * 0.04,
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // marginTop: Dimensions.get('window').height * 0.02,
+    // marginBottom: Dimensions.get('window').height * 0.0009,
+    // marginLeft: Dimensions.get('window').height * 0.02,
+    // marginRight: Dimensions.get('window').height * 0.04,
   },
   titleStyle: {
     color: '#000000',
@@ -1455,10 +1364,10 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width * 0.2,
   },
   icon: {
-    marginLeft: Dimensions.get('window').width * 0.03,
-    marginTop: Dimensions.get('window').width * 0.03,
-    marginRight: Dimensions.get('window').width * 0.04,
-    marginBottom: Dimensions.get('window').width * 0.03,
+    // marginLeft: Dimensions.get('window').width * 0.03,
+    // marginTop: Dimensions.get('window').width * 0.03,
+    // marginRight: Dimensions.get('window').width * 0.04,
+    // marginBottom: Dimensions.get('window').width * 0.03,
   },
   iconText: {
     color: '#6A6A6A',
@@ -1466,6 +1375,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     justifyContent: 'space-between',
     alignSelf: 'center',
+    textAlign: 'center',
   },
   SectionStyle: {
     backgroundColor: '#E5E3E4',
