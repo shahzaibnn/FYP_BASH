@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import RegistrationScreenStudent from './src/screens/RegistrationScreenStudent';
 
 import ProfileScreen from './src/screens/ProfileScreen';
@@ -51,7 +51,7 @@ import {Provider} from 'react-redux';
 import {store} from './src/store/store';
 import DropDownCheck from './src/screens/DropdownCheck';
 
-import {db, authorization, auth} from '../Firebase/Config';
+// import {db, authorization, auth} from '../Firebase/Config';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,

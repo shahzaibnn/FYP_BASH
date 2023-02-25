@@ -84,7 +84,8 @@ export default function HomeScreen({navigation, route}) {
   const profileName = 'Tony';
 
   const [userData, setUserData] = useState(Object);
-  const emailAddressOfCurrentUser = route.params.userEmail;
+  // const emailAddressOfCurrentUser = route.params.userEmail;
+  const emailAddressOfCurrentUser = 'bashfyp@gmail.com';
 
   const [tempLike, setTempLike] = useState([]);
   const [fetchedPosts, setFetchedPosts] = useState([]);
