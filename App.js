@@ -65,40 +65,40 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getAuth} from 'firebase/auth';
 import AuthStack from './src/navigations/AuthStack';
 export default function App() {
-  const Stack = createNativeStackNavigator();
+  // const Stack = createNativeStackNavigator();
 
-  const checkIfUserIsLoggedIn = async () => {
-    const authToken = await AsyncStorage.getItem('authToken');
-    if (authToken) {
-      const auth = getAuth();
-      onAuthStateChanged(auth, user => {
-        if (user) {
-          setFlag(true);
-          const userEmail = user.email.toLowerCase();
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 1,
-              routes: [
-                {
-                  name: 'Drawer',
+  // const checkIfUserIsLoggedIn = async () => {
+  //   const authToken = await AsyncStorage.getItem('authToken');
+  //   if (authToken) {
+  //     const auth = getAuth();
+  //     onAuthStateChanged(auth, user => {
+  //       if (user) {
+  //         setFlag(true);
+  //         const userEmail = user.email.toLowerCase();
+  //         navigation.dispatch(
+  //           CommonActions.reset({
+  //             index: 1,
+  //             routes: [
+  //               {
+  //                 name: 'Drawer',
 
-                  params: {
-                    screen: 'BottomTabs',
-                    params: {
-                      screen: 'Home',
-                      params: {
-                        userEmail,
-                      },
-                    },
-                  },
-                },
-              ],
-            }),
-          );
-        }
-      });
-    }
-  };
+  //                 params: {
+  //                   screen: 'BottomTabs',
+  //                   params: {
+  //                     screen: 'Home',
+  //                     params: {
+  //                       userEmail,
+  //                     },
+  //                   },
+  //                 },
+  //               },
+  //             ],
+  //           }),
+  //         );
+  //       }
+  //     });
+  //   }
+  // };
 
   const [loading, setLoading] = useState(true);
   const [flag, setFlag] = useState(false);
