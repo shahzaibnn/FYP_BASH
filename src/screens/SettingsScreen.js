@@ -64,8 +64,7 @@ export default function SettingsScreen({navigation}) {
           }}>
           <TouchableOpacity
             onPress={() => {
-              // setSpinnerVisible(!spinnerVisible);
-              // setIndexValue(indexValue + 1);
+              navigation.goBack();
             }}
             style={{}}>
             <Ionicons
@@ -342,11 +341,11 @@ export default function SettingsScreen({navigation}) {
           </View>
         </Collapsible>
 
-        <TouchableOpacity onPress={logoutPressed} style={styles.logoutStyle}>
+        {/* <TouchableOpacity onPress={logoutPressed} style={styles.logoutStyle}>
           <Text style={{color: '#000000', fontSize: 30, fontWeight: 'bold'}}>
             Logout
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <Spinner
           style={{

@@ -19,7 +19,7 @@ import {SliderBox} from 'react-native-image-slider-box';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function JobDashboardScreen() {
+export default function JobDashboardScreen({navigation}) {
   const [fetchedJobs, setFetchedJobs] = useState([]);
 
   const searchJobs = async () => {
@@ -63,6 +63,7 @@ export default function JobDashboardScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
+          onPress={() => navigation.jumpTo('Explore')}
           style={{
             alignItems: 'center',
             marginLeft: '3%',

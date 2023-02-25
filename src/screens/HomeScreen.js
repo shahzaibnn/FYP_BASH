@@ -467,6 +467,7 @@ export default function HomeScreen({navigation, route}) {
               </TouchableOpacity>
 
               <TouchableOpacity
+                onPress={() => navigation.jumpTo('Explore')}
                 style={{
                   alignItems: 'center',
                   marginLeft: '3%',

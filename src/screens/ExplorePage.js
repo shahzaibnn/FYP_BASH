@@ -23,8 +23,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {db, dbFirestore} from '../Firebase/Config';
 
-const ExplorePage = () => {
-  const emailAddressOfCurrentUser = 'shahzaibnn@gmail.com';
+import {useSelector, useDispatch} from 'react-redux';
+
+const ExplorePage = ({navigation}) => {
+  const storeData = useSelector(state => state);
+
+  const emailAddressOfCurrentUser = storeData.userEmail;
 
   const [searchResults, setSearchResults] = useState([]);
 
@@ -130,11 +134,12 @@ const ExplorePage = () => {
   const UpdatedSearch = () => {
     if (!searchValue) {
       setSearchSelected(false);
+      setFetchedUsers([]);
+      setFetchedPosts([]);
+      setFetchedJobs([]);
 
       alert('Enter value to search!!');
     } else {
-      setSearchSelected(true);
-
       // if (peopleSelected) {
 
       //Users Fetching
@@ -146,8 +151,8 @@ const ExplorePage = () => {
           const allFields = Object.values(data).join(' ');
           if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
             results.push(data);
-            console.log(results);
-            console.log('search value is: ', searchValue.toLowerCase());
+            // console.log(results);
+            // console.log('search value is: ', searchValue.toLowerCase());
           }
         });
         setSearchPeople(true);
@@ -170,9 +175,19 @@ const ExplorePage = () => {
           const results = [];
           querySnapshot.forEach(documentSnapshot => {
             const data = documentSnapshot.data();
+            data.id = documentSnapshot.id;
+            // console.log(
+            //   'User ID: ',
+            //   documentSnapshot.id,
+            //   documentSnapshot.data(),
+            //   //To grab a particular field use
+            //   //documentSnapshot.data().userEmail,
+            // );
+            // setFetchedPosts(fetchedPosts => [...fetchedPosts, data]);
             const allFields = Object.values(data).join(' ');
             if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
               results.push(data);
+              console.log('posts are:            -----------------------:');
               console.log(results);
               console.log('search value is: ', searchValue.toLowerCase());
             }
@@ -211,6 +226,8 @@ const ExplorePage = () => {
         setSearchJobs(true);
         setSearchResults(results);
         setFetchedJobs(results);
+        setSearchSelected(true);
+
         // setpostsSelected(false);
         // setjobsSelected(false);
         // setpeopleSelected(false);
@@ -229,10 +246,10 @@ const ExplorePage = () => {
   return (
     <ScrollView style={styles.container}>
       <View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{position: 'absolute', marginTop: '6%', marginLeft: '5%'}}>
           <Ionicons name="chevron-back" size={35} color="#777777" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Text
           style={{
             fontSize: 28,
@@ -824,7 +841,10 @@ const ExplorePage = () => {
               contentContainerStyle={{paddingBottom: 60}}
               ListFooterComponent={<View style={{height: 60}}></View>}
               renderItem={({item}) => (
-                <View
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('ViewProfile');
+                  }}
                   style={{
                     backgroundColor: 'rgba(187, 198, 200, 0.5)',
                     // borderRadius: 16,
@@ -879,7 +899,7 @@ const ExplorePage = () => {
                       </View>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               )}
               keyExtractor={item => item.id}
             />
@@ -1023,7 +1043,7 @@ const ExplorePage = () => {
                                   console.log('Like Removed!');
                                 });
 
-                              searchResults.find(
+                              fetchedPosts.find(
                                 obj => obj.id == item.id,
                               ).likedBy = item.likedBy.filter(
                                 e => e !== emailAddressOfCurrentUser,
@@ -1043,7 +1063,7 @@ const ExplorePage = () => {
                                 });
                               let arr = item.likedBy;
                               arr.push(emailAddressOfCurrentUser);
-                              searchResults.find(
+                              fetchedPosts.find(
                                 obj => obj.id == item.id,
                               ).likedBy = arr;
 
