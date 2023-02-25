@@ -51,13 +51,66 @@ import {Provider} from 'react-redux';
 import {store} from './src/store/store';
 import DropDownCheck from './src/screens/DropdownCheck';
 
+import {db, authorization, auth} from '../Firebase/Config';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+} from 'firebase/auth';
+
+import {CommonActions} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {getAuth} from 'firebase/auth';
+import AuthStack from './src/navigations/AuthStack';
 export default function App() {
   const Stack = createNativeStackNavigator();
+  const [flag, setFlag] = useState(true);
+
+  const checkIfUserIsLoggedIn = async () => {
+    const authToken = await AsyncStorage.getItem('authToken');
+    if (authToken) {
+      const auth = getAuth();
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          setFlag(true);
+          const userEmail = user.email.toLowerCase();
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [
+                {
+                  name: 'Drawer',
+
+                  params: {
+                    screen: 'BottomTabs',
+                    params: {
+                      screen: 'Home',
+                      params: {
+                        userEmail,
+                      },
+                    },
+                  },
+                },
+              ],
+            }),
+          );
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log('checking');
+    checkIfUserIsLoggedIn();
+  }, []);
+
   return (
     // <DropDownCheck />
     <Provider store={store}>
       <NavigationContainer>
-        <AppStack />
+        {flag ? <AuthStack /> : <AppStack />}
       </NavigationContainer>
     </Provider>
 
