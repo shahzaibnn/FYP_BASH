@@ -66,7 +66,6 @@ import {getAuth} from 'firebase/auth';
 import AuthStack from './src/navigations/AuthStack';
 export default function App() {
   const Stack = createNativeStackNavigator();
-  const [flag, setFlag] = useState(true);
 
   const checkIfUserIsLoggedIn = async () => {
     const authToken = await AsyncStorage.getItem('authToken');
@@ -101,103 +100,128 @@ export default function App() {
     }
   };
 
+  const [loading, setLoading] = useState(true);
+  const [flag, setFlag] = useState(false);
+
+  const FetchLoggedInData = async () => {
+    try {
+      const data = await AsyncStorage.getItem('authToken');
+      console.log(data);
+      if (data) {
+        setFlag(true);
+      }
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    console.log('checking');
-    checkIfUserIsLoggedIn();
+    FetchLoggedInData();
+    setTimeout(() => setLoading(false), 1000);
   }, []);
 
   return (
-    // <DropDownCheck />
-    <Provider store={store}>
-      <NavigationContainer>
-        {flag ? <AuthStack /> : <AppStack />}
-      </NavigationContainer>
-    </Provider>
-
-    // <EditProfileScreen />
-    //  <ExplorePage />
-    // <SettingsScreen />
-
-    //  <BottomTabs />
-    // <JobPostingScreen />
-    // <ViewJob />
-    // <JobDashboardScreen />
-    // <HomeScreen />
-    // <HomeInfinite />
-
-    // <TestScreen />
-    // <TestHome />
-    // <ClassFunc />
-    // <AnotherTest />
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //     screenOptions={{
-    //       headerShown: false,
-    //     }}>
-    //     <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-    //     <Stack.Screen name="Splash" component={SplashScreen} />
-    //     <Stack.Screen name="Start" component={StartScreen} />
-    //     <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-    //     <Stack.Screen name="Registration" component={RegistrationScreen} />
-    //     <Stack.Screen name="Login" component={LoginScreen} />
-    //     <Stack.Screen name="Home" component={HomeScreen} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
-
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //     screenOptions={{
-    //       headerShown: false,
-    //     }}>
-    //     {/* <Stack.Screen name="ViewJob" component={ViewJob} /> */}
-    //     <Stack.Screen name="test" component={Test} />
-    //     <Stack.Screen name="Splash" component={SplashScreen} />
-    //     <Stack.Screen name="Start" component={StartScreen} />
-    //     <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-    //     <Stack.Screen name="Registration" component={MyTabs} />
-    //     <Stack.Screen name="Login" component={LoginScreen} />
-    //     <Stack.Screen name="Home" component={HomeScreen} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
-
-    // <NavigationContainer>
-    //   <MyTabs />
-    // </NavigationContainer>
-
-    // Testing email
-    // <Email />
-    // <NotificationsTest />
-    // <ForgotPassword />
-    // <RegistrationScreenStudent />
-    // <Test />
-    // <RegistrationScreen />
-    // <TestReg></TestReg>
-    // <Alerts_Error />
-    // <Alerts_Success />
-    // <ToastAlert />
-    // <Toaster />
-    // <ModalTester></ModalTester>
-    // <Tip />
-    // <HomeScreen />
-    // <CreatePostScreen />
-    // <SettingsScreen />
-    // <JobDashboardScreen />
-    // <LoginScreen />
-    // <StartScreen />
-    // <ProfileScreen />
-    // <ApplyToJob />
-    // <ViewJob />
-    // <ExplorePage />
-    // <Test />
-    // <PdfViewScreen />
-
-    // <ImageScreen />
-    // <JobPostingScreen />
-
-    // <ProfileScreen />
-    // <ApplyToJob />
-    // <Test />
-    // <SplashScreen />
-    // <ViewProfileScreen />
+    <>
+      {loading ? (
+        <></>
+      ) : (
+        <>
+          <Provider store={store}>
+            <NavigationContainer>
+              {flag ? <AuthStack email={'bashfyp@gmail.com'} /> : <AppStack />}
+            </NavigationContainer>
+          </Provider>
+        </>
+      )}
+    </>
   );
+
+  // check().then(res => {
+  //   res ? <Text>aaaaaaaaaaaa</Text> : <></>
+  // });
+  // <DropDownCheck />
+
+  // <EditProfileScreen />
+  //  <ExplorePage />
+  // <SettingsScreen />
+
+  //  <BottomTabs />
+  // <JobPostingScreen />
+  // <ViewJob />
+  // <JobDashboardScreen />
+  // <HomeScreen />
+  // <HomeInfinite />
+
+  // <TestScreen />
+  // <TestHome />
+  // <ClassFunc />
+  // <AnotherTest />
+  // <NavigationContainer>
+  //   <Stack.Navigator
+  //     screenOptions={{
+  //       headerShown: false,
+  //     }}>
+  //     <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+  //     <Stack.Screen name="Splash" component={SplashScreen} />
+  //     <Stack.Screen name="Start" component={StartScreen} />
+  //     <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+  //     <Stack.Screen name="Registration" component={RegistrationScreen} />
+  //     <Stack.Screen name="Login" component={LoginScreen} />
+  //     <Stack.Screen name="Home" component={HomeScreen} />
+  //   </Stack.Navigator>
+  // </NavigationContainer>
+
+  // <NavigationContainer>
+  //   <Stack.Navigator
+  //     screenOptions={{
+  //       headerShown: false,
+  //     }}>
+  //     {/* <Stack.Screen name="ViewJob" component={ViewJob} /> */}
+  //     <Stack.Screen name="test" component={Test} />
+  //     <Stack.Screen name="Splash" component={SplashScreen} />
+  //     <Stack.Screen name="Start" component={StartScreen} />
+  //     <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+  //     <Stack.Screen name="Registration" component={MyTabs} />
+  //     <Stack.Screen name="Login" component={LoginScreen} />
+  //     <Stack.Screen name="Home" component={HomeScreen} />
+  //   </Stack.Navigator>
+  // </NavigationContainer>
+
+  // <NavigationContainer>
+  //   <MyTabs />
+  // </NavigationContainer>
+
+  // Testing email
+  // <Email />
+  // <NotificationsTest />
+  // <ForgotPassword />
+  // <RegistrationScreenStudent />
+  // <Test />
+  // <RegistrationScreen />
+  // <TestReg></TestReg>
+  // <Alerts_Error />
+  // <Alerts_Success />
+  // <ToastAlert />
+  // <Toaster />
+  // <ModalTester></ModalTester>
+  // <Tip />
+  // <HomeScreen />
+  // <CreatePostScreen />
+  // <SettingsScreen />
+  // <JobDashboardScreen />
+  // <LoginScreen />
+  // <StartScreen />
+  // <ProfileScreen />
+  // <ApplyToJob />
+  // <ViewJob />
+  // <ExplorePage />
+  // <Test />
+  // <PdfViewScreen />
+
+  // <ImageScreen />
+  // <JobPostingScreen />
+
+  // <ProfileScreen />
+  // <ApplyToJob />
+  // <Test />
+  // <SplashScreen />
+  // <ViewProfileScreen />
 }

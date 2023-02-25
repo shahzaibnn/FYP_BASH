@@ -24,6 +24,9 @@ import HomeInfinite from '../screens/HomeInfinite';
 const Tab = createBottomTabNavigator();
 
 export default function Tabs({navigation, route}) {
+  console.log('tabs sea araha ahey, ', navigation);
+  console.log('tabs sea araha ahey, ', route);
+
   return (
     <Tab.Navigator
       screenOptions={{

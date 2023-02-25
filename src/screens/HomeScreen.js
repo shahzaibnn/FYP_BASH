@@ -84,8 +84,8 @@ export default function HomeScreen({navigation, route}) {
   const profileName = 'Tony';
 
   const [userData, setUserData] = useState(Object);
-  // const emailAddressOfCurrentUser = route.params.userEmail;
-  const emailAddressOfCurrentUser = 'bashfyp@gmail.com';
+  const emailAddressOfCurrentUser = route.params.userEmail;
+  // const emailAddressOfCurrentUser = 'bashfyp@gmail.com';
 
   const [tempLike, setTempLike] = useState([]);
   const [fetchedPosts, setFetchedPosts] = useState([]);
@@ -456,8 +456,7 @@ export default function HomeScreen({navigation, route}) {
               }}>
               <TouchableOpacity
                 onPress={() => {
-                  console.log(userData);
-                  console.log('checking store now: ', storeData);
+                  console.log(route);
                 }}>
                 <Image
                   style={{height: 60, width: 60, borderRadius: 64}}

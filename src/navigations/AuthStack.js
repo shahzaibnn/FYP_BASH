@@ -48,12 +48,14 @@ import ExplorePage from '../screens/ExplorePage';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ApplyToJob from '../screens/ApplyToJob';
 import ViewProfileScreen from '../screens/ViewProfileScreen';
+import {CommonActions} from '@react-navigation/native';
 
 // import MyTabs from '../screens/tabs';
 
-export default function AuthStack() {
+export default function AuthStack({email}) {
   const Stack = createNativeStackNavigator();
   const Drawer = createDrawerNavigator();
+  const userEmail = email;
 
   return (
     // <NavigationContainer>
@@ -61,7 +63,19 @@ export default function AuthStack() {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="Drawer" component={DrawerNav} />
+      <Stack.Screen
+        name="Drawer"
+        component={DrawerNav}
+        initialParams={{
+          screen: 'BottomTabs',
+          params: {
+            screen: 'Home',
+            params: {
+              userEmail: userEmail.toLowerCase(),
+            },
+          },
+        }}
+      />
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Start" component={StartScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />

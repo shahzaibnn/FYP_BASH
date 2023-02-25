@@ -13,7 +13,8 @@ import ProfileScreen from '../screens/ProfileScreen';
 
 const Drawer = createDrawerNavigator();
 
-const DrawerNav = () => {
+const DrawerNav = route => {
+  console.log('drawer nbavigaton mey araha ye , ', route);
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
