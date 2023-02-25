@@ -22,6 +22,7 @@ import storage from '@react-native-firebase/storage';
 
 // import {SliderBox} from 'react-native-image-slider-box';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageModal from 'react-native-image-modal';
 import {useSelector, useDispatch} from 'react-redux';
@@ -104,7 +105,7 @@ const ProfileScreen = ({navigation}) => {
           <TouchableOpacity
             onPress={handleClose}
             style={{alignItems: 'center'}}>
-            <Text>Close</Text>
+            <Ionicons name="ios-close-circle-sharp" size={20} color="red" />
           </TouchableOpacity>
         </View>
       );
@@ -167,7 +168,8 @@ const ProfileScreen = ({navigation}) => {
             dbFirestore()
               .doc('Users/' + documentSnapshot.id)
               .update({
-                resumeUrl: pdfUrl,
+                // resumeUrl: pdfUrl,
+                resumeUrl: url,
               })
               .then(() => {
                 console.log('Added in firestore');
@@ -192,7 +194,7 @@ const ProfileScreen = ({navigation}) => {
     console.log('done, checking again: ', pdfUrl);
 
     // setUploading(false);
-    Alert.alert('CV uploaded!', 'You will receive the responses soon! ');
+    Alert.alert('CV uploaded!', 'Good Luck!');
     // setImage(null);
     setfilePath({});
   };
@@ -448,35 +450,19 @@ const ProfileScreen = ({navigation}) => {
             <View>
               {/* <TouchableOpacity onPress={() => handlePreview}> */}
               <TouchableOpacity onPress={handlePreview}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginTop: '5%',
+                    marginBottom: '5%',
+                  }}>
                   {/* <Image source={require('./pdf-icon.png')} style={{ width: 24, height: 24 }} /> */}
-                  <Text style={{marginLeft: 8}}>check</Text>
+                  <Fontisto name="preview" size={20} color="#469597" />
+                  <Text style={{marginLeft: 8}}>Preview Resume</Text>
                 </View>
               </TouchableOpacity>
               {renderPdfPreview()}
-              {/* {showPdf && (
-                <View>
-                  <Pdf
-                    source={{uri: resumeUrl}}
-                    trustAllCerts={false}
-                    onLoadComplete={(numberOfPages, filePath) => {
-                      console.log(`Number of pages: ${numberOfPages}`);
-                    }}
-                    onError={error => {
-                      console.error(error);
-                    }}
-                    onPressLink={uri => {
-                      console.log(`Link pressed: ${uri}`);
-                    }}
-                    style={{flex: 1, width: '100%', height: 500}}
-                  />
-                  <TouchableOpacity
-                    onPress={handleClose}
-                    style={{alignItems: 'center'}}>
-                    <Text>Close</Text>
-                  </TouchableOpacity>
-                </View>
-              )} */}
             </View>
             {/* testing end */}
             {/* cv file display */}
