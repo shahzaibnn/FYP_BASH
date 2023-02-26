@@ -22,9 +22,16 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {db, dbFirestore} from '../Firebase/Config';
+import {db, dbFirestore, auth} from '../Firebase/Config';
 
 import {useSelector, useDispatch} from 'react-redux';
+
+// import {db, authorization, auth, dbFirestore} from '../Firebase/Config';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from 'firebase/auth';
 
 const AdminRequestManagement = ({navigation}) => {
   const [peopleSelected, setpeopleSelected] = useState(true);
@@ -120,9 +127,6 @@ const AdminRequestManagement = ({navigation}) => {
           data={users}
           renderItem={({item}) => (
             <View
-              // onPress={() => {
-              //   navigation.navigate('ViewProfile');
-              // }}
               style={{
                 backgroundColor: 'rgba(187, 198, 200, 0.5)',
                 borderRadius: 16,
@@ -198,26 +202,40 @@ const AdminRequestManagement = ({navigation}) => {
 
   const ApproveUser = userId => {
     console.log('approving user id: ', userId);
+    console.log('approving user id: ', userId);
     dbFirestore()
       .collection('Users')
       .get()
       .then(querySnapshot => {
         console.log('Total Found users: ', querySnapshot.size);
+        console.log('Total data: ', querySnapshot.data);
 
         querySnapshot.forEach(documentSnapshot => {
+          const userData = documentSnapshot.data();
           // console.log(documentSnapshot.id);
+          if (documentSnapshot.id === userId) {
+            dbFirestore()
+              .doc('Users/' + userId)
+              .update({
+                accountApproved: 'Approved',
+              })
 
-          dbFirestore()
-            .doc('Users/' + userId)
-            .update({
-              accountApproved: 'Approved',
-            })
-            .then(() => {
-              console.log('Approved in firestore');
-            })
-            .catch(err => {
-              console.log('not working');
-            });
+              .then(() => {
+                createUserWithEmailAndPassword(
+                  auth,
+                  userData.userEmail,
+                  userData.userPassword,
+                );
+
+                console.log('Approved in firestore');
+                console.log('Email: ' + userData.userEmail);
+                console.log('Pw: ' + userData.userPassword);
+              })
+              .catch(err => {
+                console.log('not working: ', err);
+                console.log('Error: ' + err);
+              });
+          }
         });
       })
       .catch(error => {
