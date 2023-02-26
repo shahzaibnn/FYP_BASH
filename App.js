@@ -64,6 +64,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {getAuth} from 'firebase/auth';
 import AuthStack from './src/navigations/AuthStack';
+import AdminRequestManagement from './src/screens/AdminRequestManagement';
 export default function App() {
   const Stack = createNativeStackNavigator();
   const [flag, setFlag] = useState(true);
@@ -110,7 +111,9 @@ export default function App() {
     // <DropDownCheck />
     <Provider store={store}>
       <NavigationContainer>
-        {flag ? <AuthStack /> : <AppStack />}
+        {/* {flag ? <AuthStack /> : <AppStack />} */}
+
+        <AdminRequestManagement />
       </NavigationContainer>
     </Provider>
 
