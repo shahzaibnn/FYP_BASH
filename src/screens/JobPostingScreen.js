@@ -33,7 +33,15 @@ import storage from '@react-native-firebase/storage';
 import {addJob} from '../store/action';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {Chase} from 'react-native-animated-spinkit';
+
 export default function JobPostingScreen() {
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
+  const [pointerEvent, setPointerEvent] = useState('auto');
+  const [opacity, setOpacity] = useState(1);
+  const [indicator, setIndicator] = useState(true);
+  const [enabledScroll, setEnabledScroll] = useState(true);
+
   const [title, setTitle] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
@@ -171,23 +179,25 @@ export default function JobPostingScreen() {
     }
   };
   const addtoDB = async () => {
-    const filename = filePath.fileCopyUri.substring(
-      filePath.fileCopyUri.lastIndexOf('/') + 1,
-    );
-    const uploadUri =
-      Platform.OS === 'ios'
-        ? filePath.fileCopyUri.replace('file://', '')
-        : filePath.fileCopyUri;
-    setUploading(true);
-    setTransferred(0);
-    const task = await storage().ref(filename).putFile(uploadUri);
-    // console.log(task.ref.getDownloadURL);
-    // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
-    console.log('working');
-    const url = await storage().ref(filename).getDownloadURL();
-    console.log('url is: ' + url);
+    setIndicator(false);
 
     try {
+      const filename = filePath.fileCopyUri.substring(
+        filePath.fileCopyUri.lastIndexOf('/') + 1,
+      );
+      const uploadUri =
+        Platform.OS === 'ios'
+          ? filePath.fileCopyUri.replace('file://', '')
+          : filePath.fileCopyUri;
+      setUploading(true);
+      setTransferred(0);
+      const task = await storage().ref(filename).putFile(uploadUri);
+      // console.log(task.ref.getDownloadURL);
+      // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
+      console.log('working');
+      const url = await storage().ref(filename).getDownloadURL();
+      console.log('url is: ' + url);
+
       task;
       dbFirestore()
         .collection('Jobs')
@@ -219,15 +229,46 @@ export default function JobPostingScreen() {
             jobPostedBy: name,
             createdAt: currentDate,
           };
-          dispatch(addJob(jobRedux));
+          // dispatch(addJob(jobRedux));
+          setIndicator(true);
         });
     } catch (e) {
+      setIndicator(true);
+
       console.error(e);
     }
     setUploading(false);
-    Alert.alert('Job uploaded!', 'You will receive the responses soon! ');
-    // setImage(null);
+
+    setUploaded(false);
     setfilePath({});
+    setSingleFile('');
+    setTitle('');
+    setValue('');
+    setCity('');
+    setName('');
+    setEmail('');
+    setCompany('');
+    setValue2('');
+    setSalary('');
+    setDescription('');
+
+    setTitleLength(0);
+    setCityLength(0);
+    setNameLength(0);
+    setCompanyNameLength(0);
+    setSalaryLength(0);
+    setDescriptionLength(0);
+
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+    setCurrentDate(
+      date + '/' + month + '/' + year + ' ' + hours + ':' + min + ':' + sec,
+    );
+    Alert.alert('Job uploaded!', 'You will receive the responses soon! ');
   };
 
   const selectFile = async () => {
@@ -257,437 +298,472 @@ export default function JobPostingScreen() {
   // console.log(multipleFile);
 
   console.log('Saved value is: ', singleFile);
+
+  useEffect(() => {
+    if (indicator) {
+      setSpinnerLoader(false);
+      setPointerEvent('auto');
+      setOpacity(1);
+      setEnabledScroll(true);
+    } else {
+      setSpinnerLoader(true);
+      setPointerEvent('none');
+      setOpacity(0.8);
+      setEnabledScroll(false);
+    }
+  }, [indicator]);
   return (
-    <ScrollView style={{backgroundColor: '#E5E3E4', flex: 1}}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: '5%',
-          marginVertical: '3%',
-          justifyContent: 'center',
-        }}>
-        <TouchableOpacity style={{position: 'absolute', left: 0}}>
-          <Entypo name="circle-with-cross" size={25} color="#777777" />
-        </TouchableOpacity>
-
-        <Text
+    <ScrollView
+      style={{backgroundColor: '#E5E3E4', flex: 1}}
+      scrollEnabled={enabledScroll}>
+      <View pointerEvents={pointerEvent} style={{opacity: opacity}}>
+        <View
           style={{
-            fontSize: 30,
-            color: '#000000',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            // marginHorizontal: Dimensions.get('window').width / 5,
-            // marginEnd: '30%',
-
-            // marginHorizontal: '25%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginHorizontal: '5%',
+            marginVertical: '3%',
+            justifyContent: 'center',
           }}>
-          Post Job
-        </Text>
-      </View>
+          <TouchableOpacity style={{position: 'absolute', left: 0}}>
+            <Entypo name="circle-with-cross" size={25} color="#777777" />
+          </TouchableOpacity>
 
-      <View style={{marginHorizontal: '5%'}}>
-        {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+          <Text
+            style={{
+              fontSize: 30,
+              color: '#000000',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              // marginHorizontal: Dimensions.get('window').width / 5,
+              // marginEnd: '30%',
+
+              // marginHorizontal: '25%',
+            }}>
+            Post Job
+          </Text>
+        </View>
+
+        <View style={{marginHorizontal: '5%'}}>
+          {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
           Job Title
         </Text> */}
 
-        <View style={styles.ExpBoxView}>
-          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-            Job Title
-          </Text>
-          <Text
-            style={[styles.lengthText, titleLength >= 15 && {color: 'red'}]}>
-            {titleLength}/15
-          </Text>
+          <View style={styles.ExpBoxView}>
+            <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+              Job Title
+            </Text>
+            <Text
+              style={[styles.lengthText, titleLength >= 15 && {color: 'red'}]}>
+              {titleLength}/15
+            </Text>
+          </View>
+
+          <View
+            style={{
+              marginVertical: '5%',
+              // height: Dimensions.get('window').height * 0.25,
+              backgroundColor: 'white',
+              // marginHorizontal: '5%',
+              borderRadius: 16,
+            }}>
+            <TextInput
+              style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
+              // multiline
+              // onChangeText={setTitle}
+              onChangeText={title => {
+                setTitle(title);
+                setTitleLength(title.length);
+                // setErrorMessage('');
+              }}
+              value={title}
+              placeholder="Job title here..."
+              placeholderTextColor={'#5BA199'}
+            />
+          </View>
         </View>
 
-        <View
-          style={{
-            marginVertical: '5%',
-            // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: 'white',
-            // marginHorizontal: '5%',
-            borderRadius: 16,
-          }}>
-          <TextInput
-            style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
-            // multiline
-            // onChangeText={setTitle}
-            onChangeText={title => {
-              setTitle(title);
-              setTitleLength(title.length);
-              // setErrorMessage('');
+        <View style={{marginHorizontal: '5%'}}>
+          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+            Job Location
+          </Text>
+          <DropDownPicker
+            listMode="SCROLLVIEW"
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder="Select country"
+            style={{
+              marginVertical: '5%',
+              backgroundColor: 'white',
+              borderWidth: 0,
+              borderRadius: 16,
             }}
-            value={title}
-            placeholder="Job title here..."
-            placeholderTextColor={'#5BA199'}
+            textStyle={{color: '#5BA199', fontSize: 14, marginHorizontal: '2%'}}
+            dropDownContainerStyle={{
+              // backgroundColor: '#469597',
+              backgroundColor: 'white',
+              borderWidth: 0,
+              marginTop: 10,
+              borderRadius: 30,
+            }}
+            //   labelStyle={{color: 'white'}}
+            // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
+            listItemLabelStyle={{color: '#6A6A6A'}}
           />
         </View>
-      </View>
 
-      <View style={{marginHorizontal: '5%'}}>
-        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-          Job Location
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          placeholder="Select country"
-          style={{
-            marginVertical: '5%',
-            backgroundColor: 'white',
-            borderWidth: 0,
-            borderRadius: 16,
-          }}
-          textStyle={{color: '#5BA199', fontSize: 14, marginHorizontal: '2%'}}
-          dropDownContainerStyle={{
-            // backgroundColor: '#469597',
-            backgroundColor: 'white',
-            borderWidth: 0,
-            marginTop: 10,
-            borderRadius: 30,
-          }}
-          //   labelStyle={{color: 'white'}}
-          // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
-          listItemLabelStyle={{color: '#6A6A6A'}}
-        />
-      </View>
-
-      <View style={{marginHorizontal: '5%'}}>
-        {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+        <View style={{marginHorizontal: '5%'}}>
+          {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
           City
         </Text> */}
 
-        <View style={styles.ExpBoxView}>
-          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-            City
-          </Text>
-          <Text style={[styles.lengthText, cityLength >= 15 && {color: 'red'}]}>
-            {cityLength}/15
-          </Text>
+          <View style={styles.ExpBoxView}>
+            <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+              City
+            </Text>
+            <Text
+              style={[styles.lengthText, cityLength >= 15 && {color: 'red'}]}>
+              {cityLength}/15
+            </Text>
+          </View>
+
+          <View
+            style={{
+              marginVertical: '5%',
+              // height: Dimensions.get('window').height * 0.25,
+              backgroundColor: 'white',
+              // marginHorizontal: '5%',
+              borderRadius: 16,
+            }}>
+            <TextInput
+              style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
+              // multiline
+              // onChangeText={setCity}
+              onChangeText={city => {
+                setCity(city);
+                setCityLength(city.length);
+                // setErrorMessage('');
+              }}
+              value={city}
+              placeholder="City name"
+              placeholderTextColor={'#5BA199'}
+            />
+          </View>
         </View>
 
-        <View
-          style={{
-            marginVertical: '5%',
-            // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: 'white',
-            // marginHorizontal: '5%',
-            borderRadius: 16,
-          }}>
-          <TextInput
-            style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
-            // multiline
-            // onChangeText={setCity}
-            onChangeText={city => {
-              setCity(city);
-              setCityLength(city.length);
-              // setErrorMessage('');
-            }}
-            value={city}
-            placeholder="City name"
-            placeholderTextColor={'#5BA199'}
-          />
-        </View>
-      </View>
-
-      <View style={{marginHorizontal: '5%'}}>
-        {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+        <View style={{marginHorizontal: '5%'}}>
+          {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
           Name
         </Text> */}
-        <View style={styles.ExpBoxView}>
+          <View style={styles.ExpBoxView}>
+            <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+              Name
+            </Text>
+            <Text
+              style={[styles.lengthText, nameLength >= 15 && {color: 'red'}]}>
+              {nameLength}/15
+            </Text>
+          </View>
+
+          <View
+            style={{
+              marginVertical: '5%',
+              // height: Dimensions.get('window').height * 0.25,
+              backgroundColor: 'white',
+              // marginHorizontal: '5%',
+              borderRadius: 16,
+            }}>
+            <TextInput
+              style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
+              // multiline
+              // onChangeText={setName}
+              onChangeText={name => {
+                setName(name);
+                setNameLength(name.length);
+                // setErrorMessage('');
+              }}
+              value={name}
+              placeholder="Your name here..."
+              placeholderTextColor={'#5BA199'}
+            />
+          </View>
+        </View>
+
+        <View style={{marginHorizontal: '5%'}}>
           <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-            Name
+            Contact Email
           </Text>
-          <Text style={[styles.lengthText, nameLength >= 15 && {color: 'red'}]}>
-            {nameLength}/15
-          </Text>
+
+          <View
+            style={{
+              marginVertical: '5%',
+              // height: Dimensions.get('window').height * 0.25,
+              backgroundColor: 'white',
+              // marginHorizontal: '5%',
+              borderRadius: 16,
+            }}>
+            <TextInput
+              style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
+              // multiline
+              onChangeText={setEmail}
+              value={email}
+              keyboardType="email-address"
+              placeholder="Email here..."
+              placeholderTextColor={'#5BA199'}
+            />
+          </View>
         </View>
 
-        <View
-          style={{
-            marginVertical: '5%',
-            // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: 'white',
-            // marginHorizontal: '5%',
-            borderRadius: 16,
-          }}>
-          <TextInput
-            style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
-            // multiline
-            // onChangeText={setName}
-            onChangeText={name => {
-              setName(name);
-              setNameLength(name.length);
-              // setErrorMessage('');
-            }}
-            value={name}
-            placeholder="Your name here..."
-            placeholderTextColor={'#5BA199'}
-          />
-        </View>
-      </View>
-
-      <View style={{marginHorizontal: '5%'}}>
-        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-          Contact Email
-        </Text>
-
-        <View
-          style={{
-            marginVertical: '5%',
-            // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: 'white',
-            // marginHorizontal: '5%',
-            borderRadius: 16,
-          }}>
-          <TextInput
-            style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
-            // multiline
-            onChangeText={setEmail}
-            value={email}
-            keyboardType="email-address"
-            placeholder="Email here..."
-            placeholderTextColor={'#5BA199'}
-          />
-        </View>
-      </View>
-
-      <View style={{marginHorizontal: '5%'}}>
-        {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+        <View style={{marginHorizontal: '5%'}}>
+          {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
           Company Name
         </Text> */}
 
-        <View style={styles.ExpBoxView}>
-          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-            Company Name
-          </Text>
-          <Text
-            style={[
-              styles.lengthText,
-              companyNameLength >= 15 && {color: 'red'},
-            ]}>
-            {companyNameLength}/15
-          </Text>
-        </View>
-
-        <View
-          style={{
-            marginVertical: '5%',
-            // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: 'white',
-            // marginHorizontal: '5%',
-            borderRadius: 16,
-          }}>
-          <TextInput
-            style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
-            // multiline
-            // onChangeText={setCompany}
-            onChangeText={company => {
-              setCompany(company);
-              setCompanyNameLength(company.length);
-              // setErrorMessage('');
-            }}
-            value={company}
-            placeholder="Company name here..."
-            placeholderTextColor={'#5BA199'}
-          />
-        </View>
-      </View>
-
-      <View style={{marginHorizontal: '5%'}}>
-        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-          Mode of Work
-        </Text>
-        <DropDownPicker
-          listMode="SCROLLVIEW"
-          open={open2}
-          value={value2}
-          items={items2}
-          setOpen={setOpen2}
-          setValue={setValue2}
-          setItems={setItems2}
-          style={{
-            marginVertical: '5%',
-            backgroundColor: 'white',
-            borderWidth: 0,
-            borderRadius: 16,
-          }}
-          textStyle={{color: '#5BA199', fontSize: 14, marginHorizontal: '2%'}}
-          dropDownContainerStyle={{
-            backgroundColor: '#469597',
-            borderWidth: 0,
-            marginTop: 10,
-          }}
-          //   labelStyle={{color: 'white'}}
-          listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
-        />
-      </View>
-
-      <View style={{marginHorizontal: '5%'}}>
-        <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-          Related Picture
-        </Text>
-      </View>
-
-      {uploaded ? (
-        <View
-          style={{
-            // backgroundColor: 'orange',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View style={{}}>
-            <ImageModal
-              // onTap={() => console.log(item.display)}
-              // disabled={!item.display}
-              resizeMode="stretch"
-              modalImageResizeMode="contain"
-              style={{
-                width: 60,
-                height: 60,
-                borderRadius: 64,
-                alignSelf: 'center',
-                //   backgroundColor: 'orange',
-                //   marginLeft: Dimensions.get('window').width * 0.4,
-              }}
-              modalImageStyle={{
-                minHeight: Dimensions.get('window').height,
-                minWidth: Dimensions.get('window').width,
-              }}
-              source={{
-                uri: singleFile,
-              }}
-            />
+          <View style={styles.ExpBoxView}>
+            <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+              Company Name
+            </Text>
+            <Text
+              style={[
+                styles.lengthText,
+                companyNameLength >= 15 && {color: 'red'},
+              ]}>
+              {companyNameLength}/15
+            </Text>
           </View>
 
-          <TouchableOpacity
-            onPress={() => removeFile()}
-            style={{marginTop: '2%'}}>
-            <Entypo name="circle-with-cross" color={'#777777'} size={20} />
-          </TouchableOpacity>
+          <View
+            style={{
+              marginVertical: '5%',
+              // height: Dimensions.get('window').height * 0.25,
+              backgroundColor: 'white',
+              // marginHorizontal: '5%',
+              borderRadius: 16,
+            }}>
+            <TextInput
+              style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
+              // multiline
+              // onChangeText={setCompany}
+              onChangeText={company => {
+                setCompany(company);
+                setCompanyNameLength(company.length);
+                // setErrorMessage('');
+              }}
+              value={company}
+              placeholder="Company name here..."
+              placeholderTextColor={'#5BA199'}
+            />
+          </View>
         </View>
-      ) : null}
-      <TouchableOpacity
-        style={{
-          alignSelf: 'center',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#469597',
-          borderRadius: 12,
-          marginTop: '3%',
-          height: 30,
-          width: 150,
-        }}
-        onPress={() => selectFile()}>
-        <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 15}}>
-          Upload Picture
-        </Text>
-      </TouchableOpacity>
 
-      <View style={{marginHorizontal: '5%'}}>
-        {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+        <View style={{marginHorizontal: '5%'}}>
+          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+            Mode of Work
+          </Text>
+          <DropDownPicker
+            listMode="SCROLLVIEW"
+            open={open2}
+            value={value2}
+            items={items2}
+            setOpen={setOpen2}
+            setValue={setValue2}
+            setItems={setItems2}
+            style={{
+              marginVertical: '5%',
+              backgroundColor: 'white',
+              borderWidth: 0,
+              borderRadius: 16,
+            }}
+            textStyle={{color: '#5BA199', fontSize: 14, marginHorizontal: '2%'}}
+            dropDownContainerStyle={{
+              backgroundColor: '#469597',
+              borderWidth: 0,
+              marginTop: 10,
+            }}
+            //   labelStyle={{color: 'white'}}
+            listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
+          />
+        </View>
+
+        <View style={{marginHorizontal: '5%'}}>
+          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+            Related Picture
+          </Text>
+        </View>
+
+        {uploaded ? (
+          <View
+            style={{
+              // backgroundColor: 'orange',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View style={{}}>
+              <ImageModal
+                // onTap={() => console.log(item.display)}
+                // disabled={!item.display}
+                resizeMode="stretch"
+                modalImageResizeMode="contain"
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 64,
+                  alignSelf: 'center',
+                  //   backgroundColor: 'orange',
+                  //   marginLeft: Dimensions.get('window').width * 0.4,
+                }}
+                modalImageStyle={{
+                  minHeight: Dimensions.get('window').height,
+                  minWidth: Dimensions.get('window').width,
+                }}
+                source={{
+                  uri: singleFile,
+                }}
+              />
+            </View>
+
+            <TouchableOpacity
+              onPress={() => removeFile()}
+              style={{marginTop: '2%'}}>
+              <Entypo name="circle-with-cross" color={'#777777'} size={20} />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+        <TouchableOpacity
+          style={{
+            alignSelf: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#469597',
+            borderRadius: 12,
+            marginTop: '3%',
+            height: 30,
+            width: 150,
+          }}
+          onPress={() => selectFile()}>
+          <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 15}}>
+            Upload Picture
+          </Text>
+        </TouchableOpacity>
+
+        <View style={{marginHorizontal: '5%'}}>
+          {/* <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
           Salary
         </Text> */}
 
-        <View style={styles.ExpBoxView}>
-          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-            Salary
-          </Text>
+          <View style={styles.ExpBoxView}>
+            <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+              Salary
+            </Text>
+            <Text
+              style={[styles.lengthText, salaryLength >= 15 && {color: 'red'}]}>
+              {salaryLength}/15
+            </Text>
+          </View>
+
+          <View
+            style={{
+              marginVertical: '5%',
+              // height: Dimensions.get('window').height * 0.25,
+              backgroundColor: 'white',
+              // backgroundColor: '#BBC6C8',
+              // marginHorizontal: '5%',
+              borderRadius: 16,
+            }}>
+            <TextInput
+              style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
+              // multiline
+              // onChangeText={setSalary}
+              onChangeText={salary => {
+                setSalary(salary);
+                setSalaryLength(salary.length);
+                // setErrorMessage('');
+              }}
+              value={salary}
+              placeholder="Salary here..."
+              placeholderTextColor={'#5BA199'}
+              keyboardType="numeric"
+            />
+          </View>
+        </View>
+
+        <View style={{marginHorizontal: '5%'}}>
+          <View style={styles.ExpBoxView}>
+            <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+              Job Description
+            </Text>
+            <Text
+              style={[
+                styles.lengthText,
+                descriptionLength >= 50 && {color: 'red'},
+              ]}>
+              {descriptionLength}/50
+            </Text>
+          </View>
+
+          <View
+            style={{
+              marginVertical: '5%',
+              height: Dimensions.get('window').height * 0.25,
+              backgroundColor: 'white',
+              // marginHorizontal: '5%',
+              borderRadius: 16,
+            }}>
+            <TextInput
+              style={{marginHorizontal: '5%', fontSize: 14}}
+              multiline={true}
+              // onChangeText={setDescription}
+              onChangeText={description => {
+                setDescription(description);
+                setDescriptionLength(description.length);
+                // setErrorMessage('');
+              }}
+              value={description}
+              placeholder="Job description here..."
+              placeholderTextColor={'#5BA199'}
+            />
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={{
+            alignSelf: 'center',
+            paddingHorizontal: '15%',
+            paddingVertical: '3%',
+            backgroundColor: '#469597',
+            borderRadius: 32,
+            marginVertical: '3%',
+          }}
+          onPress={() => handleSubmit()}>
           <Text
-            style={[styles.lengthText, salaryLength >= 15 && {color: 'red'}]}>
-            {salaryLength}/15
+            style={{
+              fontSize: 25,
+              color: '#ffffff',
+              fontWeight: 'bold',
+            }}>
+            Post Job
           </Text>
-        </View>
-
-        <View
-          style={{
-            marginVertical: '5%',
-            // height: Dimensions.get('window').height * 0.25,
-            backgroundColor: 'white',
-            // backgroundColor: '#BBC6C8',
-            // marginHorizontal: '5%',
-            borderRadius: 16,
-          }}>
-          <TextInput
-            style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
-            // multiline
-            // onChangeText={setSalary}
-            onChangeText={salary => {
-              setSalary(salary);
-              setSalaryLength(salary.length);
-              // setErrorMessage('');
+        </TouchableOpacity>
+        {spinnerLoader ? (
+          <Chase
+            style={{
+              position: 'absolute',
+              // top: Dimensions.get('window').height * 0.5,
+              left: Dimensions.get('window').width * 0.4,
+              bottom: Dimensions.get('window').height * 0.5,
+              alignSelf: 'center',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-            value={salary}
-            placeholder="Salary here..."
-            placeholderTextColor={'#5BA199'}
-            keyboardType="numeric"
+            size={Dimensions.get('window').width * 0.2}
+            color="#5BA199"
           />
-        </View>
+        ) : null}
       </View>
-
-      <View style={{marginHorizontal: '5%'}}>
-        <View style={styles.ExpBoxView}>
-          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
-            Job Description
-          </Text>
-          <Text
-            style={[
-              styles.lengthText,
-              descriptionLength >= 50 && {color: 'red'},
-            ]}>
-            {descriptionLength}/50
-          </Text>
-        </View>
-
-        <View
-          style={{
-            marginVertical: '5%',
-            height: Dimensions.get('window').height * 0.25,
-            backgroundColor: 'white',
-            // marginHorizontal: '5%',
-            borderRadius: 16,
-          }}>
-          <TextInput
-            style={{marginHorizontal: '5%', fontSize: 14}}
-            multiline={true}
-            // onChangeText={setDescription}
-            onChangeText={description => {
-              setDescription(description);
-              setDescriptionLength(description.length);
-              // setErrorMessage('');
-            }}
-            value={description}
-            placeholder="Job description here..."
-            placeholderTextColor={'#5BA199'}
-          />
-        </View>
-      </View>
-
-      <TouchableOpacity
-        style={{
-          alignSelf: 'center',
-          paddingHorizontal: '15%',
-          paddingVertical: '3%',
-          backgroundColor: '#469597',
-          borderRadius: 32,
-          marginVertical: '3%',
-        }}
-        onPress={() => handleSubmit()}>
-        <Text
-          style={{
-            fontSize: 25,
-            color: '#ffffff',
-            fontWeight: 'bold',
-          }}>
-          Post Job
-        </Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 }
