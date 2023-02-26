@@ -23,6 +23,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {db, dbFirestore, auth} from '../Firebase/Config';
+import RNSmtpMailer from 'react-native-smtp-mailer';
 
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -71,7 +72,7 @@ const AdminRequestManagement = ({navigation}) => {
               marginTop: '15%',
               // borderColor: 'black',
               borderColor: '#4CA6A8',
-              backgroundColour: newUsersSelected ? '#4CA6A8' : 'red',
+              backgroundColor: newUsersSelected ? '#4CA6A8' : null,
               // backgroundColor: '#4CA6A8',
               borderWidth: 1,
               marginLeft: '15%',
@@ -79,10 +80,21 @@ const AdminRequestManagement = ({navigation}) => {
             <TouchableOpacity
               onPress={() => {
                 setNewUsersSelected(true),
+                  setUsersRemoveSelected(false),
+                  setUsersUpdatesSelected(false),
                   console.log('selected or not?', newUsersSelected);
               }}>
               {/* <AntDesign name="adduser" size={15} color="#4CA6A8" /> */}
-              <Text style={styles.userTabStyles}>New Users</Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  //   color: 'white',
+                  // color: '#4CA6A8',
+                  color: newUsersSelected ? 'white' : 'black',
+                  padding: '1%',
+                }}>
+                New Users
+              </Text>
             </TouchableOpacity>
           </View>
           <View
@@ -93,12 +105,27 @@ const AdminRequestManagement = ({navigation}) => {
               marginTop: '15%',
               // borderColor: 'black',
               borderColor: '#4CA6A8',
-              backgroundColour: usersUpdatesSelected ? '#4CA6A8' : '#ffffff',
+              backgroundColor: usersUpdatesSelected ? '#4CA6A8' : null,
               borderWidth: 1,
               marginLeft: '15%',
             }}>
-            <TouchableOpacity>
-              <Text style={styles.userTabStyles}>Updates</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setUsersUpdatesSelected(true),
+                  setUsersRemoveSelected(false),
+                  setNewUsersSelected(false),
+                  console.log('selected or not?', newUsersSelected);
+              }}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  //   color: 'white',
+                  // color: '#4CA6A8',
+                  color: usersUpdatesSelected ? 'white' : 'black',
+                  padding: '1%',
+                }}>
+                Updates
+              </Text>
             </TouchableOpacity>
           </View>
           <View
@@ -109,12 +136,27 @@ const AdminRequestManagement = ({navigation}) => {
               marginTop: '15%',
               // borderColor: 'black',
               borderColor: '#4CA6A8',
-              backgroundColour: usersRemoveSelected ? '#4CA6A8' : '#ffffff',
+              backgroundColor: usersRemoveSelected ? '#4CA6A8' : null,
               borderWidth: 1,
               marginLeft: '15%',
             }}>
-            <TouchableOpacity>
-              <Text style={styles.userTabStyles}>Remove</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setUsersRemoveSelected(true),
+                  setNewUsersSelected(false),
+                  setUsersUpdatesSelected(false);
+                console.log('selected or not?', newUsersSelected);
+              }}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  //   color: 'white',
+                  // color: '#4CA6A8',
+                  color: usersRemoveSelected ? 'white' : 'black',
+                  padding: '1%',
+                }}>
+                Remove
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -236,6 +278,30 @@ const AdminRequestManagement = ({navigation}) => {
                 console.log('Email: ' + userData.userEmail);
                 console.log('Pw: ' + userData.userPassword);
               })
+              .then(() => {
+                RNSmtpMailer.sendMail({
+                  mailhost: 'smtp.gmail.com',
+                  port: '465',
+                  ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
+                  username: 'bashfyp@gmail.com',
+                  password: 'ltdapqlallccrgss',
+                  // fromName: 'Some Name', // optional
+                  // replyTo: 'usernameEmail', // optional
+                  recipients: userData.userEmail,
+                  // bcc: ['bccEmail1', 'bccEmail2'], // optional
+                  // bcc: ['shahzaibnn@gmail.com'], // optional
+                  subject: 'BASH Account Confirmed!',
+                  htmlBody:
+                    '<h1>Congratulations!!!</h1>' +
+                    '<h2>Thank you for registering with BASH Application</h2>' +
+                    '<p>Admin has approved your account, now you can login to BASH application and enjoy!</p>' +
+                    '<p>Sincerely</p>' +
+                    '<p>Team BASH</p>',
+                  // attachmentPaths: [path],
+                  // attachmentNames: ['anotherTest.pdf'],
+                });
+              })
+
               .catch(err => {
                 console.log('not working: ', err);
                 console.log('Error: ' + err);

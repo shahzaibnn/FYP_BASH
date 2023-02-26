@@ -199,7 +199,10 @@ export default function RegistrationScreenStudent({navigation}) {
             subject: 'BASH Account Registered',
             htmlBody:
               '<h1>Welcome</h1>' +
-              '<p>Thank you for registering with BASH Application</p',
+              '<h2>Thank you for registering with BASH Application</h2>' +
+              '<p>Admin will approve your account shortly!</p' +
+              '<p>Sincerely</p>' +
+              '<p>Team BASH</p>',
             // attachmentPaths: [path],
             // attachmentNames: ['anotherTest.pdf'],
           })
@@ -213,7 +216,8 @@ export default function RegistrationScreenStudent({navigation}) {
               setDate(new Date());
               setDob(new Date());
               setFlag(true);
-              showToast('Account Registered');
+              // showToast('Account Registered');
+              showToast('Kindly wait for admin verification');
               navigation.navigate('Login');
               notifyMessage('Account Registered');
             })
