@@ -35,7 +35,15 @@ import {
 } from 'firebase/database';
 import {waitForPendingWrites} from 'firebase/firestore';
 
+import {Wave} from 'react-native-animated-spinkit';
+import {Chase} from 'react-native-animated-spinkit';
+
 export default function CreatePostScreen() {
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
+  const [pointerEvent, setPointerEvent] = useState('auto');
+  const [opacity, setOpacity] = useState(1);
+  const [indicator, setIndicator] = useState(true);
+
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
 
@@ -97,6 +105,7 @@ export default function CreatePostScreen() {
   };
 
   const uploadImage = async () => {
+    setIndicator(false);
     console.log(Docid);
     try {
       let counter = 0;
@@ -133,6 +142,7 @@ export default function CreatePostScreen() {
       });
       console.log('abey bhai!!');
     } catch (error) {
+      setIndicator(true);
       console.log('Some Error!!!');
     } finally {
       console.log('final: ');
@@ -161,6 +171,7 @@ export default function CreatePostScreen() {
         postedBy: storeData.userEmail,
       })
       .then(() => {
+        setIndicator(true);
         console.log('Post Added!');
       });
   };
@@ -239,76 +250,90 @@ export default function CreatePostScreen() {
       setText('');
       setyourArray([]);
       setFlag(false);
+      // setIndicator(true);
       alert('Post Uploaded!!!');
     }
   }, [flag]);
 
+  useEffect(() => {
+    if (indicator) {
+      setSpinnerLoader(false);
+      setPointerEvent('auto');
+      setOpacity(1);
+    } else {
+      setSpinnerLoader(true);
+      setPointerEvent('none');
+      setOpacity(0.8);
+    }
+  }, [indicator]);
+
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: '5%',
-          marginVertical: '3%',
-          justifyContent: 'center',
-        }}>
-        <TouchableOpacity
-          style={{position: 'absolute', left: 0}}
-          onPress={() => console.log(storeData)}>
-          <Entypo name="circle-with-cross" size={25} color="#777777" />
-        </TouchableOpacity>
-
-        <Text
+      <View pointerEvents={pointerEvent} style={{opacity: opacity}}>
+        <View
           style={{
-            fontSize: 30,
-            color: '#000000',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            // marginHorizontal: Dimensions.get('window').width / 5,
-            // marginEnd: '30%',
-
-            // marginHorizontal: '25%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginHorizontal: '5%',
+            marginVertical: '3%',
+            justifyContent: 'center',
           }}>
-          Share Post
-        </Text>
-      </View>
+          <TouchableOpacity
+            style={{position: 'absolute', left: 0}}
+            onPress={() => console.log(storeData)}>
+            <Entypo name="circle-with-cross" size={25} color="#777777" />
+          </TouchableOpacity>
 
-      <View
-        style={{
-          marginHorizontal: '5%',
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        <Image
-          source={{uri: profile[0].pic}}
-          style={{width: 60, height: 60, borderRadius: 64}}
-        />
+          <Text
+            style={{
+              fontSize: 30,
+              color: '#000000',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              // marginHorizontal: Dimensions.get('window').width / 5,
+              // marginEnd: '30%',
 
-        <View style={{marginLeft: '5%'}}>
-          <Text style={{color: '#000000', fontWeight: 'bold', fontSize: 20}}>
-            {profile[0].name}
-          </Text>
-          <Text style={{color: '#5BA199', marginVertical: '2%'}}>
-            {profile[0].title}
+              // marginHorizontal: '25%',
+            }}>
+            Share Post
           </Text>
         </View>
 
-        <TouchableOpacity
+        <View
           style={{
-            backgroundColor: '#4CA6A8',
-            paddingVertical: '3%',
-            paddingHorizontal: '7%',
-            borderRadius: 16,
-            marginLeft: '30%',
-          }}
-          onPress={buttonClick}>
-          <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
-            Post
-          </Text>
-        </TouchableOpacity>
+            marginHorizontal: '5%',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <Image
+            source={{uri: profile[0].pic}}
+            style={{width: 60, height: 60, borderRadius: 64}}
+          />
 
-        {/* <TouchableOpacity
+          <View style={{marginLeft: '5%'}}>
+            <Text style={{color: '#000000', fontWeight: 'bold', fontSize: 20}}>
+              {profile[0].name}
+            </Text>
+            <Text style={{color: '#5BA199', marginVertical: '2%'}}>
+              {profile[0].title}
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#4CA6A8',
+              paddingVertical: '3%',
+              paddingHorizontal: '7%',
+              borderRadius: 16,
+              marginLeft: '30%',
+            }}
+            onPress={buttonClick}>
+            <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
+              Post
+            </Text>
+          </TouchableOpacity>
+
+          {/* <TouchableOpacity
           style={{
             backgroundColor: '#4CA6A8',
             paddingVertical: '2%',
@@ -322,101 +347,120 @@ export default function CreatePostScreen() {
             Post here
           </Text>
         </TouchableOpacity> */}
-      </View>
+        </View>
 
-      <View
-        style={{
-          marginVertical: '5%',
-          height: Dimensions.get('window').height * 0.25,
-          backgroundColor: '#BBC6C8',
-          marginHorizontal: '5%',
-          borderRadius: 16,
-        }}>
-        <TextInput
-          style={{marginHorizontal: '5%', fontSize: 18}}
-          multiline
-          onChangeText={setText}
-          value={text}
-          placeholder="Write post here..."
-          placeholderTextColor={'#5BA199'}
-        />
-      </View>
+        <View
+          style={{
+            marginVertical: '5%',
+            height: Dimensions.get('window').height * 0.25,
+            backgroundColor: '#BBC6C8',
+            marginHorizontal: '5%',
+            borderRadius: 16,
+          }}>
+          <TextInput
+            style={{marginHorizontal: '5%', fontSize: 18}}
+            multiline
+            onChangeText={setText}
+            value={text}
+            placeholder="Write post here..."
+            placeholderTextColor={'#5BA199'}
+          />
+        </View>
 
-      <Text
-        style={{
-          marginHorizontal: '5%',
-          fontSize: 23,
-          fontWeight: 'bold',
-          color: '#000000',
-          marginBottom: '3%',
-        }}>
-        Attachments
-      </Text>
+        <Text
+          style={{
+            marginHorizontal: '5%',
+            fontSize: 23,
+            fontWeight: 'bold',
+            color: '#000000',
+            marginBottom: '3%',
+          }}>
+          Attachments
+        </Text>
 
-      <TouchableOpacity
-        onPress={() => selectMultipleFile()}
-        style={{
-          backgroundColor: '#4CA6A8',
+        <TouchableOpacity
+          onPress={() => selectMultipleFile()}
+          style={{
+            backgroundColor: '#4CA6A8',
 
-          marginHorizontal: '5%',
-          alignSelf: 'baseline',
-          paddingHorizontal: '8%',
-          paddingVertical: '3%',
-          borderRadius: 32,
-        }}>
-        <FontAwesome name="paperclip" size={30} color="#ffffff" />
-      </TouchableOpacity>
+            marginHorizontal: '5%',
+            alignSelf: 'baseline',
+            paddingHorizontal: '8%',
+            paddingVertical: '3%',
+            borderRadius: 32,
+          }}>
+          <FontAwesome name="paperclip" size={30} color="#ffffff" />
+        </TouchableOpacity>
 
-      <View
-        style={{
-          marginHorizontal: '5%',
-          marginVertical: '5%',
-          // backgroundColor: '#BBC6C8',
-          // justifyContent: 'space-between',
-        }}>
-        <FlatList
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          // numColumns={4}
-          data={filePath}
-          key={'_'}
-          keyExtractor={item => '_' + item.key}
-          renderItem={({item}) => {
-            return (
-              <View
-                style={{
-                  marginVertical: 10,
-                  marginEnd: 15,
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <ImageModal
-                  // onTap={() => console.log(item.display)}
-                  // disabled={!item.display}
-                  resizeMode="stretch"
-                  modalImageResizeMode="contain"
-                  style={{width: 60, height: 60, borderRadius: 64}}
-                  modalImageStyle={{
-                    minHeight: Dimensions.get('window').height,
-                    minWidth: Dimensions.get('window').width,
-                  }}
-                  source={{
-                    uri: item.uri,
-                  }}
-                />
+        <View
+          style={{
+            marginHorizontal: '5%',
+            marginVertical: '5%',
+            // backgroundColor: '#BBC6C8',
+            // justifyContent: 'space-between',
+          }}>
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            // numColumns={4}
+            data={filePath}
+            key={'_'}
+            keyExtractor={item => '_' + item.key}
+            renderItem={({item}) => {
+              return (
+                <View
+                  style={{
+                    marginVertical: 10,
+                    marginEnd: 15,
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <ImageModal
+                    // onTap={() => console.log(item.display)}
+                    // disabled={!item.display}
+                    resizeMode="stretch"
+                    modalImageResizeMode="contain"
+                    style={{width: 60, height: 60, borderRadius: 64}}
+                    modalImageStyle={{
+                      minHeight: Dimensions.get('window').height,
+                      minWidth: Dimensions.get('window').width,
+                    }}
+                    source={{
+                      uri: item.uri,
+                    }}
+                  />
 
-                <TouchableOpacity
-                  style={{marginTop: 5}}
-                  onPress={() => removeFile(item.key)}>
-                  <Entypo name="circle-with-cross" size={20} color="#777777" />
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{marginTop: 5}}
+                    onPress={() => removeFile(item.key)}>
+                    <Entypo
+                      name="circle-with-cross"
+                      size={20}
+                      color="#777777"
+                    />
+                  </TouchableOpacity>
 
-                {/* <Text>{item.name}</Text> */}
-              </View>
-            );
-          }}
-        />
+                  {/* <Text>{item.name}</Text> */}
+                </View>
+              );
+            }}
+          />
+        </View>
+        {spinnerLoader ? (
+          <Chase
+            style={{
+              position: 'absolute',
+              top: Dimensions.get('window').height * 0.5,
+              left: Dimensions.get('window').width * 0.4,
+              alignSelf: 'center',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            size={Dimensions.get('window').width * 0.2}
+            color="#5BA199"
+          />
+        ) : null}
       </View>
     </ScrollView>
   );
