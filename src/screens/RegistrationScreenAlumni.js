@@ -181,6 +181,7 @@ export default function RegistrationScreenAlumni({navigation}) {
               experience: [{}],
               postsId: [],
               appliedJobId: [],
+              accountApproved: 'pending',
             })
             .then(() => {
               console.log('User added!');

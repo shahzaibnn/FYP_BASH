@@ -181,6 +181,7 @@ export default function RegistrationScreenFaculty({navigation}) {
               experience: [{}],
               postsId: [],
               appliedJobId: [],
+              accountApproved: 'pending',
             })
             .then(() => {
               console.log('User added!');
