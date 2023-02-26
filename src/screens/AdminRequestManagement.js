@@ -71,11 +71,16 @@ const AdminRequestManagement = ({navigation}) => {
               marginTop: '15%',
               // borderColor: 'black',
               borderColor: '#4CA6A8',
-              backgroundColour: newUsersSelected ? '#4CA6A8' : '#ffffff',
+              backgroundColour: newUsersSelected ? '#4CA6A8' : 'red',
+              // backgroundColor: '#4CA6A8',
               borderWidth: 1,
               marginLeft: '15%',
             }}>
-            <TouchableOpacity onPress={() => setNewUsersSelected(true)}>
+            <TouchableOpacity
+              onPress={() => {
+                setNewUsersSelected(true),
+                  console.log('selected or not?', newUsersSelected);
+              }}>
               {/* <AntDesign name="adduser" size={15} color="#4CA6A8" /> */}
               <Text style={styles.userTabStyles}>New Users</Text>
             </TouchableOpacity>

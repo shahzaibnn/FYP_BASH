@@ -64,6 +64,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {getAuth} from 'firebase/auth';
 import AuthStack from './src/navigations/AuthStack';
+import AdminRequestManagement from './src/screens/AdminRequestManagement';
 export default function App() {
   // const Stack = createNativeStackNavigator();
 
@@ -119,19 +120,21 @@ export default function App() {
   }, []);
 
   return (
-    <>
-      {loading ? (
-        <></>
-      ) : (
-        <>
-          <Provider store={store}>
-            <NavigationContainer>
-              {flag ? <AuthStack email={'bashfyp@gmail.com'} /> : <AppStack />}
-            </NavigationContainer>
-          </Provider>
-        </>
-      )}
-    </>
+    // <>
+    //   {loading ? (
+    //     <></>
+    //   ) : (
+    //     <>
+    //       <Provider store={store}>
+    //         <NavigationContainer>
+    //           {flag ? <AuthStack email={'bashfyp@gmail.com'} /> : <AppStack />}
+    //         </NavigationContainer>
+    //       </Provider>
+    //     </>
+    //   )}
+    // </>
+
+    <AdminRequestManagement />
   );
 
   // check().then(res => {
