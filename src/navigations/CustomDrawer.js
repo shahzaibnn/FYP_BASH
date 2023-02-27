@@ -31,6 +31,10 @@ import {
 } from 'firebase/auth';
 Drawer = createDrawerNavigator();
 
+import {MMKV} from 'react-native-mmkv';
+
+export const storage = new MMKV();
+
 export default function CustomDrawer({props, navigation}) {
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
@@ -48,7 +52,8 @@ export default function CustomDrawer({props, navigation}) {
 
         const auth = getAuth();
         await signOut(auth);
-        await AsyncStorage.removeItem('authToken');
+        storage.clearAll();
+        // await AsyncStorage.removeItem('authToken');
 
         navigation.navigate('Login');
         navigation.dispatch(

@@ -32,6 +32,11 @@ import {Grid} from 'react-native-animated-spinkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {getAuth} from 'firebase/auth';
+
+import {MMKV} from 'react-native-mmkv';
+
+export const storage = new MMKV();
+
 export default function LoginScreen({navigation}) {
   // export default function LoginScreen() {
 
@@ -57,10 +62,10 @@ export default function LoginScreen({navigation}) {
   console.log(email);
   console.log(password);
 
-  useEffect(() => {
-    console.log('checking');
-    checkIfUserIsLoggedIn();
-  }, []);
+  // useEffect(() => {
+  //   console.log('checking');
+  //   checkIfUserIsLoggedIn();
+  // }, []);
   const checkIfUserIsLoggedIn = async () => {
     const authToken = await AsyncStorage.getItem('authToken');
     if (authToken) {
@@ -138,31 +143,33 @@ export default function LoginScreen({navigation}) {
           console.log(cred);
           console.log('success');
           const authToken = cred.user.getIdToken();
-          AsyncStorage.setItem('authToken', authToken.toString())
-            // const user = cred.user;
-            .then(() => {
-              setFlag(true);
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 1,
-                  routes: [
-                    {
-                      name: 'Drawer',
+          // AsyncStorage.setItem('authToken', authToken.toString())
+          // const user = cred.user;
+          // .then(() => {
+          setFlag(true);
+          storage.set('authToken', 'LoggedIn');
+          storage.set('loggedInUser', email);
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [
+                {
+                  name: 'Drawer',
 
+                  params: {
+                    screen: 'BottomTabs',
+                    params: {
+                      screen: 'Home',
                       params: {
-                        screen: 'BottomTabs',
-                        params: {
-                          screen: 'Home',
-                          params: {
-                            userEmail: email.toLowerCase(),
-                          },
-                        },
+                        userEmail: email.toLowerCase(),
                       },
                     },
-                  ],
-                }),
-              );
-            });
+                  },
+                },
+              ],
+            }),
+          );
+          // });
           // console.log('Logged in as ', user.email);
           // setFlag(true);
           // navigation.dispatch(

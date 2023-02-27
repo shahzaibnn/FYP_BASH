@@ -64,6 +64,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {getAuth} from 'firebase/auth';
 import AuthStack from './src/navigations/AuthStack';
+
+import {MMKV} from 'react-native-mmkv';
+
+export const storage = new MMKV();
+
 export default function App() {
   // const Stack = createNativeStackNavigator();
 
@@ -100,38 +105,50 @@ export default function App() {
   //   }
   // };
 
-  const [loading, setLoading] = useState(true);
-  const [flag, setFlag] = useState(false);
+  // const [loading, setLoading] = useState(true);
+  // const [flag, setFlag] = useState(false);
 
-  const FetchLoggedInData = async () => {
-    try {
-      const data = await AsyncStorage.getItem('authToken');
-      console.log(data);
-      if (data) {
-        setFlag(true);
-      }
-    } catch (error) {}
-  };
+  // const FetchLoggedInData = async () => {
+  //   try {
+  //     const data = await AsyncStorage.getItem('authToken');
+  //     console.log(data);
+  //     if (data) {
+  //       setFlag(true);
+  //     }
+  //   } catch (error) {}
+  // };
 
-  useEffect(() => {
-    FetchLoggedInData();
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
+  // useEffect(() => {
+  //   FetchLoggedInData();
+  //   setTimeout(() => setLoading(false), 1000);
+  // }, []);
+
+  // return (
+  //   <>
+  //     {loading ? (
+  //       <></>
+  //     ) : (
+  //       <>
+  //         <Provider store={store}>
+  //           <NavigationContainer>
+  //             {flag ? <AuthStack email={'bashfyp@gmail.com'} /> : <AppStack />}
+  //           </NavigationContainer>
+  //         </Provider>
+  //       </>
+  //     )}
+  //   </>
+  // );
 
   return (
-    <>
-      {loading ? (
-        <></>
-      ) : (
-        <>
-          <Provider store={store}>
-            <NavigationContainer>
-              {flag ? <AuthStack email={'bashfyp@gmail.com'} /> : <AppStack />}
-            </NavigationContainer>
-          </Provider>
-        </>
-      )}
-    </>
+    <Provider store={store}>
+      <NavigationContainer>
+        {storage.getString('authToken') ? (
+          <AuthStack email={storage.getString('loggedInUser')} />
+        ) : (
+          <AppStack />
+        )}
+      </NavigationContainer>
+    </Provider>
   );
 
   // check().then(res => {
