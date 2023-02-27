@@ -42,6 +42,11 @@ const AdminRequestManagement = ({navigation}) => {
   const [newUsersSelected, setNewUsersSelected] = useState(false);
   const [usersUpdatesSelected, setUsersUpdatesSelected] = useState(false);
   const [usersRemoveSelected, setUsersRemoveSelected] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [fetchedUsers, setFetchedUsers] = useState([]);
+  const [searchPeople, setSearchPeople] = useState(true);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchSelected, setSearchSelected] = useState(false);
 
   useEffect(() => {
     dbFirestore()
@@ -60,6 +65,8 @@ const AdminRequestManagement = ({navigation}) => {
       });
   }, []);
   const peopleScreenmethod = () => {
+    // setSearchPeople(false);
+
     return (
       <View>
         <View style={styles.expView}>
@@ -82,7 +89,11 @@ const AdminRequestManagement = ({navigation}) => {
                 setNewUsersSelected(true),
                   setUsersRemoveSelected(false),
                   setUsersUpdatesSelected(false),
-                  console.log('selected or not?', newUsersSelected);
+                  setSearchSelected(false);
+                setSearchPeople(false);
+                // setpeopleSelected(false);
+
+                console.log('selected or not?', newUsersSelected);
               }}>
               {/* <AntDesign name="adduser" size={15} color="#4CA6A8" /> */}
               <Text
@@ -177,7 +188,8 @@ const AdminRequestManagement = ({navigation}) => {
               style={{
                 backgroundColor: 'rgba(187, 198, 200, 0.5)',
                 borderRadius: 16,
-                marginVertical: Dimensions.get('window').height * 0.05,
+                marginTop: '5%',
+                // marginVertical: Dimensions.get('window').height * 0.02,
                 marginHorizontal: Dimensions.get('window').width * 0.05,
                 paddingBottom: '4%',
               }}>
@@ -320,6 +332,36 @@ const AdminRequestManagement = ({navigation}) => {
   const postsScreenmethod = () => {};
   const jobsScreenmethod = () => {};
 
+  const UpdatedSearch = () => {
+    if (!searchValue) {
+      setSearchSelected(false);
+      setFetchedUsers([]);
+
+      alert('Enter value to search!!');
+    } else {
+      // if (peopleSelected) {
+      setSearchSelected(true);
+      //Users Fetching
+      const query = dbFirestore()
+        .collection('Users')
+        .where('accountApproved', '==', 'pending');
+      query.get().then(querySnapshot => {
+        const results = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const data = documentSnapshot.data();
+          const allFields = Object.values(data).join(' ');
+          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+            results.push(data);
+          }
+        });
+        setSearchPeople(true);
+        setNewUsersSelected(false);
+        setSearchResults(results);
+        setFetchedUsers(results);
+      });
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -343,6 +385,44 @@ const AdminRequestManagement = ({navigation}) => {
           }}>
           Request Management
         </Text>
+      </View>
+
+      {/* Search Bar */}
+      <View
+        style={{flexDirection: 'row', marginTop: '3%', marginHorizontal: '5%'}}>
+        <View
+          style={{
+            alignItems: 'center',
+            marginLeft: '3%',
+            marginTop: '3%',
+
+            justifyContent: 'space-between',
+
+            height: 60,
+            backgroundColor: '#ffffff',
+            flex: 1,
+            borderRadius: 16,
+            flexDirection: 'row',
+          }}>
+          <TextInput
+            placeholder="Search here..."
+            style={{marginLeft: '5%'}}
+            value={searchValue}
+            // onChangeText={setSearchValue}
+            onChangeText={searchValue => setSearchValue(searchValue)}
+          />
+
+          {/* {searchResults.map(result => (
+              <Text key={result.id}>{result.firstName}</Text>
+            ))} */}
+          <View
+            style={{padding: 10, backgroundColor: '#5BA199', borderRadius: 16}}>
+            {/* <TouchableOpacity onPress={search}> */}
+            <TouchableOpacity onPress={UpdatedSearch}>
+              <Ionicons name="search" size={40} color="#ffffff" style={{}} />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
 
       {/* Another view for options */}
@@ -371,6 +451,8 @@ const AdminRequestManagement = ({navigation}) => {
                 setpeopleSelected(true);
                 setpostsSelected(false);
                 setjobsSelected(false);
+                setSearchSelected(false);
+                setSearchPeople(false);
 
                 // setSearchSelected(false);
                 console.log('posts', postsSelected);
@@ -484,6 +566,114 @@ const AdminRequestManagement = ({navigation}) => {
         : jobsSelected
         ? jobsScreenmethod()
         : null}
+
+      {/* search flatlist */}
+
+      <View>
+        <View
+          style={{
+            marginHorizontal: '3%',
+            marginVertical: Dimensions.get('window').height * 0.00009,
+            marginTop: '5%',
+            // paddingBottom: '15%',
+          }}>
+          {/* user search flatlist */}
+          {searchSelected ? (
+            <FlatList
+              horizontal={false}
+              showsHorizontalScrollIndicator={false}
+              data={fetchedUsers}
+              ListEmptyComponent={
+                searchSelected ? (
+                  <View
+                    style={{
+                      marginHorizontal: Dimensions.get('screen').width * 0.05,
+                      // marginTop: '5%',
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={{fontSize: 20}}>No Results found for </Text>
+                    <Text style={{fontSize: 20, fontWeight: '900'}}>
+                      ({searchValue})
+                    </Text>
+                  </View>
+                ) : (
+                  <></>
+                )
+              }
+              contentContainerStyle={{paddingBottom: 60}}
+              ListFooterComponent={<View style={{height: 60}}></View>}
+              renderItem={({item}) => (
+                <View
+                  // onPress={() => {
+                  //   navigation.navigate('ViewProfile');
+                  // }}
+                  style={{
+                    backgroundColor: 'rgba(187, 198, 200, 0.5)',
+                    // borderRadius: 16,
+                    // marginLeft: Dimensions.get('window').width * 0.02,
+                    // marginTop: Dimensions.get('window').width * 0.05,
+                    // height: Dimensions.get('window').height * 0.18,
+                    // width: Dimensions.get('window').width * 0.9,
+                    // backgroundColor: '#BBC6C8',
+                    borderRadius: 16,
+                    marginVertical: Dimensions.get('window').width * 0.01,
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      // marginTop: Dimensions.get('window').height * 0.02,
+                      // marginHorizontal: Dimensions.get('window').width * 0.05,
+                    }}>
+                    <Image
+                      style={{
+                        marginLeft: Dimensions.get('window').width * 0.02,
+                        marginTop: Dimensions.get('window').width * 0.05,
+                        height: Dimensions.get('window').height * 0.1,
+                        width: Dimensions.get('window').width * 0.2,
+                        borderRadius: 16,
+                      }}
+                      source={{
+                        uri: item.pic,
+                      }}
+                    />
+
+                    <View
+                      style={{
+                        marginLeft: Dimensions.get('window').width * 0.03,
+                        marginBottom: '5%',
+                      }}>
+                      <Text style={styles.designationStyle}>
+                        {/* {item.role.toUpperCase()} */}
+                        {item.role}
+                      </Text>
+                      <Text>{item.firstName + ' ' + item.lastName}</Text>
+                      <View style={styles.ExpBoxView}>
+                        {/* <Text>{item.designation}</Text> */}
+                        <Text style={styles.ExpLocation}>{item.userEmail}</Text>
+                        {/* <Text
+                          style={{
+                            color: '#469597',
+                            fontSize: 15,
+                            marginTop: '2%',
+                            marginBottom: '2%',
+                            marginHorizontal: '6%',
+                            marginLeft: '-1%',
+                            marginRight: '-5%',
+                          }}>
+                          {item.skills.join(', ')}
+                        </Text> */}
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              )}
+              keyExtractor={item => item.id}
+            />
+          ) : (
+            <></>
+          )}
+        </View>
+      </View>
     </ScrollView>
   );
 };
