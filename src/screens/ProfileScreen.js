@@ -31,9 +31,12 @@ import {db, dbFirestore} from '../Firebase/Config';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {useEffect} from 'react';
 import Pdf from 'react-native-pdf';
+import {updateResumeUrl} from '../store/action';
 // import {dbFirestore} from '../Firebase/Config';
 const ProfileScreen = ({navigation}) => {
   const profileName = 'Tony';
+
+  const dispatch = useDispatch();
 
   const storeData = useSelector(state => state);
   const emailAddressOfCurrentUser = storeData.userEmail;
@@ -43,74 +46,75 @@ const ProfileScreen = ({navigation}) => {
   const [singleFile, setSingleFile] = useState();
   const [uploaded, setUploaded] = useState(false);
   const [extraData, setExtraData] = React.useState(new Date());
-  const [filePath, setfilePath] = useState();
-  const [pdfUrl, setPdfUrl] = useState('');
+  const [filePath, setfilePath] = useState({});
+  const [resumeUrl, setResumeUrl] = useState(storeData.resumeUrl);
   const [showPdf, setShowPdf] = useState('');
-  const [resumeUrl, setResumeUrl] = useState('');
-  useEffect(() => {
-    console.log('fetching in use effectttt');
-    const fetchResumeUrl = async () => {
-      try {
-        const querySnapshot = await dbFirestore()
-          .collection('Users')
-          .where('userEmail', '==', storeData.userEmail)
-          .get();
-        console.log('Total Found users: ', querySnapshot.size);
+  const [selected, setSelected] = useState(false);
 
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(documentSnapshot.id);
-          setResumeUrl(documentSnapshot.data().resumeUrl);
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    console.log('fetching in use effectttt', resumeUrl);
+  // useEffect(() => {
+  //   console.log('fetching in use effectttt');
+  //   const fetchResumeUrl = async () => {
+  //     try {
+  //       const querySnapshot = await dbFirestore()
+  //         .collection('Users')
+  //         .where('userEmail', '==', storeData.userEmail)
+  //         .get();
+  //       console.log('Total Found users: ', querySnapshot.size);
 
-    fetchResumeUrl();
-  }, []);
-  useEffect(() => {
-    dbFirestore()
-      .collection('Users')
-      .where('userEmail', '==', storeData.userEmail)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
-          const data = documentSnapshot.data();
-          setResumeUrl(data.resumeUrl || '');
-        });
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, [storeData.userEmail]);
-  const renderPdfPreview = () => {
-    if (showPdf && resumeUrl !== '') {
-      return (
-        <View>
-          <Pdf
-            source={{uri: resumeUrl}}
-            trustAllCerts={false}
-            onLoadComplete={(numberOfPages, filePath) => {
-              console.log(`Number of pages: ${numberOfPages}`);
-            }}
-            onError={error => {
-              console.error(error);
-            }}
-            onPressLink={uri => {
-              console.log(`Link pressed: ${uri}`);
-            }}
-            style={{flex: 1, width: '100%', height: 500}}
-          />
-          <TouchableOpacity
-            onPress={handleClose}
-            style={{alignItems: 'center'}}>
-            <Ionicons name="ios-close-circle-sharp" size={20} color="red" />
-          </TouchableOpacity>
-        </View>
-      );
-    }
-  };
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         console.log(documentSnapshot.id);
+  //         setResumeUrl(documentSnapshot.data().resumeUrl);
+  //       });
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   console.log('fetching in use effectttt', resumeUrl);
+
+  //   fetchResumeUrl();
+  // }, []);
+  // useEffect(() => {
+  //   dbFirestore()
+  //     .collection('Users')
+  //     .where('userEmail', '==', storeData.userEmail)
+  //     .get()
+  //     .then(querySnapshot => {
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         const data = documentSnapshot.data();
+  //         setResumeUrl(data.resumeUrl || '');
+  //       });
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }, [storeData.userEmail]);
+  // const renderPdfPreview = () => {
+  //   if (showPdf && resumeUrl !== '') {
+  //     return (
+  //       <View>
+  //         <Pdf
+  //           source={{uri: pdfUrl}}
+  //           trustAllCerts={false}
+  //           onLoadComplete={(numberOfPages, filePath) => {
+  //             console.log(`Number of pages: ${numberOfPages}`);
+  //           }}
+  //           onError={error => {
+  //             console.error(error);
+  //           }}
+  //           onPressLink={uri => {
+  //             console.log(`Link pressed: ${uri}`);
+  //           }}
+  //           style={{flex: 1, width: '100%', height: 500}}
+  //         />
+  //         <TouchableOpacity
+  //           onPress={handleClose}
+  //           style={{alignItems: 'center'}}>
+  //           <Ionicons name="ios-close-circle-sharp" size={20} color="red" />
+  //         </TouchableOpacity>
+  //       </View>
+  //     );
+  //   }
+  // };
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
@@ -123,81 +127,98 @@ const ProfileScreen = ({navigation}) => {
       console.log(results.type);
 
       setSingleFile(results.uri);
-      setUploaded(true);
+
+      setSelected(true);
     } catch (err) {
-      console.log('Some Error!!!');
+      console.log('Some Error!!! is : ', err);
     }
   };
-  const addtoDB = async () => {
-    const filename = filePath.fileCopyUri.substring(
-      filePath.fileCopyUri.lastIndexOf('/') + 1,
-    );
-    const uploadUri =
-      Platform.OS === 'ios'
-        ? filePath.fileCopyUri.replace('file://', '')
-        : filePath.fileCopyUri;
-    // setUploading(true);
-    // setTransferred(0);
-    const task = await storage().ref(filename).putFile(uploadUri);
-    // console.log(task.ref.getDownloadURL);
-    // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
-    console.log('working');
-    const url = await storage().ref(filename).getDownloadURL();
-    console.log('url is: ' + url);
 
-    try {
-      task;
-      setPdfUrl(url);
-      setResumeUrl(url);
+  useEffect(() => {
+    if (selected) {
+      console.log('filepath is /l : ', filePath);
 
-      console.log('done, link for pdf: ', pdfUrl);
+      const addtoDB = async () => {
+        console.log('file copy uri checking: ', filePath);
+        const filename = filePath.fileCopyUri.substring(
+          filePath.fileCopyUri.lastIndexOf('/') + 1,
+        );
+        const uploadUri =
+          Platform.OS === 'ios'
+            ? filePath.fileCopyUri.replace('file://', '')
+            : filePath.fileCopyUri;
+        // setUploading(true);
+        // setTransferred(0);
+        const task = await storage().ref(filename).putFile(uploadUri);
+        // console.log(task.ref.getDownloadURL);
+        // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
+        console.log('working');
+        const url = await storage().ref(filename).getDownloadURL();
+        console.log('url is: ' + url);
 
-      dbFirestore()
-        .collection('Users')
-        // .doc('roles')
-        // .collection(value.toLowerCase())
-        .where('userEmail', '==', storeData.userEmail)
-        // .where('userEmail', '==', 'bashfyp@gmail.com')
-        .get()
-        .then(querySnapshot => {
-          console.log('Total Found users: ', querySnapshot.size);
+        try {
+          task;
+          // setPdfUrl(url);
+          setResumeUrl(url);
 
-          querySnapshot.forEach(documentSnapshot => {
-            console.log(documentSnapshot.id);
+          // console.log('done, link for pdf: ', pdfUrl);
 
-            dbFirestore()
-              .doc('Users/' + documentSnapshot.id)
-              .update({
-                // resumeUrl: pdfUrl,
-                resumeUrl: url,
-              })
-              .then(() => {
-                console.log('Added in firestore');
-              })
-              .catch(err => {
-                console.log('not working');
+          dbFirestore()
+            .collection('Users')
+            // .doc('roles')
+            // .collection(value.toLowerCase())
+            .where('userEmail', '==', storeData.userEmail)
+            // .where('userEmail', '==', 'bashfyp@gmail.com')
+            .get()
+            .then(querySnapshot => {
+              console.log('Total Found users: ', querySnapshot.size);
+
+              querySnapshot.forEach(documentSnapshot => {
+                console.log(documentSnapshot.id);
+
+                dbFirestore()
+                  .doc('Users/' + documentSnapshot.id)
+                  .update({
+                    // resumeUrl: pdfUrl,
+                    resumeUrl: url,
+                  })
+                  .then(() => {
+                    console.log('Added in firestore');
+
+                    dispatch(updateResumeUrl(url));
+                    setfilePath({});
+
+                    alert('FINALLY THE RESUME IS ADDED');
+                  })
+                  .catch(err => {
+                    console.log('not working');
+                  });
               });
-          });
-        })
-        .catch(error => {
-          alert(error);
+            })
+            .catch(error => {
+              alert(error);
 
-          // setFlag(true);
-        });
-      //
-      // .then(() => {
-      //   console.log('CV Added!');
-      // });
-    } catch (e) {
-      console.error(e);
+              // setFlag(true);
+            });
+          //
+          // .then(() => {
+          //   console.log('CV Added!');
+          // });
+        } catch (e) {
+          console.error(e);
+        }
+        // console.log('done, checking again: ', pdfUrl);
+
+        // setUploading(false);
+        // Alert.alert('CV uploaded!', 'Good Luck!');
+        // setImage(null);
+      };
+
+      addtoDB();
+
+      setSelected(false);
     }
-    console.log('done, checking again: ', pdfUrl);
-
-    // setUploading(false);
-    Alert.alert('CV uploaded!', 'Good Luck!');
-    // setImage(null);
-    setfilePath({});
-  };
+  }, [selected]);
 
   const removeFile = key => {
     setSingleFile(null);
@@ -246,9 +267,11 @@ const ProfileScreen = ({navigation}) => {
       });
   };
 
-  useEffect(() => {
-    findPosts();
-  }, []);
+  //IMPORTANT
+
+  // useEffect(() => {
+  //   findPosts();
+  // }, []);
 
   // test start
   // const handlePreview = () => {
@@ -403,11 +426,31 @@ const ProfileScreen = ({navigation}) => {
             <Text style={{fontSize: 18, marginTop: '5%', fontStyle: 'italic'}}>
               {storeData.description}
             </Text>
+
+            <View
+              style={{
+                // flexDirection: 'row',
+                // justifyContent: 'space-between',
+                // alignItems: 'center',
+                // backgroundColor: 'orange',
+                marginTop: '3%',
+              }}>
+              <Text
+                style={{
+                  // marginTop: '5%',
+                  fontSize: 22,
+                  fontWeight: 'bold',
+                  color: '#000000',
+                }}>
+                Resume
+              </Text>
+            </View>
             {/* add cv button here */}
             <View style={styles.UploadCV}>
-              {storeData.cv ? (
+              {resumeUrl ? (
                 <View>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('PDFView')}>
                     <MaterialCommunityIcons
                       name="file-pdf-box"
                       size={60}
@@ -437,18 +480,18 @@ const ProfileScreen = ({navigation}) => {
               <TouchableOpacity
                 style={styles.UploadBtn}
                 onPress={() => selectFile()}>
-                <Text style={styles.UploadText}>Select CV</Text>
+                <Text style={styles.UploadText}>Upload CV</Text>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.UploadBtn}
                 onPress={() => addtoDB()}>
                 <Text style={styles.UploadText}>Upload CV</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             {/* testing code */}
-            <View>
-              {/* <TouchableOpacity onPress={() => handlePreview}> */}
+            {/* <View>
+              {/* <TouchableOpacity onPress={() => handlePreview}> 
               <TouchableOpacity onPress={handlePreview}>
                 <View
                   style={{
@@ -457,13 +500,13 @@ const ProfileScreen = ({navigation}) => {
                     marginTop: '5%',
                     marginBottom: '5%',
                   }}>
-                  {/* <Image source={require('./pdf-icon.png')} style={{ width: 24, height: 24 }} /> */}
+                   <Image source={require('./pdf-icon.png')} style={{ width: 24, height: 24 }} /> 
                   <Fontisto name="preview" size={20} color="#469597" />
                   <Text style={{marginLeft: 8}}>Preview Resume</Text>
                 </View>
               </TouchableOpacity>
               {renderPdfPreview()}
-            </View>
+            </View> */}
             {/* testing end */}
             {/* cv file display */}
 

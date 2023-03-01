@@ -8,6 +8,7 @@ import {
   ADDEXPREDUX,
   REMOVEEXPREDUX,
   ADD_JOB,
+  UPDATERESUMEURL,
 } from './actionTypes';
 
 const initialState = Object;
@@ -46,6 +47,14 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         experience: state.experience.filter((_, i) => i !== action.payload),
+      };
+    }
+
+    case UPDATERESUMEURL: {
+      console.log('yy: ', action.payload);
+      return {
+        ...state,
+        resumeUrl: action.payload,
       };
     }
 

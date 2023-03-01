@@ -49,6 +49,7 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import ApplyToJob from '../screens/ApplyToJob';
 import ViewProfileScreen from '../screens/ViewProfileScreen';
 import {CommonActions} from '@react-navigation/native';
+import PdfViewScreen from '../screens/PDFViewScreen';
 
 // import MyTabs from '../screens/tabs';
 
@@ -87,6 +88,7 @@ export default function AuthStack({email}) {
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen name="ApplyToJob" component={ApplyToJob} />
       <Stack.Screen name="ViewProfile" component={ViewProfileScreen} />
+      <Stack.Screen name="PDFView" component={PdfViewScreen} />
     </Stack.Navigator>
     // </NavigationContainer>
   );

@@ -9,6 +9,7 @@ import {
   REMOVEEXPREDUX,
   ADD_JOB,
   SETJOBS,
+  UPDATERESUMEURL,
 } from './actionTypes';
 
 export const addition = () => ({
@@ -59,5 +60,12 @@ export const addJob = job => {
   return {
     type: ADD_JOB,
     payload: job,
+  };
+};
+
+export const updateResumeUrl = url => {
+  return {
+    type: UPDATERESUMEURL,
+    payload: url,
   };
 };

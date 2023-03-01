@@ -9,8 +9,15 @@ import {
 import Pdf from 'react-native-pdf';
 import DocumentPicker from 'react-native-document-picker';
 
-export default function PdfViewScreen() {
+import {useSelector, useDispatch} from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+export default function PdfViewScreen({navigation}) {
   const [selectFile, setSelectFile] = useState();
+
+  const storeData = useSelector(state => state);
+
+  const [resumeUrl, setResumeUrl] = useState(storeData.resumeUrl);
 
   const selectSingleFile = async () => {
     try {
@@ -33,27 +40,47 @@ export default function PdfViewScreen() {
     }
   };
 
-  const source = {
-    uri: selectFile,
-    cache: true,
-  };
-
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => selectSingleFile()}
+      <View
         style={{
-          backgroundColor: '#5BA199',
-          paddingHorizontal: '10%',
-          paddingVertical: '5%',
-          borderRadius: 16,
+          // alignSelf: 'flex-start',
+          flexDirection: 'row',
+          // alignItems: 'center',
+          marginHorizontal: '5%',
+          marginTop: '5%',
+          marginBottom: '5%',
+          // justifyContent: 'space-evenly',
         }}>
-        <Text style={{fontSize: 20, color: '#ffffff', fontWeight: 'bold'}}>
-          File To View
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+          style={{flex: 1}}>
+          <Ionicons
+            name="chevron-back-circle-sharp"
+            size={35}
+            color="#777777"
+          />
+        </TouchableOpacity>
+
+        <Text
+          style={{
+            flex: 2,
+            fontSize: 35,
+            color: '#000000',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            marginLeft: '3%',
+          }}>
+          Resume
         </Text>
-      </TouchableOpacity>
+
+        <View style={{flex: 1}} />
+      </View>
       <Pdf
-        source={source}
+        source={{uri: resumeUrl}}
+        trustAllCerts={false}
         onLoadComplete={(numberOfPages, filePath) => {
           console.log(`Number of pages: ${numberOfPages}`);
         }}
@@ -74,15 +101,17 @@ export default function PdfViewScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#E5E3E4',
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     // marginTop: 25,
   },
   pdf: {
-    flex: 1,
+    // flex: 1,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    backgroundColor: 'black',
+    backgroundColor: '#E5E3E4',
+    // backgroundColor: 'black',
   },
 });

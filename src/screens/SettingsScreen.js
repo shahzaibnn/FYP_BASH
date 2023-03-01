@@ -31,26 +31,6 @@ export default function SettingsScreen({navigation}) {
   const [pointerEvent, setPointerEvent] = useState('auto');
   const [opacity, setOpacity] = useState(1);
 
-  function logoutPressed() {
-    return new Promise(function (resolve, reject) {
-      setSpinnerLoader(true);
-      setPointerEvent('none');
-      setOpacity(0.8);
-      setTimeout(function () {
-        setSpinnerLoader(false);
-        setPointerEvent('auto');
-        setOpacity(1);
-        navigation.navigate('Login');
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{name: 'Login'}],
-          }),
-        );
-      }, 3000);
-    });
-  }
-
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
       <View pointerEvents={pointerEvent} style={{opacity: opacity}}>
