@@ -31,7 +31,7 @@ import {db, dbFirestore} from '../Firebase/Config';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {useEffect} from 'react';
 import Pdf from 'react-native-pdf';
-import {updateResumeUrl} from '../store/action';
+import {updateResumeUrl, removeResumeUrl} from '../store/action';
 // import {dbFirestore} from '../Firebase/Config';
 const ProfileScreen = ({navigation}) => {
   const profileName = 'Tony';
@@ -220,9 +220,50 @@ const ProfileScreen = ({navigation}) => {
     }
   }, [selected]);
 
-  const removeFile = key => {
-    setSingleFile(null);
-    setUploaded(false);
+  const removeFile = () => {
+    // setSingleFile(null);
+    // setUploaded(false);
+
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', storeData.userEmail)
+      // .where('userEmail', '==', 'bashfyp@gmail.com')
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(documentSnapshot.id);
+
+          dbFirestore()
+            .doc('Users/' + documentSnapshot.id)
+            .update({
+              // resumeUrl: pdfUrl,
+              resumeUrl: '',
+            })
+            .then(() => {
+              console.log('Added in firestore');
+
+              setfilePath({});
+
+              dispatch(removeResumeUrl());
+              setResumeUrl('');
+
+              alert('FINALLY THE RESUME IS REMOVED');
+            })
+            .catch(err => {
+              console.log('not working');
+            });
+        });
+      })
+      .catch(error => {
+        alert(error);
+
+        // setFlag(true);
+      });
+
     console.log('clicked!!!');
   };
 
@@ -267,11 +308,11 @@ const ProfileScreen = ({navigation}) => {
       });
   };
 
-  //IMPORTANT
+  // IMPORTANT
 
-  // useEffect(() => {
-  //   findPosts();
-  // }, []);
+  useEffect(() => {
+    findPosts();
+  }, []);
 
   // test start
   // const handlePreview = () => {
@@ -642,41 +683,75 @@ const ProfileScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       marginVertical: Dimensions.get('window').height * 0.01,
+                      justifyContent: 'space-between',
                     }}>
-                    <Image
-                      source={{uri: item.profilePic}}
-                      style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: 64,
-                        marginLeft: Dimensions.get('window').width * 0.02,
-                      }}
-                    />
-                    <View
-                      style={{
-                        marginLeft: Dimensions.get('window').width * 0.05,
-                      }}>
-                      <Text
+                    <View style={{flexDirection: 'row'}}>
+                      <Image
+                        source={{uri: item.profilePic}}
                         style={{
-                          color: '#5BA199',
-                          fontWeight: 'bold',
-                          marginBottom: Dimensions.get('window').height * 0.005,
-                          fontSize: 16,
-                        }}>
-                        {item.name}
-                      </Text>
-                      <Text
+                          width: 60,
+                          height: 60,
+                          borderRadius: 64,
+                          marginLeft: Dimensions.get('window').width * 0.02,
+                        }}
+                      />
+                      <View
                         style={{
-                          color: '#5BA199',
-                          marginBottom: Dimensions.get('window').height * 0.005,
-                          fontSize: 12,
+                          marginLeft: Dimensions.get('window').width * 0.05,
                         }}>
-                        {item.title}
-                      </Text>
-                      <Text style={{color: '#777777', fontSize: 12}}>
-                        {item.date}
-                      </Text>
+                        <Text
+                          style={{
+                            color: '#5BA199',
+                            fontWeight: 'bold',
+                            marginBottom:
+                              Dimensions.get('window').height * 0.005,
+                            fontSize: 16,
+                          }}>
+                          {item.name}
+                        </Text>
+                        <Text
+                          style={{
+                            color: '#5BA199',
+                            marginBottom:
+                              Dimensions.get('window').height * 0.005,
+                            fontSize: 12,
+                          }}>
+                          {item.title}
+                        </Text>
+                        <Text style={{color: '#777777', fontSize: 12}}>
+                          {item.date}
+                        </Text>
+                      </View>
                     </View>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        console.log(item.id);
+                        dbFirestore()
+                          .collection('Posts')
+                          .doc(item.id)
+                          .delete()
+                          .then(() => {
+                            console.log('User deleted!');
+                            setFetchedPosts(current =>
+                              current.filter(posts => posts.id !== item.id),
+                            );
+                            setExtraData(new Date());
+                          });
+                      }}
+                      style={{
+                        paddingHorizontal: '3%',
+                        backgroundColor: '#5BA199',
+                        // height: '30%',
+                        height: 30,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 16,
+                      }}>
+                      <Text style={{fontWeight: 'bold', color: '#ffffff'}}>
+                        Delete
+                      </Text>
+                    </TouchableOpacity>
                   </View>
 
                   <SliderBox
@@ -783,29 +858,6 @@ const ProfileScreen = ({navigation}) => {
                         <AntDesign name="like1" size={25} color={likeColor} />
                       </TouchableOpacity>
                     </View>
-
-                    {/* <View>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          color: '#469597',
-                          fontWeight: 'bold',
-                        }}>
-                        {item.commentedBy.length} Comments
-                      </Text>
-                      <TouchableOpacity
-                        style={{
-                          paddingHorizontal: '8%',
-                          paddingVertical: '8%',
-                          backgroundColor: '#5BA199',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          borderRadius: 8,
-                          // width: Dimensions.get('window').width * 0.2,
-                        }}>
-                        <FontAwesome name="comment" size={25} color="#ffffff" />
-                      </TouchableOpacity>
-                    </View> */}
                   </View>
                 </View>
               );

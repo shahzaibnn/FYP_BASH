@@ -9,3 +9,4 @@ export const REMOVEEXPREDUX = 'REMOVEEXPREDUX';
 export const ADD_JOB = 'ADD_JOB';
 export const SETJOBS = 'SETJOBS';
 export const UPDATERESUMEURL = 'UPDATERESUMEURL';
+export const REMOVERESUMEURL = 'REMOVERESUMEURL';

@@ -10,6 +10,7 @@ import {
   ADD_JOB,
   SETJOBS,
   UPDATERESUMEURL,
+  REMOVERESUMEURL,
 } from './actionTypes';
 
 export const addition = () => ({
@@ -67,5 +68,11 @@ export const updateResumeUrl = url => {
   return {
     type: UPDATERESUMEURL,
     payload: url,
+  };
+};
+
+export const removeResumeUrl = () => {
+  return {
+    type: REMOVERESUMEURL,
   };
 };
