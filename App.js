@@ -72,17 +72,17 @@ export const storage = new MMKV();
 
 export default function App() {
   return (
-    // <Provider store={store}>
-    //   <NavigationContainer>
-    //     {storage.getString('authToken') ? (
-    //       <AuthStack email={storage.getString('loggedInUser')} />
-    //     ) : (
-    //       <AppStack />
-    //     )}
-    //   </NavigationContainer>
-    // </Provider>
+    <Provider store={store}>
+      <NavigationContainer>
+        {storage.getString('authToken') ? (
+          <AuthStack email={storage.getString('loggedInUser')} />
+        ) : (
+          <AppStack />
+        )}
+      </NavigationContainer>
+    </Provider>
 
-    <AdminRequestManagement />
+    // <AdminRequestManagement />
   );
 
   // const Stack = createNativeStackNavigator();

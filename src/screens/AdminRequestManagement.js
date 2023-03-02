@@ -281,18 +281,18 @@ const AdminRequestManagement = ({navigation}) => {
               .update({
                 accountApproved: 'Approved',
               })
+              // already creating on main registration page
+              // .then(() => {
+              //   createUserWithEmailAndPassword(
+              //     auth,
+              //     userData.userEmail,
+              //     userData.userPassword,
+              //   );
 
-              .then(() => {
-                createUserWithEmailAndPassword(
-                  auth,
-                  userData.userEmail,
-                  userData.userPassword,
-                );
-
-                console.log('Approved in firestore');
-                console.log('Email: ' + userData.userEmail);
-                console.log('Pw: ' + userData.userPassword);
-              })
+              //   console.log('Approved in firestore');
+              //   console.log('Email: ' + userData.userEmail);
+              //   console.log('Pw: ' + userData.userPassword);
+              // })
               .then(() => {
                 RNSmtpMailer.sendMail({
                   mailhost: 'smtp.gmail.com',
