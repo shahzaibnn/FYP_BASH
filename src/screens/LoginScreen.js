@@ -228,6 +228,7 @@ export default function LoginScreen({navigation}) {
                     'Approveeee: ',
                     documentSnapshot.data().accountApproved,
                   );
+                  console.log('Role: ', documentSnapshot.data().role);
 
                   if (documentSnapshot.data().accountApproved === 'Approved') {
                     setApproved(true);
