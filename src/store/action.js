@@ -11,6 +11,7 @@ import {
   SETJOBS,
   UPDATERESUMEURL,
   REMOVERESUMEURL,
+  UPDATEPROFILEPICURL,
 } from './actionTypes';
 
 export const addition = () => ({
@@ -74,5 +75,12 @@ export const updateResumeUrl = url => {
 export const removeResumeUrl = () => {
   return {
     type: REMOVERESUMEURL,
+  };
+};
+
+export const updateProfilePicUrl = url => {
+  return {
+    type: UPDATEPROFILEPICURL,
+    payload: url,
   };
 };

@@ -31,7 +31,11 @@ import {db, dbFirestore} from '../Firebase/Config';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {useEffect} from 'react';
 import Pdf from 'react-native-pdf';
-import {updateResumeUrl, removeResumeUrl} from '../store/action';
+import {
+  updateResumeUrl,
+  removeResumeUrl,
+  updateProfilePicUrl,
+} from '../store/action';
 // import {dbFirestore} from '../Firebase/Config';
 const ProfileScreen = ({navigation}) => {
   const profileName = 'Tony';
@@ -44,12 +48,16 @@ const ProfileScreen = ({navigation}) => {
   const [fetchedPosts, setFetchedPosts] = useState([]);
 
   const [singleFile, setSingleFile] = useState();
+  const [singleFileImage, setSingleFileImage] = useState();
   const [uploaded, setUploaded] = useState(false);
   const [extraData, setExtraData] = React.useState(new Date());
   const [filePath, setfilePath] = useState({});
+  const [imagePath, setImagePath] = useState({});
   const [resumeUrl, setResumeUrl] = useState(storeData.resumeUrl);
   const [showPdf, setShowPdf] = useState('');
   const [selected, setSelected] = useState(false);
+  const [selectedPic, setSelectedPic] = useState(false);
+  const [setPicUrl, picUrl] = useState(storeData.pic);
 
   // useEffect(() => {
   //   console.log('fetching in use effectttt');
@@ -129,6 +137,25 @@ const ProfileScreen = ({navigation}) => {
       setSingleFile(results.uri);
 
       setSelected(true);
+    } catch (err) {
+      console.log('Some Error!!! is : ', err);
+    }
+  };
+
+  const selectImage = async () => {
+    try {
+      const results = await DocumentPicker.pickSingle({
+        type: DocumentPicker.types.images,
+        copyTo: 'cachesDirectory',
+      });
+      setImagePath(results);
+
+      console.log(results.uri);
+      console.log(results.type);
+
+      setSingleFileImage(results.uri);
+
+      setSelectedPic(true);
     } catch (err) {
       console.log('Some Error!!! is : ', err);
     }
@@ -219,6 +246,98 @@ const ProfileScreen = ({navigation}) => {
       setSelected(false);
     }
   }, [selected]);
+
+  useEffect(() => {
+    if (selectedPic) {
+      console.log('Profile Pic is /l : ', imagePath);
+
+      const addtoDB = async () => {
+        console.log('Profile Pic uri checking: ', imagePath);
+        const filename = imagePath.fileCopyUri.substring(
+          imagePath.fileCopyUri.lastIndexOf('/') + 1,
+        );
+        const uploadUri =
+          Platform.OS === 'ios'
+            ? imagePath.fileCopyUri.replace('file://', '')
+            : imagePath.fileCopyUri;
+        // setUploading(true);
+        // setTransferred(0);
+        const task = await storage().ref(filename).putFile(uploadUri);
+        // console.log(task.ref.getDownloadURL);
+        // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
+        console.log('Profile Pic working');
+        const urlPicc = await storage().ref(filename).getDownloadURL();
+        console.log('Profile Pic url is: ' + urlPicc);
+
+        try {
+          console.log('Profile 1');
+
+          task;
+
+          // setPdfUrl(url);
+          console.log('Profile');
+          // setPicUrl(urlPicc);
+          console.log('Profile Pic url inside: ' + urlPicc);
+
+          // console.log('done, link for pdf: ', pdfUrl);
+
+          dbFirestore()
+            .collection('Users')
+            // .doc('roles')
+            // .collection(value.toLowerCase())
+            .where('userEmail', '==', storeData.userEmail)
+            // .where('userEmail', '==', 'bashfyp@gmail.com')
+            .get()
+            .then(querySnapshot => {
+              console.log('Total Found users: ', querySnapshot.size);
+
+              querySnapshot.forEach(documentSnapshot => {
+                console.log(documentSnapshot.id);
+
+                dbFirestore()
+                  .doc('Users/' + documentSnapshot.id)
+                  .update({
+                    // resumeUrl: pdfUrl,
+                    pic: urlPicc,
+                  })
+                  .then(() => {
+                    console.log('Added in firestore PIC');
+
+                    // dispatch(updateResumeUrl(url));
+                    dispatch(updateProfilePicUrl(urlPicc));
+                    setImagePath({});
+
+                    alert('FINALLY THE PIC IS ADDED');
+                  })
+                  .catch(err => {
+                    console.log('Pic not changed: ' + err.message);
+                  });
+              });
+            })
+            .catch(error => {
+              alert(error);
+
+              // setFlag(true);
+            });
+          //
+          // .then(() => {
+          //   console.log('CV Added!');
+          // });
+        } catch (e) {
+          console.error(e);
+        }
+        // console.log('done, checking again: ', pdfUrl);
+
+        // setUploading(false);
+        // Alert.alert('CV uploaded!', 'Good Luck!');
+        // setImage(null);
+      };
+
+      addtoDB();
+
+      setSelectedPic(false);
+    }
+  }, [selectedPic]);
 
   const removeFile = () => {
     // setSingleFile(null);
@@ -359,7 +478,8 @@ const ProfileScreen = ({navigation}) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => console.log(fetchedPosts)}
+          // onPress={() => console.log(fetchedPosts)}
+          onPress={() => selectImage()}
           style={{position: 'absolute', right: '5%', top: '5%'}}>
           <MaterialCommunityIcons
             name="dots-vertical"
