@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useState, createRef} from 'react';
 import FastImage from 'react-native-fast-image';
-import {profile, jobs, posts, experience, user} from '../model/data';
+// import {profile, jobs, posts, experience, user} from '../model/data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -35,333 +35,110 @@ import {
 } from 'firebase/auth';
 
 const AdminRequestManagement = ({navigation}) => {
-  const [peopleSelected, setpeopleSelected] = useState(true);
-  const [postsSelected, setpostsSelected] = useState(false);
-  const [jobsSelected, setjobsSelected] = useState(false);
   const [users, setUsers] = useState([]);
-  const [newUsersSelected, setNewUsersSelected] = useState(false);
-  const [usersUpdatesSelected, setUsersUpdatesSelected] = useState(false);
-  const [usersRemoveSelected, setUsersRemoveSelected] = useState(false);
+
   const [searchValue, setSearchValue] = useState('');
-  const [fetchedUsers, setFetchedUsers] = useState([]);
-  const [searchPeople, setSearchPeople] = useState(true);
-  const [searchResults, setSearchResults] = useState([]);
+
   const [searchSelected, setSearchSelected] = useState(false);
 
   useEffect(() => {
+    console.log('its called!!');
     dbFirestore()
       .collection('Users')
       .where('accountApproved', '==', 'pending')
-      .onSnapshot(querySnapshot => {
-        const usersList = [];
-        querySnapshot.forEach(documentSnapshot => {
-          usersList.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          });
-        });
-        console.log(usersList);
-        setUsers(usersList);
-      });
-  }, []);
-  const peopleScreenmethod = () => {
-    // setSearchPeople(false);
-
-    return (
-      <View>
-        <View style={styles.expView}>
-          <View
-            // onPress={() => setNewUsersSelected(true)}
-            style={{
-              width: Dimensions.get('window').width * 0.25,
-              height: Dimensions.get('window').height * 0.03,
-              borderRadius: 16,
-              marginTop: '15%',
-              // borderColor: 'black',
-              borderColor: '#4CA6A8',
-              backgroundColor: newUsersSelected ? '#4CA6A8' : null,
-              // backgroundColor: '#4CA6A8',
-              borderWidth: 1,
-              marginLeft: '78%',
-              // alignSelf: 'center',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                setNewUsersSelected(true),
-                  setUsersRemoveSelected(false),
-                  setUsersUpdatesSelected(false),
-                  setSearchSelected(false);
-                setSearchPeople(false);
-                // setpeopleSelected(false);
-
-                console.log('selected or not?', newUsersSelected);
-              }}>
-              {/* <AntDesign name="adduser" size={15} color="#4CA6A8" /> */}
-              <Text
-                style={{
-                  textAlign: 'center',
-                  //   color: 'white',
-                  // color: '#4CA6A8',
-                  color: newUsersSelected ? 'white' : 'black',
-                  padding: '1%',
-                }}>
-                New Users
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {/* updates tab
-          <View
-            style={{
-              width: Dimensions.get('window').width * 0.25,
-              height: Dimensions.get('window').height * 0.03,
-              borderRadius: 16,
-              marginTop: '15%',
-              // borderColor: 'black',
-              borderColor: '#4CA6A8',
-              backgroundColor: usersUpdatesSelected ? '#4CA6A8' : null,
-              borderWidth: 1,
-              marginLeft: '15%',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                setUsersUpdatesSelected(true),
-                  setUsersRemoveSelected(false),
-                  setNewUsersSelected(false),
-                  console.log('selected or not?', newUsersSelected);
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  //   color: 'white',
-                  // color: '#4CA6A8',
-                  color: usersUpdatesSelected ? 'white' : 'black',
-                  padding: '1%',
-                }}>
-                Updates
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {/* remove tab */}
-          {/* <View
-            style={{
-              width: Dimensions.get('window').width * 0.25,
-              height: Dimensions.get('window').height * 0.03,
-              borderRadius: 16,
-              marginTop: '15%',
-              // borderColor: 'black',
-              borderColor: '#4CA6A8',
-              backgroundColor: usersRemoveSelected ? '#4CA6A8' : null,
-              borderWidth: 1,
-              marginLeft: '15%',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                setUsersRemoveSelected(true),
-                  setNewUsersSelected(false),
-                  setUsersUpdatesSelected(false);
-                console.log('selected or not?', newUsersSelected);
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  //   color: 'white',
-                  // color: '#4CA6A8',
-                  color: usersRemoveSelected ? 'white' : 'black',
-                  padding: '1%',
-                }}>
-                Remove
-              </Text>
-            </TouchableOpacity>
-          </View>  */}
-        </View>
-        {/* Flatlist to show accounts pending for approval */}
-        {newUsersSelected ? newUsersList() : null}
-      </View>
-    );
-  };
-
-  const newUsersList = () => {
-    console.log('New users');
-    return (
-      <View>
-        <FlatList
-          data={users}
-          renderItem={({item}) => (
-            <View
-              style={{
-                backgroundColor: 'rgba(187, 198, 200, 0.5)',
-                borderRadius: 16,
-                marginTop: '5%',
-                // marginVertical: Dimensions.get('window').height * 0.02,
-                marginHorizontal: Dimensions.get('window').width * 0.05,
-                paddingBottom: '4%',
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}>
-                <Image
-                  style={{
-                    marginLeft: Dimensions.get('window').width * 0.02,
-                    marginTop: Dimensions.get('window').width * 0.05,
-                    height: Dimensions.get('window').height * 0.1,
-                    width: Dimensions.get('window').width * 0.2,
-                    borderRadius: 16,
-                  }}
-                  source={{
-                    uri: item.pic,
-                  }}
-                />
-
-                <View
-                  style={{
-                    marginLeft: Dimensions.get('window').width * 0.03,
-                  }}>
-                  {/* <Text style={styles.designationStyle}>People</Text> */}
-                  <Text style={styles.designationStyle}>{item.role}</Text>
-                  {/* <Text>{item.firstName + ' ' + item.lastName}</Text> */}
-                  <View style={styles.ExpBoxView}>
-                    {/* <Text>{item.designation}</Text> */}
-                    <Text style={styles.ExpLocation}>
-                      {item.firstName + ' ' + item.lastName}
-                    </Text>
-                    <Text style={styles.ExpLocation}>Batch: {item.batch}</Text>
-                    <Text style={styles.ExpLocation}>
-                      Email: {item.userEmail}
-                    </Text>
-                    <Text style={styles.ExpLocation}>
-                      DOB: {item.dateOfBirth}
-                    </Text>
-                    <Text style={styles.ExpLocation}>
-                      Contact No: {item.contactNo}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignSelf: 'flex-end',
-                  marginEnd: '5%',
-                  marginTop: '8%',
-                }}>
-                <TouchableOpacity
-                  style={{marginRight: '4%'}}
-                  onPress={() => ApproveUser(item.key)}>
-                  <FontAwesome name="check-circle" size={26} color="green" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={RemoveUser(item.key)}>
-                  <FontAwesome name="times-circle" size={26} color="red" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-          keyExtractor={item => item.id}
-        />
-      </View>
-    );
-  };
-
-  const ApproveUser = userId => {
-    console.log('approving user id: ', userId);
-    console.log('approving user id: ', userId);
-    dbFirestore()
-      .collection('Users')
       .get()
       .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
-        console.log('Total data: ', querySnapshot.data);
-
         querySnapshot.forEach(documentSnapshot => {
-          const userData = documentSnapshot.data();
-          // console.log(documentSnapshot.id);
-          if (documentSnapshot.id === userId) {
-            dbFirestore()
-              .doc('Users/' + userId)
-              .update({
-                accountApproved: 'Approved',
-              })
-              // already creating on main registration page
-              // .then(() => {
-              //   createUserWithEmailAndPassword(
-              //     auth,
-              //     userData.userEmail,
-              //     userData.userPassword,
-              //   );
+          const data = documentSnapshot.data();
+          data.id = documentSnapshot.id;
 
-              //   console.log('Approved in firestore');
-              //   console.log('Email: ' + userData.userEmail);
-              //   console.log('Pw: ' + userData.userPassword);
-              // })
-              .then(() => {
-                RNSmtpMailer.sendMail({
-                  mailhost: 'smtp.gmail.com',
-                  port: '465',
-                  ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
-                  username: 'bashfyp@gmail.com',
-                  password: 'ltdapqlallccrgss',
-                  // fromName: 'Some Name', // optional
-                  // replyTo: 'usernameEmail', // optional
-                  recipients: userData.userEmail,
-                  // bcc: ['bccEmail1', 'bccEmail2'], // optional
-                  // bcc: ['shahzaibnn@gmail.com'], // optional
-                  subject: 'BASH Account Confirmed!',
-                  htmlBody:
-                    '<h1>Congratulations!!!</h1>' +
-                    '<h2>Thank you for registering with BASH Application</h2>' +
-                    '<p>Admin has approved your account, now you can login to BASH application and enjoy!</p>' +
-                    '<p>Sincerely</p>' +
-                    '<p>Team BASH</p>',
-                  // attachmentPaths: [path],
-                  // attachmentNames: ['anotherTest.pdf'],
-                });
-              })
+          setUsers(oldArray => [...oldArray, data]);
+        });
+      });
+  }, []);
 
-              .catch(err => {
-                console.log('not working: ', err);
-                console.log('Error: ' + err);
-              });
-          }
+  const ApproveUser = (userId, userEmail) => {
+    console.log('approving user id: ', userId);
+    console.log('approving user id: ', userId);
+    console.log('users are: ', users);
+    dbFirestore()
+      .collection('Users')
+      .doc(userId)
+      .update({
+        accountApproved: 'Approved',
+      })
+      .then(() => {
+        RNSmtpMailer.sendMail({
+          mailhost: 'smtp.gmail.com',
+          port: '465',
+          ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
+          username: 'bashfyp@gmail.com',
+          password: 'ltdapqlallccrgss',
+          recipients: userEmail,
+          subject: 'BASH Account Confirmed!',
+          htmlBody:
+            '<h1>Congratulations!!!</h1>' +
+            '<h2>Thank you for registering with BASH Application</h2>' +
+            '<p>Admin has approved your account, now you can login to BASH application and enjoy!</p>' +
+            '<p>Sincerely</p>' +
+            '<p>Team BASH</p>',
         });
       })
+      .then(() => {
+        setUsers(current => current.filter(users => users.id !== userId));
+      })
+
       .catch(error => {
         alert(error);
-
-        // setFlag(true);
       });
   };
   const RemoveUser = userId => {};
 
-  const postsScreenmethod = () => {};
-  const jobsScreenmethod = () => {};
-
   const UpdatedSearch = () => {
     if (!searchValue) {
       setSearchSelected(false);
-      setFetchedUsers([]);
+      setUsers([]);
+      console.log('its called!!');
+      dbFirestore()
+        .collection('Users')
+        .where('accountApproved', '==', 'pending')
+        .get()
+        .then(querySnapshot => {
+          const usersList = [];
+          querySnapshot.forEach(documentSnapshot => {
+            usersList.push({
+              ...documentSnapshot.data(),
+              id: documentSnapshot.id,
+            });
+          });
+          console.log(usersList);
+          setUsers(usersList);
+        });
+      // setUsers(initialUsers);
 
       alert('Enter value to search!!');
     } else {
       // if (peopleSelected) {
+      setUsers([]);
       setSearchSelected(true);
+
       //Users Fetching
-      const query = dbFirestore()
+
+      dbFirestore()
         .collection('Users')
-        .where('accountApproved', '==', 'pending');
-      query.get().then(querySnapshot => {
-        const results = [];
-        querySnapshot.forEach(documentSnapshot => {
-          const data = documentSnapshot.data();
-          const allFields = Object.values(data).join(' ');
-          if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
-            results.push(data);
-          }
+        .where('accountApproved', '==', 'pending')
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(documentSnapshot => {
+            const data = documentSnapshot.data();
+            data.id = documentSnapshot.id;
+            const allFields = Object.values(data).join(' ');
+            if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+              // results.push(data);
+              setUsers(oldArray => [...oldArray, data]);
+            }
+          });
         });
-        setSearchPeople(true);
-        setNewUsersSelected(false);
-        setSearchResults(results);
-        setFetchedUsers(results);
-      });
     }
   };
 
@@ -369,12 +146,15 @@ const AdminRequestManagement = ({navigation}) => {
     <ScrollView style={styles.container}>
       <View>
         <Image
+          // resizeMode="center"
+          // resizeMode="stretch"
           source={require('../assets/images/bash_icon.png')}
           style={{
-            height: Dimensions.get('window').height * 0.04,
-            width: Dimensions.get('window').width * 1,
+            backgroundColor: 'red',
+            height: Dimensions.get('window').height * 0.08,
+            width: Dimensions.get('window').width * 0.3,
             marginTop: '5%',
-            aspectRatio: 6,
+            // aspectRatio: 6,
             alignSelf: 'center',
           }}
         />
@@ -384,7 +164,7 @@ const AdminRequestManagement = ({navigation}) => {
             color: '#4CA6A8',
             fontWeight: 'bold',
             textAlign: 'center',
-            marginTop: '5%',
+            // marginTop: '5%',
           }}>
           Request Management
         </Text>
@@ -415,9 +195,6 @@ const AdminRequestManagement = ({navigation}) => {
             onChangeText={searchValue => setSearchValue(searchValue)}
           />
 
-          {/* {searchResults.map(result => (
-              <Text key={result.id}>{result.firstName}</Text>
-            ))} */}
           <View
             style={{padding: 10, backgroundColor: '#5BA199', borderRadius: 16}}>
             {/* <TouchableOpacity onPress={search}> */}
@@ -441,7 +218,7 @@ const AdminRequestManagement = ({navigation}) => {
             style={{
               // marginLeft: Dimensions.get('window').width * 0.04,
               // marginTop: Dimensions.get('window').width * 0.04,
-              backgroundColor: peopleSelected ? '#4CA6A8' : '#ffffff',
+              backgroundColor: '#4CA6A8',
               borderRadius: 100,
 
               height: Dimensions.get('window').height * 0.1,
@@ -451,19 +228,12 @@ const AdminRequestManagement = ({navigation}) => {
             }}>
             <TouchableOpacity
               onPress={() => {
-                setpeopleSelected(true);
-                setpostsSelected(false);
-                setjobsSelected(false);
-                setSearchSelected(false);
-                setSearchPeople(false);
-
-                // setSearchSelected(false);
-                console.log('posts', postsSelected);
+                console.log(users);
               }}>
               <Ionicons
                 name="people"
                 size={35}
-                color={peopleSelected ? '#ffffff' : '#4CA6A8'}
+                color={'#ffffff'}
                 style={styles.icon}
               />
             </TouchableOpacity>
@@ -471,76 +241,6 @@ const AdminRequestManagement = ({navigation}) => {
 
           <Text style={styles.iconText}>Users</Text>
         </View>
-        {/* posts icon */}
-        {/* <View style={{alignItems: 'center', justifyContent: 'center'}}>
-          <View
-            style={{
-              // marginLeft: Dimensions.get('window').width * 0.04,
-              // marginTop: Dimensions.get('window').width * 0.04,
-              backgroundColor: postsSelected ? '#4CA6A8' : '#ffffff',
-              borderRadius: 100,
-
-              height: Dimensions.get('window').height * 0.1,
-              width: Dimensions.get('window').width * 0.2,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                setpostsSelected(true);
-                setjobsSelected(false);
-                setpeopleSelected(false);
-                // setSearchSelected(false);
-                console.log('posts  ', postsSelected);
-              }}>
-              <MaterialIcons
-                name="post-add"
-                size={35}
-                color={postsSelected ? '#ffffff' : '#4CA6A8'}
-                style={styles.icon}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <Text style={styles.iconText}>Posts</Text>
-        </View> */}
-        {/* job icon */}
-
-        {/* <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <View
-            style={{
-              // marginLeft: Dimensions.get('window').width * 0.04,
-              // marginTop: Dimensions.get('window').width * 0.04,
-              backgroundColor: jobsSelected ? '#4CA6A8' : '#ffffff',
-              borderRadius: 100,
-
-              height: Dimensions.get('window').height * 0.1,
-              width: Dimensions.get('window').width * 0.2,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <TouchableOpacity
-              style={{alignItems: 'center', justifyContent: 'center'}}
-              onPress={() => {
-                setjobsSelected(true);
-                setpostsSelected(false);
-
-                setpeopleSelected(false);
-                // setSearchSelected(false);
-                console.log(setjobsSelected);
-              }}>
-              <Ionicons
-                name="briefcase"
-                size={35}
-                color={jobsSelected ? '#ffffff' : '#4CA6A8'}
-                style={styles.icon}
-                backgroundColor="blue"
-              />
-            </TouchableOpacity>
-          </View>
-
-          <Text style={styles.iconText}>Jobs</Text>
-        </View> */}
       </View>
       <View style={styles.titleStyle}>
         {/* <Text>{TitleTag}</Text> */}
@@ -551,130 +251,137 @@ const AdminRequestManagement = ({navigation}) => {
             textAlign: 'center',
             color: '#000000',
           }}>
-          {peopleSelected
-            ? 'Pending Requests'
-            : postsSelected
-            ? 'Posts'
-            : jobsSelected
-            ? 'Jobs'
-            : null}
+          Pending Requests
         </Text>
       </View>
       {/* after title screen */}
 
-      {peopleSelected
-        ? peopleScreenmethod()
-        : postsSelected
-        ? postsScreenmethod()
-        : jobsSelected
-        ? jobsScreenmethod()
-        : null}
-
-      {/* search flatlist */}
-
       <View>
-        <View
-          style={{
-            marginHorizontal: '3%',
-            marginVertical: Dimensions.get('window').height * 0.00009,
-            marginTop: '5%',
-            // paddingBottom: '15%',
-          }}>
-          {/* user search flatlist */}
-          {searchSelected ? (
-            <FlatList
-              horizontal={false}
-              showsHorizontalScrollIndicator={false}
-              data={fetchedUsers}
-              ListEmptyComponent={
-                searchSelected ? (
-                  <View
-                    style={{
-                      marginHorizontal: Dimensions.get('screen').width * 0.05,
-                      // marginTop: '5%',
-                      flexDirection: 'row',
-                    }}>
-                    <Text style={{fontSize: 20}}>No Results found for </Text>
-                    <Text style={{fontSize: 20, fontWeight: '900'}}>
-                      ({searchValue})
-                    </Text>
-                  </View>
-                ) : (
-                  <></>
-                )
-              }
-              contentContainerStyle={{paddingBottom: 60}}
-              ListFooterComponent={<View style={{height: 60}}></View>}
-              renderItem={({item}) => (
-                <View
-                  // onPress={() => {
-                  //   navigation.navigate('ViewProfile');
-                  // }}
-                  style={{
-                    backgroundColor: 'rgba(187, 198, 200, 0.5)',
-                    // borderRadius: 16,
-                    // marginLeft: Dimensions.get('window').width * 0.02,
-                    // marginTop: Dimensions.get('window').width * 0.05,
-                    // height: Dimensions.get('window').height * 0.18,
-                    // width: Dimensions.get('window').width * 0.9,
-                    // backgroundColor: '#BBC6C8',
-                    borderRadius: 16,
-                    marginVertical: Dimensions.get('window').width * 0.01,
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      // marginTop: Dimensions.get('window').height * 0.02,
-                      // marginHorizontal: Dimensions.get('window').width * 0.05,
-                    }}>
-                    <Image
-                      style={{
-                        marginLeft: Dimensions.get('window').width * 0.02,
-                        marginTop: Dimensions.get('window').width * 0.05,
-                        height: Dimensions.get('window').height * 0.1,
-                        width: Dimensions.get('window').width * 0.2,
-                        borderRadius: 16,
-                      }}
-                      source={{
-                        uri: item.pic,
-                      }}
-                    />
+        <View style={styles.expView}>
+          <View
+            // onPress={() => setNewUsersSelected(true)}
+            style={{
+              width: Dimensions.get('window').width * 0.25,
+              height: Dimensions.get('window').height * 0.03,
+              borderRadius: 16,
+              marginTop: '15%',
+              // borderColor: 'black',
+              borderColor: '#4CA6A8',
+              backgroundColor: '#4CA6A8',
+              // backgroundColor: '#4CA6A8',
+              borderWidth: 1,
+              marginLeft: '78%',
+              // alignSelf: 'center',
+            }}>
+            <TouchableOpacity>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  //   color: 'white',
+                  // color: '#4CA6A8',
+                  color: '#ffffff',
+                  padding: '1%',
+                  fontWeight: 'bold',
+                }}>
+                New Users
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-                    <View
-                      style={{
-                        marginLeft: Dimensions.get('window').width * 0.03,
-                        marginBottom: '5%',
-                      }}>
-                      <Text style={styles.designationStyle}>
-                        {/* {item.role.toUpperCase()} */}
-                        {item.role}
+        <View>
+          <FlatList
+            data={users}
+            ListEmptyComponent={
+              searchSelected ? (
+                <View
+                  style={{
+                    marginHorizontal: Dimensions.get('screen').width * 0.05,
+                    flexDirection: 'row',
+                  }}>
+                  <Text style={{fontSize: 20}}>No Results found for </Text>
+                  <Text style={{fontSize: 20, fontWeight: '900'}}>
+                    ({searchValue})
+                  </Text>
+                </View>
+              ) : (
+                <></>
+              )
+            }
+            renderItem={({item}) => (
+              <View
+                style={{
+                  backgroundColor: 'rgba(187, 198, 200, 0.5)',
+                  borderRadius: 16,
+                  marginTop: '5%',
+                  // marginVertical: Dimensions.get('window').height * 0.02,
+                  marginHorizontal: Dimensions.get('window').width * 0.05,
+                  paddingBottom: '4%',
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                  }}>
+                  <Image
+                    style={{
+                      marginLeft: Dimensions.get('window').width * 0.02,
+                      marginTop: Dimensions.get('window').width * 0.05,
+                      height: Dimensions.get('window').height * 0.1,
+                      width: Dimensions.get('window').width * 0.2,
+                      borderRadius: 16,
+                    }}
+                    source={{
+                      uri: item.pic,
+                    }}
+                  />
+
+                  <View
+                    style={{
+                      marginLeft: Dimensions.get('window').width * 0.03,
+                    }}>
+                    {/* <Text style={styles.designationStyle}>People</Text> */}
+                    <Text style={styles.designationStyle}>{item.role}</Text>
+                    {/* <Text>{item.firstName + ' ' + item.lastName}</Text> */}
+                    <View style={styles.ExpBoxView}>
+                      {/* <Text>{item.designation}</Text> */}
+                      <Text style={styles.ExpLocation}>
+                        {item.firstName + ' ' + item.lastName}
                       </Text>
-                      <Text>{item.firstName + ' ' + item.lastName}</Text>
-                      <View style={styles.ExpBoxView}>
-                        {/* <Text>{item.designation}</Text> */}
-                        <Text style={styles.ExpLocation}>{item.userEmail}</Text>
-                        {/* <Text
-                          style={{
-                            color: '#469597',
-                            fontSize: 15,
-                            marginTop: '2%',
-                            marginBottom: '2%',
-                            marginHorizontal: '6%',
-                            marginLeft: '-1%',
-                            marginRight: '-5%',
-                          }}>
-                          {item.skills.join(', ')}
-                        </Text> */}
-                      </View>
+                      <Text style={styles.ExpLocation}>
+                        Batch: {item.batch}
+                      </Text>
+                      <Text style={styles.ExpLocation}>
+                        Email: {item.userEmail}
+                      </Text>
+                      <Text style={styles.ExpLocation}>
+                        DOB: {item.dateOfBirth}
+                      </Text>
+                      <Text style={styles.ExpLocation}>
+                        Contact No: {item.contactNo}
+                      </Text>
                     </View>
                   </View>
                 </View>
-              )}
-              keyExtractor={item => item.id}
-            />
-          ) : (
-            <></>
-          )}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignSelf: 'flex-end',
+                    marginEnd: '5%',
+                    marginTop: '8%',
+                  }}>
+                  <TouchableOpacity
+                    style={{marginRight: '4%'}}
+                    onPress={() => ApproveUser(item.id, item.userEmail)}>
+                    <FontAwesome name="check-circle" size={40} color="green" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={RemoveUser(item.id)}>
+                    <FontAwesome name="times-circle" size={40} color="red" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+            keyExtractor={item => item.id}
+          />
         </View>
       </View>
     </ScrollView>
@@ -721,7 +428,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginTop: Dimensions.get('window').height * 0.05,
     marginBottom: Dimensions.get('window').height * 0.0009,
-    marginLeft: Dimensions.get('window').height * 0.04,
+    marginHorizontal: Dimensions.get('window').height * 0.04,
   },
   titleTextStyle: {
     fontSize: 24,

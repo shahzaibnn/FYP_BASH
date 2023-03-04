@@ -165,7 +165,7 @@ export default function RegistrationScreenFaculty({navigation}) {
             // .doc('roles')
             // .collection('faculty')
             .add({
-              role: 'faculty',
+              role: 'Alumni',
               firstName: userName,
               lastName: lastName,
               userEmail: userEmail.toLowerCase(),
@@ -173,7 +173,7 @@ export default function RegistrationScreenFaculty({navigation}) {
               contactNo: contactNo,
               dateOfBirth: dateOfBirth,
               batch: batch,
-              pic: '',
+              pic: 'https://www.seekpng.com/png/full/18-188802_graduation-icon-png-image-icon-male-student.png',
               title: '',
               description: '',
               skills: [],

@@ -22,13 +22,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {db, dbFirestore} from '../Firebase/Config';
-
 import {useSelector, useDispatch} from 'react-redux';
+import {setInititialLogin} from '../store/action';
 
-const ExplorePage = ({navigation}) => {
+const AdminUserManagement = ({navigation}) => {
   const storeData = useSelector(state => state);
+  const dispatch = useDispatch();
 
-  const emailAddressOfCurrentUser = storeData.userEmail;
+  const emailAddressOfCurrentUser = 'adminfypbash@gmail.com';
 
   const [searchResults, setSearchResults] = useState([]);
 
@@ -44,9 +45,6 @@ const ExplorePage = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [actionParameters, setActionParameters] = useState([]);
   const [extraData, setExtraData] = React.useState(new Date());
-  const [searchPeople, setSearchPeople] = useState(true);
-  const [searchPosts, setSearchPosts] = useState(false);
-  const [searchJobs, setSearchJobs] = useState(false);
 
   let actionSheet = createRef();
   const show = item => {
@@ -54,82 +52,6 @@ const ExplorePage = ({navigation}) => {
     console.log('actions is, ', actionParameters);
     actionSheet.current.show();
   };
-  // useEffect(() => {
-  //   const subscriber = dbFirestore()
-  //     .collection('Users')
-
-  //     .onSnapshot(querySnapshot => {
-  //       const updatedData = [];
-  //       querySnapshot.forEach(doc => {
-  //         updatedData.push({id: doc.id, ...doc.data()});
-  //       });
-  //       setFetchedUsers(updatedData);
-  //       setLoading(false);
-  //     });
-
-  //   return () => subscriber();
-  // }, []);
-
-  // useEffect(() => {
-  //   const subscriber = dbFirestore()
-  //     .collection('Posts')
-  //     .onSnapshot(querySnapshot => {
-  //       const updatedData = [];
-  //       querySnapshot.forEach(doc => {
-  //         updatedData.push({id: doc.id, ...doc.data()});
-  //       });
-  //       setFetchedPosts(updatedData);
-  //       setLoading(false);
-  //     });
-
-  //   return () => subscriber();
-  // }, []);
-
-  // useEffect(() => {
-  //   const subscriber = dbFirestore()
-  //     .collection('Jobs')
-  //     .onSnapshot(querySnapshot => {
-  //       const updatedData = [];
-  //       querySnapshot.forEach(doc => {
-  //         updatedData.push({id: doc.id, ...doc.data()});
-  //       });
-  //       setFetchedJobs(updatedData);
-  //       setLoading(false);
-  //     });
-
-  //   return () => subscriber();
-  // }, []);
-
-  // const TitleTag = () => {
-  //   if (postsSelected) {
-  //     return <Text style={styles.titleTextStyle}>Posts</Text>;
-  //   } else if (peopleSelected) {
-  //     return <Text style={styles.titleTextStyle}>People</Text>;
-  //   } else if (jobsSelected) {
-  //     return <Text style={styles.titleTextStyle}>Jobs</Text>;
-  //   } else if (searchSelected == true && searchPeople == true) {
-  //     return (
-  //       <Text style={styles.titleTextStyle}>Search Results For People</Text>
-  //     );
-  //   } else if (searchSelected == true && searchJobs == true) {
-  //     return <Text style={styles.titleTextStyle}>Search Results For Jobs</Text>;
-  //   } else if (searchSelected == true && searchPosts == true) {
-  //     return (
-  //       <Text style={styles.titleTextStyle}>Search Results For Posts</Text>
-  //     );
-  //   } else if (
-  //     searchSelected == true &&
-  //     searchPosts == false &&
-  //     searchPeople == false &&
-  //     searchJobs == false
-  //   ) {
-  //     setpeopleSelected(true);
-  //     return <Text style={styles.titleTextStyle}>Search Results test</Text>;
-  //   } else {
-  //     setpeopleSelected(true);
-  //     return <Text style={styles.titleTextStyle}>People</Text>;
-  //   }
-  // };
 
   const UpdatedSearch = () => {
     if (!searchValue) {
@@ -148,6 +70,7 @@ const ExplorePage = ({navigation}) => {
         const results = [];
         querySnapshot.forEach(documentSnapshot => {
           const data = documentSnapshot.data();
+          data.id = documentSnapshot.id;
           const allFields = Object.values(data).join(' ');
           if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
             results.push(data);
@@ -155,9 +78,6 @@ const ExplorePage = ({navigation}) => {
             // console.log('search value is: ', searchValue.toLowerCase());
           }
         });
-        setSearchPeople(true);
-        setSearchPosts(false);
-        setSearchJobs(false);
 
         setSearchResults(results);
         setFetchedUsers(results);
@@ -187,14 +107,9 @@ const ExplorePage = ({navigation}) => {
             const allFields = Object.values(data).join(' ');
             if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
               results.push(data);
-              console.log('posts are:            -----------------------:');
-              console.log(results);
-              console.log('search value is: ', searchValue.toLowerCase());
             }
           });
-          setSearchPeople(false);
-          setSearchPosts(true);
-          setSearchJobs(false);
+
           setSearchResults(results);
           setFetchedPosts(results);
           // setpostsSelected(false);
@@ -216,14 +131,14 @@ const ExplorePage = ({navigation}) => {
         const results = [];
         querySnapshot.forEach(documentSnapshot => {
           const data = documentSnapshot.data();
+          data.id = documentSnapshot.id;
           const allFields = Object.values(data).join(' ');
           if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+            // console.log(data);
             results.push(data);
           }
         });
-        setSearchPeople(false);
-        setSearchPosts(false);
-        setSearchJobs(true);
+
         setSearchResults(results);
         setFetchedJobs(results);
         setSearchSelected(true);
@@ -233,32 +148,33 @@ const ExplorePage = ({navigation}) => {
         // setpeopleSelected(false);
       });
     }
-
-    // if (!peopleSelected && !postsSelected && !jobsSelected) {
-    //   setSearchResults([]);
-    //   // by default people
-    //   setpeopleSelected(true);
-    // }
-    // for clearing the field
-    // setSearchValue('');
   };
 
   return (
     <ScrollView style={styles.container}>
       <View>
-        {/* <TouchableOpacity
-          style={{position: 'absolute', marginTop: '6%', marginLeft: '5%'}}>
-          <Ionicons name="chevron-back" size={35} color="#777777" />
-        </TouchableOpacity> */}
+        <Image
+          // resizeMode="center"
+          // resizeMode="stretch"
+          source={require('../assets/images/bash_icon.png')}
+          style={{
+            backgroundColor: 'red',
+            height: Dimensions.get('window').height * 0.08,
+            width: Dimensions.get('window').width * 0.3,
+            marginTop: '5%',
+            // aspectRatio: 6,
+            alignSelf: 'center',
+          }}
+        />
         <Text
           style={{
             fontSize: 28,
             color: '#4CA6A8',
             fontWeight: 'bold',
             textAlign: 'center',
-            marginTop: '5%',
+            // marginTop: '5%',
           }}>
-          Explore
+          User / Job Management
         </Text>
       </View>
       <View
@@ -286,8 +202,8 @@ const ExplorePage = ({navigation}) => {
           />
 
           {/* {searchResults.map(result => (
-              <Text key={result.id}>{result.firstName}</Text>
-            ))} */}
+                <Text key={result.id}>{result.firstName}</Text>
+              ))} */}
           <View
             style={{padding: 10, backgroundColor: '#5BA199', borderRadius: 16}}>
             {/* <TouchableOpacity onPress={search}> */}
@@ -428,386 +344,6 @@ const ExplorePage = ({navigation}) => {
             : null}
         </Text>
       </View>
-      {/* Flatlists */}
-      {/* Users Flatlist 
-      <View>
-        <View style={{marginHorizontal: '3%', marginVertical: '4%'}}>
-          {peopleSelected ? (
-            <FlatList
-              horizontal={false}
-              showsHorizontalScrollIndicator={false}
-              data={fetchedUsers}
-              contentContainerStyle={{paddingBottom: 60}}
-              ListFooterComponent={<View style={{height: 60}}></View>}
-              renderItem={({item}) => (
-                <View
-                  style={{
-                    backgroundColor: 'rgba(187, 198, 200, 0.5)',
-                    // borderRadius: 16,
-                    // marginLeft: Dimensions.get('window').width * 0.02,
-                    // marginTop: Dimensions.get('window').width * 0.05,
-                    // height: Dimensions.get('window').height * 0.18,
-                    // width: Dimensions.get('window').width * 0.9,
-                    // backgroundColor: '#BBC6C8',
-                    borderRadius: 16,
-                    marginVertical: Dimensions.get('window').width * 0.01,
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      // marginTop: Dimensions.get('window').height * 0.02,
-                      // marginHorizontal: Dimensions.get('window').width * 0.05,
-                    }}>
-                    <Image
-                      style={{
-                        marginLeft: Dimensions.get('window').width * 0.02,
-                        marginTop: Dimensions.get('window').width * 0.05,
-                        height: Dimensions.get('window').height * 0.1,
-                        width: Dimensions.get('window').width * 0.2,
-                        borderRadius: 16,
-                      }}
-                      source={{
-                        uri: item.pic,
-                      }}
-                    />
-
-                    <View
-                      style={{
-                        marginLeft: Dimensions.get('window').width * 0.03,
-                      }}>
-                      <Text style={styles.designationStyle}>People</Text>
-                      <Text>{item.firstName + ' ' + item.lastName}</Text>
-                      <View style={styles.ExpBoxView}>
-                        // {/* <Text>{item.designation}</Text> 
-                        <Text style={styles.ExpLocation}>{item.userEmail}</Text>
-                        <Text
-                          style={{
-                            color: '#469597',
-                            fontSize: 15,
-                            marginTop: '2%',
-                            marginBottom: '2%',
-                            marginHorizontal: '6%',
-                            marginLeft: '-1%',
-                            marginRight: '-5%',
-                          }}>
-                          {item.skills.join(', ')}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              )}
-              keyExtractor={item => item.id}
-            />
-          ) : (
-            <></>
-          )}
-        </View>
-      </View> */}
-
-      {/* Posts Flatlist
-      <View>
-        <View
-          style={{
-            marginHorizontal: '1%',
-            marginVertical: Dimensions.get('window').height * 0.0009,
-          }}>
-          {postsSelected ? (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={fetchedPosts}
-              extraData={extraData}
-              onEndReachedThreshold={0.1}
-              scrollEventThrottle={150}
-              contentContainerStyle={{paddingBottom: 60}}
-              keyExtractor={item => item.id}
-              renderItem={({item}) => {
-                console.log('Id is : ', item);
-                let likeColor = '';
-
-                if (item.likedBy.includes(emailAddressOfCurrentUser)) {
-                  likeColor = '#000000';
-                  console.log('liked', emailAddressOfCurrentUser);
-                } else {
-                  likeColor = '#ffffff';
-                  console.log('liked again', emailAddressOfCurrentUser);
-                }
-
-                return (
-                  <View
-                    style={{
-                      marginHorizontal: Dimensions.get('window').width * 0.05,
-                      marginVertical: Dimensions.get('window').height * 0.01,
-                      borderRadius: 16,
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginVertical: Dimensions.get('window').height * 0.01,
-                      }}>
-                      <Image
-                        source={{uri: item.profilePic}}
-                        style={{
-                          width: 60,
-                          height: 60,
-                          borderRadius: 64,
-                          marginLeft: Dimensions.get('window').width * 0.02,
-                        }}
-                      />
-                      <View
-                        style={{
-                          marginLeft: Dimensions.get('window').width * 0.05,
-                        }}>
-                        <Text
-                          style={{
-                            color: '#5BA199',
-                            fontWeight: 'bold',
-                            marginBottom:
-                              Dimensions.get('window').height * 0.005,
-                            fontSize: 16,
-                          }}>
-                          {item.name}
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#5BA199',
-                            marginBottom:
-                              Dimensions.get('window').height * 0.005,
-                            fontSize: 12,
-                          }}>
-                          {item.title}
-                        </Text>
-                        <Text style={{color: '#777777', fontSize: 12}}>
-                          {item.date}
-                        </Text>
-                      </View>
-                    </View>
-
-                    <SliderBox
-                      parentWidth={Dimensions.get('window').width * 0.9}
-                      ImageComponentStyle={{borderRadius: 16}}
-                      images={item.images}
-                      sliderBoxHeight={Dimensions.get('window').height * 0.3}
-                    />
-
-                    <Text
-                      style={{
-                        color: '#000000',
-                        width: '95%',
-                        marginHorizontal: '2.5%',
-                        marginVertical: '2%',
-                      }}>
-                      {item.description}
-                    </Text>
-
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-evenly',
-                        marginBottom: '5%',
-                      }}>
-                      <View>
-                        <Text
-                          style={{
-                            textAlign: 'center',
-                            color: '#469597',
-                            fontWeight: 'bold',
-                          }}>
-                          {item.likedBy.length} Likes
-                        </Text>
-                        <TouchableOpacity
-                          onPress={() => {
-                            console.log('hdshjdsfvhddhfbhj');
-                            if (
-                              item.likedBy.includes(emailAddressOfCurrentUser)
-                            ) {
-                              dbFirestore()
-                                .doc('Posts/' + item.id)
-                                .update({
-                                  likedBy: dbFirestore.FieldValue.arrayRemove(
-                                    emailAddressOfCurrentUser,
-                                  ),
-                                })
-                                .then(() => {
-                                  console.log('Like Removed!');
-                                });
-
-                              fetchedPosts.find(
-                                obj => obj.id == item.id,
-                              ).likedBy = item.likedBy.filter(
-                                e => e !== emailAddressOfCurrentUser,
-                              );
-                              setExtraData(new Date());
-                            } else {
-                              console.log('ye work');
-                              dbFirestore()
-                                .doc('Posts/' + item.id)
-                                .update({
-                                  likedBy: dbFirestore.FieldValue.arrayUnion(
-                                    emailAddressOfCurrentUser,
-                                  ),
-                                })
-                                .then(() => {
-                                  console.log('Like Placed!');
-                                });
-                              let arr = item.likedBy;
-                              arr.push(emailAddressOfCurrentUser);
-                              fetchedPosts.find(
-                                obj => obj.id == item.id,
-                              ).likedBy = arr;
-
-                              setExtraData(new Date());
-                            }
-                          }}
-                          style={{
-                            paddingHorizontal: '8%',
-                            paddingVertical: '8%',
-                            backgroundColor: '#5BA199',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 8,
-                          }}>
-                          <AntDesign name="like1" size={25} color={likeColor} />
-                        </TouchableOpacity>
-                      </View>
-
-                      //  <View>
-                      //     <Text
-                      //       style={{
-                      //         textAlign: 'center',
-                      //         color: '#469597',
-                      //         fontWeight: 'bold',
-                      //       }}>
-                      //       {item.commentedBy.length} Comments
-                      //     </Text>
-                      //     <TouchableOpacity
-                      //       style={{
-                      //         paddingHorizontal: '8%',
-                      //         paddingVertical: '8%',
-                      //         backgroundColor: '#5BA199',
-                      //         justifyContent: 'center',
-                      //         alignItems: 'center',
-                      //         borderRadius: 8,
-                              
-                      //       }}>
-                      //       <FontAwesome name="comment" size={25} color="#ffffff" />
-                      //     </TouchableOpacity>
-                      //   </View> 
-                    </View>
-                  </View>
-                );
-              }}
-            />
-          ) : (
-            <></>
-          )}
-        </View>
-      </View> */}
-
-      {/* Jobs Flatlist
-      <View>
-        <View
-          style={{
-            marginHorizontal: '3%',
-            marginVertical: Dimensions.get('window').height * 0.00009,
-          }}>
-          {jobsSelected ? (
-            <FlatList
-              data={fetchedJobs}
-              contentContainerStyle={{paddingBottom: 60}}
-              renderItem={({item}) => (
-                <View
-                  style={{
-                    backgroundColor: '#BBC6C8',
-
-                    borderRadius: 16,
-
-                    marginHorizontal: Dimensions.get('window').width * 0.01,
-                    marginBottom: Dimensions.get('window').height * 0.02,
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginTop: Dimensions.get('window').height * 0.02,
-
-                      marginHorizontal: Dimensions.get('window').width * 0.05,
-                    }}>
-                    <Image
-                      style={{
-                        height: 60,
-                        width: 60,
-                        borderRadius: 16,
-                      }}
-                      source={{
-                        uri: item.image,
-                      }}
-                    />
-                    <View
-                      style={{
-                        marginLeft: Dimensions.get('window').width * 0.03,
-                      }}>
-                      <Text style={{fontSize: 12}}>
-                        {item.jobPostedBy} posted a new job
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          fontWeight: 'bold',
-                          marginVertical:
-                            Dimensions.get('window').height * 0.005,
-                          color: '#000000',
-                        }}>
-                        {item.jobTitle}
-                      </Text>
-                      <Text>{item.jobCompany}</Text>
-                    </View>
-
-                    <TouchableOpacity onPress={() => show(item)}>
-                      <MaterialCommunityIcons
-                        name="dots-vertical"
-                        size={25}
-                        color="#000000"
-                        style={{
-                          marginLeft: Dimensions.get('window').width * 0.05,
-                        }}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginHorizontal: Dimensions.get('window').width * 0.05,
-                      marginVertical: Dimensions.get('window').height * 0.02,
-                    }}>
-                    <TouchableOpacity
-                      style={{
-                        backgroundColor: '#5BA199',
-                        paddingHorizontal:
-                          Dimensions.get('window').width * 0.15,
-                        paddingVertical: Dimensions.get('window').height * 0.01,
-                        borderRadius: 16,
-                      }}>
-                      <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
-                        Apply
-                      </Text>
-                    </TouchableOpacity>
-
-                    <Text style={{color: '#469597', fontSize: 16}}>
-                      {item.jobCity},{item.jobLocation}
-                    </Text>
-                  </View>
-                </View>
-              )}
-              keyExtractor={item => item.id}
-            />
-          ) : (
-            <></>
-          )}
-        </View>
-      </View> */}
 
       {/* Search Flatlist */}
       <View>
@@ -843,7 +379,35 @@ const ExplorePage = ({navigation}) => {
               renderItem={({item}) => (
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('ViewProfile');
+                    dbFirestore()
+                      .collection('Users')
+                      // .doc('roles')
+                      // .collection(value.toLowerCase())
+                      .where('userEmail', '==', item.userEmail)
+                      .get()
+                      .then(querySnapshot => {
+                        console.log('Total Found users: ', querySnapshot.size);
+
+                        if (querySnapshot.size == 0) {
+                          console.log('CANNOT RETRIEVE DATA');
+                        } else {
+                          querySnapshot.forEach(documentSnapshot => {
+                            console.log(documentSnapshot.data());
+                            // setUserData(documentSnapshot.data());
+                            dispatch(
+                              setInititialLogin(documentSnapshot.data()),
+                            );
+                            navigation.navigate('Profile');
+                          });
+                        }
+                      })
+                      .catch(error => {
+                        // alert(error);
+
+                        // setFlag(true);
+                        console.log(error);
+                      });
+                    // navigation.navigate('Profile');
                   }}
                   style={{
                     backgroundColor: 'rgba(187, 198, 200, 0.5)',
@@ -935,11 +499,14 @@ const ExplorePage = ({navigation}) => {
               scrollEventThrottle={150}
               keyExtractor={item => item.id}
               renderItem={({item}) => {
-                console.log('Id is : ', item);
+                // console.log('Id is : ', item);
                 let likeColor = '';
+
+                // console.log(item.likedBy);
 
                 if (item.likedBy.includes(emailAddressOfCurrentUser)) {
                   likeColor = '#000000';
+                  // console.log('running');
                 } else {
                   likeColor = '#ffffff';
                 }
@@ -947,7 +514,7 @@ const ExplorePage = ({navigation}) => {
                 return (
                   <View
                     style={{
-                      marginHorizontal: Dimensions.get('window').width * 0.03,
+                      marginHorizontal: Dimensions.get('window').width * 0.05,
                       marginVertical: Dimensions.get('window').height * 0.01,
                       borderRadius: 16,
                     }}>
@@ -955,48 +522,92 @@ const ExplorePage = ({navigation}) => {
                       style={{
                         flexDirection: 'row',
                         marginVertical: Dimensions.get('window').height * 0.01,
+                        justifyContent: 'space-between',
                       }}>
-                      <Image
-                        source={{uri: item.profilePic}}
-                        style={{
-                          width: 60,
-                          height: 60,
-                          borderRadius: 64,
-                          marginLeft: Dimensions.get('window').width * 0.02,
-                        }}
-                      />
-                      <View
-                        style={{
-                          marginLeft: Dimensions.get('window').width * 0.05,
-                        }}>
-                        <Text
+                      <View style={{flexDirection: 'row'}}>
+                        <Image
+                          source={{uri: item.profilePic}}
                           style={{
-                            color: '#5BA199',
-                            fontWeight: 'bold',
-                            marginBottom:
-                              Dimensions.get('window').height * 0.005,
-                            fontSize: 16,
-                          }}>
-                          {item.name}
-                        </Text>
-                        <Text
+                            width: 60,
+                            height: 60,
+                            borderRadius: 64,
+                            marginLeft: Dimensions.get('window').width * 0.02,
+                          }}
+                        />
+                        <View
                           style={{
-                            color: '#5BA199',
-                            marginBottom:
-                              Dimensions.get('window').height * 0.005,
-                            fontSize: 12,
+                            marginLeft: Dimensions.get('window').width * 0.05,
                           }}>
-                          {item.title}
-                        </Text>
-                        <Text style={{color: '#777777', fontSize: 12}}>
-                          {item.date}
-                        </Text>
+                          <Text
+                            style={{
+                              color: '#5BA199',
+                              fontWeight: 'bold',
+                              marginBottom:
+                                Dimensions.get('window').height * 0.005,
+                              fontSize: 16,
+                            }}>
+                            {item.name}
+                          </Text>
+                          <Text
+                            style={{
+                              color: '#5BA199',
+                              marginBottom:
+                                Dimensions.get('window').height * 0.005,
+                              fontSize: 12,
+                            }}>
+                            {item.title}
+                          </Text>
+                          <Text style={{color: '#777777', fontSize: 12}}>
+                            {item.date}
+                          </Text>
+                        </View>
                       </View>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          console.log(item.id);
+                          dbFirestore()
+                            .collection('Posts')
+                            .doc(item.id)
+                            .delete()
+                            .then(() => {
+                              console.log('User deleted!');
+                              setFetchedPosts(current =>
+                                current.filter(posts => posts.id !== item.id),
+                              );
+                              setExtraData(new Date());
+                            });
+                        }}
+                        style={{
+                          paddingHorizontal: '3%',
+                          backgroundColor: '#5BA199',
+                          // height: '30%',
+                          height: 30,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderRadius: 16,
+                        }}>
+                        <Text style={{fontWeight: 'bold', color: '#ffffff'}}>
+                          Delete
+                        </Text>
+                      </TouchableOpacity>
                     </View>
 
                     <SliderBox
+                      // onCurrentImagePressed={index => ImagePressed()}
                       parentWidth={Dimensions.get('window').width * 0.9}
                       ImageComponentStyle={{borderRadius: 16}}
+                      // paginationBoxStyle={styles.sliderBoxPageStyle}
+                      // ImageComponentStyle={styles.sliderBoxImageStyle}
+                      // dotStyle={{
+                      //   width: 10,
+                      //   height: 10,
+                      //   borderRadius: 5,
+                      //   marginBottom: 20,
+                      //   marginHorizontal: 0,
+                      //   padding: 0,
+                      //   margin: 0,
+                      // }}
                       images={item.images}
                       sliderBoxHeight={Dimensions.get('window').height * 0.3}
                     />
@@ -1027,6 +638,7 @@ const ExplorePage = ({navigation}) => {
                           {item.likedBy.length} Likes
                         </Text>
                         <TouchableOpacity
+                          disabled
                           onPress={() => {
                             console.log('hdshjdsfvhddhfbhj');
                             if (
@@ -1049,6 +661,8 @@ const ExplorePage = ({navigation}) => {
                                 e => e !== emailAddressOfCurrentUser,
                               );
                               setExtraData(new Date());
+
+                              // likeColor = '#ffffff';
                             } else {
                               console.log('ye work');
                               dbFirestore()
@@ -1069,6 +683,8 @@ const ExplorePage = ({navigation}) => {
 
                               setExtraData(new Date());
                             }
+                            // setFetchedPosts([]);
+                            // searchPosts();
                           }}
                           style={{
                             paddingHorizontal: '8%',
@@ -1077,33 +693,11 @@ const ExplorePage = ({navigation}) => {
                             justifyContent: 'center',
                             alignItems: 'center',
                             borderRadius: 8,
+                            // width: Dimensions.get('window').width * 0.2,
                           }}>
                           <AntDesign name="like1" size={25} color={likeColor} />
                         </TouchableOpacity>
                       </View>
-
-                      {/* <View>
-                       <Text
-                         style={{
-                           textAlign: 'center',
-                           color: '#469597',
-                           fontWeight: 'bold',
-                         }}>
-                         {item.commentedBy.length} Comments
-                       </Text>
-                       <TouchableOpacity
-                         style={{
-                           paddingHorizontal: '8%',
-                           paddingVertical: '8%',
-                           backgroundColor: '#5BA199',
-                           justifyContent: 'center',
-                           alignItems: 'center',
-                           borderRadius: 8,
-                           
-                         }}>
-                         <FontAwesome name="comment" size={25} color="#ffffff" />
-                       </TouchableOpacity>
-                     </View> */}
                     </View>
                   </View>
                 );
@@ -1290,8 +884,8 @@ const ExplorePage = ({navigation}) => {
 
             {/* Qualification Text */}
             {/* <View>
-              <Text style={styles.qualText}>Qualification</Text>
-            </View> */}
+                <Text style={styles.qualText}>Qualification</Text>
+              </View> */}
 
             {/* Job desc */}
             <View style={styles.messageBodyStyle}>
@@ -1317,7 +911,7 @@ const ExplorePage = ({navigation}) => {
   );
 };
 
-export default ExplorePage;
+export default AdminUserManagement;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#E5E3E4',

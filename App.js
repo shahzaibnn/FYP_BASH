@@ -67,20 +67,30 @@ import AuthStack from './src/navigations/AuthStack';
 
 import {MMKV} from 'react-native-mmkv';
 import AdminRequestManagement from './src/screens/AdminRequestManagement';
+import AdminUserManagement from './src/screens/AdminUserManagement';
+import AdminStack from './src/navigations/AdminStack';
 
 export const storage = new MMKV();
 
 export default function App() {
   return (
+    // <Provider store={store}>
+    //   <NavigationContainer>
+    //     {storage.getString('authToken') ? (
+    //       <AuthStack email={storage.getString('loggedInUser')} />
+    //     ) : (
+    //       <AppStack />
+    //     )}
+    //   </NavigationContainer>
+    // </Provider>
+
     <Provider store={store}>
       <NavigationContainer>
-        {storage.getString('authToken') ? (
-          <AuthStack email={storage.getString('loggedInUser')} />
-        ) : (
-          <AppStack />
-        )}
+        <AdminStack />
       </NavigationContainer>
     </Provider>
+
+    // <AdminUserManagement />
 
     // <AdminRequestManagement />
   );
