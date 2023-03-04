@@ -11,6 +11,7 @@ import {
   UPDATERESUMEURL,
   REMOVERESUMEURL,
   UPDATEPROFILEPICURL,
+  REMOVEPICURL,
 } from './actionTypes';
 
 const initialState = Object;
@@ -59,6 +60,12 @@ export const mainReducer = (state = initialState, action) => {
         resumeUrl: action.payload,
       };
     }
+    case REMOVERESUMEURL: {
+      return {
+        ...state,
+        resumeUrl: '',
+      };
+    }
     case UPDATEPROFILEPICURL: {
       console.log('PROFILE PIC URL: ', action.payload);
       return {
@@ -66,10 +73,10 @@ export const mainReducer = (state = initialState, action) => {
         pic: action.payload,
       };
     }
-    case REMOVERESUMEURL: {
+    case REMOVEPICURL: {
       return {
         ...state,
-        resumeUrl: '',
+        pic: '',
       };
     }
 

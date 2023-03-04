@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, createRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -35,8 +35,11 @@ import {
   updateResumeUrl,
   removeResumeUrl,
   updateProfilePicUrl,
+  removePicUrl,
 } from '../store/action';
 // import {dbFirestore} from '../Firebase/Config';
+import ActionSheet from 'react-native-actions-sheet';
+
 const ProfileScreen = ({navigation}) => {
   const profileName = 'Tony';
 
@@ -58,6 +61,7 @@ const ProfileScreen = ({navigation}) => {
   const [selected, setSelected] = useState(false);
   const [selectedPic, setSelectedPic] = useState(false);
   const [setPicUrl, picUrl] = useState(storeData.pic);
+  let actionSheet = createRef();
 
   // useEffect(() => {
   //   console.log('fetching in use effectttt');
@@ -123,6 +127,23 @@ const ProfileScreen = ({navigation}) => {
   //     );
   //   }
   // };
+
+  const show = () => {
+    // console.log(item);
+    // setActionParameters(item);
+    // console.log('acrtions is, ', actionParameters);
+    actionSheet.current.show();
+    // actionSheet.current.hide();
+  };
+
+  const hide = () => {
+    // console.log(item);
+    // setActionParameters(item);
+    // console.log('acrtions is, ', actionParameters);
+    actionSheet.current.hide();
+    // actionSheet.current.hide();
+  };
+
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
@@ -158,6 +179,8 @@ const ProfileScreen = ({navigation}) => {
       setSelectedPic(true);
     } catch (err) {
       console.log('Some Error!!! is : ', err);
+    } finally {
+      hide();
     }
   };
 
@@ -339,38 +362,26 @@ const ProfileScreen = ({navigation}) => {
     }
   }, [selectedPic]);
 
-  const removeFile = () => {
-    // setSingleFile(null);
-    // setUploaded(false);
-
+  const removeProfilePic = () => {
     dbFirestore()
       .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
       .where('userEmail', '==', storeData.userEmail)
-      // .where('userEmail', '==', 'bashfyp@gmail.com')
       .get()
       .then(querySnapshot => {
         console.log('Total Found users: ', querySnapshot.size);
-
         querySnapshot.forEach(documentSnapshot => {
           console.log(documentSnapshot.id);
-
           dbFirestore()
             .doc('Users/' + documentSnapshot.id)
             .update({
-              // resumeUrl: pdfUrl,
-              resumeUrl: '',
+              pic: '',
             })
             .then(() => {
-              console.log('Added in firestore');
-
-              setfilePath({});
-
-              dispatch(removeResumeUrl());
-              setResumeUrl('');
-
-              alert('FINALLY THE RESUME IS REMOVED');
+              console.log('Removed in firestore');
+              setImagePath({});
+              dispatch(removePicUrl());
+              setPicUrl('');
+              alert('FINALLY PIC IS REMOVED');
             })
             .catch(err => {
               console.log('not working');
@@ -383,6 +394,60 @@ const ProfileScreen = ({navigation}) => {
         // setFlag(true);
       });
 
+    console.log('clicked!!!');
+  };
+
+  const removeFile = () => {
+    // setSingleFile(null);
+    // setUploaded(false);
+    try {
+      dbFirestore()
+        .collection('Users')
+        // .doc('roles')
+        // .collection(value.toLowerCase())
+        .where('userEmail', '==', storeData.userEmail)
+        // .where('userEmail', '==', 'bashfyp@gmail.com')
+        .get()
+        .then(querySnapshot => {
+          console.log('Total Found users: ', querySnapshot.size);
+
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.id);
+
+            dbFirestore()
+              .doc('Users/' + documentSnapshot.id)
+              .update({
+                // resumeUrl: pdfUrl,
+                resumeUrl: '',
+              })
+              .then(() => {
+                console.log('Added in firestore');
+
+                setfilePath({});
+
+                dispatch(removeResumeUrl());
+                setResumeUrl('');
+
+                alert('FINALLY THE RESUME IS REMOVED');
+              })
+              .catch(err => {
+                console.log('not working');
+              });
+          });
+        })
+        .catch(error => {
+          alert(error);
+
+          // setFlag(true);
+        });
+    } catch {
+      console.log('not working here');
+    } finally {
+      // actionSheet.current.hide();
+      hide();
+
+      console.log('work done here');
+    }
     console.log('clicked!!!');
   };
 
@@ -479,7 +544,7 @@ const ProfileScreen = ({navigation}) => {
 
         <TouchableOpacity
           // onPress={() => console.log(fetchedPosts)}
-          onPress={() => selectImage()}
+          onPress={() => show()}
           style={{position: 'absolute', right: '5%', top: '5%'}}>
           <MaterialCommunityIcons
             name="dots-vertical"
@@ -985,6 +1050,56 @@ const ProfileScreen = ({navigation}) => {
           />
         </View>
         {/* </View> */}
+        <ActionSheet ref={actionSheet}>
+          <View
+            style={
+              // {paddingLeft: '20%'}
+              {flexDirection: 'row'}
+            }>
+            <TouchableOpacity
+              style={{
+                color: 'blue',
+                marginLeft: '5%',
+                marginTop: '5%',
+                // marginBottom: '25%',
+                flexDirection: 'row',
+              }}
+              onPress={() => selectImage()}>
+              <MaterialCommunityIcons
+                name="image-edit-outline"
+                size={25}
+                color="#469597"
+              />
+              <Text style={{fontSize: 20, paddingLeft: '5%'}}>
+                Update Profile Picture
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={
+              // {paddingLeft: '20%'}
+              {flexDirection: 'row'}
+            }>
+            <TouchableOpacity
+              style={{
+                color: 'blue',
+                marginLeft: '5%',
+                marginTop: '5%',
+                // marginBottom: '2%',
+                flexDirection: 'row',
+              }}
+              onPress={() => removeProfilePic()}>
+              <MaterialCommunityIcons
+                name="image-remove"
+                size={25}
+                color="#469597"
+              />
+              <Text style={{fontSize: 20, paddingLeft: '5%'}}>
+                Remove Profile Picture
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ActionSheet>
       </View>
     </ScrollView>
   );
