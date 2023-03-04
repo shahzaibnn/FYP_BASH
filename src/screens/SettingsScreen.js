@@ -63,7 +63,9 @@ export default function SettingsScreen({navigation}) {
             marginTop: '10%',
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#BBC6C8',
+            // backgroundColor: '#BBC6C8',
+            backgroundColor: 'rgba(70,149,151,0.8)',
+
             //   borderRadius: 8,
             padding: '2%',
             justifyContent: 'space-between',
@@ -76,8 +78,8 @@ export default function SettingsScreen({navigation}) {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <FontAwesome
               name="question-circle"
-              size={25}
-              color="#777777"
+              size={20}
+              color="white"
               style={{marginLeft: '2%'}}
             />
             <Text style={styles.optionsStyle}>FAQ's</Text>
@@ -86,7 +88,7 @@ export default function SettingsScreen({navigation}) {
           <TouchableOpacity
             onPress={() => setFaqViewDisplay(!faqViewDisplay)}
             style={{marginRight: '2%'}}>
-            <FontAwesome name="plus-circle" size={25} color="#777777" />
+            <FontAwesome name="plus-circle" size={20} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -98,9 +100,77 @@ export default function SettingsScreen({navigation}) {
               borderBottomLeftRadius: 8,
               borderBottomRightRadius: 8,
             }}>
-            <Text style={{textAlign: 'center'}}>
-              -----------TEXT FOR FAQ's-------------
+            {/* <Text style={{textAlign: 'center'}}> */}
+            {/* -----------TEXT FOR FAQ's------------- */}
+            {/* </Text> */}
+            {/* test */}
+            <Text style={styles.heading}>Bash FAQs</Text>
+            <Text style={styles.question}>What is Bash?</Text>
+            <Text style={styles.answer}>
+              A: Bash is a social networking app that serves as a professional
+              platform for users to connect, share their work experiences,
+              skills, and career interests with potential employers, recruiters,
+              and other professionals.
             </Text>
+
+            <Text style={styles.question}>How does Bash work?</Text>
+            <Text style={styles.answer}>
+              A: Bash works by allowing users to create a professional profile
+              with their work experience, skills, education, and other relevant
+              information. Users can connect with other professionals, follow
+              companies, join groups, and share their thoughts and ideas. They
+              can also search for jobs, apply for them, and receive
+              recommendations based on their profile.
+            </Text>
+
+            <Text style={styles.question}>How can I sign up for Bash?</Text>
+            <Text style={styles.answer}>
+              A: To sign up for Bash, download the app from the app store or
+              play store, and create an account using your email address.
+            </Text>
+
+            <Text style={styles.question}>Is Bash free to use?</Text>
+            <Text style={styles.answer}>
+              A: Absolutely! Bash is a free platform that allows users to create
+              a profile, connect with other professionals, join groups, and
+              share their thoughts and ideas.
+            </Text>
+
+            <Text style={styles.question}>Can I search for jobs on Bash?</Text>
+            <Text style={styles.answer}>
+              A: Yes, you can search for jobs on Bash. The app offers a job
+              search feature that allows users to search for jobs by keyword,
+              location, and job title. You can also receive job recommendations
+              based on your profile and preferences.
+            </Text>
+
+            <Text style={styles.question}>
+              How can I view other professionals on Bash?
+            </Text>
+            <Text style={styles.answer}>
+              A: To view other professionals on Bash, search for people by name,
+              company, or job title.
+            </Text>
+
+            <Text style={styles.question}>Is Bash safe to use?</Text>
+            <Text style={styles.answer}>
+              A: Bash takes user privacy and security very seriously. The app
+              uses industry-standard encryption to protect user data and
+              information. It also offers various privacy settings to allow
+              users to control who can see their profile and information.
+            </Text>
+
+            <Text style={styles.question}>
+              How can I report inappropriate content on Bash?
+            </Text>
+            <Text style={styles.answer}>
+              A: If you come across any inappropriate content on Bash, you can
+              report it by clicking on the three dots next to the post or
+              message and selecting the "Report" option. The Bash team will
+              review the report and take appropriate action.
+            </Text>
+
+            {/* test */}
           </View>
         </Collapsible>
 
@@ -112,7 +182,9 @@ export default function SettingsScreen({navigation}) {
             marginTop: '10%',
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'rgba(70,149,151,0.8)',
+
+            // backgroundColor: '#BBC6C8',
             //   borderRadius: 8,
             padding: '2%',
             justifyContent: 'space-between',
@@ -125,8 +197,8 @@ export default function SettingsScreen({navigation}) {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <MaterialIcons
               name="privacy-tip"
-              size={25}
-              color="#777777"
+              size={20}
+              color="white"
               style={{marginLeft: '0%'}}
             />
             <Text style={styles.optionsStyle}>Privacy Policy</Text>
@@ -135,7 +207,7 @@ export default function SettingsScreen({navigation}) {
           <TouchableOpacity
             onPress={() => setPrivacyViewDisplay(!privacyViewDisplay)}
             style={{marginRight: '2%'}}>
-            <FontAwesome name="plus-circle" size={25} color="#777777" />
+            <FontAwesome name="plus-circle" size={20} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -147,8 +219,16 @@ export default function SettingsScreen({navigation}) {
               borderBottomLeftRadius: 8,
               borderBottomRightRadius: 8,
             }}>
-            <Text style={{textAlign: 'center'}}>
-              -----------TEXT FOR Privacy Policy-------------
+            {/* <Text style={{textAlign: 'center'}}> */}
+            {/* -----------TEXT FOR Privacy Policy------------- */}
+            {/* </Text> */}
+            <Text style={styles.privacyPolicy}>
+              We collect personal info to create your profile, connect you with
+              professionals, and provide job recommendations. We may share with
+              third-party providers and other users. We use encryption to
+              protect your info, but cannot guarantee complete security. You can
+              edit your profile and control notifications. We may update this
+              policy. Contact us with questions.
             </Text>
           </View>
         </Collapsible>
@@ -162,7 +242,8 @@ export default function SettingsScreen({navigation}) {
             marginTop: '10%',
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#BBC6C8',
+            // backgroundColor: '#BBC6C8',
+            backgroundColor: 'rgba(70,149,151,0.8)',
             //   borderRadius: 8,
             padding: '2%',
             justifyContent: 'space-between',
@@ -175,8 +256,8 @@ export default function SettingsScreen({navigation}) {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <MaterialCommunityIcons
               name="chat"
-              size={25}
-              color="#777777"
+              size={20}
+              color="white"
               style={{marginLeft: '0%'}}
             />
             <Text style={styles.optionsStyle}>Contact Us</Text>
@@ -185,7 +266,7 @@ export default function SettingsScreen({navigation}) {
           <TouchableOpacity
             onPress={() => setContactViewDisplay(!contactViewDisplay)}
             style={{marginRight: '2%'}}>
-            <FontAwesome name="plus-circle" size={25} color="#777777" />
+            <FontAwesome name="plus-circle" size={20} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -197,8 +278,13 @@ export default function SettingsScreen({navigation}) {
               borderBottomLeftRadius: 8,
               borderBottomRightRadius: 8,
             }}>
-            <Text style={{textAlign: 'center'}}>
-              -----------TEXT FOR Contact Us-------------
+            {/* <Text style={{textAlign: 'center'}}> */}
+            {/* -----------TEXT FOR Contact Us------------- */}
+            {/* </Text> */}
+            <Text style={styles.contactUs}>
+              If you have any questions, concerns, or feedback, please email us
+              at bashfyp@gmail.com. We strive to respond to all inquiries within
+              24 hours.
             </Text>
           </View>
         </Collapsible>
@@ -209,7 +295,8 @@ export default function SettingsScreen({navigation}) {
             marginTop: '10%',
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: '#BBC6C8',
+            backgroundColor: 'rgba(70,149,151,0.8)',
+            // backgroundColor: '#BBC6C8',
             //   borderRadius: 8,
             padding: '2%',
             justifyContent: 'space-between',
@@ -222,8 +309,8 @@ export default function SettingsScreen({navigation}) {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <MaterialCommunityIcons
               name="lock"
-              size={25}
-              color="#777777"
+              size={20}
+              color="white"
               style={{marginLeft: '0%'}}
             />
             <Text style={styles.optionsStyle}>Change Password</Text>
@@ -232,7 +319,7 @@ export default function SettingsScreen({navigation}) {
           <TouchableOpacity
             onPress={() => setChangePasswordDisplay(!changePasswordDisplay)}
             style={{marginRight: '2%'}}>
-            <FontAwesome name="plus-circle" size={25} color="#777777" />
+            <FontAwesome name="plus-circle" size={20} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -370,7 +457,37 @@ const styles = StyleSheet.create({
   },
   optionsStyle: {
     fontSize: 20,
-    color: '#000000',
+    color: 'white',
     marginLeft: 10,
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+  question: {
+    fontSize: 18,
+    marginLeft: '3%',
+    fontWeight: 'bold',
+  },
+  answer: {
+    fontSize: 16,
+    marginVertical: 5,
+    marginLeft: '3%',
+  },
+  privacyPolicy: {
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'justify',
+    marginHorizontal: 10,
+    marginVertical: 5,
+  },
+  contactUs: {
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'justify',
+    marginHorizontal: 10,
+    marginVertical: 5,
   },
 });
