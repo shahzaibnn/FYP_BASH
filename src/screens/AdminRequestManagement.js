@@ -82,7 +82,8 @@ const AdminRequestManagement = ({navigation}) => {
               backgroundColor: newUsersSelected ? '#4CA6A8' : null,
               // backgroundColor: '#4CA6A8',
               borderWidth: 1,
-              marginLeft: '15%',
+              marginLeft: '78%',
+              // alignSelf: 'center',
             }}>
             <TouchableOpacity
               onPress={() => {
@@ -108,6 +109,7 @@ const AdminRequestManagement = ({navigation}) => {
               </Text>
             </TouchableOpacity>
           </View>
+          {/* updates tab
           <View
             style={{
               width: Dimensions.get('window').width * 0.25,
@@ -139,7 +141,8 @@ const AdminRequestManagement = ({navigation}) => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View
+          {/* remove tab */}
+          {/* <View
             style={{
               width: Dimensions.get('window').width * 0.25,
               height: Dimensions.get('window').height * 0.03,
@@ -169,7 +172,7 @@ const AdminRequestManagement = ({navigation}) => {
                 Remove
               </Text>
             </TouchableOpacity>
-          </View>
+          </View>  */}
         </View>
         {/* Flatlist to show accounts pending for approval */}
         {newUsersSelected ? newUsersList() : null}
@@ -278,18 +281,18 @@ const AdminRequestManagement = ({navigation}) => {
               .update({
                 accountApproved: 'Approved',
               })
+              // already creating on main registration page
+              // .then(() => {
+              //   createUserWithEmailAndPassword(
+              //     auth,
+              //     userData.userEmail,
+              //     userData.userPassword,
+              //   );
 
-              .then(() => {
-                createUserWithEmailAndPassword(
-                  auth,
-                  userData.userEmail,
-                  userData.userPassword,
-                );
-
-                console.log('Approved in firestore');
-                console.log('Email: ' + userData.userEmail);
-                console.log('Pw: ' + userData.userPassword);
-              })
+              //   console.log('Approved in firestore');
+              //   console.log('Email: ' + userData.userEmail);
+              //   console.log('Pw: ' + userData.userPassword);
+              // })
               .then(() => {
                 RNSmtpMailer.sendMail({
                   mailhost: 'smtp.gmail.com',
@@ -469,7 +472,7 @@ const AdminRequestManagement = ({navigation}) => {
           <Text style={styles.iconText}>Users</Text>
         </View>
         {/* posts icon */}
-        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        {/* <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <View
             style={{
               // marginLeft: Dimensions.get('window').width * 0.04,
@@ -500,10 +503,10 @@ const AdminRequestManagement = ({navigation}) => {
           </View>
 
           <Text style={styles.iconText}>Posts</Text>
-        </View>
+        </View> */}
         {/* job icon */}
 
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        {/* <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <View
             style={{
               // marginLeft: Dimensions.get('window').width * 0.04,
@@ -537,7 +540,7 @@ const AdminRequestManagement = ({navigation}) => {
           </View>
 
           <Text style={styles.iconText}>Jobs</Text>
-        </View>
+        </View> */}
       </View>
       <View style={styles.titleStyle}>
         {/* <Text>{TitleTag}</Text> */}
@@ -545,7 +548,7 @@ const AdminRequestManagement = ({navigation}) => {
           style={{
             fontSize: 24,
             fontWeight: 'bold',
-
+            textAlign: 'center',
             color: '#000000',
           }}>
           {peopleSelected

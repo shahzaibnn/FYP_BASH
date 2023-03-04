@@ -66,10 +66,25 @@ import {getAuth} from 'firebase/auth';
 import AuthStack from './src/navigations/AuthStack';
 
 import {MMKV} from 'react-native-mmkv';
+import AdminRequestManagement from './src/screens/AdminRequestManagement';
 
 export const storage = new MMKV();
 
 export default function App() {
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        {storage.getString('authToken') ? (
+          <AuthStack email={storage.getString('loggedInUser')} />
+        ) : (
+          <AppStack />
+        )}
+      </NavigationContainer>
+    </Provider>
+
+    // <AdminRequestManagement />
+  );
+
   // const Stack = createNativeStackNavigator();
 
   // const checkIfUserIsLoggedIn = async () => {
@@ -138,18 +153,6 @@ export default function App() {
   //     )}
   //   </>
   // );
-
-  return (
-    <Provider store={store}>
-      <NavigationContainer>
-        {storage.getString('authToken') ? (
-          <AuthStack email={storage.getString('loggedInUser')} />
-        ) : (
-          <AppStack />
-        )}
-      </NavigationContainer>
-    </Provider>
-  );
 
   // check().then(res => {
   //   res ? <Text>aaaaaaaaaaaa</Text> : <></>

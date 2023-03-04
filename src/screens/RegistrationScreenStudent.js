@@ -153,93 +153,93 @@ export default function RegistrationScreenStudent({navigation}) {
 
       setFlag(false);
 
-      // createUserWithEmailAndPassword(auth, userEmail, userPassword)
-      //   .then(cred => {
-      //     console.log(cred);
-      //     console.log('success');
-      //     const user = cred.user;
-      // console.log('Logged in as ', user.email);
-      //adding here so first the details are verified and then saved further
-      dbFirestore()
-        .collection('Users')
-        // .doc('roles')
-        // .collection('student')
-        .add({
-          role: 'student',
-          firstName: userName,
-          lastName: lastName,
-          userEmail: userEmail.toLowerCase(),
-          userPassword: userPassword,
-          contactNo: contactNo,
-          dateOfBirth: dateOfBirth,
-          batch: batch,
-          pic: '',
-          title: '',
-          description: '',
-          skills: [],
-          cv: '',
-          experience: [{}],
-          postsId: [],
-          appliedJobId: [],
-          accountApproved: 'pending',
-        })
-        .then(() => {
-          console.log('User added!');
-          RNSmtpMailer.sendMail({
-            mailhost: 'smtp.gmail.com',
-            port: '465',
-            ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
-            username: 'bashfyp@gmail.com',
-            password: 'ltdapqlallccrgss',
-            // fromName: 'Some Name', // optional
-            // replyTo: 'usernameEmail', // optional
-            recipients: userEmail,
-            // bcc: ['bccEmail1', 'bccEmail2'], // optional
-            // bcc: ['shahzaibnn@gmail.com'], // optional
-            subject: 'BASH Account Registered',
-            htmlBody:
-              '<h1>Welcome</h1>' +
-              '<h2>Thank you for registering with BASH Application</h2>' +
-              '<p>Admin will approve your account shortly!</p' +
-              '<p>Sincerely</p>' +
-              '<p>Team BASH</p>',
-            // attachmentPaths: [path],
-            // attachmentNames: ['anotherTest.pdf'],
-          })
-            .then(success => {
-              console.log(success);
-              setUserName('');
-              setLastName('');
-              setUserEmail('');
-              setUserPassword('');
-              setcontactNo('');
-              setDate(new Date());
-              setDob(new Date());
-              setFlag(true);
-              // showToast('Account Registered');
-              showToast('Kindly wait for admin verification');
-              navigation.navigate('Login');
-              notifyMessage('Account Registered');
+      createUserWithEmailAndPassword(auth, userEmail, userPassword)
+        .then(cred => {
+          console.log(cred);
+          console.log('success');
+          const user = cred.user;
+          console.log('Logged in as ', user.email);
+          //adding here so first the details are verified and then saved further
+          dbFirestore()
+            .collection('Users')
+            // .doc('roles')
+            // .collection('student')
+            .add({
+              role: 'student',
+              firstName: userName,
+              lastName: lastName,
+              userEmail: userEmail.toLowerCase(),
+              userPassword: userPassword,
+              contactNo: contactNo,
+              dateOfBirth: dateOfBirth,
+              batch: batch,
+              pic: '',
+              title: '',
+              description: '',
+              skills: [],
+              cv: '',
+              experience: [{}],
+              postsId: [],
+              appliedJobId: [],
+              accountApproved: 'pending',
             })
-            .catch(err => {
-              console.log(err);
+            .then(() => {
+              console.log('User added!');
+              RNSmtpMailer.sendMail({
+                mailhost: 'smtp.gmail.com',
+                port: '465',
+                ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
+                username: 'bashfyp@gmail.com',
+                password: 'ltdapqlallccrgss',
+                // fromName: 'Some Name', // optional
+                // replyTo: 'usernameEmail', // optional
+                recipients: userEmail,
+                // bcc: ['bccEmail1', 'bccEmail2'], // optional
+                // bcc: ['shahzaibnn@gmail.com'], // optional
+                subject: 'BASH Account Registered',
+                htmlBody:
+                  '<h1>Welcome</h1>' +
+                  '<h2>Thank you for registering with BASH Application</h2>' +
+                  '<p>Admin will approve your account shortly!</p' +
+                  '<p>Sincerely</p>' +
+                  '<p>Team BASH</p>',
+                // attachmentPaths: [path],
+                // attachmentNames: ['anotherTest.pdf'],
+              })
+                .then(success => {
+                  console.log(success);
+                  setUserName('');
+                  setLastName('');
+                  setUserEmail('');
+                  setUserPassword('');
+                  setcontactNo('');
+                  setDate(new Date());
+                  setDob(new Date());
+                  setFlag(true);
+                  // showToast('Account Registered');
+                  showToast('Kindly wait for admin verification');
+                  navigation.navigate('Login');
+                  notifyMessage('Account Registered');
+                })
+                .catch(err => {
+                  console.log(err);
+                  setFlag(true);
+                });
+            })
+            .catch(error => {
+              // The write failed...
+              const errorMessage = error.message;
+              showToast(errorMessage);
               setFlag(true);
             });
         })
         .catch(error => {
-          // The write failed...
+          const errorCode = error.code;
           const errorMessage = error.message;
           showToast(errorMessage);
           setFlag(true);
+          // ..
         });
-      // })
-      // .catch(error => {
-      //   const errorCode = error.code;
-      //   const errorMessage = error.message;
-      //   showToast(errorMessage);
-      //   setFlag(true);
-      //   // ..
-      // });
     }
   };
 

@@ -19,7 +19,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // import {auth} from '@react-native-firebase/auth';
-import {db, authorization, auth} from '../Firebase/Config';
+import {db, authorization, auth, dbFirestore} from '../Firebase/Config';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -58,6 +58,7 @@ export default function LoginScreen({navigation}) {
   const [pointerEvent, setPointerEvent] = useState('auto');
   const [opacity, setOpacity] = useState(1);
   const [flag, setFlag] = useState(true);
+  const [approved, setApproved] = useState(true);
 
   console.log(email);
   console.log(password);
@@ -147,28 +148,30 @@ export default function LoginScreen({navigation}) {
           // const user = cred.user;
           // .then(() => {
           setFlag(true);
-          storage.set('authToken', 'LoggedIn');
-          storage.set('loggedInUser', email);
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 1,
-              routes: [
-                {
-                  name: 'Drawer',
 
-                  params: {
-                    screen: 'BottomTabs',
-                    params: {
-                      screen: 'Home',
-                      params: {
-                        userEmail: email.toLowerCase(),
-                      },
-                    },
-                  },
-                },
-              ],
-            }),
-          );
+          // console.log('email: ' + cred.userEmail);
+          // storage.set('authToken', 'LoggedIn');
+          // storage.set('loggedInUser', email);
+          // navigation.dispatch(
+          //   CommonActions.reset({
+          //     index: 1,
+          //     routes: [
+          //       {
+          //         name: 'Drawer',
+
+          //         params: {
+          //           screen: 'BottomTabs',
+          //           params: {
+          //             screen: 'Home',
+          //             params: {
+          //               userEmail: email.toLowerCase(),
+          //             },
+          //           },
+          //         },
+          //       },
+          //     ],
+          //   }),
+          // );
           // });
           // console.log('Logged in as ', user.email);
           // setFlag(true);
@@ -202,6 +205,119 @@ export default function LoginScreen({navigation}) {
           //   },
           // });
         })
+
+        .then(() => {
+          console.log('checking for approval');
+          dbFirestore()
+            .collection('Users')
+            // .doc('roles')
+            // .collection(value.toLowerCase())
+            .where('userEmail', '==', email.toLowerCase())
+            .get()
+            .then(querySnapshot => {
+              console.log('Total Found users: ', querySnapshot.size);
+
+              if (querySnapshot.size == 0) {
+                console.log('CANNOT RETRIEVE DATA');
+              } else {
+                querySnapshot.forEach(documentSnapshot => {
+                  console.log(documentSnapshot.data());
+                  // setUserData(documentSnapshot.data());
+                  // dispatch(setInititialLogin(documentSnapshot.data()));
+                  console.log(
+                    'Approveeee: ',
+                    documentSnapshot.data().accountApproved,
+                  );
+                  console.log('Role: ', documentSnapshot.data().role);
+
+                  if (documentSnapshot.data().accountApproved === 'Approved') {
+                    setApproved(true);
+                    storage.set('authToken', 'LoggedIn');
+                    storage.set('loggedInUser', email);
+                    navigation.dispatch(
+                      CommonActions.reset({
+                        index: 1,
+                        routes: [
+                          {
+                            name: 'Drawer',
+
+                            params: {
+                              screen: 'BottomTabs',
+                              params: {
+                                screen: 'Home',
+                                params: {
+                                  userEmail: email.toLowerCase(),
+                                },
+                              },
+                            },
+                          },
+                        ],
+                      }),
+                    );
+                  } else {
+                    storage.clearAll();
+                    showToast('Pending approval here');
+                    // navigation.navigate('Login');
+                  }
+                });
+              }
+            });
+        })
+
+        // .then(() => {
+        //   if (approved === true) {
+        //     // console.log('email: ' + cred.userEmail);
+        //     storage.set('authToken', 'LoggedIn');
+        //     storage.set('loggedInUser', email);
+        //     navigation.dispatch(
+        //       CommonActions.reset({
+        //         index: 1,
+        //         routes: [
+        //           {
+        //             name: 'Drawer',
+
+        //             params: {
+        //               screen: 'BottomTabs',
+        //               params: {
+        //                 screen: 'Home',
+        //                 params: {
+        //                   userEmail: email.toLowerCase(),
+        //                 },
+        //               },
+        //             },
+        //           },
+        //         ],
+        //       }),
+        //     );
+        //   } else {
+        //     storage.clearAll();
+
+        //     showToast('Pending approval');
+        //   }
+        // })
+
+        // .then(() => {
+        //   navigation.dispatch(
+        //     CommonActions.reset({
+        //       index: 1,
+        //       routes: [
+        //         {
+        //           name: 'Drawer',
+
+        //           params: {
+        //             screen: 'BottomTabs',
+        //             params: {
+        //               screen: 'Home',
+        //               params: {
+        //                 userEmail: email.toLowerCase(),
+        //               },
+        //             },
+        //           },
+        //         },
+        //       ],
+        //     }),
+        //   );
+        // })
         .catch(error => {
           const errorCode = error.code;
           const errorMessage = error.message;
