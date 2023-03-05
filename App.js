@@ -69,6 +69,7 @@ import {MMKV} from 'react-native-mmkv';
 import AdminRequestManagement from './src/screens/AdminRequestManagement';
 import AdminUserManagement from './src/screens/AdminUserManagement';
 import AdminStack from './src/navigations/AdminStack';
+import AlertTesting from './src/screens/AlertTesting';
 
 export const storage = new MMKV();
 
@@ -84,11 +85,13 @@ export default function App() {
     //   </NavigationContainer>
     // </Provider>
 
-    <Provider store={store}>
-      <NavigationContainer>
-        <AdminStack />
-      </NavigationContainer>
-    </Provider>
+    // <Provider store={store}>
+    //   <NavigationContainer>
+    //     <AdminStack />
+    //   </NavigationContainer>
+    // </Provider>
+
+    <AlertTesting />
 
     // <AdminUserManagement />
 
