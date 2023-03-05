@@ -36,10 +36,14 @@ import {
 
 const AdminRequestManagement = ({navigation}) => {
   const [users, setUsers] = useState([]);
+  const [rejectedUsers, setRejectedUsers] = useState([]);
 
   const [searchValue, setSearchValue] = useState('');
 
   const [searchSelected, setSearchSelected] = useState(false);
+
+  const [newUserSelected, setNewUsersSelected] = useState(true);
+  const [rejectedUserSelected, setRejectedUserSelected] = useState(false);
 
   useEffect(() => {
     console.log('its called!!');
@@ -53,6 +57,19 @@ const AdminRequestManagement = ({navigation}) => {
           data.id = documentSnapshot.id;
 
           setUsers(oldArray => [...oldArray, data]);
+        });
+      });
+
+    dbFirestore()
+      .collection('Users')
+      .where('accountApproved', '==', 'Rejected')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          const data = documentSnapshot.data();
+          data.id = documentSnapshot.id;
+
+          setRejectedUsers(oldArray => [...oldArray, data]);
         });
       });
   }, []);
@@ -92,12 +109,57 @@ const AdminRequestManagement = ({navigation}) => {
         alert(error);
       });
   };
-  const RemoveUser = userId => {};
+
+  const RejectUser = (userId, userEmail) => {
+    console.log('approving user id: ', userId);
+    console.log('approving user id: ', userId);
+    console.log('users are: ', users);
+    dbFirestore()
+      .collection('Users')
+      .doc(userId)
+      .update({
+        accountApproved: 'Rejected',
+      })
+      .then(() => {
+        RNSmtpMailer.sendMail({
+          mailhost: 'smtp.gmail.com',
+          port: '465',
+          ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
+          username: 'bashfyp@gmail.com',
+          password: 'ltdapqlallccrgss',
+          recipients: userEmail,
+          subject: 'BASH Account Rejected!',
+          htmlBody:
+            '<h1>Congratulations!!!</h1>' +
+            '<h2>Thank you for registering with BASH Application</h2>' +
+            '<p>Admin has Rejected your account!</p>' +
+            '<p>Sincerely</p>' +
+            '<p>Team BASH</p>',
+        });
+      })
+      .then(() => {
+        console.log(users.find(users => users.id === userId));
+
+        setRejectedUsers(oldArray => [
+          ...oldArray,
+          users.find(users => users.id === userId),
+        ]);
+
+        setUsers(current => current.filter(users => users.id !== userId));
+
+        console.log();
+      })
+
+      .catch(error => {
+        alert(error);
+      });
+  };
 
   const UpdatedSearch = () => {
     if (!searchValue) {
       setSearchSelected(false);
       setUsers([]);
+      setRejectedUsers([]);
       console.log('its called!!');
       dbFirestore()
         .collection('Users')
@@ -114,12 +176,29 @@ const AdminRequestManagement = ({navigation}) => {
           console.log(usersList);
           setUsers(usersList);
         });
+
+      dbFirestore()
+        .collection('Users')
+        .where('accountApproved', '==', 'Rejected')
+        .get()
+        .then(querySnapshot => {
+          const usersList = [];
+          querySnapshot.forEach(documentSnapshot => {
+            usersList.push({
+              ...documentSnapshot.data(),
+              id: documentSnapshot.id,
+            });
+          });
+          console.log(usersList);
+          setRejectedUsers(usersList);
+        });
       // setUsers(initialUsers);
 
       alert('Enter value to search!!');
     } else {
       // if (peopleSelected) {
       setUsers([]);
+      setRejectedUsers([]);
       setSearchSelected(true);
 
       //Users Fetching
@@ -136,6 +215,22 @@ const AdminRequestManagement = ({navigation}) => {
             if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
               // results.push(data);
               setUsers(oldArray => [...oldArray, data]);
+            }
+          });
+        });
+
+      dbFirestore()
+        .collection('Users')
+        .where('accountApproved', '==', 'Rejected')
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(documentSnapshot => {
+            const data = documentSnapshot.data();
+            data.id = documentSnapshot.id;
+            const allFields = Object.values(data).join(' ');
+            if (allFields.toLowerCase().includes(searchValue.toLowerCase())) {
+              // results.push(data);
+              setRejectedUsers(oldArray => [...oldArray, data]);
             }
           });
         });
@@ -256,133 +351,167 @@ const AdminRequestManagement = ({navigation}) => {
       </View>
       {/* after title screen */}
 
-      <View>
-        <View style={styles.expView}>
-          <View
-            // onPress={() => setNewUsersSelected(true)}
-            style={{
-              width: Dimensions.get('window').width * 0.25,
-              height: Dimensions.get('window').height * 0.03,
-              borderRadius: 16,
-              marginTop: '15%',
-              // borderColor: 'black',
-              borderColor: '#4CA6A8',
-              backgroundColor: '#4CA6A8',
-              // backgroundColor: '#4CA6A8',
-              borderWidth: 1,
-              marginLeft: '78%',
-              // alignSelf: 'center',
-            }}>
-            <TouchableOpacity>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  //   color: 'white',
-                  // color: '#4CA6A8',
-                  color: '#ffffff',
-                  padding: '1%',
-                  fontWeight: 'bold',
-                }}>
-                New Users
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+      <View
+        // onPress={() => setNewUsersSelected(true)}
+        style={{
+          marginTop: '5%',
+          marginHorizontal: '10%',
 
-        <View>
-          <FlatList
-            data={users}
-            ListEmptyComponent={
-              searchSelected ? (
-                <View
-                  style={{
-                    marginHorizontal: Dimensions.get('screen').width * 0.05,
-                    flexDirection: 'row',
-                  }}>
-                  <Text style={{fontSize: 20}}>No Results found for </Text>
-                  <Text style={{fontSize: 20, fontWeight: '900'}}>
-                    ({searchValue})
-                  </Text>
-                </View>
-              ) : (
-                <></>
-              )
-            }
-            renderItem={({item}) => (
+          justifyContent: 'space-around',
+          // alignItems: 'center',
+          flexDirection: 'row',
+          // backgroundColor: 'red',
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            setNewUsersSelected(true);
+            setRejectedUserSelected(false);
+          }}
+          style={{
+            // width: '5%',
+            backgroundColor: newUserSelected ? '#4CA6A8' : '#E5E3E4',
+            borderWidth: 1,
+            borderColor: '#4CA6A8',
+            borderRadius: 16,
+            paddingHorizontal: '3%',
+            paddingVertical: '1%',
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+
+              color: newUserSelected ? '#ffffff' : '#000000',
+              padding: '1%',
+              fontWeight: 'bold',
+            }}>
+            New Users
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            setNewUsersSelected(false);
+            setRejectedUserSelected(true);
+          }}
+          style={{
+            // width: '5%',
+            backgroundColor: rejectedUserSelected ? '#4CA6A8' : '#E5E3E4',
+            borderWidth: 1,
+            borderColor: '#4CA6A8',
+            borderRadius: 16,
+            paddingHorizontal: '1%',
+            paddingVertical: '1%',
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+
+              color: rejectedUserSelected ? '#ffffff' : '#000000',
+              padding: '1%',
+              fontWeight: 'bold',
+            }}>
+            Rejected Users
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View>
+        <FlatList
+          data={newUserSelected ? users : rejectedUsers}
+          ListEmptyComponent={
+            searchSelected ? (
               <View
                 style={{
-                  backgroundColor: 'rgba(187, 198, 200, 0.5)',
-                  borderRadius: 16,
-                  marginTop: '5%',
-                  // marginVertical: Dimensions.get('window').height * 0.02,
-                  marginHorizontal: Dimensions.get('window').width * 0.05,
-                  paddingBottom: '4%',
+                  marginHorizontal: Dimensions.get('screen').width * 0.05,
+                  flexDirection: 'row',
                 }}>
+                <Text style={{fontSize: 20}}>No Results found for </Text>
+                <Text style={{fontSize: 20, fontWeight: '900'}}>
+                  ({searchValue})
+                </Text>
+              </View>
+            ) : (
+              <></>
+            )
+          }
+          renderItem={({item}) => (
+            <View
+              style={{
+                backgroundColor: 'rgba(187, 198, 200, 0.5)',
+                borderRadius: 16,
+                marginTop: '5%',
+                // marginVertical: Dimensions.get('window').height * 0.02,
+                marginHorizontal: Dimensions.get('window').width * 0.05,
+                paddingBottom: '4%',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <Image
+                  style={{
+                    marginLeft: Dimensions.get('window').width * 0.02,
+                    marginTop: Dimensions.get('window').width * 0.05,
+                    height: Dimensions.get('window').height * 0.1,
+                    width: Dimensions.get('window').width * 0.2,
+                    borderRadius: 16,
+                  }}
+                  source={{
+                    uri: item.pic,
+                  }}
+                />
+
                 <View
                   style={{
-                    flexDirection: 'row',
+                    marginLeft: Dimensions.get('window').width * 0.03,
                   }}>
-                  <Image
-                    style={{
-                      marginLeft: Dimensions.get('window').width * 0.02,
-                      marginTop: Dimensions.get('window').width * 0.05,
-                      height: Dimensions.get('window').height * 0.1,
-                      width: Dimensions.get('window').width * 0.2,
-                      borderRadius: 16,
-                    }}
-                    source={{
-                      uri: item.pic,
-                    }}
-                  />
-
-                  <View
-                    style={{
-                      marginLeft: Dimensions.get('window').width * 0.03,
-                    }}>
-                    {/* <Text style={styles.designationStyle}>People</Text> */}
-                    <Text style={styles.designationStyle}>{item.role}</Text>
-                    {/* <Text>{item.firstName + ' ' + item.lastName}</Text> */}
-                    <View style={styles.ExpBoxView}>
-                      {/* <Text>{item.designation}</Text> */}
-                      <Text style={styles.ExpLocation}>
-                        {item.firstName + ' ' + item.lastName}
-                      </Text>
-                      <Text style={styles.ExpLocation}>
-                        Batch: {item.batch}
-                      </Text>
-                      <Text style={styles.ExpLocation}>
-                        Email: {item.userEmail}
-                      </Text>
-                      <Text style={styles.ExpLocation}>
-                        DOB: {item.dateOfBirth}
-                      </Text>
-                      <Text style={styles.ExpLocation}>
-                        Contact No: {item.contactNo}
-                      </Text>
-                    </View>
+                  {/* <Text style={styles.designationStyle}>People</Text> */}
+                  <Text style={styles.designationStyle}>{item.role}</Text>
+                  {/* <Text>{item.firstName + ' ' + item.lastName}</Text> */}
+                  <View style={styles.ExpBoxView}>
+                    {/* <Text>{item.designation}</Text> */}
+                    <Text style={styles.ExpLocation}>
+                      {item.firstName + ' ' + item.lastName}
+                    </Text>
+                    <Text style={styles.ExpLocation}>Batch: {item.batch}</Text>
+                    <Text style={styles.ExpLocation}>
+                      Email: {item.userEmail}
+                    </Text>
+                    <Text style={styles.ExpLocation}>
+                      DOB: {item.dateOfBirth}
+                    </Text>
+                    <Text style={styles.ExpLocation}>
+                      Contact No: {item.contactNo}
+                    </Text>
                   </View>
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignSelf: 'flex-end',
-                    marginEnd: '5%',
-                    marginTop: '8%',
-                  }}>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignSelf: 'flex-end',
+                  marginEnd: '5%',
+                  marginTop: '8%',
+                }}>
+                <TouchableOpacity
+                  style={{marginRight: '4%'}}
+                  onPress={() => ApproveUser(item.id, item.userEmail)}>
+                  <FontAwesome name="check-circle" size={40} color="green" />
+                </TouchableOpacity>
+
+                {newUserSelected ? (
                   <TouchableOpacity
-                    style={{marginRight: '4%'}}
-                    onPress={() => ApproveUser(item.id, item.userEmail)}>
-                    <FontAwesome name="check-circle" size={40} color="green" />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={RemoveUser(item.id)}>
+                    onPress={() => RejectUser(item.id, item.userEmail)}>
                     <FontAwesome name="times-circle" size={40} color="red" />
                   </TouchableOpacity>
-                </View>
+                ) : (
+                  <></>
+                )}
               </View>
-            )}
-            keyExtractor={item => item.id}
-          />
-        </View>
+            </View>
+          )}
+          keyExtractor={item => item.id}
+        />
       </View>
     </ScrollView>
   );
@@ -564,13 +693,7 @@ const styles = StyleSheet.create({
     // alignSelf: 'flex-end',
     // alignItems: 'flex-end',
   },
-  expView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: Dimensions.get('window').width * 0.5,
-    alignSelf: 'center',
-    marginRight: '52%',
-  },
+  expView: {},
   text: {fontSize: 20, fontWeight: 'bold', color: '#6A6A6A', paddingTop: 15},
 
   text: {

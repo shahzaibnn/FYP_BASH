@@ -158,7 +158,7 @@ const AdminUserManagement = ({navigation}) => {
           // resizeMode="stretch"
           source={require('../assets/images/bash_icon.png')}
           style={{
-            backgroundColor: 'red',
+            // backgroundColor: 'red',
             height: Dimensions.get('window').height * 0.08,
             width: Dimensions.get('window').width * 0.3,
             marginTop: '5%',

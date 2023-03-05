@@ -39,12 +39,12 @@ export default function AdminStack() {
         headerShown: false,
       }}>
       <Stack.Screen
-        name="AdminUserManagement"
-        component={AdminUserManagement}
-      />
-      <Stack.Screen
         name="AdminRequestManagement"
         component={AdminRequestManagement}
+      />
+      <Stack.Screen
+        name="AdminUserManagement"
+        component={AdminUserManagement}
       />
 
       <Stack.Screen name="Profile" component={ProfileScreen} />
