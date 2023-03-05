@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, createRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -31,8 +31,15 @@ import {db, dbFirestore} from '../Firebase/Config';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {useEffect} from 'react';
 import Pdf from 'react-native-pdf';
-import {updateResumeUrl, removeResumeUrl} from '../store/action';
+import {
+  updateResumeUrl,
+  removeResumeUrl,
+  updateProfilePicUrl,
+  removePicUrl,
+} from '../store/action';
 // import {dbFirestore} from '../Firebase/Config';
+import ActionSheet from 'react-native-actions-sheet';
+
 const ProfileScreen = ({navigation}) => {
   const profileName = 'Tony';
 
@@ -44,12 +51,17 @@ const ProfileScreen = ({navigation}) => {
   const [fetchedPosts, setFetchedPosts] = useState([]);
 
   const [singleFile, setSingleFile] = useState();
+  const [singleFileImage, setSingleFileImage] = useState();
   const [uploaded, setUploaded] = useState(false);
   const [extraData, setExtraData] = React.useState(new Date());
   const [filePath, setfilePath] = useState({});
+  const [imagePath, setImagePath] = useState({});
   const [resumeUrl, setResumeUrl] = useState(storeData.resumeUrl);
   const [showPdf, setShowPdf] = useState('');
   const [selected, setSelected] = useState(false);
+  const [selectedPic, setSelectedPic] = useState(false);
+  const [setPicUrl, picUrl] = useState(storeData.pic);
+  let actionSheet = createRef();
 
   // useEffect(() => {
   //   console.log('fetching in use effectttt');
@@ -115,6 +127,23 @@ const ProfileScreen = ({navigation}) => {
   //     );
   //   }
   // };
+
+  const show = () => {
+    // console.log(item);
+    // setActionParameters(item);
+    // console.log('acrtions is, ', actionParameters);
+    actionSheet.current.show();
+    // actionSheet.current.hide();
+  };
+
+  const hide = () => {
+    // console.log(item);
+    // setActionParameters(item);
+    // console.log('acrtions is, ', actionParameters);
+    actionSheet.current.hide();
+    // actionSheet.current.hide();
+  };
+
   const selectFile = async () => {
     try {
       const results = await DocumentPicker.pickSingle({
@@ -131,6 +160,27 @@ const ProfileScreen = ({navigation}) => {
       setSelected(true);
     } catch (err) {
       console.log('Some Error!!! is : ', err);
+    }
+  };
+
+  const selectImage = async () => {
+    try {
+      const results = await DocumentPicker.pickSingle({
+        type: DocumentPicker.types.images,
+        copyTo: 'cachesDirectory',
+      });
+      setImagePath(results);
+
+      console.log(results.uri);
+      console.log(results.type);
+
+      setSingleFileImage(results.uri);
+
+      setSelectedPic(true);
+    } catch (err) {
+      console.log('Some Error!!! is : ', err);
+    } finally {
+      hide();
     }
   };
 
@@ -220,38 +270,118 @@ const ProfileScreen = ({navigation}) => {
     }
   }, [selected]);
 
-  const removeFile = () => {
-    // setSingleFile(null);
-    // setUploaded(false);
+  useEffect(() => {
+    if (selectedPic) {
+      console.log('Profile Pic is /l : ', imagePath);
 
+      const addtoDB = async () => {
+        console.log('Profile Pic uri checking: ', imagePath);
+        const filename = imagePath.fileCopyUri.substring(
+          imagePath.fileCopyUri.lastIndexOf('/') + 1,
+        );
+        const uploadUri =
+          Platform.OS === 'ios'
+            ? imagePath.fileCopyUri.replace('file://', '')
+            : imagePath.fileCopyUri;
+        // setUploading(true);
+        // setTransferred(0);
+        const task = await storage().ref(filename).putFile(uploadUri);
+        // console.log(task.ref.getDownloadURL);
+        // final TaskSnapshot task = await storage().ref(filename).putFile(uploadUri);
+        console.log('Profile Pic working');
+        const urlPicc = await storage().ref(filename).getDownloadURL();
+        console.log('Profile Pic url is: ' + urlPicc);
+
+        try {
+          console.log('Profile 1');
+
+          task;
+
+          // setPdfUrl(url);
+          console.log('Profile');
+          // setPicUrl(urlPicc);
+          console.log('Profile Pic url inside: ' + urlPicc);
+
+          // console.log('done, link for pdf: ', pdfUrl);
+
+          dbFirestore()
+            .collection('Users')
+            // .doc('roles')
+            // .collection(value.toLowerCase())
+            .where('userEmail', '==', storeData.userEmail)
+            // .where('userEmail', '==', 'bashfyp@gmail.com')
+            .get()
+            .then(querySnapshot => {
+              console.log('Total Found users: ', querySnapshot.size);
+
+              querySnapshot.forEach(documentSnapshot => {
+                console.log(documentSnapshot.id);
+
+                dbFirestore()
+                  .doc('Users/' + documentSnapshot.id)
+                  .update({
+                    // resumeUrl: pdfUrl,
+                    pic: urlPicc,
+                  })
+                  .then(() => {
+                    console.log('Added in firestore PIC');
+
+                    // dispatch(updateResumeUrl(url));
+                    dispatch(updateProfilePicUrl(urlPicc));
+                    setImagePath({});
+
+                    alert('FINALLY THE PIC IS ADDED');
+                  })
+                  .catch(err => {
+                    console.log('Pic not changed: ' + err.message);
+                  });
+              });
+            })
+            .catch(error => {
+              alert(error);
+
+              // setFlag(true);
+            });
+          //
+          // .then(() => {
+          //   console.log('CV Added!');
+          // });
+        } catch (e) {
+          console.error(e);
+        }
+        // console.log('done, checking again: ', pdfUrl);
+
+        // setUploading(false);
+        // Alert.alert('CV uploaded!', 'Good Luck!');
+        // setImage(null);
+      };
+
+      addtoDB();
+
+      setSelectedPic(false);
+    }
+  }, [selectedPic]);
+
+  const removeProfilePic = () => {
     dbFirestore()
       .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
       .where('userEmail', '==', storeData.userEmail)
-      // .where('userEmail', '==', 'bashfyp@gmail.com')
       .get()
       .then(querySnapshot => {
         console.log('Total Found users: ', querySnapshot.size);
-
         querySnapshot.forEach(documentSnapshot => {
           console.log(documentSnapshot.id);
-
           dbFirestore()
             .doc('Users/' + documentSnapshot.id)
             .update({
-              // resumeUrl: pdfUrl,
-              resumeUrl: '',
+              pic: '',
             })
             .then(() => {
-              console.log('Added in firestore');
-
-              setfilePath({});
-
-              dispatch(removeResumeUrl());
-              setResumeUrl('');
-
-              alert('FINALLY THE RESUME IS REMOVED');
+              console.log('Removed in firestore');
+              setImagePath({});
+              dispatch(removePicUrl());
+              setPicUrl('');
+              alert('FINALLY PIC IS REMOVED');
             })
             .catch(err => {
               console.log('not working');
@@ -264,6 +394,60 @@ const ProfileScreen = ({navigation}) => {
         // setFlag(true);
       });
 
+    console.log('clicked!!!');
+  };
+
+  const removeFile = () => {
+    // setSingleFile(null);
+    // setUploaded(false);
+    try {
+      dbFirestore()
+        .collection('Users')
+        // .doc('roles')
+        // .collection(value.toLowerCase())
+        .where('userEmail', '==', storeData.userEmail)
+        // .where('userEmail', '==', 'bashfyp@gmail.com')
+        .get()
+        .then(querySnapshot => {
+          console.log('Total Found users: ', querySnapshot.size);
+
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.id);
+
+            dbFirestore()
+              .doc('Users/' + documentSnapshot.id)
+              .update({
+                // resumeUrl: pdfUrl,
+                resumeUrl: '',
+              })
+              .then(() => {
+                console.log('Added in firestore');
+
+                setfilePath({});
+
+                dispatch(removeResumeUrl());
+                setResumeUrl('');
+
+                alert('FINALLY THE RESUME IS REMOVED');
+              })
+              .catch(err => {
+                console.log('not working');
+              });
+          });
+        })
+        .catch(error => {
+          alert(error);
+
+          // setFlag(true);
+        });
+    } catch {
+      console.log('not working here');
+    } finally {
+      // actionSheet.current.hide();
+      hide();
+
+      console.log('work done here');
+    }
     console.log('clicked!!!');
   };
 
@@ -359,7 +543,8 @@ const ProfileScreen = ({navigation}) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => console.log(fetchedPosts)}
+          // onPress={() => console.log(fetchedPosts)}
+          onPress={() => show()}
           style={{position: 'absolute', right: '5%', top: '5%'}}>
           <MaterialCommunityIcons
             name="dots-vertical"
@@ -865,6 +1050,56 @@ const ProfileScreen = ({navigation}) => {
           />
         </View>
         {/* </View> */}
+        <ActionSheet ref={actionSheet}>
+          <View
+            style={
+              // {paddingLeft: '20%'}
+              {flexDirection: 'row'}
+            }>
+            <TouchableOpacity
+              style={{
+                color: 'blue',
+                marginLeft: '5%',
+                marginTop: '5%',
+                // marginBottom: '25%',
+                flexDirection: 'row',
+              }}
+              onPress={() => selectImage()}>
+              <MaterialCommunityIcons
+                name="image-edit-outline"
+                size={25}
+                color="#469597"
+              />
+              <Text style={{fontSize: 20, paddingLeft: '5%'}}>
+                Update Profile Picture
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={
+              // {paddingLeft: '20%'}
+              {flexDirection: 'row'}
+            }>
+            <TouchableOpacity
+              style={{
+                color: 'blue',
+                marginLeft: '5%',
+                marginTop: '5%',
+                // marginBottom: '2%',
+                flexDirection: 'row',
+              }}
+              onPress={() => removeProfilePic()}>
+              <MaterialCommunityIcons
+                name="image-remove"
+                size={25}
+                color="#469597"
+              />
+              <Text style={{fontSize: 20, paddingLeft: '5%'}}>
+                Remove Profile Picture
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ActionSheet>
       </View>
     </ScrollView>
   );
