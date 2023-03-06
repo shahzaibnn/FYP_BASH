@@ -81,6 +81,7 @@ export default function HomeScreen({navigation, route}) {
     setOnEndReachedCalledDuringMomentumJob,
   ] = useState(true);
   let actionSheet = createRef();
+  let actionSheetLike = createRef();
   const profileName = 'Tony';
 
   const [userData, setUserData] = useState(Object);
@@ -108,6 +109,7 @@ export default function HomeScreen({navigation, route}) {
   const [lastVisible, setLastVisible] = useState(null);
   const [loading, setLoading] = useState(false);
   const [jobLoading, setJobLoading] = useState(false);
+  const [likedPeople, setLikedPeople] = useState([]);
   const [query, setQuery] = useState(
     dbFirestore().collection('Posts').orderBy('createdAt', 'desc').limit(2),
   );
@@ -209,6 +211,14 @@ export default function HomeScreen({navigation, route}) {
     setActionParameters(item);
     console.log('acrtions is, ', actionParameters);
     actionSheet.current.show();
+  };
+
+  const likeShow = itemLikes => {
+    console.log('liked by here ', itemLikes);
+    setLikedPeople(itemLikes);
+
+    // console.log('acrtions is, ', actionParameters);
+    actionSheetLike.current.show();
   };
 
   const searchPosts = async () => {
@@ -784,14 +794,16 @@ export default function HomeScreen({navigation, route}) {
                   marginBottom: '5%',
                 }}>
                 <View>
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      color: '#469597',
-                      fontWeight: 'bold',
-                    }}>
-                    {item.likedBy.length} Likes
-                  </Text>
+                  <TouchableOpacity onPress={() => likeShow(item.likedBy)}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        color: '#469597',
+                        fontWeight: 'bold',
+                      }}>
+                      {item.likedBy.length} Likes
+                    </Text>
+                  </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
                       console.log('hdshjdsfvhddhfbhj');
@@ -970,6 +982,64 @@ export default function HomeScreen({navigation, route}) {
           </ScrollView>
         </View>
       </ActionSheet>
+
+      {/* liked action sheet */}
+      <ActionSheet
+        // id={sheetId}
+        // data={fetchedPosts}
+        ref={actionSheetLike}
+        containerStyle={{
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+          backgroundColor: '#E5E3E4',
+        }}
+        indicatorStyle={{
+          width: 100,
+        }}
+        gestureEnabled={true}>
+        <View>
+          {/* action sheet */}
+          <ScrollView style={styles.SectionStyle}>
+            <View style={styles.likeView}>
+              <FlatList
+                data={fetchedPosts}
+                renderItem={({item, index}) => (
+                  <View style={{flexDirection: 'row'}}>
+                    {/* <MaterialCommunityIcons
+                      name="abacus"
+                      size={20}
+                      color="#000000"
+                      style={{
+                        marginLeft: Dimensions.get('window').width * -0.05,
+                        marginTop: Dimensions.get('window').height * 0.003,
+                      }}
+                    />
+                    <Text style={styles.compTxt}>
+                      {likedPeople.likedBy[index]} likes this
+                    </Text> */}
+
+                    {/* test */}
+                    <View style={styles.likedByContainer}>
+                      {item.likedBy
+                        .filter(
+                          (user, index, self) => self.indexOf(user) === index,
+                        ) // filter out duplicates
+                        .map((user, index) => (
+                          <Text key={index} style={styles.likedByText}>
+                            {user}
+                          </Text>
+                        ))}
+                    </View>
+                    {/* test end */}
+                  </View>
+                )}
+              />
+            </View>
+          </ScrollView>
+        </View>
+      </ActionSheet>
+
+      {/* ending liked action sheet here */}
       <Toast topOffset={30} />
     </View>
   );
@@ -1109,6 +1179,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: Dimensions.get('window').width * 0.5,
     alignSelf: 'center',
+    // alignItems: 'flex-end',
+    /* Not doing anything. */
+    // flex: 1,
+  },
+  likeView: {
+    flexDirection: 'row',
+
+    justifyContent: 'space-between',
+    width: Dimensions.get('window').width * 0.5,
+    alignSelf: 'center',
+    marginTop: '5%',
+    marginBottom: '5%',
     // alignItems: 'flex-end',
     /* Not doing anything. */
     // flex: 1,
