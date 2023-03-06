@@ -1001,7 +1001,7 @@ export default function HomeScreen({navigation, route}) {
           {/* action sheet */}
           <ScrollView style={styles.SectionStyle}>
             <View style={{flexDirection: 'column'}}>
-              {likedPeople.likedBy.map((user, index) => (
+              {likedPeople.likedBy?.map((user, index) => (
                 <Text
                   key={index}
                   style={{
