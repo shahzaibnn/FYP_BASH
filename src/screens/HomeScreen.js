@@ -794,7 +794,7 @@ export default function HomeScreen({navigation, route}) {
                   marginBottom: '5%',
                 }}>
                 <View>
-                  <TouchableOpacity onPress={() => likeShow(item.likedBy)}>
+                  <TouchableOpacity onPress={() => likeShow(item)}>
                     <Text
                       style={{
                         textAlign: 'center',
@@ -1000,40 +1000,21 @@ export default function HomeScreen({navigation, route}) {
         <View>
           {/* action sheet */}
           <ScrollView style={styles.SectionStyle}>
-            <View style={styles.likeView}>
-              <FlatList
-                data={fetchedPosts}
-                renderItem={({item, index}) => (
-                  <View style={{flexDirection: 'row'}}>
-                    {/* <MaterialCommunityIcons
-                      name="abacus"
-                      size={20}
-                      color="#000000"
-                      style={{
-                        marginLeft: Dimensions.get('window').width * -0.05,
-                        marginTop: Dimensions.get('window').height * 0.003,
-                      }}
-                    />
-                    <Text style={styles.compTxt}>
-                      {likedPeople.likedBy[index]} likes this
-                    </Text> */}
-
-                    {/* test */}
-                    <View style={styles.likedByContainer}>
-                      {item.likedBy
-                        .filter(
-                          (user, index, self) => self.indexOf(user) === index,
-                        ) // filter out duplicates
-                        .map((user, index) => (
-                          <Text key={index} style={styles.likedByText}>
-                            {user}
-                          </Text>
-                        ))}
-                    </View>
-                    {/* test end */}
-                  </View>
-                )}
-              />
+            <View style={{flexDirection: 'column'}}>
+              {likedPeople.likedBy.map((user, index) => (
+                <Text
+                  key={index}
+                  style={{
+                    marginRight: '5%',
+                    marginBottom: '2%',
+                    marginLeft: '15%',
+                    backgroundColor: '#E5E3E4',
+                    borderRadius: 5,
+                    padding: 5,
+                  }}>
+                  {user}
+                </Text>
+              ))}
             </View>
           </ScrollView>
         </View>
@@ -1185,12 +1166,11 @@ const styles = StyleSheet.create({
   },
   likeView: {
     flexDirection: 'row',
-
-    justifyContent: 'space-between',
-    width: Dimensions.get('window').width * 0.5,
+    // justifyContent: 'space-between',
+    width: Dimensions.get('window').width * 0.75,
     alignSelf: 'center',
     marginTop: '5%',
-    marginBottom: '5%',
+    marginBottom: '15%',
     // alignItems: 'flex-end',
     /* Not doing anything. */
     // flex: 1,
