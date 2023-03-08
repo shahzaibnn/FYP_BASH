@@ -16,6 +16,24 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {CommonActions} from '@react-navigation/native';
 
 import Spinner from 'react-native-spinkit';
+import {useSelector, useDispatch} from 'react-redux';
+import {ToastAndroid, Platform, AlertIOS} from 'react-native';
+import Toast from 'react-native-toast-message';
+import {db, authorization, auth, dbFirestore} from '../Firebase/Config';
+import RNSmtpMailer from 'react-native-smtp-mailer';
+
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  reauthenticateWithCredential,
+  getAuth,
+  updateCurrentUser,
+  updatePassword,
+  EmailAuthProvider,
+  signOut,
+} from 'firebase/auth';
 
 export default function SettingsScreen({navigation}) {
   const [faqViewDisplay, setFaqViewDisplay] = useState(false);
@@ -30,6 +48,164 @@ export default function SettingsScreen({navigation}) {
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
   const [opacity, setOpacity] = useState(1);
+
+  const [id, setId] = useState('');
+  const [flag, setFlag] = useState(true);
+
+  const [emailGenerated, setemailGenerated] = useState('');
+  const [email, setEmail] = useState('');
+  const storeData = useSelector(state => state);
+
+  // const [role, setRole] = useState('');
+
+  const [found, setFound] = useState(false);
+
+  const showToast = heading => {
+    Toast.show({
+      type: 'error',
+      text1: heading,
+      // text2: text,
+    });
+  };
+
+  const changePasswordPressed = async () => {
+    if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&//.])[A-Za-z\d@$!%*?&//.]{8,}$/.test(
+        newPassword,
+      )
+    ) {
+      showToast(
+        '(Password Criteria)\nMinimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character',
+      );
+      console.log('no pls');
+    } else {
+      console.log('yes pls pls');
+
+      changePassword();
+    }
+  };
+  const changePassword = () => {
+    // firebase
+    // authorization()
+
+    // if (!email) {
+    //   alert('Please Enter Email Address');
+    // } else {
+    //   setFlag(false);
+
+    console.log('new', newPassword);
+
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', storeData.userEmail)
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        if (querySnapshot.size == 0) {
+          setFlag(true);
+          notifyMessage('Email Address does not Exists');
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.id);
+            console.log(documentSnapshot.data().userPassword);
+            setId(documentSnapshot.id);
+            setOldPassword(documentSnapshot.data().userPassword);
+            setFound(true);
+          });
+        }
+      })
+      .then(() => {
+        if (found) {
+          dbFirestore()
+            .collection('Users')
+            // .doc('roles')
+            // .collection(value.toLowerCase())
+            .doc(id)
+            .update({
+              userPassword: newPassword.toString(),
+            })
+            .then(() => {
+              console.log('----------------------------');
+
+              RNSmtpMailer.sendMail({
+                mailhost: 'smtp.gmail.com',
+                port: '465',
+                ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
+                username: 'bashfyp@gmail.com',
+                password: 'ltdapqlallccrgss',
+                // fromName: 'Some Name', // optional
+                // replyTo: 'usernameEmail', // optional
+                recipients: storeData.userEmail,
+                // bcc: ['bccEmail1', 'bccEmail2'], // optional
+                // bcc: ['shahzaibnn@gmail.com'], // optional
+                subject: 'BASH Password Changed',
+                htmlBody: '<h1>New Password is:' + newPassword + '</h1>',
+                // attachmentPaths: [path],
+                // attachmentNames: ['anotherTest.pdf'],
+              })
+                .then(success => {
+                  const auth = getAuth();
+                  console.log('Email sent');
+
+                  signInWithEmailAndPassword(
+                    auth,
+                    storeData.userEmail,
+                    oldPassword,
+                  )
+                    .then(userCredential => {
+                      console.log('old pw', oldPassword);
+
+                      // Signed in
+                      const user = userCredential.user;
+                      console.log('first : ', user);
+                      updatePassword(user, newPassword)
+                        .then(() =>
+                          signOut(auth).then(() => {
+                            console.log('pura done');
+                            console.log(success);
+                            console.log('Password Updated');
+
+                            setemailGenerated(true);
+                            // notifyMessage(
+                            //   'New Password Sent At ' + storeData.userEmail,
+                            // );
+                            setNewPassword('');
+
+                            console.log('toaster sent');
+                            setFound(false);
+                            setFlag(true);
+                            // navigation.navigate('Login');
+                          }),
+                        )
+                        .catch(error => {
+                          setFlag(true);
+
+                          console.log(error);
+                        });
+                      // ...
+                    })
+                    .catch(error => {
+                      console.log(error);
+                      setFlag(true);
+                    });
+                })
+                .catch(err => {
+                  console.log(err);
+                  setFound(false);
+                  setFlag(true);
+                });
+            });
+        }
+      })
+      .catch(error => {
+        alert(error);
+
+        setFlag(true);
+      });
+  };
 
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
@@ -405,14 +581,15 @@ export default function SettingsScreen({navigation}) {
                 placeholder="Confirm New Password"
               />
             </View>
+            <TouchableOpacity
+              onPress={changePasswordPressed}
+              style={styles.logoutStyle}>
+              <Text style={{color: 'white', fontSize: 18}}>
+                Change Password
+              </Text>
+            </TouchableOpacity>
           </View>
         </Collapsible>
-
-        {/* <TouchableOpacity onPress={logoutPressed} style={styles.logoutStyle}>
-          <Text style={{color: '#000000', fontSize: 30, fontWeight: 'bold'}}>
-            Logout
-          </Text>
-        </TouchableOpacity> */}
 
         <Spinner
           style={{
@@ -447,13 +624,15 @@ const styles = StyleSheet.create({
   logoutStyle: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#BBC6C8',
+    backgroundColor: 'rgba(70,149,151,0.8)',
     alignSelf: 'center',
-    paddingHorizontal: '15%',
-    paddingVertical: '3%',
+    paddingHorizontal: '8%',
+    paddingVertical: '1%',
     borderRadius: 32,
-    marginTop: '50%',
-    marginBottom: 100,
+    marginTop: '5%',
+    marginBottom: '5%',
+    // borderColor: 'white',
+    // borderWidth: 1,
   },
   optionsStyle: {
     fontSize: 20,
