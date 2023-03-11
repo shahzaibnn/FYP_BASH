@@ -124,23 +124,6 @@ export default function HomeScreen({navigation, route}) {
     console.log('checking again: ', {job});
 
     navigation.navigate('ApplyToJob', {job});
-
-    // navigation.dispatch(
-    //   CommonActions.navigate({
-    //     // index: 1,
-    //     routes: [
-    //       {
-    //         name: 'ApplyToJob',
-    //         params: {job},
-    //       },
-    //     ],
-    //   }),
-    // );
-    // navigation.navigate('ApplytoJob', {
-    //   jobTitle: job.jobTitle,
-    //   jobCompany: job.jobCompany,
-    //   jobEmail: job.jobEmail,
-    // });
   };
 
   const searchData = loggedInUser => {
@@ -223,12 +206,6 @@ export default function HomeScreen({navigation, route}) {
 
   const searchPosts = async () => {
     setLoading(true);
-    // const snapshot = await query.get();
-    // setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
-    // const newData = snapshot.docs.map(doc => doc.data());
-    // setData(data.concat(newData));
-    // console.log('data is, ', data);
-    // setLoading(false);
 
     dbFirestore()
       .collection('Posts')
@@ -701,9 +678,15 @@ export default function HomeScreen({navigation, route}) {
           // console.log('Id is : ', item);
           let likeColor = '';
 
-          // console.log(item.likedBy);
+          var found = false;
+          for (var i = 0; i < item.likedBy.length; i++) {
+            if (item.likedBy[i].email == emailAddressOfCurrentUser) {
+              found = true;
+              break;
+            }
+          }
 
-          if (item.likedBy.includes(emailAddressOfCurrentUser)) {
+          if (found) {
             likeColor = '#000000';
             // console.log('running');
           } else {
@@ -762,17 +745,6 @@ export default function HomeScreen({navigation, route}) {
                 // onCurrentImagePressed={index => ImagePressed()}
                 parentWidth={Dimensions.get('window').width * 0.9}
                 ImageComponentStyle={{borderRadius: 16}}
-                // paginationBoxStyle={styles.sliderBoxPageStyle}
-                // ImageComponentStyle={styles.sliderBoxImageStyle}
-                // dotStyle={{
-                //   width: 10,
-                //   height: 10,
-                //   borderRadius: 5,
-                //   marginBottom: 20,
-                //   marginHorizontal: 0,
-                //   padding: 0,
-                //   margin: 0,
-                // }}
                 images={item.images}
                 sliderBoxHeight={Dimensions.get('window').height * 0.3}
               />
@@ -807,12 +779,28 @@ export default function HomeScreen({navigation, route}) {
                   <TouchableOpacity
                     onPress={() => {
                       console.log('hdshjdsfvhddhfbhj');
-                      if (item.likedBy.includes(emailAddressOfCurrentUser)) {
+
+                      var found = false;
+                      for (var i = 0; i < item.likedBy.length; i++) {
+                        if (
+                          item.likedBy[i].email == emailAddressOfCurrentUser
+                        ) {
+                          found = true;
+                          break;
+                        }
+                      }
+                      if (found) {
                         dbFirestore()
                           .doc('Posts/' + item.id)
                           .update({
                             likedBy: dbFirestore.FieldValue.arrayRemove(
-                              emailAddressOfCurrentUser,
+                              ...[
+                                {
+                                  email: emailAddressOfCurrentUser,
+                                  name: storeData.firstName,
+                                  picUrl: storeData.pic,
+                                },
+                              ],
                             ),
                           })
                           .then(() => {
@@ -821,8 +809,9 @@ export default function HomeScreen({navigation, route}) {
 
                         fetchedPosts.find(obj => obj.id == item.id).likedBy =
                           item.likedBy.filter(
-                            e => e !== emailAddressOfCurrentUser,
+                            e => e.email !== emailAddressOfCurrentUser,
                           );
+
                         setExtraData(new Date());
 
                         // likeColor = '#ffffff';
@@ -831,15 +820,21 @@ export default function HomeScreen({navigation, route}) {
                         dbFirestore()
                           .doc('Posts/' + item.id)
                           .update({
-                            likedBy: dbFirestore.FieldValue.arrayUnion(
-                              emailAddressOfCurrentUser,
-                            ),
+                            likedBy: dbFirestore.FieldValue.arrayUnion({
+                              email: emailAddressOfCurrentUser,
+                              name: storeData.firstName,
+                              picUrl: storeData.pic,
+                            }),
                           })
                           .then(() => {
                             console.log('Like Placed!');
                           });
                         let arr = item.likedBy;
-                        arr.push(emailAddressOfCurrentUser);
+                        arr.push({
+                          email: emailAddressOfCurrentUser,
+                          name: storeData.firstName,
+                          picUrl: storeData.pic,
+                        });
                         fetchedPosts.find(obj => obj.id == item.id).likedBy =
                           arr;
 
@@ -860,29 +855,6 @@ export default function HomeScreen({navigation, route}) {
                     <AntDesign name="like1" size={25} color={likeColor} />
                   </TouchableOpacity>
                 </View>
-
-                {/* <View>
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      color: '#469597',
-                      fontWeight: 'bold',
-                    }}>
-                    {item.commentedBy.length} Comments
-                  </Text>
-                  <TouchableOpacity
-                    style={{
-                      paddingHorizontal: '8%',
-                      paddingVertical: '8%',
-                      backgroundColor: '#5BA199',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: 8,
-                      // width: Dimensions.get('window').width * 0.2,
-                    }}>
-                    <FontAwesome name="comment" size={25} color="#ffffff" />
-                  </TouchableOpacity>
-                </View> */}
               </View>
             </View>
           );
@@ -952,11 +924,6 @@ export default function HomeScreen({navigation, route}) {
               </TouchableOpacity>
             </View>
 
-            {/* Qualification Text */}
-            {/* <View>
-            <Text style={styles.qualText}>Qualification</Text>
-          </View> */}
-
             {/* Job desc */}
             <View style={styles.messageBodyStyle}>
               <ScrollView>
@@ -1002,18 +969,34 @@ export default function HomeScreen({navigation, route}) {
           <ScrollView style={styles.SectionStyle}>
             <View style={{flexDirection: 'column'}}>
               {likedPeople.likedBy?.map((user, index) => (
-                <Text
+                <TouchableOpacity
                   key={index}
                   style={{
-                    marginRight: '5%',
-                    marginBottom: '2%',
-                    marginLeft: '15%',
-                    backgroundColor: '#E5E3E4',
-                    borderRadius: 5,
-                    padding: 5,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    paddingHorizontal: '20%',
+                    borderColor: 'black',
+                    borderWidth: 1,
+                    marginBottom: '10%',
                   }}>
-                  {user}
-                </Text>
+                  <Image
+                    style={{height: 60, width: 60, borderRadius: 64}}
+                    source={{
+                      uri: user.picUrl,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      marginHorizontal: '20%',
+
+                      backgroundColor: '#E5E3E4',
+
+                      fontSize: 20,
+                    }}>
+                    {user.name}
+                  </Text>
+                </TouchableOpacity>
               ))}
             </View>
           </ScrollView>
