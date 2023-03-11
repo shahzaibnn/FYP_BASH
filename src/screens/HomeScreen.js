@@ -549,6 +549,7 @@ export default function HomeScreen({navigation, route}) {
                       }}>
                       <Image
                         style={{
+                          flex: 2,
                           height: 60,
                           width: 60,
                           borderRadius: 16,
@@ -559,6 +560,7 @@ export default function HomeScreen({navigation, route}) {
                       />
                       <View
                         style={{
+                          flex: 4,
                           marginLeft: Dimensions.get('window').width * 0.03,
                         }}>
                         <Text style={{fontSize: 12}}>
@@ -577,7 +579,9 @@ export default function HomeScreen({navigation, route}) {
                         <Text>{item.jobCompany}</Text>
                       </View>
 
-                      <TouchableOpacity onPress={() => show(item)}>
+                      <TouchableOpacity
+                        style={{flex: 1}}
+                        onPress={() => show(item)}>
                         <MaterialCommunityIcons
                           name="dots-vertical"
                           size={25}
@@ -766,7 +770,9 @@ export default function HomeScreen({navigation, route}) {
                   marginBottom: '5%',
                 }}>
                 <View>
-                  <TouchableOpacity onPress={() => likeShow(item)}>
+                  <TouchableOpacity
+                    style={{marginBottom: 6}}
+                    onPress={() => likeShow(item)}>
                     <Text
                       style={{
                         textAlign: 'center',
@@ -799,6 +805,7 @@ export default function HomeScreen({navigation, route}) {
                                   email: emailAddressOfCurrentUser,
                                   name: storeData.firstName,
                                   picUrl: storeData.pic,
+                                  role: storeData.role,
                                 },
                               ],
                             ),
@@ -824,6 +831,7 @@ export default function HomeScreen({navigation, route}) {
                               email: emailAddressOfCurrentUser,
                               name: storeData.firstName,
                               picUrl: storeData.pic,
+                              role: storeData.role,
                             }),
                           })
                           .then(() => {
@@ -834,6 +842,7 @@ export default function HomeScreen({navigation, route}) {
                           email: emailAddressOfCurrentUser,
                           name: storeData.firstName,
                           picUrl: storeData.pic,
+                          role: storeData.role,
                         });
                         fetchedPosts.find(obj => obj.id == item.id).likedBy =
                           arr;
@@ -968,35 +977,82 @@ export default function HomeScreen({navigation, route}) {
           {/* action sheet */}
           <ScrollView style={styles.SectionStyle}>
             <View style={{flexDirection: 'column'}}>
+              <Text
+                style={{
+                  marginTop: '1%',
+                  marginBottom: '3%',
+                  marginHorizontal: '10%',
+                  color: '#000000',
+                  fontWeight: 'bold',
+                  fontSize: 25,
+                }}>
+                Likes
+              </Text>
               {likedPeople.likedBy?.map((user, index) => (
-                <TouchableOpacity
+                <View
                   key={index}
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'flex-start',
+                    // justifyContent: 'flex-start',
                     alignItems: 'center',
-                    paddingHorizontal: '20%',
-                    borderColor: 'black',
-                    borderWidth: 1,
+                    // paddingHorizontal: '10%',
+                    // borderColor: 'black',
+                    // borderWidth: 1,
                     marginBottom: '10%',
+                    marginHorizontal: '10%',
                   }}>
                   <Image
-                    style={{height: 60, width: 60, borderRadius: 64}}
+                    style={{height: 60, width: 60, borderRadius: 64, flex: 1}}
                     source={{
                       uri: user.picUrl,
                     }}
                   />
-                  <Text
+
+                  <View style={{flex: 3}}>
+                    <Text
+                      style={{
+                        marginHorizontal: '20%',
+
+                        backgroundColor: '#E5E3E4',
+                        fontWeight: 'bold',
+
+                        fontSize: 16,
+                      }}>
+                      {user.name}
+                    </Text>
+
+                    <Text
+                      style={{
+                        marginHorizontal: '20%',
+
+                        backgroundColor: '#E5E3E4',
+                        fontStyle: 'italic',
+
+                        fontSize: 14,
+                      }}>
+                      {user.role}
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity
                     style={{
-                      marginHorizontal: '20%',
-
-                      backgroundColor: '#E5E3E4',
-
-                      fontSize: 20,
+                      flex: 1,
+                      backgroundColor: '#5BA199',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius: 8,
+                      paddingVertical: '2%',
                     }}>
-                    {user.name}
-                  </Text>
-                </TouchableOpacity>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: '#ffffff',
+                        fontWeight: 'bold',
+                      }}>
+                      View
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               ))}
             </View>
           </ScrollView>

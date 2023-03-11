@@ -147,7 +147,6 @@ export default function LoginScreen({navigation}) {
           // AsyncStorage.setItem('authToken', authToken.toString())
           // const user = cred.user;
           // .then(() => {
-          setFlag(true);
 
           // console.log('email: ' + cred.userEmail);
           // storage.set('authToken', 'LoggedIn');
@@ -234,6 +233,7 @@ export default function LoginScreen({navigation}) {
                     setApproved(true);
                     storage.set('authToken', 'LoggedIn');
                     storage.set('loggedInUser', email);
+                    setFlag(true);
                     navigation.dispatch(
                       CommonActions.reset({
                         index: 1,
@@ -255,6 +255,7 @@ export default function LoginScreen({navigation}) {
                       }),
                     );
                   } else {
+                    setFlag(true);
                     storage.clearAll();
                     showToast('Pending approval here');
                     // navigation.navigate('Login');
@@ -264,60 +265,6 @@ export default function LoginScreen({navigation}) {
             });
         })
 
-        // .then(() => {
-        //   if (approved === true) {
-        //     // console.log('email: ' + cred.userEmail);
-        //     storage.set('authToken', 'LoggedIn');
-        //     storage.set('loggedInUser', email);
-        //     navigation.dispatch(
-        //       CommonActions.reset({
-        //         index: 1,
-        //         routes: [
-        //           {
-        //             name: 'Drawer',
-
-        //             params: {
-        //               screen: 'BottomTabs',
-        //               params: {
-        //                 screen: 'Home',
-        //                 params: {
-        //                   userEmail: email.toLowerCase(),
-        //                 },
-        //               },
-        //             },
-        //           },
-        //         ],
-        //       }),
-        //     );
-        //   } else {
-        //     storage.clearAll();
-
-        //     showToast('Pending approval');
-        //   }
-        // })
-
-        // .then(() => {
-        //   navigation.dispatch(
-        //     CommonActions.reset({
-        //       index: 1,
-        //       routes: [
-        //         {
-        //           name: 'Drawer',
-
-        //           params: {
-        //             screen: 'BottomTabs',
-        //             params: {
-        //               screen: 'Home',
-        //               params: {
-        //                 userEmail: email.toLowerCase(),
-        //               },
-        //             },
-        //           },
-        //         },
-        //       ],
-        //     }),
-        //   );
-        // })
         .catch(error => {
           const errorCode = error.code;
           const errorMessage = error.message;
