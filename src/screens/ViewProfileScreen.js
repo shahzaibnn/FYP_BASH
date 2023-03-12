@@ -22,8 +22,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageModal from 'react-native-image-modal';
 
-const ViewProfileScreen = () => {
+const ViewProfileScreen = ({route, navigation}) => {
   const profileName = 'Tony';
+
+  const currentUser = route.params.userEmail;
 
   // const data = posts();
   return (
@@ -46,7 +48,9 @@ const ViewProfileScreen = () => {
         source={{
           uri: user[0].pic,
         }}>
-        <TouchableOpacity style={{position: 'absolute', left: '5%', top: '5%'}}>
+        <TouchableOpacity
+          onPress={() => console.log('email is : ', currentUser)}
+          style={{position: 'absolute', left: '5%', top: '5%'}}>
           <Ionicons name="chevron-back-circle" size={50} color="#777777" />
         </TouchableOpacity>
 

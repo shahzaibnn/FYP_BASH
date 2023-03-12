@@ -1035,6 +1035,11 @@ export default function HomeScreen({navigation, route}) {
                   </View>
 
                   <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('ViewProfile', {
+                        userEmail: user.email,
+                      })
+                    }
                     style={{
                       flex: 1,
                       backgroundColor: '#5BA199',
