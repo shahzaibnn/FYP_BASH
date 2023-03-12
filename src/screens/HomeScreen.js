@@ -172,23 +172,6 @@ export default function HomeScreen({navigation, route}) {
     searchPosts();
   }, []);
 
-  // useEffect(() => {
-  //   if (!lastVisible) {
-  //     setQuery(query);
-  //   } else {
-  //     setQuery(query.startAfter(lastVisible));
-  //   }
-  //   searchPosts();
-  // }, [lastVisible]);
-
-  // useEffect(() => {
-  //   if (!lastVisibleJobs) {
-  //     setJobQuery(jobQuery);
-  //   } else {
-  //     setJobQuery(jobQuery.startAfter(lastVisibleJobs));
-  //   }
-  //   searchJobs();
-  // }, [lastVisibleJobs]);
   const show = item => {
     // console.log(item);
     setActionParameters(item);
@@ -297,11 +280,6 @@ export default function HomeScreen({navigation, route}) {
 
   const searchJobs = async () => {
     setJobLoading(true);
-    // const snapshot = await jobQuery.get();
-    // setLastVisibleJobs(snapshot.docs[snapshot.docs.length - 1]);
-    // const newJobData = snapshot.docs.map(doc => doc.data());
-    // setJobData(jobData.concat(newJobData));
-    // console.log('job data is, ', jobData);
 
     dbFirestore()
       .collection('Jobs')
