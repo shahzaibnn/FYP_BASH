@@ -114,8 +114,8 @@ export default function JobPostingScreen() {
       name: 'Java',
     },
     {
-      id: '667atsas',
-      name: 'Maiduguri',
+      id: 'dbms',
+      name: 'Databases',
     },
   ]);
 
@@ -125,6 +125,27 @@ export default function JobPostingScreen() {
 
   const onSelectedItemsChange = items => {
     setSelectedItems(items);
+    // setSelectedItems(items.map(item => item.id));
+  };
+
+  const getSelectedItemsExt = items =>
+    items.map(
+      item => skillsList.find(skill => skill.id === item)?.name || item,
+    );
+  const addNewSkill = newSkill => {
+    console.log('adding new skill', newSkill);
+    const newItemId = selectedItems.length + 1;
+    setSkillsList([...skillsList, {id: newItemId, name: newSkill}]);
+  };
+
+  const onSubmit = () => {
+    // Check if the last item in selectedItems is a new skill
+    const newSkill = selectedItems[selectedItems.length - 1];
+    if (newSkill && !skillsList.find(skill => skill.id === newSkill)) {
+      addNewSkill(newSkill);
+    }
+    // const newSelectedItems = selectedItems.map(skill => skill.name);
+    setSelectedItems([]);
   };
 
   useEffect(() => {
@@ -179,12 +200,6 @@ export default function JobPostingScreen() {
     }
   };
 
-  const addNewSkill = newSkill => {
-    console.log('adding new skill', newSkill);
-    const newItemId = selectedItems.length + 1;
-    setSkillsList([...skillsList, {id: newItemId, name: newSkill}]);
-  };
-
   // const onSubmit = () => {
   //   // Check if the last item in selectedItems is a new skill
   //   const newSkill = selectedItems[selectedItems.length - 1];
@@ -193,15 +208,7 @@ export default function JobPostingScreen() {
   //   }
   //   setSelectedItems([]);
   // };
-  const onSubmit = () => {
-    // Check if the last item in selectedItems is a new skill
-    const newSkill = selectedItems[selectedItems.length - 1];
-    if (newSkill && !skillsList.find(skill => skill.id === newSkill)) {
-      addNewSkill(newSkill);
-    }
-    // const newSelectedItems = selectedItems.map(skill => skill.name);
-    setSelectedItems([]);
-  };
+
   const handleSubmit = () => {
     if (!title) {
       Alert.alert('Empty Field', 'Please enter a job title.');
@@ -683,15 +690,17 @@ export default function JobPostingScreen() {
         <View style={{marginHorizontal: '5%'}}>
           {/* <Text>select skills</Text> */}
           <MultiSelect
-            hideTags
+            // hideTags
             items={skillsList}
             // items={skillsList.map(item => ({value: item.id, label: item.name}))}
             uniqueKey="id"
+            // displayKey="name"
             ref={multiSelect}
             onSelectedItemsChange={onSelectedItemsChange}
             selectedItems={selectedItems}
             selectText="Select Skils"
             searchInputPlaceholderText="Search Items..."
+            // single={true}
             // onChangeInput={text => console.log(text)}
             altFontFamily="ProximaNova-Light"
             // tagRemoveIconColor="#CCC"
@@ -701,14 +710,16 @@ export default function JobPostingScreen() {
             selectedItemTextColor="#469597"
             selectedItemIconColor="#469597"
             itemTextColor="#000"
-            displayKey="name"
+            // displayKey="name"
             searchInputStyle={{color: '#CCC', textAlign: 'center'}}
             submitButtonColor="#469597"
             canAddItems={true} // fontSize={15}
-            styleIndicator={{
-              color: '#469597',
-              // paddingLeft: '-5%',
-            }}
+            styleIndicator={
+              {
+                // color: '#469597',
+                // paddingLeft: '-5%',
+              }
+            }
             // hideDropdown={true}
             styleDropdownMenu={{
               // marginTop: 10,
@@ -729,7 +740,15 @@ export default function JobPostingScreen() {
             onSubmit={onSubmit}
             onAddItem={addNewSkill}
           />
+
           <View>{multiSelect.current?.getSelectedItemsExt(selectedItems)}</View>
+          {/* <View>
+            <Text>
+              {JSON.stringify(
+                multiSelect.current?.getSelectedItemsExt(selectedItems),
+              )}
+            </Text>
+          </View> */}
         </View>
         {/* testing ends */}
         <View style={{marginHorizontal: '5%'}}>
