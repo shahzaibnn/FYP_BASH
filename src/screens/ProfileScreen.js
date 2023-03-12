@@ -61,7 +61,18 @@ const ProfileScreen = ({navigation}) => {
   const [selected, setSelected] = useState(false);
   const [selectedPic, setSelectedPic] = useState(false);
   const [setPicUrl, picUrl] = useState(storeData.pic);
+
+  const [likedPeople, setLikedPeople] = useState([]);
+
   let actionSheet = createRef();
+  let actionSheetLike = createRef();
+  const likeShow = itemLikes => {
+    console.log('liked by here ', itemLikes);
+    setLikedPeople(itemLikes);
+
+    // console.log('acrtions is, ', actionParameters);
+    actionSheetLike.current.show();
+  };
 
   // useEffect(() => {
   //   console.log('fetching in use effectttt');
@@ -848,9 +859,15 @@ const ProfileScreen = ({navigation}) => {
               // console.log('Id is : ', item);
               let likeColor = '';
 
-              // console.log(item.likedBy);
+              var found = false;
+              for (var i = 0; i < item.likedBy.length; i++) {
+                if (item.likedBy[i].email == emailAddressOfCurrentUser) {
+                  found = true;
+                  break;
+                }
+              }
 
-              if (item.likedBy.includes(emailAddressOfCurrentUser)) {
+              if (found) {
                 likeColor = '#000000';
                 // console.log('running');
               } else {
@@ -868,92 +885,47 @@ const ProfileScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       marginVertical: Dimensions.get('window').height * 0.01,
-                      justifyContent: 'space-between',
                     }}>
-                    <View style={{flexDirection: 'row'}}>
-                      <Image
-                        source={{uri: item.profilePic}}
-                        style={{
-                          width: 60,
-                          height: 60,
-                          borderRadius: 64,
-                          marginLeft: Dimensions.get('window').width * 0.02,
-                        }}
-                      />
-                      <View
-                        style={{
-                          marginLeft: Dimensions.get('window').width * 0.05,
-                        }}>
-                        <Text
-                          style={{
-                            color: '#5BA199',
-                            fontWeight: 'bold',
-                            marginBottom:
-                              Dimensions.get('window').height * 0.005,
-                            fontSize: 16,
-                          }}>
-                          {item.name}
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#5BA199',
-                            marginBottom:
-                              Dimensions.get('window').height * 0.005,
-                            fontSize: 12,
-                          }}>
-                          {item.title}
-                        </Text>
-                        <Text style={{color: '#777777', fontSize: 12}}>
-                          {item.date}
-                        </Text>
-                      </View>
-                    </View>
-
-                    <TouchableOpacity
-                      onPress={() => {
-                        console.log(item.id);
-                        dbFirestore()
-                          .collection('Posts')
-                          .doc(item.id)
-                          .delete()
-                          .then(() => {
-                            console.log('User deleted!');
-                            setFetchedPosts(current =>
-                              current.filter(posts => posts.id !== item.id),
-                            );
-                            setExtraData(new Date());
-                          });
-                      }}
+                    <Image
+                      source={{uri: item.profilePic}}
                       style={{
-                        paddingHorizontal: '3%',
-                        backgroundColor: '#5BA199',
-                        // height: '30%',
-                        height: 30,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 16,
+                        width: 60,
+                        height: 60,
+                        borderRadius: 64,
+                        marginLeft: Dimensions.get('window').width * 0.02,
+                      }}
+                    />
+                    <View
+                      style={{
+                        marginLeft: Dimensions.get('window').width * 0.05,
                       }}>
-                      <Text style={{fontWeight: 'bold', color: '#ffffff'}}>
-                        Delete
+                      <Text
+                        style={{
+                          color: '#5BA199',
+                          fontWeight: 'bold',
+                          marginBottom: Dimensions.get('window').height * 0.005,
+                          fontSize: 16,
+                        }}>
+                        {item.name}
                       </Text>
-                    </TouchableOpacity>
+                      <Text
+                        style={{
+                          color: '#5BA199',
+                          marginBottom: Dimensions.get('window').height * 0.005,
+                          fontSize: 12,
+                        }}>
+                        {item.title}
+                      </Text>
+                      <Text style={{color: '#777777', fontSize: 12}}>
+                        {item.date}
+                      </Text>
+                    </View>
                   </View>
 
                   <SliderBox
                     // onCurrentImagePressed={index => ImagePressed()}
                     parentWidth={Dimensions.get('window').width * 0.9}
                     ImageComponentStyle={{borderRadius: 16}}
-                    // paginationBoxStyle={styles.sliderBoxPageStyle}
-                    // ImageComponentStyle={styles.sliderBoxImageStyle}
-                    // dotStyle={{
-                    //   width: 10,
-                    //   height: 10,
-                    //   borderRadius: 5,
-                    //   marginBottom: 20,
-                    //   marginHorizontal: 0,
-                    //   padding: 0,
-                    //   margin: 0,
-                    // }}
                     images={item.images}
                     sliderBoxHeight={Dimensions.get('window').height * 0.3}
                   />
@@ -975,25 +947,44 @@ const ProfileScreen = ({navigation}) => {
                       marginBottom: '5%',
                     }}>
                     <View>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          color: '#469597',
-                          fontWeight: 'bold',
-                        }}>
-                        {item.likedBy.length} Likes
-                      </Text>
+                      <TouchableOpacity
+                        style={{marginBottom: 6}}
+                        onPress={() => likeShow(item)}>
+                        <Text
+                          style={{
+                            textAlign: 'center',
+                            color: '#469597',
+                            fontWeight: 'bold',
+                          }}>
+                          {item.likedBy.length} Likes
+                        </Text>
+                      </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => {
                           console.log('hdshjdsfvhddhfbhj');
-                          if (
-                            item.likedBy.includes(emailAddressOfCurrentUser)
-                          ) {
+
+                          var found = false;
+                          for (var i = 0; i < item.likedBy.length; i++) {
+                            if (
+                              item.likedBy[i].email == emailAddressOfCurrentUser
+                            ) {
+                              found = true;
+                              break;
+                            }
+                          }
+                          if (found) {
                             dbFirestore()
                               .doc('Posts/' + item.id)
                               .update({
                                 likedBy: dbFirestore.FieldValue.arrayRemove(
-                                  emailAddressOfCurrentUser,
+                                  ...[
+                                    {
+                                      email: emailAddressOfCurrentUser,
+                                      name: storeData.firstName,
+                                      picUrl: storeData.pic,
+                                      role: storeData.role,
+                                    },
+                                  ],
                                 ),
                               })
                               .then(() => {
@@ -1003,8 +994,9 @@ const ProfileScreen = ({navigation}) => {
                             fetchedPosts.find(
                               obj => obj.id == item.id,
                             ).likedBy = item.likedBy.filter(
-                              e => e !== emailAddressOfCurrentUser,
+                              e => e.email !== emailAddressOfCurrentUser,
                             );
+
                             setExtraData(new Date());
 
                             // likeColor = '#ffffff';
@@ -1013,15 +1005,23 @@ const ProfileScreen = ({navigation}) => {
                             dbFirestore()
                               .doc('Posts/' + item.id)
                               .update({
-                                likedBy: dbFirestore.FieldValue.arrayUnion(
-                                  emailAddressOfCurrentUser,
-                                ),
+                                likedBy: dbFirestore.FieldValue.arrayUnion({
+                                  email: emailAddressOfCurrentUser,
+                                  name: storeData.firstName,
+                                  picUrl: storeData.pic,
+                                  role: storeData.role,
+                                }),
                               })
                               .then(() => {
                                 console.log('Like Placed!');
                               });
                             let arr = item.likedBy;
-                            arr.push(emailAddressOfCurrentUser);
+                            arr.push({
+                              email: emailAddressOfCurrentUser,
+                              name: storeData.firstName,
+                              picUrl: storeData.pic,
+                              role: storeData.role,
+                            });
                             fetchedPosts.find(
                               obj => obj.id == item.id,
                             ).likedBy = arr;
@@ -1098,6 +1098,110 @@ const ProfileScreen = ({navigation}) => {
                 Remove Profile Picture
               </Text>
             </TouchableOpacity>
+          </View>
+        </ActionSheet>
+
+        <ActionSheet
+          // id={sheetId}
+          // data={fetchedPosts}
+          ref={actionSheetLike}
+          containerStyle={{
+            borderTopLeftRadius: 25,
+            borderTopRightRadius: 25,
+            backgroundColor: '#E5E3E4',
+          }}
+          indicatorStyle={{
+            width: 100,
+          }}
+          gestureEnabled={true}>
+          <View>
+            {/* action sheet */}
+            <ScrollView
+              style={{
+                // flexDirection: 'row',
+                backgroundColor: '#E5E3E4',
+                // height: 500,
+
+                // backgroundColor: 'white',
+              }}>
+              <View style={{flexDirection: 'column'}}>
+                <Text
+                  style={{
+                    marginTop: '1%',
+                    marginBottom: '3%',
+                    marginHorizontal: '10%',
+                    color: '#000000',
+                    fontWeight: 'bold',
+                    fontSize: 25,
+                  }}>
+                  Likes
+                </Text>
+                {likedPeople.likedBy?.map((user, index) => (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: 'row',
+                      // justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      // paddingHorizontal: '10%',
+                      // borderColor: 'black',
+                      // borderWidth: 1,
+                      marginBottom: Dimensions.get('window').height * 0.04,
+                      marginHorizontal: '10%',
+                    }}>
+                    <Image
+                      style={{height: 60, width: 60, borderRadius: 64, flex: 1}}
+                      source={{
+                        uri: user.picUrl,
+                      }}
+                    />
+
+                    <View style={{flex: 3}}>
+                      <Text
+                        style={{
+                          marginHorizontal: '20%',
+                          backgroundColor: '#E5E3E4',
+                          fontWeight: 'bold',
+                          fontSize: 16,
+                        }}>
+                        {user.name}
+                      </Text>
+
+                      <Text
+                        style={{
+                          marginHorizontal: '20%',
+
+                          backgroundColor: '#E5E3E4',
+                          fontStyle: 'italic',
+
+                          fontSize: 14,
+                        }}>
+                        {user.role}
+                      </Text>
+                    </View>
+
+                    <TouchableOpacity
+                      style={{
+                        flex: 1,
+                        backgroundColor: '#5BA199',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 8,
+                        paddingVertical: '2%',
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: '#ffffff',
+                          fontWeight: 'bold',
+                        }}>
+                        View
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
           </View>
         </ActionSheet>
       </View>
