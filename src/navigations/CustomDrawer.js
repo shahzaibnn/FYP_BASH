@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Tabs from './BottomTabs';
 import {windowHeight} from '../utils/Dimensions';
@@ -22,6 +22,7 @@ import {
 import {CommonActions} from '@react-navigation/native';
 import {Grid} from 'react-native-animated-spinkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {db, dbFirestore} from '../Firebase/Config';
 
 import {
   getAuth,
@@ -32,6 +33,7 @@ import {
 Drawer = createDrawerNavigator();
 
 import {MMKV} from 'react-native-mmkv';
+import {useSelector, useDispatch} from 'react-redux';
 
 export const storage = new MMKV();
 
@@ -39,6 +41,54 @@ export default function CustomDrawer({props, navigation}) {
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
   const [opacity, setOpacity] = useState(1);
+
+  const [student, setStudentSelected] = useState(false);
+  const [faculty, setFacultySelected] = useState(false);
+  const [alumni, setAlumniSelected] = useState(false);
+
+  const storeData = useSelector(state => state);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // console.log('email in drawer: ', storeData?.userEmail);
+    const userEmail = storeData?.userEmail;
+    console.log('email in drawer here: ', userEmail);
+
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', userEmail)
+      // .where('userEmail', '==', 'shahzaibnn@gmail.com')
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        if (querySnapshot.size == 0) {
+          console.log('in drawer');
+        } else {
+          console.log('in drawer');
+
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.data().role);
+            if (documentSnapshot.data().role == 'Student') {
+              setStudentSelected(true);
+              setAlumniSelected(false);
+              setFacultySelected(false);
+            } else if (documentSnapshot.data().role == 'Alumni') {
+              setAlumniSelected(true);
+              setStudentSelected(false);
+              setFacultySelected(true);
+            } else if (documentSnapshot.data().role == 'Faculty') {
+              setFacultySelected(true);
+              setStudentSelected(false);
+              setAlumniSelected(false);
+            }
+            // setUserData(documentSnapshot.data());
+            // dispatch(setInititialLogin(documentSnapshot.data()));
+          });
+        }
+      });
+  });
 
   function logoutPressed() {
     return new Promise(function (resolve, reject) {
@@ -106,17 +156,39 @@ export default function CustomDrawer({props, navigation}) {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={{marginTop: '5%'}}
-          onPress={() => {
-            navigation.navigate('JobPosting');
-          }}>
-          <View style={styles.drawerAlignStyle}>
-            {/* <FontAwesome5 name={iconName} size={25} /> */}
-            {/* <Ionicons name={iconName} size={25} /> */}
-            <Text style={styles.mainDrawer}>Job Posting</Text>
+        {student ? (
+          <View>
+            {/* for student */}
+            <TouchableOpacity
+              style={{marginTop: '5%'}}
+              disabled={true}
+              onPress={() => {
+                navigation.navigate('JobPosting');
+              }}>
+              <View style={styles.drawerAlignStyle}>
+                {/* <FontAwesome5 name={iconName} size={25} /> */}
+                {/* <Ionicons name={iconName} size={25} /> */}
+                <Text style={styles.mainDrawer}>Job Posting</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        ) : (
+          <View>
+            {/* for faculty/alumni */}
+
+            <TouchableOpacity
+              style={{marginTop: '5%'}}
+              onPress={() => {
+                navigation.navigate('JobPosting');
+              }}>
+              <View style={styles.drawerAlignStyle}>
+                {/* <FontAwesome5 name={iconName} size={25} /> */}
+                {/* <Ionicons name={iconName} size={25} /> */}
+                <Text style={styles.mainDrawer}>Job Posting</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
 
         <TouchableOpacity
           style={{marginTop: '5%'}}

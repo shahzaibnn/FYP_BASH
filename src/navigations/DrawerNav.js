@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawer from './CustomDrawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,11 +10,13 @@ import JobDashboardScreen from '../screens/JobDashboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 // import TabNavigator from './TabNavigator';
 // import BottomTabs from '../navigations/BottomTabs';
+import {db, dbFirestore} from '../Firebase/Config';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNav = route => {
   console.log('drawer nbavigaton mey araha ye , ', route);
+
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
