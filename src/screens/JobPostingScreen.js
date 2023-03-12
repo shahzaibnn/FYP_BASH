@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {Component, useEffect, useState, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -34,7 +34,7 @@ import {addJob} from '../store/action';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {Chase} from 'react-native-animated-spinkit';
-
+import MultiSelect from 'react-native-multiple-select';
 export default function JobPostingScreen() {
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
@@ -91,9 +91,63 @@ export default function JobPostingScreen() {
   const [nameLength, setNameLength] = useState(0);
   const [cityLength, setCityLength] = useState(0);
   const [titleLength, setTitleLength] = useState(0);
+  const [newItem, setNewItem] = useState('');
 
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
+
+  const [skillsList, setSkillsList] = useState([
+    {
+      id: 'react-native',
+      name: 'React Native',
+    },
+    {
+      id: 'react',
+      name: 'React',
+    },
+    {
+      id: 'javascript',
+      name: 'Javascript',
+    },
+    {
+      id: 'java',
+      name: 'Java',
+    },
+    {
+      id: 'dbms',
+      name: 'Databases',
+    },
+  ]);
+
+  const [selectedItems, setSelectedItems] = useState([]);
+  // const [skillsList, setSkillsList] = useState([]);
+  const multiSelect = useRef(null);
+
+  const onSelectedItemsChange = items => {
+    setSelectedItems(items);
+    // setSelectedItems(items.map(item => item.id));
+  };
+
+  const getSelectedItemsExt = items =>
+    items.map(
+      item => skillsList.find(skill => skill.id === item)?.name || item,
+    );
+  const addNewSkill = newSkill => {
+    console.log('adding new skill', newSkill);
+    const newItemId = selectedItems.length + 1;
+    setSkillsList([...skillsList, {id: newItemId, name: newSkill}]);
+  };
+
+  const onSubmit = () => {
+    // Check if the last item in selectedItems is a new skill
+    const newSkill = selectedItems[selectedItems.length - 1];
+    if (newSkill && !skillsList.find(skill => skill.id === newSkill)) {
+      addNewSkill(newSkill);
+    }
+    // const newSelectedItems = selectedItems.map(skill => skill.name);
+    setSelectedItems([]);
+  };
+
   useEffect(() => {
     var date = new Date().getDate(); //Current Date
     var month = new Date().getMonth() + 1; //Current Month
@@ -113,6 +167,47 @@ export default function JobPostingScreen() {
       // text2: text,
     });
   };
+
+  // const handleAddItem = newItem => {
+  //   const existingSkill = skillsList.find(
+  //     skill => skill.name.toLowerCase() == newItem,
+  //   );
+
+  //   if (existingSkill) {
+  //     const newItems = [...selectedItems, existingSkill];
+  //     setSelectedItems(newItems);
+  //     console.log(' exist', newItems);
+  //   } else {
+  //     const newItemId = selectedItems.length + 1;
+  //     // const newItems = [...selectedItems, {id: newItemId, name: newItem}];
+  //     const newSkill = {id: newItemId, name: newItem};
+  //     const newItems = [...selectedItems, newSkill];
+  //     const newSkillsList = [...selectedSkills, newSkills];
+  //     setSelectedItems(newItems);
+  //     setSelectedSkills(newSkillsList);
+  //     console.log('doesnt exist', newItems);
+  //     console.log('new adding', newSkillsList);
+  //   }
+  // };
+
+  const handleAddItem = () => {
+    if (newItem.trim() !== '') {
+      const newItemId = selectedItems.length + 1;
+      const newSkill = {id: newItemId, name: newItem};
+      const newSkillsList = [...selectedSkills, newSkill];
+      setSkillsList(newSkillsList);
+      setNewItem('');
+    }
+  };
+
+  // const onSubmit = () => {
+  //   // Check if the last item in selectedItems is a new skill
+  //   const newSkill = selectedItems[selectedItems.length - 1];
+  //   if (newSkill && !skillsList.find(skill => skill.id === newSkill)) {
+  //     addNewSkill(newSkill);
+  //   }
+  //   setSelectedItems([]);
+  // };
 
   const handleSubmit = () => {
     if (!title) {
@@ -213,6 +308,7 @@ export default function JobPostingScreen() {
           image: url,
           jobPostedBy: name,
           createdAt: currentDate,
+          skills: selectedItems,
         })
         .then(() => {
           console.log('Post Added!');
@@ -258,6 +354,8 @@ export default function JobPostingScreen() {
     setCompanyNameLength(0);
     setSalaryLength(0);
     setDescriptionLength(0);
+
+    setSelectedItems([]);
 
     var date = new Date().getDate(); //Current Date
     var month = new Date().getMonth() + 1; //Current Month
@@ -588,7 +686,71 @@ export default function JobPostingScreen() {
             listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
           />
         </View>
+        {/* testing for multi-select */}
+        <View style={{marginHorizontal: '5%'}}>
+          {/* <Text>select skills</Text> */}
+          <MultiSelect
+            // hideTags
+            items={skillsList}
+            // items={skillsList.map(item => ({value: item.id, label: item.name}))}
+            uniqueKey="id"
+            // displayKey="name"
+            ref={multiSelect}
+            onSelectedItemsChange={onSelectedItemsChange}
+            selectedItems={selectedItems}
+            selectText="Select Skils"
+            searchInputPlaceholderText="Search Items..."
+            // single={true}
+            // onChangeInput={text => console.log(text)}
+            altFontFamily="ProximaNova-Light"
+            // tagRemoveIconColor="#CCC"
+            tagRemoveIconColor="black"
+            tagBorderColor="#469597"
+            tagTextColor="#469597"
+            selectedItemTextColor="#469597"
+            selectedItemIconColor="#469597"
+            itemTextColor="#000"
+            // displayKey="name"
+            searchInputStyle={{color: '#CCC', textAlign: 'center'}}
+            submitButtonColor="#469597"
+            canAddItems={true} // fontSize={15}
+            styleIndicator={
+              {
+                // color: '#469597',
+                // paddingLeft: '-5%',
+              }
+            }
+            // hideDropdown={true}
+            styleDropdownMenu={{
+              // marginTop: 10,
+              // borderWidth: 1,
+              // paddingLeft: '%',
+              borderRadius: 300,
+              borderColor: 'gray',
+              borderRadius: 55,
+              fontSize: 12,
+              fontWeight: 'bold',
+              alignContent: 'center',
+              textAlign: 'center',
 
+              // backgroundColor: 'white',
+              // padding: 10,
+            }}
+            onChangeInput={text => setNewItem(text)}
+            onSubmit={onSubmit}
+            onAddItem={addNewSkill}
+          />
+
+          <View>{multiSelect.current?.getSelectedItemsExt(selectedItems)}</View>
+          {/* <View>
+            <Text>
+              {JSON.stringify(
+                multiSelect.current?.getSelectedItemsExt(selectedItems),
+              )}
+            </Text>
+          </View> */}
+        </View>
+        {/* testing ends */}
         <View style={{marginHorizontal: '5%'}}>
           <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
             Related Picture
