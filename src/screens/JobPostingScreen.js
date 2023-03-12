@@ -35,6 +35,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {Chase} from 'react-native-animated-spinkit';
 import MultiSelect from 'react-native-multiple-select';
+
 export default function JobPostingScreen() {
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
@@ -98,28 +99,39 @@ export default function JobPostingScreen() {
 
   const [skillsList, setSkillsList] = useState([
     {
-      id: 'react-native',
-      name: 'React Native',
+      label: 'React Native',
+      value: 'React native',
     },
     {
-      id: 'react',
-      name: 'React',
+      label: 'React',
+      value: 'React',
     },
     {
-      id: 'javascript',
-      name: 'Javascript',
+      label: 'Javascript',
+      value: 'Javascript',
     },
     {
-      id: 'java',
+      label: 'Java',
       name: 'Java',
     },
     {
-      id: 'dbms',
-      name: 'Databases',
+      label: 'Databases',
+      value: 'Databases',
+    },
+
+    {
+      label: 'C',
+      name: 'C',
+    },
+    {
+      label: 'Python',
+      value: 'Python',
     },
   ]);
 
   const [selectedItems, setSelectedItems] = useState([]);
+
+  const [skillOpen, setSkillOpen] = useState(false);
   // const [skillsList, setSkillsList] = useState([]);
   const multiSelect = useRef(null);
 
@@ -675,21 +687,61 @@ export default function JobPostingScreen() {
               backgroundColor: 'white',
               borderWidth: 0,
               borderRadius: 16,
+              zIndex: 0,
+              // position: 'absolute',
             }}
             textStyle={{color: '#5BA199', fontSize: 14, marginHorizontal: '2%'}}
             dropDownContainerStyle={{
               backgroundColor: '#469597',
               borderWidth: 0,
               marginTop: 10,
+              // position: 'absolute',
             }}
             //   labelStyle={{color: 'white'}}
-            listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
+            listItemLabelStyle={{
+              color: 'white',
+              fontWeight: 'bold',
+              // position: 'absolute',
+            }}
           />
         </View>
         {/* testing for multi-select */}
         <View style={{marginHorizontal: '5%'}}>
+          <DropDownPicker
+            listMode="SCROLLVIEW"
+            multiple={true}
+            min={0}
+            max={5}
+            open={skillOpen}
+            value={selectedItems}
+            items={skillsList}
+            onChangeValue={console.log(value)}
+            setOpen={setSkillOpen}
+            setValue={setSelectedItems}
+            setItems={setSkillsList}
+            placeholder="Select The Skills"
+            searchable={true}
+            addCustomItem={true}
+            mode="BADGE"
+            badgeDotColors={['black', 'white', 'blue', 'green']}
+            theme="LIGHT"
+            // containerStyle={{marginTop: 40}}
+            style={{
+              borderWidth: 0,
+              zIndex: 0,
+              // backgroundColor: 'beige',
+              marginTop: 10,
+            }}
+            dropDownContainerStyle={{
+              // backgroundColor: '#dfdfdf',
+              marginTop: 10,
+            }}
+            // listItemContainer={{
+            //   height: 100,
+            // }}
+          />
           {/* <Text>select skills</Text> */}
-          <MultiSelect
+          {/* <MultiSelect
             // hideTags
             items={skillsList}
             // items={skillsList.map(item => ({value: item.id, label: item.name}))}
@@ -741,7 +793,7 @@ export default function JobPostingScreen() {
             onAddItem={addNewSkill}
           />
 
-          <View>{multiSelect.current?.getSelectedItemsExt(selectedItems)}</View>
+          <View>{multiSelect.current?.getSelectedItemsExt(selectedItems)}</View> */}
           {/* <View>
             <Text>
               {JSON.stringify(
@@ -750,6 +802,7 @@ export default function JobPostingScreen() {
             </Text>
           </View> */}
         </View>
+
         {/* testing ends */}
         <View style={{marginHorizontal: '5%'}}>
           <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
