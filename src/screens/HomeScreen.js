@@ -16,7 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actions-sheet';
 import {CommonActions} from '@react-navigation/native';
-
+// import {withFirestoreInstance} from 'react-firestore';
 import {
   ref,
   set,
@@ -305,9 +305,12 @@ export default function HomeScreen({navigation, route}) {
 
     dbFirestore()
       .collection('Jobs')
-      .orderBy('createdAt', 'desc')
+      // .where('skills', 'array-contains-any', ['Next'])
+      .where('skills', 'array-contains-any', storeData?.skills)
+      // .orderBy('createdAt', 'desc')
       .limit(2)
       .get()
+
       .then(querySnapshot => {
         const jobs = [];
         querySnapshot.forEach(doc => {
@@ -356,7 +359,9 @@ export default function HomeScreen({navigation, route}) {
 
     dbFirestore()
       .collection('Jobs')
-      .orderBy('createdAt', 'desc')
+      // .where('skills', 'array-contains-any', storeData?.skills)
+      .where('skills', 'array-contains-any', storeData?.skills)
+      // .orderBy('createdAt', 'desc')
       .startAfter(lastVisibleJobs)
       .limit(1)
       .get()
