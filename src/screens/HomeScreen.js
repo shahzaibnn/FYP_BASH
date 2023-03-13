@@ -148,10 +148,6 @@ export default function HomeScreen({navigation, route}) {
           });
         }
       })
-      .then(() => {
-        console.log('checking for jobs', storeData?.skills);
-        searchJobs(storeData?.skills);
-      })
       .catch(error => {
         // alert(error);
 
@@ -164,9 +160,9 @@ export default function HomeScreen({navigation, route}) {
     searchData(emailAddressOfCurrentUser);
   }, []);
 
-  // useEffect(() => {
-  //   searchJobs();
-  // }, []);
+  useEffect(() => {
+    searchJobs();
+  }, []);
 
   useEffect(() => {
     // console.log('LOGGED IN USER IS : ', emailAddressOfCurrentUser);
@@ -282,13 +278,13 @@ export default function HomeScreen({navigation, route}) {
       });
   };
 
-  const searchJobs = async skillsParams => {
+  const searchJobs = async () => {
     setJobLoading(true);
 
     dbFirestore()
       .collection('Jobs')
       // .where('skills', 'array-contains-any', ['Next'])
-      .where('skills', 'array-contains-any', skillsParams)
+      .where('skills', 'array-contains-any', storeData?.skills)
       // .orderBy('createdAt', 'desc')
       .limit(2)
       .get()
@@ -336,13 +332,13 @@ export default function HomeScreen({navigation, route}) {
     // setJobLoading(false);
   };
 
-  const searchMoreJobs = async skillsParams => {
+  const searchMoreJobs = async () => {
     setJobLoading(true);
 
     dbFirestore()
       .collection('Jobs')
       // .where('skills', 'array-contains-any', storeData?.skills)
-      .where('skills', 'array-contains-any', skillsParams)
+      .where('skills', 'array-contains-any', storeData?.skills)
       // .orderBy('createdAt', 'desc')
       .startAfter(lastVisibleJobs)
       .limit(1)
