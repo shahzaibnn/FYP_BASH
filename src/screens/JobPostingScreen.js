@@ -54,14 +54,83 @@ export default function JobPostingScreen() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Pakistan', value: 'Pakistan'},
-    {label: 'USA', value: 'USA'},
-    {label: 'JAPAN', value: 'Japan'},
-    {label: 'CHINA', value: 'China'},
-    {label: 'UK', value: 'uk'},
-    {label: 'France', value: 'france'},
-  ]);
+    {label: 'Pakistan', value: 'pk'},
+    {label: 'Karachi', value: 'Karachi, Pakistan', parent: 'pk'},
+    {label: 'Lahore', value: 'Lahore, Pakistan', parent: 'pk'},
+    {label: 'Islamabad', value: 'Islamabad, Pakistan', parent: 'pk'},
+    {label: 'Rawalpindi', value: 'Rawalpindi, Pakistan', parent: 'pk'},
+    {label: 'Faisalabad', value: 'Faisalabad, Pakistan', parent: 'pk'},
 
+    {label: 'USA', value: 'us'},
+    {label: 'New York', value: 'New York, USA', parent: 'us'},
+    {label: 'Los Angeles', value: 'Los Angeles, USA', parent: 'us'},
+    {label: 'Chicago', value: 'Chicago, USA', parent: 'us'},
+    {label: 'Houston', value: 'Houston, USA', parent: 'us'},
+    {label: 'Phoenix', value: 'Phoenix, USA', parent: 'us'},
+
+    {label: 'Australia', value: 'au'},
+    {label: 'Sydney', value: 'Sydney, Australia', parent: 'au'},
+    {label: 'Melbourne', value: 'Melbourne, Australia', parent: 'au'},
+    {label: 'Brisbane', value: 'Brisbane, Australia', parent: 'au'},
+    {label: 'Perth', value: 'Perth, Australia', parent: 'au'},
+    {label: 'Adelaide', value: 'Adelaide, Australia', parent: 'au'},
+
+    {label: 'United Kingdom', value: 'uk'},
+    {label: 'London', value: 'London, UK', parent: 'uk'},
+    {label: 'Manchester', value: 'Manchester, UK', parent: 'uk'},
+    {label: 'Birmingham', value: 'Birmingham, UK', parent: 'uk'},
+    {label: 'Liverpool', value: 'Liverpool, UK', parent: 'uk'},
+    {label: 'Leeds', value: 'Leeds, UK', parent: 'uk'},
+
+    {label: 'Japan', value: 'jp'},
+    {label: 'Tokyo', value: 'Tokyo, Japan', parent: 'jp'},
+    {label: 'Osaka', value: 'Osaka, Japan', parent: 'jp'},
+    {label: 'Nagoya', value: 'Nagoya, Japan', parent: 'jp'},
+    {label: 'Sapporo', value: 'Sapporo, Japan', parent: 'jp'},
+    {label: 'Fukuoka', value: 'Fukuoka, Japan', parent: 'jp'},
+
+    {label: 'Canada', value: 'ca'},
+    {label: 'Toronto', value: 'Toronto, Canada', parent: 'ca'},
+    {label: 'Montreal', value: 'Montreal, Canada', parent: 'ca'},
+    {label: 'Vancouver', value: 'Vancouver, Canada', parent: 'ca'},
+    {label: 'Calgary', value: 'Calgary, Canada', parent: 'ca'},
+    {label: 'Ottawa', value: 'Ottawa, Canada', parent: 'ca'},
+
+    {label: 'India', value: 'in'},
+    {label: 'Mumbai', value: 'Mumbai, India', parent: 'in'},
+    {label: 'Delhi', value: 'Delhi, India', parent: 'in'},
+    {label: 'Bangalore', value: 'Bangalore, India', parent: 'in'},
+    {label: 'Hyderabad', value: 'Hyderabad, India', parent: 'in'},
+    {label: 'Chennai', value: 'Chennai, India', parent: 'in'},
+
+    {label: 'France', value: 'fr'},
+    {label: 'Paris', value: 'Paris, France', parent: 'fr'},
+    {label: 'Marseille', value: 'Marseille, France', parent: 'fr'},
+    {label: 'Lyon', value: 'Lyon, France', parent: 'fr'},
+    {label: 'Toulouse', value: 'Toulouse, France', parent: 'fr'},
+    {label: 'Nice', value: 'Nice, France', parent: 'fr'},
+
+    {label: 'Brazil', value: 'br'},
+    {label: 'São Paulo', value: 'São Paulo, Brazil', parent: 'br'},
+    {label: 'Rio de Janeiro', value: 'Rio de Janeiro, Brazil', parent: 'br'},
+    {label: 'Brasília', value: 'Brasília, Brazil', parent: 'br'},
+    {label: 'Salvador', value: 'Salvador, Brazil', parent: 'br'},
+    {label: 'Fortaleza', value: 'Fortaleza, Brazil', parent: 'br'},
+
+    {label: 'Germany', value: 'de'},
+    {label: 'Berlin', value: 'Berlin, Germany', parent: 'de'},
+    {label: 'Hamburg', value: 'Hamburg, Germany', parent: 'de'},
+    {label: 'Munich', value: 'Munich, Germany', parent: 'de'},
+    {label: 'Cologne', value: 'Cologne, Germany', parent: 'de'},
+    {label: 'Frankfurt', value: 'Frankfurt, Germany', parent: 'de'},
+
+    {label: 'Spain', value: 'es'},
+    {label: 'Madrid', value: 'Madrid, Spain', parent: 'es'},
+    {label: 'Barcelona', value: 'Barcelona, Spain', parent: 'es'},
+    {label: 'Valencia', value: 'Valencia, Spain', parent: 'es'},
+    {label: 'Seville', value: 'Seville, Spain', parent: 'es'},
+    {label: 'Zaragoza', value: 'Zaragoza, Spain', parent: 'es'},
+  ]);
   // const [value3, setValue3] = useState(null);
   // const [open3, setOpen3] = useState(false);
 
@@ -611,6 +680,7 @@ export default function JobPostingScreen() {
           <DropDownPicker
             listMode="SCROLLVIEW"
             open={open}
+            categorySelectable={true}
             value={value}
             items={items}
             setOpen={setOpen}
