@@ -48,47 +48,47 @@ export default function CustomDrawer({props, navigation}) {
 
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
-  useEffect(() => {
-    // console.log('email in drawer: ', storeData?.userEmail);
-    const userEmail = storeData?.userEmail;
-    console.log('email in drawer here: ', userEmail);
+  // useEffect(() => {
+  //   // console.log('email in drawer: ', storeData?.userEmail);
+  //   const userEmail = storeData?.userEmail;
+  //   console.log('email in drawer here: ', userEmail);
 
-    dbFirestore()
-      .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
-      .where('userEmail', '==', userEmail)
-      // .where('userEmail', '==', 'shahzaibnn@gmail.com')
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
+  //   dbFirestore()
+  //     .collection('Users')
+  //     // .doc('roles')
+  //     // .collection(value.toLowerCase())
+  //     .where('userEmail', '==', userEmail)
+  //     // .where('userEmail', '==', 'shahzaibnn@gmail.com')
+  //     .get()
+  //     .then(querySnapshot => {
+  //       console.log('Total Found users: ', querySnapshot.size);
 
-        if (querySnapshot.size == 0) {
-          console.log('in drawer');
-        } else {
-          console.log('in drawer');
+  //       if (querySnapshot.size == 0) {
+  //         console.log('in drawer');
+  //       } else {
+  //         console.log('in drawer');
 
-          querySnapshot.forEach(documentSnapshot => {
-            console.log(documentSnapshot.data().role);
-            if (documentSnapshot.data().role == 'Student') {
-              setStudentSelected(true);
-              setAlumniSelected(false);
-              setFacultySelected(false);
-            } else if (documentSnapshot.data().role == 'Alumni') {
-              setAlumniSelected(true);
-              setStudentSelected(false);
-              setFacultySelected(true);
-            } else if (documentSnapshot.data().role == 'Faculty') {
-              setFacultySelected(true);
-              setStudentSelected(false);
-              setAlumniSelected(false);
-            }
-            // setUserData(documentSnapshot.data());
-            // dispatch(setInititialLogin(documentSnapshot.data()));
-          });
-        }
-      });
-  });
+  //         querySnapshot.forEach(documentSnapshot => {
+  //           console.log(documentSnapshot.data().role);
+  //           if (documentSnapshot.data().role == 'Student') {
+  //             setStudentSelected(true);
+  //             setAlumniSelected(false);
+  //             setFacultySelected(false);
+  //           } else if (documentSnapshot.data().role == 'Alumni') {
+  //             setAlumniSelected(true);
+  //             setStudentSelected(false);
+  //             setFacultySelected(true);
+  //           } else if (documentSnapshot.data().role == 'Faculty') {
+  //             setFacultySelected(true);
+  //             setStudentSelected(false);
+  //             setAlumniSelected(false);
+  //           }
+  //           // setUserData(documentSnapshot.data());
+  //           // dispatch(setInititialLogin(documentSnapshot.data()));
+  //         });
+  //       }
+  //     });
+  // });
 
   function logoutPressed() {
     return new Promise(function (resolve, reject) {
@@ -156,7 +156,7 @@ export default function CustomDrawer({props, navigation}) {
           </View>
         </TouchableOpacity>
 
-        {student ? (
+        {storeData.role === 'Student' ? (
           <View>
             {/* for student */}
             <TouchableOpacity

@@ -145,6 +145,7 @@ export default function HomeScreen({navigation, route}) {
             console.log(documentSnapshot.data());
             setUserData(documentSnapshot.data());
             dispatch(setInititialLogin(documentSnapshot.data()));
+            searchJobs(documentSnapshot.data().skills);
           });
         }
       })
@@ -160,9 +161,9 @@ export default function HomeScreen({navigation, route}) {
     searchData(emailAddressOfCurrentUser);
   }, []);
 
-  useEffect(() => {
-    searchJobs();
-  }, []);
+  // useEffect(() => {
+  //   searchJobs();
+  // }, []);
 
   useEffect(() => {
     // console.log('LOGGED IN USER IS : ', emailAddressOfCurrentUser);
@@ -278,13 +279,15 @@ export default function HomeScreen({navigation, route}) {
       });
   };
 
-  const searchJobs = async () => {
+  const searchJobs = async skillsParams => {
+    console.log('search jobs here', skillsParams);
     setJobLoading(true);
 
     dbFirestore()
       .collection('Jobs')
       // .where('skills', 'array-contains-any', ['Next'])
-      .where('skills', 'array-contains-any', storeData?.skills)
+      // .where('skills', 'array-contains-any', storeData?.skills)
+      .where('skills', 'array-contains-any', skillsParams)
       // .orderBy('createdAt', 'desc')
       .limit(2)
       .get()
