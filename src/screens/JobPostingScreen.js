@@ -99,8 +99,8 @@ export default function JobPostingScreen() {
 
   const [skillsList, setSkillsList] = useState([
     {
-      label: 'React Native',
-      value: 'React native',
+      label: 'React-Native',
+      value: 'React-native',
     },
     {
       label: 'React',
@@ -112,20 +112,131 @@ export default function JobPostingScreen() {
     },
     {
       label: 'Java',
-      name: 'Java',
+      value: 'Java',
     },
     {
       label: 'Databases',
       value: 'Databases',
     },
-
     {
       label: 'C',
-      name: 'C',
+      value: 'C',
     },
     {
       label: 'Python',
       value: 'Python',
+    },
+    {
+      label: 'Swift',
+      value: 'Swift',
+    },
+    {
+      label: 'PHP',
+      value: 'PHP',
+    },
+    {
+      label: 'Ruby',
+      value: 'Ruby',
+    },
+    {
+      label: 'HTML',
+      value: 'HTML',
+    },
+    {
+      label: 'CSS',
+      value: 'CSS',
+    },
+    {
+      label: 'TypeScript',
+      value: 'TypeScript',
+    },
+    {
+      label: 'Angular',
+      value: 'Angular',
+    },
+    {
+      label: 'Vue',
+      value: 'Vue',
+    },
+    {
+      label: 'jQuery',
+      value: 'jQuery',
+    },
+    {
+      label: 'Node.js',
+      value: 'Node.js',
+    },
+    {
+      label: 'Express.js',
+      value: 'Express.js',
+    },
+    {
+      label: 'MongoDB',
+      value: 'MongoDB',
+    },
+    {
+      label: 'SQL',
+      value: 'SQL',
+    },
+    {
+      label: 'Git',
+      value: 'Git',
+    },
+    {
+      label: 'AWS',
+      value: 'AWS',
+    },
+    {
+      label: 'Azure',
+      value: 'Azure',
+    },
+    {
+      label: 'Firebase',
+      value: 'Firebase',
+    },
+    {
+      label: 'Heroku',
+      value: 'Heroku',
+    },
+    {
+      label: 'Docker',
+      value: 'Docker',
+    },
+    {
+      label: 'Project Management',
+      value: 'Project-Management',
+    },
+    {
+      label: 'Leadership',
+      value: 'Leadership',
+    },
+    {
+      label: 'Marketing',
+      value: 'Marketing',
+    },
+    {
+      label: 'Social Media Management',
+      value: 'Social-Media-Management',
+    },
+    {
+      label: 'Search Engine Optimization (SEO)',
+      value: 'SEO',
+    },
+    {
+      label: 'Human Resource Management',
+      value: 'Human-Resource-Management',
+    },
+    {
+      label: 'Business Analytics',
+      value: 'Business-Analytics',
+    },
+    {
+      label: 'Financial Management',
+      value: 'Financial-Management',
+    },
+    {
+      label: 'Copywriting',
+      value: 'Copywriting',
     },
   ]);
 
@@ -687,25 +798,26 @@ export default function JobPostingScreen() {
               backgroundColor: 'white',
               borderWidth: 0,
               borderRadius: 16,
-              zIndex: 0,
-              // position: 'absolute',
             }}
             textStyle={{color: '#5BA199', fontSize: 14, marginHorizontal: '2%'}}
             dropDownContainerStyle={{
-              backgroundColor: '#469597',
+              // backgroundColor: '#469597',
+              backgroundColor: 'white',
               borderWidth: 0,
               marginTop: 10,
-              // position: 'absolute',
+              borderRadius: 30,
             }}
             //   labelStyle={{color: 'white'}}
-            listItemLabelStyle={{
-              color: 'white',
-              fontWeight: 'bold',
-              // position: 'absolute',
-            }}
+            // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
+            listItemLabelStyle={{color: '#6A6A6A'}}
           />
         </View>
         {/* testing for multi-select */}
+        <View style={{marginHorizontal: '5%'}}>
+          <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
+            Skills
+          </Text>
+        </View>
         <View style={{marginHorizontal: '5%'}}>
           <DropDownPicker
             listMode="SCROLLVIEW"
@@ -719,25 +831,34 @@ export default function JobPostingScreen() {
             setOpen={setSkillOpen}
             setValue={setSelectedItems}
             setItems={setSkillsList}
-            placeholder="Select The Skills"
+            placeholder="Select relevant skills"
             searchable={true}
             addCustomItem={true}
             mode="BADGE"
-            badgeDotColors={['black', 'white', 'blue', 'green']}
+            badgeDotColors={['#469597']}
             theme="LIGHT"
             // containerStyle={{marginTop: 40}}
+
             style={{
+              marginVertical: '5%',
+              backgroundColor: 'white',
               borderWidth: 0,
-              zIndex: 0,
-              // backgroundColor: 'beige',
-              marginTop: 10,
+              borderRadius: 16,
             }}
+            textStyle={{color: '#5BA199', fontSize: 14}}
             dropDownContainerStyle={{
-              // backgroundColor: '#dfdfdf',
+              // backgroundColor: '#469597',
+              backgroundColor: 'white',
+              borderWidth: 0,
               marginTop: 10,
+              borderRadius: 30,
             }}
+            //   labelStyle={{color: 'white'}}
+            // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
+            listItemLabelStyle={{color: '#6A6A6A'}}
             // listItemContainer={{
-            //   height: 100,
+            //   // height: 100,
+            //   backgroundColor: 'red',
             // }}
           />
           {/* <Text>select skills</Text> */}
