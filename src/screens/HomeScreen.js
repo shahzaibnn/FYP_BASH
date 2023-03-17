@@ -193,7 +193,7 @@ export default function HomeScreen({navigation, route}) {
 
     dbFirestore()
       .collection('Posts')
-      // .orderBy('id', 'desc')
+      // .orderBy('createdAt', 'asc')
       .limit(2)
       .get()
       .then(querySnapshot => {
