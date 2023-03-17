@@ -1,4 +1,5 @@
-import React, {Component, useState} from 'react';
+import React, {useEffect, useState, createRef} from 'react';
+
 import {
   StyleSheet,
   Text,
@@ -21,11 +22,122 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageModal from 'react-native-image-modal';
+import {db, dbFirestore} from '../Firebase/Config';
 
 const ViewProfileScreen = ({route, navigation}) => {
+  const [fetchedPosts, setFetchedPosts] = useState([]);
+  const [description, setDescription] = useState();
+  const [skills, setSkills] = useState([]);
+  const [experience, setExperience] = useState([]);
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('');
+  const [title, setTitle] = useState('');
+  const [resumeLink, setResumeLink] = useState('');
   const profileName = 'Tony';
 
-  const currentUser = route.params.userEmail;
+  const profileEmail = route.params.userEmail;
+  const [extraData, setExtraData] = React.useState(new Date());
+
+  const findPosts = () => {
+    dbFirestore()
+      .collection('Posts')
+      .where('postedBy', '==', profileEmail)
+      // .limit(2)
+      .get()
+      .then(querySnapshot => {
+        console.log('User logged in is: ', profileEmail);
+        console.log('YE ASAL CHECKING KE LIYE HEY!!!!');
+        console.log('Total posts: ', querySnapshot.size);
+
+        var total = querySnapshot.size;
+        let count = 0;
+
+        if (total == 0) {
+          // setPostLoader(false);
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+            // console.log(
+            //   'User ID: ',
+            //   documentSnapshot.id,
+            //   documentSnapshot.data(),
+            //   //To grab a particular field use
+            //   //documentSnapshot.data().userEmail,
+            // );
+            setFetchedPosts(fetchedPosts => [...fetchedPosts, v]);
+
+            count++;
+            if (count == total) {
+              // setPostLoader(false);
+              console.log(':runing');
+            }
+          });
+        }
+
+        // setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+      });
+  };
+
+  // IMPORTANT
+
+  useEffect(() => {
+    findPosts();
+  }, []);
+
+  const findUserData = () => {
+    dbFirestore()
+      .collection('Users')
+      .where('userEmail', '==', profileEmail)
+      // .limit(2)
+      .get()
+      .then(querySnapshot => {
+        console.log('User logged in is: ', profileEmail);
+        console.log('YE ASAL CHECKING KE LIYE HEY!!!!');
+        console.log('Total skills: ', querySnapshot.size);
+
+        var total = querySnapshot.size;
+        let count = 0;
+
+        if (total == 0) {
+          // setPostLoader(false);
+        } else {
+          const skillsArr = [];
+          const expArry = [];
+          querySnapshot.forEach(documentSnapshot => {
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+
+            const {skills} = documentSnapshot.data();
+
+            skillsArr.push(...skills);
+
+            const {experience} = documentSnapshot.data();
+
+            expArry.push(...experience);
+            // setSkills(skillsArr);
+
+            count++;
+            if (count == total) {
+              // setPostLoader(false);
+              console.log(':runing');
+            }
+            setDescription(v.description);
+            setName(v.firstName + ' ' + v.lastName);
+            setImage(v.pic);
+            setTitle(v.role + ' - ' + v.title);
+            setResumeLink(v.resumeUrl);
+          });
+          setSkills(skillsArr);
+          setExperience(expArry);
+        }
+
+        // setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+      });
+  };
+  useEffect(() => {
+    findUserData();
+  }, []);
 
   // const data = posts();
   return (
@@ -46,10 +158,10 @@ const ViewProfileScreen = ({route, navigation}) => {
           minWidth: Dimensions.get('window').width,
         }}
         source={{
-          uri: user[0].pic,
+          uri: image,
         }}>
         <TouchableOpacity
-          onPress={() => console.log('email is : ', currentUser)}
+          onPress={() => console.log('email is : ', profileEmail)}
           style={{position: 'absolute', left: '5%', top: '5%'}}>
           <Ionicons name="chevron-back-circle" size={50} color="#777777" />
         </TouchableOpacity>
@@ -66,9 +178,9 @@ const ViewProfileScreen = ({route, navigation}) => {
 
       <View style={styles.container}>
         <View style={styles.bodyContent}>
-          <Text style={styles.name}>{user[0].username}</Text>
+          <Text style={styles.name}>{name}</Text>
           <View>
-            <Text style={styles.info}>{user[0].education}</Text>
+            <Text style={styles.info}>{title}</Text>
           </View>
 
           <View
@@ -100,7 +212,7 @@ const ViewProfileScreen = ({route, navigation}) => {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={user[0].skills}
+            data={skills}
             renderItem={({item}) => (
               <View style={{}}>
                 <View style={styles.skillsListBox}>
@@ -139,11 +251,12 @@ const ViewProfileScreen = ({route, navigation}) => {
             </View>
 
             <Text style={{fontSize: 18, marginTop: '5%', fontStyle: 'italic'}}>
-              {user[0].description}
+              {/* {user[0].description} */}
+              {description}
             </Text>
             {/* add cv button here */}
             <View style={styles.UploadCV}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('PDFView')}>
                 <MaterialCommunityIcons
                   name="file-pdf-box"
                   size={60}
@@ -155,7 +268,7 @@ const ViewProfileScreen = ({route, navigation}) => {
                   }}
                 />
 
-                <Text style={styles.resumeText}>{user[0].cvFile}</Text>
+                <Text style={styles.resumeText}>Preview {name} Resume</Text>
               </TouchableOpacity>
               {/* <TouchableOpacity style={styles.UploadBtn}>
                 <Text style={styles.UploadText}>Upload CV</Text>
@@ -198,7 +311,7 @@ const ViewProfileScreen = ({route, navigation}) => {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            data={user[0].experience}
+            data={experience}
             renderItem={({item}) => (
               <View
                 style={{
@@ -222,7 +335,7 @@ const ViewProfileScreen = ({route, navigation}) => {
                       borderRadius: 16,
                     }}
                     source={{
-                      uri: item.pic,
+                      uri: item.image,
                     }}
                   />
 
@@ -230,10 +343,11 @@ const ViewProfileScreen = ({route, navigation}) => {
                     style={{
                       marginLeft: Dimensions.get('window').width * 0.03,
                     }}>
-                    <Text style={styles.designationStyle}>
-                      {item.designation}
+                    <Text style={styles.designationStyle}>{item.title}</Text>
+                    <Text style={{fontWeight: 'bold'}}>
+                      {item.period}
+                      {item.periodEnd}
                     </Text>
-                    <Text style={{fontWeight: 'bold'}}>{item.timePeriod}</Text>
                     <View style={styles.ExpBoxView}>
                       <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
                       <Text style={{fontWeight: 'bold'}}> - </Text>
@@ -263,16 +377,23 @@ const ViewProfileScreen = ({route, navigation}) => {
           </Text>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={posts}
+            data={fetchedPosts}
             keyExtractor={item => item.id}
             renderItem={({item}) => {
+              // console.log('Id is : ', item);
               let likeColor = '';
 
-              console.log(item.likedBy);
+              var found = false;
+              for (var i = 0; i < item.likedBy.length; i++) {
+                if (item.likedBy[i].email == profileEmail) {
+                  found = true;
+                  break;
+                }
+              }
 
-              if (item.likedBy.includes(profileName)) {
+              if (found) {
                 likeColor = '#000000';
-                console.log('running');
+                // console.log('running');
               } else {
                 likeColor = '#ffffff';
               }
@@ -280,8 +401,6 @@ const ViewProfileScreen = ({route, navigation}) => {
               return (
                 <View
                   style={{
-                    // elevation: 1000,
-                    // backgroundColor: '#ffffff',
                     marginHorizontal: Dimensions.get('window').width * 0.05,
                     marginVertical: Dimensions.get('window').height * 0.01,
                     borderRadius: 16,
@@ -292,7 +411,7 @@ const ViewProfileScreen = ({route, navigation}) => {
                       marginVertical: Dimensions.get('window').height * 0.01,
                     }}>
                     <Image
-                      source={{uri: item.imageUrl}}
+                      source={{uri: item.profilePic}}
                       style={{
                         width: 60,
                         height: 60,
@@ -322,45 +441,15 @@ const ViewProfileScreen = ({route, navigation}) => {
                         {item.title}
                       </Text>
                       <Text style={{color: '#777777', fontSize: 12}}>
-                        {item.datePosted}
+                        {item.date}
                       </Text>
                     </View>
-                    {/* looks fine here */}
-
-                    <TouchableOpacity
-                      style={{
-                        marginLeft: '18%',
-                      }}>
-                      {/* <MaterialCommunityIcons
-                        name="dots-vertical"
-                        size={30}
-                        color="#000000"
-                        style={
-                          {
-                            // marginLeft: Dimensions.get('window').width * 0.15,
-                            // alignSelf: 'flex-end',
-                            // marginTop: Dimensions.get('window').height * 0.005,
-                          }
-                        }
-                      /> */}
-                    </TouchableOpacity>
                   </View>
 
                   <SliderBox
                     // onCurrentImagePressed={index => ImagePressed()}
                     parentWidth={Dimensions.get('window').width * 0.9}
                     ImageComponentStyle={{borderRadius: 16}}
-                    // paginationBoxStyle={styles.sliderBoxPageStyle}
-                    // ImageComponentStyle={styles.sliderBoxImageStyle}
-                    // dotStyle={{
-                    //   width: 10,
-                    //   height: 10,
-                    //   borderRadius: 5,
-                    //   marginBottom: 20,
-                    //   marginHorizontal: 0,
-                    //   padding: 0,
-                    //   margin: 0,
-                    // }}
                     images={item.images}
                     sliderBoxHeight={Dimensions.get('window').height * 0.3}
                   />
@@ -372,7 +461,7 @@ const ViewProfileScreen = ({route, navigation}) => {
                       marginHorizontal: '2.5%',
                       marginVertical: '2%',
                     }}>
-                    {item.descriptionText}
+                    {item.description}
                   </Text>
 
                   <View
@@ -382,15 +471,88 @@ const ViewProfileScreen = ({route, navigation}) => {
                       marginBottom: '5%',
                     }}>
                     <View>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          color: '#469597',
-                          fontWeight: 'bold',
-                        }}>
-                        {item.likedBy.length} Likes
-                      </Text>
                       <TouchableOpacity
+                        style={{marginBottom: 6}}
+                        onPress={() => likeShow(item)}>
+                        <Text
+                          style={{
+                            textAlign: 'center',
+                            color: '#469597',
+                            fontWeight: 'bold',
+                          }}>
+                          {item.likedBy.length} Likes
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          console.log('hdshjdsfvhddhfbhj');
+
+                          var found = false;
+                          for (var i = 0; i < item.likedBy.length; i++) {
+                            if (item.likedBy[i].email == profileEmail) {
+                              found = true;
+                              break;
+                            }
+                          }
+                          if (found) {
+                            dbFirestore()
+                              .doc('Posts/' + item.id)
+                              .update({
+                                likedBy: dbFirestore.FieldValue.arrayRemove(
+                                  ...[
+                                    {
+                                      email: profileEmail,
+                                      // name: storeData.firstName,
+                                      // picUrl: storeData.pic,
+                                      // role: storeData.role,
+                                    },
+                                  ],
+                                ),
+                              })
+                              .then(() => {
+                                console.log('Like Removed!');
+                              });
+
+                            fetchedPosts.find(
+                              obj => obj.id == item.id,
+                            ).likedBy = item.likedBy.filter(
+                              e => e.email !== profileEmail,
+                            );
+
+                            setExtraData(new Date());
+
+                            // likeColor = '#ffffff';
+                          } else {
+                            console.log('ye work');
+                            dbFirestore()
+                              .doc('Posts/' + item.id)
+                              .update({
+                                likedBy: dbFirestore.FieldValue.arrayUnion({
+                                  email: profileEmail,
+                                  // name: storeData.firstName,
+                                  // picUrl: storeData.pic,
+                                  // role: storeData.role,
+                                }),
+                              })
+                              .then(() => {
+                                console.log('Like Placed!');
+                              });
+                            let arr = item.likedBy;
+                            arr.push({
+                              email: profileEmail,
+                              // name: storeData.firstName,
+                              // picUrl: storeData.pic,
+                              // role: storeData.role,
+                            });
+                            fetchedPosts.find(
+                              obj => obj.id == item.id,
+                            ).likedBy = arr;
+
+                            setExtraData(new Date());
+                          }
+                          // setFetchedPosts([]);
+                          // searchPosts();
+                        }}
                         style={{
                           paddingHorizontal: '8%',
                           paddingVertical: '8%',
@@ -401,29 +563,6 @@ const ViewProfileScreen = ({route, navigation}) => {
                           // width: Dimensions.get('window').width * 0.2,
                         }}>
                         <AntDesign name="like1" size={25} color={likeColor} />
-                      </TouchableOpacity>
-                    </View>
-
-                    <View>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          color: '#469597',
-                          fontWeight: 'bold',
-                        }}>
-                        {item.commentedBy.length} Comments
-                      </Text>
-                      <TouchableOpacity
-                        style={{
-                          paddingHorizontal: '8%',
-                          paddingVertical: '8%',
-                          backgroundColor: '#5BA199',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          borderRadius: 8,
-                          // width: Dimensions.get('window').width * 0.2,
-                        }}>
-                        <FontAwesome name="comment" size={25} color="#ffffff" />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -453,9 +592,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5E3E4',
   },
   resumeText: {
-    fontSize: 14,
+    fontSize: 16,
     color: 'black',
-    fontWeight: '600',
+    fontWeight: '400',
     justifyContent: 'center',
     alignSelf: 'center',
   },
