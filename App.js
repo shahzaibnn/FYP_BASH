@@ -70,21 +70,23 @@ import AdminRequestManagement from './src/screens/AdminRequestManagement';
 import AdminUserManagement from './src/screens/AdminUserManagement';
 import AdminStack from './src/navigations/AdminStack';
 import AlertTesting from './src/screens/AlertTesting';
+import AdminLogin from './src/screens/AdminLogin';
 
 export const storage = new MMKV();
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        {storage.getString('authToken') ? (
-          <AuthStack email={storage.getString('loggedInUser')} />
-        ) : (
-          <AppStack />
-        )}
-      </NavigationContainer>
-    </Provider>
+    // <Provider store={store}>
+    //   <NavigationContainer>
+    //     {storage.getString('authToken') ? (
+    //       <AuthStack email={storage.getString('loggedInUser')} />
+    //     ) : (
+    //       <AppStack />
+    //     )}
+    //   </NavigationContainer>
+    // </Provider>
 
+    <AdminLogin />
     // <Provider store={store}>
     //   <JobPostingScreen />
     // </Provider>
