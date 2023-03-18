@@ -74,7 +74,7 @@ export default function AdminLogin({navigation}) {
     } else {
       setFlag(false);
       if (email === adminEmail && password === adminPassword) {
-        navigation.navigate('AdminUserManagement');
+        navigation.navigate('AdminDashboard');
         setFlag(true);
       }
     }

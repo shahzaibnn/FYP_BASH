@@ -92,13 +92,13 @@ export default function App() {
     //   <JobPostingScreen />
     // </Provider>
 
-    <AdminDashboard />
+    // <AdminDashboard />
 
-    // <Provider store={store}>
-    //   <NavigationContainer>
-    //     <AdminStack />
-    //   </NavigationContainer>
-    // </Provider>
+    <Provider store={store}>
+      <NavigationContainer>
+        <AdminStack />
+      </NavigationContainer>
+    </Provider>
 
     // <SettingsScreen/>
 
