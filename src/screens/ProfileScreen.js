@@ -885,41 +885,77 @@ const ProfileScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       marginVertical: Dimensions.get('window').height * 0.01,
+                      // justifyContent: 'space-around',
                     }}>
-                    <Image
-                      source={{uri: item.profilePic}}
-                      style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: 64,
-                        marginLeft: Dimensions.get('window').width * 0.02,
-                      }}
-                    />
-                    <View
-                      style={{
-                        marginLeft: Dimensions.get('window').width * 0.05,
-                      }}>
-                      <Text
+                    <View style={{flexDirection: 'row'}}>
+                      <Image
+                        source={{uri: item.profilePic}}
                         style={{
-                          color: '#5BA199',
-                          fontWeight: 'bold',
-                          marginBottom: Dimensions.get('window').height * 0.005,
-                          fontSize: 16,
-                        }}>
-                        {item.name}
-                      </Text>
-                      <Text
+                          // flex: 1,
+                          width: 60,
+                          height: 60,
+                          borderRadius: 64,
+                          marginLeft: Dimensions.get('window').width * 0.02,
+                        }}
+                      />
+                      <View
                         style={{
-                          color: '#5BA199',
-                          marginBottom: Dimensions.get('window').height * 0.005,
-                          fontSize: 12,
+                          marginLeft: Dimensions.get('window').width * 0.05,
                         }}>
-                        {item.title}
-                      </Text>
-                      <Text style={{color: '#777777', fontSize: 12}}>
-                        {item.date}
-                      </Text>
+                        <Text
+                          style={{
+                            color: '#5BA199',
+                            fontWeight: 'bold',
+                            marginBottom:
+                              Dimensions.get('window').height * 0.005,
+                            fontSize: 16,
+                          }}>
+                          {item.name}
+                        </Text>
+                        <Text
+                          style={{
+                            color: '#5BA199',
+                            marginBottom:
+                              Dimensions.get('window').height * 0.005,
+                            fontSize: 12,
+                          }}>
+                          {item.title}
+                        </Text>
+                        <Text style={{color: '#777777', fontSize: 12}}>
+                          {item.date}
+                        </Text>
+                      </View>
                     </View>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        console.log(item.id);
+                        dbFirestore()
+                          .collection('Posts')
+                          .doc(item.id)
+                          .delete()
+                          .then(() => {
+                            console.log('User deleted!');
+                            setFetchedPosts(current =>
+                              current.filter(posts => posts.id !== item.id),
+                            );
+                            setExtraData(new Date());
+                          });
+                      }}
+                      style={{
+                        paddingHorizontal: '3%',
+                        backgroundColor: '#5BA199',
+                        // height: '30%',
+                        height: 30,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 16,
+                        marginLeft: Dimensions.get('window').width * 0.15,
+                      }}>
+                      <Text style={{fontWeight: 'bold', color: '#ffffff'}}>
+                        Delete
+                      </Text>
+                    </TouchableOpacity>
                   </View>
 
                   <SliderBox

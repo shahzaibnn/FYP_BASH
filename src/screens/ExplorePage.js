@@ -66,6 +66,15 @@ const ExplorePage = ({navigation}) => {
     console.log('actions is, ', actionParameters);
     actionSheet.current.show();
   };
+
+  const handleApply = job => {
+    // Pass the job information as props to the Apply to Job screen
+    console.log('checking jobs: ', job);
+    console.log('checking again: ', {job});
+
+    navigation.navigate('ApplyToJob', {job});
+  };
+
   // useEffect(() => {
   //   const subscriber = dbFirestore()
   //     .collection('Users')
@@ -475,9 +484,11 @@ const ExplorePage = ({navigation}) => {
               ListFooterComponent={<View style={{height: 60}}></View>}
               renderItem={({item}) => (
                 <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('ViewProfile');
-                  }}
+                  onPress={() =>
+                    navigation.navigate('ViewProfile', {
+                      userEmail: item.userEmail,
+                    })
+                  }
                   style={{
                     backgroundColor: 'rgba(187, 198, 200, 0.5)',
                     // borderRadius: 16,
@@ -808,6 +819,7 @@ const ExplorePage = ({navigation}) => {
                     }}>
                     <Image
                       style={{
+                        // flex: 2,
                         height: 60,
                         width: 60,
                         borderRadius: 16,
@@ -818,6 +830,7 @@ const ExplorePage = ({navigation}) => {
                     />
                     <View
                       style={{
+                        flex: 4,
                         marginLeft: Dimensions.get('window').width * 0.03,
                       }}>
                       <Text style={{fontSize: 12}}>
@@ -836,7 +849,9 @@ const ExplorePage = ({navigation}) => {
                       <Text>{item.jobCompany}</Text>
                     </View>
 
-                    <TouchableOpacity onPress={() => show(item)}>
+                    <TouchableOpacity
+                      style={{flex: 1}}
+                      onPress={() => show(item)}>
                       <MaterialCommunityIcons
                         name="dots-vertical"
                         size={25}
@@ -857,6 +872,7 @@ const ExplorePage = ({navigation}) => {
                       marginVertical: Dimensions.get('window').height * 0.02,
                     }}>
                     <TouchableOpacity
+                      onPress={() => handleApply(fetchedJobs)}
                       style={{
                         backgroundColor: '#5BA199',
                         paddingHorizontal:
@@ -958,7 +974,9 @@ const ExplorePage = ({navigation}) => {
 
             {/* apply now */}
             <View>
-              <TouchableOpacity style={styles.buttonStyle}>
+              <TouchableOpacity
+                style={styles.buttonStyle}
+                onPress={() => handleApply(fetchedJobs)}>
                 <Text style={styles.buttonTextStyle}>Apply</Text>
               </TouchableOpacity>
             </View>

@@ -23,6 +23,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageModal from 'react-native-image-modal';
 import {db, dbFirestore} from '../Firebase/Config';
+import PostSkeleton from '../components/PostSkeleton';
+import ViewProfileSkeleton from '../components/ViewProfileSkeleton';
 
 const ViewProfileScreen = ({route, navigation}) => {
   const [fetchedPosts, setFetchedPosts] = useState([]);
@@ -143,6 +145,10 @@ const ViewProfileScreen = ({route, navigation}) => {
   return (
     <ScrollView>
       {/* back button with 3 dots button */}
+
+      {/* <PostSkeleton /> */}
+      <ViewProfileSkeleton />
+      <PostSkeleton />
       <ImageModal
         resizeMode="stretch"
         modalImageResizeMode="contain"
