@@ -71,6 +71,7 @@ import AdminUserManagement from './src/screens/AdminUserManagement';
 import AdminStack from './src/navigations/AdminStack';
 import AlertTesting from './src/screens/AlertTesting';
 import AdminLogin from './src/screens/AdminLogin';
+import AdminDashboard from './src/screens/AdminDashboad';
 
 export const storage = new MMKV();
 
@@ -86,10 +87,12 @@ export default function App() {
     //   </NavigationContainer>
     // </Provider>
 
-    <AdminLogin />
+    // <AdminLogin />
     // <Provider store={store}>
     //   <JobPostingScreen />
     // </Provider>
+
+    <AdminDashboard />
 
     // <Provider store={store}>
     //   <NavigationContainer>

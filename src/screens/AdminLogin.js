@@ -62,21 +62,10 @@ export default function AdminLogin({navigation}) {
   const [flag, setFlag] = useState(true);
   const [approved, setApproved] = useState(true);
 
-  const loginViewOpacity = new Animated.Value(0);
-
-  useEffect(() => {
-    // Animate the opacity of the login view when the screen is mounted
-    Animated.timing(loginViewOpacity, {
-      toValue: 1,
-      duration: 1000,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
   console.log(email);
   console.log(password);
-
+  const adminEmail = 'bashfyp@gmail.com';
+  const adminPassword = 'admin';
   const handleLogin = () => {
     if (!email) {
       showToast('Please fill Email');
@@ -84,75 +73,10 @@ export default function AdminLogin({navigation}) {
       showToast('Please fill Password');
     } else {
       setFlag(false);
-      signInWithEmailAndPassword(auth, email, password)
-        .then(cred => {
-          console.log(cred);
-          console.log('success');
-          const authToken = cred.user.getIdToken();
-        })
-        .then(() => {
-          console.log('checking for approval');
-          dbFirestore()
-            .collection('Users')
-            .where('userEmail', '==', email.toLowerCase())
-            .get()
-            .then(querySnapshot => {
-              console.log('Total Found users: ', querySnapshot.size);
-
-              if (querySnapshot.size == 0) {
-                console.log('CANNOT RETRIEVE DATA');
-              } else {
-                querySnapshot.forEach(documentSnapshot => {
-                  console.log(documentSnapshot.data());
-                  console.log(
-                    'Approveeee: ',
-                    documentSnapshot.data().accountApproved,
-                  );
-                  console.log('Role: ', documentSnapshot.data().role);
-
-                  if (documentSnapshot.data().accountApproved === 'Approved') {
-                    setApproved(true);
-                    storage.set('authToken', 'LoggedIn');
-                    storage.set('loggedInUser', email);
-                    setFlag(true);
-                    navigation.dispatch(
-                      CommonActions.reset({
-                        index: 1,
-                        routes: [
-                          {
-                            name: 'Drawer',
-
-                            params: {
-                              screen: 'BottomTabs',
-                              params: {
-                                screen: 'Home',
-                                params: {
-                                  userEmail: email.toLowerCase(),
-                                },
-                              },
-                            },
-                          },
-                        ],
-                      }),
-                    );
-                  } else {
-                    setFlag(true);
-                    storage.clearAll();
-                    showToast('Pending approval here');
-                  }
-                });
-              }
-            });
-        })
-
-        .catch(error => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          showToast(errorMessage);
-          setFlag(true);
-
-          // ..
-        });
+      if (email === adminEmail && password === adminPassword) {
+        navigation.navigate('AdminUserManagement');
+        setFlag(true);
+      }
     }
   };
 
