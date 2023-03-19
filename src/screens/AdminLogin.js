@@ -76,6 +76,9 @@ export default function AdminLogin({navigation}) {
       if (email === adminEmail && password === adminPassword) {
         navigation.navigate('AdminDashboard');
         setFlag(true);
+      } else {
+        showToast('Incorrect Credentials');
+        setFlag(true);
       }
     }
   };

@@ -77,15 +77,15 @@ export const storage = new MMKV();
 
 export default function App() {
   return (
-    // <Provider store={store}>
-    //   <NavigationContainer>
-    //     {storage.getString('authToken') ? (
-    //       <AuthStack email={storage.getString('loggedInUser')} />
-    //     ) : (
-    //       <AppStack />
-    //     )}
-    //   </NavigationContainer>
-    // </Provider>
+    <Provider store={store}>
+      <NavigationContainer>
+        {storage.getString('authToken') ? (
+          <AuthStack email={storage.getString('loggedInUser')} />
+        ) : (
+          <AppStack />
+        )}
+      </NavigationContainer>
+    </Provider>
 
     // <AdminLogin />
     // <Provider store={store}>
@@ -94,11 +94,11 @@ export default function App() {
 
     // <AdminDashboard />
 
-    <Provider store={store}>
-      <NavigationContainer>
-        <AdminStack />
-      </NavigationContainer>
-    </Provider>
+    // <Provider store={store}>
+    //   <NavigationContainer>
+    //     <AdminStack />
+    //   </NavigationContainer>
+    // </Provider>
 
     // <SettingsScreen/>
 
