@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
+  StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState, createRef} from 'react';
 import {db, dbFirestore} from '../Firebase/Config';
@@ -13,42 +15,199 @@ import FastImage from 'react-native-fast-image';
 import {profile, jobs, posts} from '../model/data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import ActionSheet from 'react-native-actions-sheet';
 import {SliderBox} from 'react-native-image-slider-box';
-
+import {
+  addition,
+  setInititialLogin,
+  subtraction,
+  setJobs,
+} from '../store/action';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {useSelector, useDispatch} from 'react-redux';
 
-export default function JobDashboardScreen({navigation}) {
+export default function JobDashboardScreen({navigation, route}) {
   const [fetchedJobs, setFetchedJobs] = useState([]);
+  const [userData, setUserData] = useState(Object);
+  const [jobLoading, setJobLoading] = useState(false);
+  const [jobLoader, setJobLoader] = useState(true);
+  const [lastVisibleJobs, setLastVisibleJobs] = useState(null);
+  const [actionParameters, setActionParameters] = useState([]);
+  const [
+    onEndReachedCalledDuringMomentumJob,
+    setOnEndReachedCalledDuringMomentumJob,
+  ] = useState(false);
+  const [lastJob, setLastJob] = useState(false);
 
-  const searchJobs = async () => {
-    await dbFirestore()
-      .collection('Jobs')
-      // Filter results
-      // .where('userEmail', '==', 'habibafaisal8@gmail.com')
-      // .where('firstName', '==', 'Habiba')
+  let actionSheet = createRef();
+
+  const dispatch = useDispatch();
+
+  const storeData = useSelector(state => state);
+  const emailAddressOfCurrentUser = storeData.userEmail;
+  const renderLoaderJobs = () => {
+    return jobLoading && !lastJob ? (
+      <View style={styles.loaderStyle}>
+        <ActivityIndicator size="large" color="#aaa" />
+      </View>
+    ) : null;
+  };
+  const show = item => {
+    // console.log(item);
+    setActionParameters(item);
+    console.log('acrtions is, ', actionParameters);
+    actionSheet.current.show();
+  };
+  const handleApply = job => {
+    // Pass the job information as props to the Apply to Job screen
+    console.log('checking jobs: ', job);
+    console.log('checking again: ', {job});
+
+    navigation.navigate('ApplyToJob', {job});
+  };
+
+  const searchData = loggedInUser => {
+    console.log('LOGGED IN USER IS: ', loggedInUser);
+
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', loggedInUser.toLowerCase())
       .get()
       .then(querySnapshot => {
-        console.log('Total posts: ', querySnapshot.size);
+        console.log('Total Found users: ', querySnapshot.size);
 
-        querySnapshot.forEach(documentSnapshot => {
-          let v = documentSnapshot.data();
-          v.id = documentSnapshot.id;
-          console.log(
-            'User ID: ',
-            documentSnapshot.id,
-            documentSnapshot.data(),
-            setFetchedJobs(fetchedJobs => [...fetchedJobs, v]),
-            //To grab a particular field use
-            //documentSnapshot.data().userEmail,
-          );
-        });
+        if (querySnapshot.size == 0) {
+          console.log('CANNOT RETRIEVE DATA');
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.data());
+            setUserData(documentSnapshot.data());
+            dispatch(setInititialLogin(documentSnapshot.data()));
+            searchJobs(documentSnapshot.data().skills);
+          });
+        }
+      })
+      .catch(error => {
+        // alert(error);
+
+        // setFlag(true);
+        console.log(error);
       });
   };
+
   useEffect(() => {
-    searchJobs();
+    searchData(emailAddressOfCurrentUser);
   }, []);
+  const searchJobs = async skillsParams => {
+    console.log('search jobs here', skillsParams);
+    setJobLoading(true);
+
+    dbFirestore()
+      .collection('Jobs')
+      .where('skills', 'array-contains-any', skillsParams)
+      // .orderBy('createdAt', 'desc')
+      .limit(2)
+      .get()
+
+      .then(querySnapshot => {
+        const jobs = [];
+        querySnapshot.forEach(doc => {
+          jobs.push({id: doc.id, ...doc.data()});
+        });
+        console.log('Total Jobs: ', querySnapshot.size);
+
+        var total = querySnapshot.size;
+        let count = 0;
+        if (total == 0) {
+          setJobLoader(false);
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            console.log('hgccgcfgcgfc');
+
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+            // console.log(
+            //   'User ID: ',
+            //   documentSnapshot.id,
+            //   documentSnapshot.data(),
+            //   //To grab a particular field use
+            //   //documentSnapshot.data().userEmail,
+            // );
+            setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
+
+            count++;
+            if (count == total) {
+              setJobLoader(false);
+              console.log(':runing');
+            }
+            // dispatch(setJobs(documentSnapshot.data()));
+          });
+        }
+        // dispatch(setJobs(fetchedJobs));
+        // dispatch(setJobs(documentSnapshot.data()));
+
+        setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
+      });
+    // dispatch(setJobs(jobs));
+    // setJobLoading(false);
+  };
+
+  const searchMoreJobs = async () => {
+    setJobLoading(true);
+
+    dbFirestore()
+      .collection('Jobs')
+      // .where('skills', 'array-contains-any', storeData?.skills)
+      .where('skills', 'array-contains-any', storeData?.skills)
+      // .orderBy('createdAt', 'desc')
+      .startAfter(lastVisibleJobs)
+      .limit(1)
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Jobs: ', querySnapshot.size);
+
+        var total = querySnapshot.size;
+        let count = 0;
+        if (total == 0) {
+          setJobLoading(false);
+        } else {
+          querySnapshot.forEach(documentSnapshot => {
+            console.log('hgccgcfgcgfc');
+
+            let v = documentSnapshot.data();
+            v.id = documentSnapshot.id;
+            // console.log(
+            //   'User ID: ',
+            //   documentSnapshot.id,
+            //   documentSnapshot.data(),
+            //   //To grab a particular field use
+            //   //documentSnapshot.data().userEmail,
+            // );
+            setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
+            // dispatch(setJobs(documentSnapshot.data()));
+
+            count++;
+            if (count == total) {
+              setJobLoading(false);
+              console.log(':runing');
+            }
+          });
+        }
+        setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        querySnapshot.size == 0 ? setLastJob(true) : setLastJob(false);
+      });
+  };
+  const handleEndReachedJobs = () => {
+    setJobLoading(true);
+    console.log('end reached!!');
+    // console.log(lastVisibleJobs);
+
+    searchMoreJobs();
+  };
+
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
       <View
@@ -337,6 +496,44 @@ export default function JobDashboardScreen({navigation}) {
           // horizontal={true}
           // showsHorizontalScrollIndicator={false}
           data={fetchedJobs}
+          // onEndReachedThreshold={0.1}
+          scrollEventThrottle={150}
+          onEndReachedThreshold={0.1}
+          onMomentumScrollBegin={() => {
+            setOnEndReachedCalledDuringMomentumJob(false);
+          }}
+          ListFooterComponent={
+            !lastJob ? (
+              renderLoaderJobs
+            ) : (
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 20,
+                  color: '#000000',
+                  marginBottom: 90,
+                  textAlign: 'center',
+                }}>
+                You Are Up To Date / All Jobs Fetched And Displayed
+              </Text>
+            )
+          }
+          // horizontal={false}
+          onEndReached={() => {
+            console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
+            console.log('check last job value', lastJob);
+            console.log(
+              'check end moment job value',
+              onEndReachedCalledDuringMomentumJob,
+            );
+            if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
+              console.log(
+                'reaching towards end----------------------------------------',
+              );
+              handleEndReachedJobs(); // LOAD MORE DATA
+              setOnEndReachedCalledDuringMomentumJob(true);
+            }
+          }}
           renderItem={({item}) => (
             <View
               style={{
@@ -407,7 +604,8 @@ export default function JobDashboardScreen({navigation}) {
                     paddingHorizontal: Dimensions.get('window').width * 0.15,
                     paddingVertical: Dimensions.get('window').height * 0.01,
                     borderRadius: 16,
-                  }}>
+                  }}
+                  onPress={() => handleApply(fetchedJobs)}>
                   <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
                     Apply
                   </Text>
@@ -422,6 +620,349 @@ export default function JobDashboardScreen({navigation}) {
           keyExtractor={item => item.id}
         />
       </View>
+      <ActionSheet
+        // id={sheetId}
+        data={fetchedJobs}
+        ref={actionSheet}
+        containerStyle={{
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+          backgroundColor: '#E5E3E4',
+        }}
+        indicatorStyle={{
+          width: 100,
+        }}
+        gestureEnabled={true}>
+        <View>
+          {/* action sheet */}
+          <ScrollView style={styles.SectionStyle}>
+            {/* Company Logo */}
+            <View>
+              <Image
+                style={styles.header}
+                source={{
+                  uri: actionParameters.image,
+                }}
+              />
+            </View>
+            {/* Post */}
+            <View>
+              <Text style={styles.name}>{actionParameters.jobTitle}</Text>
+            </View>
+            {/* Company Name with location */}
+            <View style={styles.expView1}>
+              <Text style={styles.compTxt}>{actionParameters.jobCompany} </Text>
+              <Text style={styles.compTxt}>
+                {actionParameters.jobCity},{actionParameters.jobLocation}
+              </Text>
+            </View>
+            {/* Icons with text */}
+            <View style={styles.expView1}>
+              <MaterialCommunityIcons
+                name="clock"
+                size={25}
+                color="#000000"
+                style={{
+                  marginLeft: Dimensions.get('window').width * -0.05,
+                  marginTop: Dimensions.get('window').height * 0.003,
+                }}
+              />
+              <Text style={styles.compTxt}>{actionParameters.jobMode}</Text>
+              {/* <Text style={styles.compTxt}> - </Text> */}
+              <Text style={styles.compTxt}>
+                {actionParameters.jobSalary}/Month
+              </Text>
+            </View>
+            {/* Description title */}
+            <View>
+              <TouchableOpacity
+                style={styles.buttonStyleDesc}
+                // activeOpacity={0.5}
+                // onPress={handleSubmitButton}
+              >
+                <Text style={styles.buttonTextStyle}>Description</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Job desc */}
+            <View style={styles.messageBodyStyle}>
+              <ScrollView>
+                <Text style={styles.messageStyle}>
+                  {actionParameters.jobDescription}
+                </Text>
+              </ScrollView>
+            </View>
+
+            {/* apply now */}
+            <View>
+              <TouchableOpacity
+                style={styles.buttonStyle}
+                onPress={() => handleApply(actionParameters)}>
+                <Text
+                  style={styles.buttonTextStyle}
+                  // onPress={navigation.navigate('ApplyToJob')}
+                >
+                  Apply
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </View>
+      </ActionSheet>
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  SectionStyle: {
+    // flexDirection: 'row',
+    backgroundColor: '#E5E3E4',
+    // height: 500,
+
+    // backgroundColor: 'white',
+  },
+  UploadCV: {
+    alignSelf: 'center',
+  },
+  name: {
+    fontSize: 28,
+    color: 'black',
+    fontWeight: '600',
+    marginTop: 5,
+    alignSelf: 'center',
+  },
+  qualText: {
+    fontSize: 16,
+    color: 'black',
+    fontWeight: '500',
+    // marginTop: 5,
+    marginLeft: Dimensions.get('window').width * 0.12,
+    alignSelf: 'flex-start',
+  },
+  compTxt: {
+    fontSize: 16,
+    color: 'black',
+    marginTop: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ExpBoxView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  //   Header: {
+  //     flexDirection: 'row',
+  //     justifyContent: 'flex-start',
+  //     alignItems: 'center',
+  //     // height: 500,
+  //   },
+  titleText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginTop: 8,
+    marginBottom: 10,
+    marginLeft: 15,
+    color: '#5BA199',
+  },
+  messageBodyStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    height: 150,
+    justifyContent: 'center',
+  },
+  messageStyle: {
+    flex: 1,
+    multiline: true,
+    paddingLeft: 40,
+    paddingRight: 20,
+    borderRadius: 12,
+    fontSize: 15,
+    alignContent: 'center',
+    // alignSelf: 'center',
+  },
+  Row: {
+    flexDirection: 'row',
+  },
+  bg: {
+    backgroundColor: '#E5E3E4',
+    height: 1000,
+    borderRadius: 12,
+    marginTop: 15,
+    marginLeft: 25,
+    marginRight: 25,
+    margin: 10,
+  },
+  SectionStyle: {
+    // flexDirection: 'row',
+    backgroundColor: '#E5E3E4',
+    // height: 500,
+
+    // backgroundColor: 'white',
+  },
+  inputStyle: {
+    flex: 1,
+    backgroundColor: 'white',
+    color: '#6A6A6A',
+    paddingLeft: 10,
+    paddingRight: 20,
+    borderRadius: 12,
+  },
+  inputStyle2: {
+    flex: 1,
+    backgroundColor: 'white',
+    color: '#6A6A6A',
+    paddingLeft: 30,
+    paddingRight: 20,
+    borderRadius: 12,
+  },
+  detStyle_1: {
+    // justifyContent: 'flex-end',
+    // alignSelf: 'flex-end',
+    // alignItems: 'flex-end',
+    fontSize: 14,
+    color: 'black',
+    justifyContent: 'space-between',
+    // alignSelf: 'center',
+  },
+  ExpLocation: {
+    textAlign: 'right',
+    fontStyle: 'italic',
+    justifyContent: 'flex-end',
+    alignSelf: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  expView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: Dimensions.get('window').width * 0.5,
+    alignSelf: 'center',
+    /* Not doing anything. */
+    // flex: 1,
+  },
+  expView1: {
+    flexDirection: 'row',
+
+    justifyContent: 'space-between',
+    width: Dimensions.get('window').width * 0.5,
+    alignSelf: 'center',
+    // alignItems: 'flex-end',
+    /* Not doing anything. */
+    // flex: 1,
+  },
+  likeView: {
+    flexDirection: 'row',
+    // justifyContent: 'space-between',
+    width: Dimensions.get('window').width * 0.75,
+    alignSelf: 'center',
+    marginTop: '5%',
+    marginBottom: '15%',
+    // alignItems: 'flex-end',
+    /* Not doing anything. */
+    // flex: 1,
+  },
+  editExpView: {
+    // alignItems: 'center',
+    flex: 1,
+  },
+  resumeText: {
+    fontSize: 14,
+    color: 'black',
+    fontWeight: '600',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  text: {fontSize: 20, fontWeight: 'bold', color: '#6A6A6A', paddingTop: 15},
+
+  lastNameStyle: {
+    textAlign: 'right',
+    marginRight: 70,
+    // paddingLeft: 15,
+    fontSize: 15,
+    color: '#6A6A6A',
+    fontWeight: 'bold',
+    justifyContent: 'flex-end',
+    alignSelf: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  header: {
+    backgroundColor: '#E5E3E4',
+    height: 100,
+    width: 100,
+    borderRadius: 64,
+    borderWidth: 10,
+    resizeMode: 'cover',
+    alignSelf: 'center',
+    // marginTop: -20,
+  },
+  Header: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  text: {
+    color: '#6A6A6A',
+    fontWeight: 'bold',
+    fontSize: 15,
+    marginLeft: 5,
+    marginTop: 20,
+    // borderRadius: 15,
+    // borderWidth: 5,
+  },
+  dropdownContainer: {
+    backgroundColor: 'white',
+    margin: 10,
+    borderWidth: 0.5,
+    borderColor: 'white',
+    borderRadius: 20,
+    height: 50,
+    width: 300,
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignSelf: 'center',
+  },
+  menuContent: {
+    color: '#000',
+    padding: 2,
+    fontSize: 15,
+  },
+  buttonStyleDesc: {
+    backgroundColor: '#4CA6A8',
+    color: '#FFFFFF',
+    height: Dimensions.get('window').height * 0.06,
+    width: Dimensions.get('window').width * 0.4,
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderRadius: 12,
+    marginLeft: 25,
+    marginRight: 25,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  buttonStyle: {
+    backgroundColor: '#4CA6A8',
+    color: '#FFFFFF',
+    height: Dimensions.get('window').height * 0.06,
+    width: Dimensions.get('window').width * 0.7,
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 15,
+    // marginLeft: 25,
+    // marginRight: 25,
+    // marginTop: 20,
+    // marginBottom: 20,
+  },
+  buttonTextStyle: {
+    color: '#FFFFFF',
+    paddingVertical: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  loaderStyle: {
+    marginVertical: 16,
+    marginBottom: 90,
+    alignItems: 'center',
+  },
+});

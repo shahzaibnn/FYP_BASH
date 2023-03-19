@@ -27,6 +27,8 @@ import ViewProfileScreen from '../screens/ViewProfileScreen';
 import PdfViewScreen from '../screens/PDFViewScreen';
 import AdminRequestManagement from '../screens/AdminRequestManagement';
 import AdminUserManagement from '../screens/AdminUserManagement';
+import AdminLogin from '../screens/AdminLogin';
+import AdminDashboard from '../screens/AdminDashboad';
 
 export default function AdminStack() {
   const Stack = createNativeStackNavigator();
@@ -38,6 +40,8 @@ export default function AdminStack() {
       screenOptions={{
         headerShown: false,
       }}>
+      <Stack.Screen name="AdminLogin" component={AdminLogin} />
+      <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
       <Stack.Screen
         name="AdminRequestManagement"
         component={AdminRequestManagement}
