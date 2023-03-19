@@ -26,6 +26,7 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useSelector, useDispatch} from 'react-redux';
+import JobSkeleton from '../components/JobSkeleton';
 
 export default function JobDashboardScreen({navigation, route}) {
   const [fetchedJobs, setFetchedJobs] = useState([]);
@@ -66,39 +67,40 @@ export default function JobDashboardScreen({navigation, route}) {
     navigation.navigate('ApplyToJob', {job});
   };
 
-  const searchData = loggedInUser => {
-    console.log('LOGGED IN USER IS: ', loggedInUser);
+  // const searchData = loggedInUser => {
+  //   console.log('LOGGED IN USER IS: ', loggedInUser);
 
-    dbFirestore()
-      .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
-      .where('userEmail', '==', loggedInUser.toLowerCase())
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
+  //   dbFirestore()
+  //     .collection('Users')
+  //     // .doc('roles')
+  //     // .collection(value.toLowerCase())
+  //     .where('userEmail', '==', loggedInUser.toLowerCase())
+  //     .get()
+  //     .then(querySnapshot => {
+  //       console.log('Total Found users: ', querySnapshot.size);
 
-        if (querySnapshot.size == 0) {
-          console.log('CANNOT RETRIEVE DATA');
-        } else {
-          querySnapshot.forEach(documentSnapshot => {
-            console.log(documentSnapshot.data());
-            setUserData(documentSnapshot.data());
-            dispatch(setInititialLogin(documentSnapshot.data()));
-            searchJobs(documentSnapshot.data().skills);
-          });
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  //       if (querySnapshot.size == 0) {
+  //         console.log('CANNOT RETRIEVE DATA');
+  //       } else {
+  //         querySnapshot.forEach(documentSnapshot => {
+  //           console.log(documentSnapshot.data());
+  //           setUserData(documentSnapshot.data());
+  //           dispatch(setInititialLogin(documentSnapshot.data()));
+  //           searchJobs(documentSnapshot.data().skills);
+  //         });
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // };
 
   useEffect(() => {
-    searchData(emailAddressOfCurrentUser);
+    // searchData(emailAddressOfCurrentUser);
+    searchJobs();
   }, []);
-  const searchJobs = async skillsParams => {
-    console.log('search jobs here', skillsParams);
+  const searchJobs = () => {
+    // console.log('search jobs here', skillsParams);
     setJobLoading(true);
 
     dbFirestore()
@@ -146,7 +148,7 @@ export default function JobDashboardScreen({navigation, route}) {
       .collection('Jobs')
 
       .startAfter(lastVisibleJobs)
-      .limit(1)
+      .limit(5)
       .get()
       .then(querySnapshot => {
         console.log('Total Jobs: ', querySnapshot.size);
@@ -186,13 +188,21 @@ export default function JobDashboardScreen({navigation, route}) {
 
   return (
     // <ScrollView style={{}}>
-    <View
-      style={{
-        marginHorizontal: '6%',
-        marginVertical: '2%',
-        backgroundColor: '#E5E3E4',
-      }}>
+    <View>
       <FlatList
+        ListEmptyComponent={
+          <View
+            style={{marginHorizontal: Dimensions.get('screen').width * 0.1}}>
+            <JobSkeleton />
+            <JobSkeleton />
+            <JobSkeleton />
+            <JobSkeleton />
+          </View>
+        }
+        style={{
+          backgroundColor: '#E5E3E4',
+          width: '100%',
+        }}
         ListHeaderComponent={
           <View>
             <View
@@ -307,7 +317,7 @@ export default function JobDashboardScreen({navigation, route}) {
               // padding: '3%',
               borderRadius: 16,
 
-              marginHorizontal: Dimensions.get('window').width * 0.01,
+              marginHorizontal: Dimensions.get('window').width * 0.08,
               marginBottom: Dimensions.get('window').height * 0.02,
               // elevation: 5,
             }}>
@@ -315,21 +325,24 @@ export default function JobDashboardScreen({navigation, route}) {
               style={{
                 flexDirection: 'row',
                 marginTop: Dimensions.get('window').height * 0.02,
-                // marginBottom: Dimensions.get('window').height * 0.02,
                 marginHorizontal: Dimensions.get('window').width * 0.05,
               }}>
               <Image
                 style={{
+                  // flex: 2,
                   height: 60,
                   width: 60,
                   borderRadius: 16,
-                  // marginLeft: Dimensions.get('window').width * 0.1,
                 }}
                 source={{
                   uri: item.image,
                 }}
               />
-              <View style={{marginLeft: Dimensions.get('window').width * 0.03}}>
+              <View
+                style={{
+                  flex: 4,
+                  marginLeft: Dimensions.get('window').width * 0.03,
+                }}>
                 <Text style={{fontSize: 12}}>
                   {item.jobPostedBy} posted a new job
                 </Text>
@@ -345,12 +358,14 @@ export default function JobDashboardScreen({navigation, route}) {
                 <Text>{item.jobCompany}</Text>
               </View>
 
-              <TouchableOpacity onPress={() => show(item)}>
+              <TouchableOpacity style={{flex: 1}} onPress={() => show(item)}>
                 <MaterialCommunityIcons
                   name="dots-vertical"
                   size={25}
                   color="#000000"
-                  style={{marginLeft: Dimensions.get('window').width * 0.05}}
+                  style={{
+                    marginLeft: Dimensions.get('window').width * 0.05,
+                  }}
                 />
               </TouchableOpacity>
             </View>

@@ -486,6 +486,7 @@ export default function HomeScreen({navigation, route}) {
               </Text>
 
               <TouchableOpacity
+                onPress={() => navigation.jumpTo('JobDashboard')}
                 style={{
                   flexDirection: 'row',
                   alignItems: 'flex-end',
