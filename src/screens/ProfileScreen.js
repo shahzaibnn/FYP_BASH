@@ -39,9 +39,33 @@ import {
 } from '../store/action';
 // import {dbFirestore} from '../Firebase/Config';
 import ActionSheet from 'react-native-actions-sheet';
+import AlertBox from '../components/AlertBox';
 
 const ProfileScreen = ({navigation}) => {
   const profileName = 'Tony';
+
+  const [showWarning, setShowWarning] = useState(false);
+
+  const [deleteId, setDeleteId] = useState('');
+
+  const WarningCancelPressed = () => {
+    setShowWarning(false);
+  };
+  const WarningConfirmPressed = () => {
+    // console.log(item.id);
+    dbFirestore()
+      .collection('Posts')
+      .doc(deleteId)
+      .delete()
+      .then(() => {
+        console.log('User deleted!');
+        setFetchedPosts(current =>
+          current.filter(posts => posts.id !== deleteId),
+        );
+        setExtraData(new Date());
+        setShowWarning(false);
+      });
+  };
 
   const dispatch = useDispatch();
 
@@ -687,7 +711,11 @@ const ProfileScreen = ({navigation}) => {
               {resumeUrl ? (
                 <View>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('PDFView')}>
+                    onPress={() =>
+                      navigation.navigate('PDFView', {
+                        pdfUrl: storeData.resumeUrl,
+                      })
+                    }>
                     <MaterialCommunityIcons
                       name="file-pdf-box"
                       size={60}
@@ -929,18 +957,21 @@ const ProfileScreen = ({navigation}) => {
 
                     <TouchableOpacity
                       onPress={() => {
-                        console.log(item.id);
-                        dbFirestore()
-                          .collection('Posts')
-                          .doc(item.id)
-                          .delete()
-                          .then(() => {
-                            console.log('User deleted!');
-                            setFetchedPosts(current =>
-                              current.filter(posts => posts.id !== item.id),
-                            );
-                            setExtraData(new Date());
-                          });
+                        setShowWarning(true);
+                        setDeleteId(item.id);
+
+                        // console.log(item.id);
+                        // dbFirestore()
+                        //   .collection('Posts')
+                        //   .doc(item.id)
+                        //   .delete()
+                        //   .then(() => {
+                        //     console.log('User deleted!');
+                        //     setFetchedPosts(current =>
+                        //       current.filter(posts => posts.id !== item.id),
+                        //     );
+                        //     setExtraData(new Date());
+                        //   });
                       }}
                       style={{
                         paddingHorizontal: '3%',
@@ -1240,6 +1271,14 @@ const ProfileScreen = ({navigation}) => {
             </ScrollView>
           </View>
         </ActionSheet>
+
+        <AlertBox
+          showWarning={showWarning}
+          CancelPressed={WarningCancelPressed}
+          ConfirmPressed={WarningConfirmPressed}
+          heading={'Confirmation'}
+          text={'Do You want to Delete this post?'}
+        />
       </View>
     </ScrollView>
   );

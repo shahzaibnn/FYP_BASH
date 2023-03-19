@@ -262,20 +262,39 @@ const ViewProfileScreen = ({route, navigation}) => {
             </Text>
             {/* add cv button here */}
             <View style={styles.UploadCV}>
-              <TouchableOpacity onPress={() => navigation.navigate('PDFView')}>
-                <MaterialCommunityIcons
-                  name="file-pdf-box"
-                  size={60}
-                  color="red"
-                  style={{
-                    // alignItems: 'center',
-                    justifyContent: 'center',
-                    alignSelf: 'center',
-                  }}
-                />
+              {resumeLink ? (
+                <View>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('PDFView', {
+                        pdfUrl: resumeLink,
+                      })
+                    }>
+                    <MaterialCommunityIcons
+                      name="file-pdf-box"
+                      size={60}
+                      color="red"
+                      style={{
+                        // alignItems: 'center',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                      }}
+                    />
 
-                <Text style={styles.resumeText}>Preview {name} Resume</Text>
-              </TouchableOpacity>
+                    <Text style={styles.resumeText}>Resume.pdf</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => removeFile()}
+                    style={{alignSelf: 'center', marginTop: '2%'}}>
+                    <Entypo
+                      name="circle-with-cross"
+                      color={'#777777'}
+                      size={20}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : null}
               {/* <TouchableOpacity style={styles.UploadBtn}>
                 <Text style={styles.UploadText}>Upload CV</Text>
               </TouchableOpacity> */}

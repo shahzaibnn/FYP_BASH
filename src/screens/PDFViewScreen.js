@@ -5,19 +5,21 @@ import {
   View,
   TouchableOpacity,
   Text,
+  ScrollView,
 } from 'react-native';
 import Pdf from 'react-native-pdf';
 import DocumentPicker from 'react-native-document-picker';
 
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+// import { ScrollView } from 'react-native-gesture-handler';
 
-export default function PdfViewScreen({navigation}) {
+export default function PdfViewScreen({navigation, route}) {
   const [selectFile, setSelectFile] = useState();
 
   const storeData = useSelector(state => state);
 
-  const [resumeUrl, setResumeUrl] = useState(storeData.resumeUrl);
+  const [resumeUrl, setResumeUrl] = useState(route.params.pdfUrl);
 
   const selectSingleFile = async () => {
     try {
@@ -103,14 +105,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#E5E3E4',
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    // justifyContent: 'flex-start',
+    // alignItems: 'center',
     // marginTop: 25,
   },
   pdf: {
-    // flex: 1,
+    flex: 1,
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    // height: Dimensions.get('window').height,
     backgroundColor: '#E5E3E4',
     // backgroundColor: 'black',
   },
