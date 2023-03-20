@@ -16,7 +16,7 @@ import {user, jobs, posts, experience} from '../model/data';
 import {profile} from '../model/data';
 import {SliderBox} from 'react-native-image-slider-box';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 // import {SliderBox} from 'react-native-image-slider-box';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -284,15 +284,15 @@ const ViewProfileScreen = ({route, navigation}) => {
                     <Text style={styles.resumeText}>Resume.pdf</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={() => removeFile()}
                     style={{alignSelf: 'center', marginTop: '2%'}}>
                     <Entypo
                       name="circle-with-cross"
                       color={'#777777'}
                       size={20}
-                    />
-                  </TouchableOpacity>
+                    /> */}
+                  {/* </TouchableOpacity> */}
                 </View>
               ) : null}
               {/* <TouchableOpacity style={styles.UploadBtn}>
