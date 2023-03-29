@@ -38,7 +38,7 @@ import storage from '@react-native-firebase/storage';
 
 import MonthPicker from 'react-native-month-year-picker';
 
-export default function EditProfileScreen() {
+export default function EditProfileScreen({navigation}) {
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
 
@@ -451,7 +451,12 @@ export default function EditProfileScreen() {
           marginVertical: '5%',
           //   justifyContent: 'center',
         }}>
-        <TouchableOpacity style={{}} onPress={() => console.log(storeData)}>
+        <TouchableOpacity
+          style={{}}
+          onPress={() => {
+            navigation.goBack();
+            console.log(storeData);
+          }}>
           <Ionicons
             name="chevron-back-circle-sharp"
             size={35}

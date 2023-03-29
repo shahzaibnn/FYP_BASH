@@ -60,7 +60,7 @@ import {
 } from 'firebase/auth';
 
 import {CommonActions} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {getAuth} from 'firebase/auth';
 import AuthStack from './src/navigations/AuthStack';

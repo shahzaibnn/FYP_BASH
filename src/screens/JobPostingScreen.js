@@ -36,7 +36,9 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Chase} from 'react-native-animated-spinkit';
 import MultiSelect from 'react-native-multiple-select';
 
-export default function JobPostingScreen() {
+export default function JobPostingScreen({navigation}) {
+  const storeData = useSelector(state => state);
+  const dispatch = useDispatch();
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
   const [opacity, setOpacity] = useState(1);
@@ -46,7 +48,7 @@ export default function JobPostingScreen() {
   const [title, setTitle] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
-  const [name, setName] = useState('');
+  const [name, setName] = useState(storeData.firstName);
 
   const [salary, setSalary] = useState('');
   const [description, setDescription] = useState('');
@@ -162,9 +164,6 @@ export default function JobPostingScreen() {
   const [cityLength, setCityLength] = useState(0);
   const [titleLength, setTitleLength] = useState(0);
   const [newItem, setNewItem] = useState('');
-
-  const storeData = useSelector(state => state);
-  const dispatch = useDispatch();
 
   const [skillsList, setSkillsList] = useState([
     {
@@ -615,7 +614,9 @@ export default function JobPostingScreen() {
             marginVertical: '3%',
             justifyContent: 'center',
           }}>
-          <TouchableOpacity style={{position: 'absolute', left: 0}}>
+          <TouchableOpacity
+            style={{position: 'absolute', left: 0}}
+            onPress={() => navigation.goBack()}>
             <Entypo name="circle-with-cross" size={25} color="#777777" />
           </TouchableOpacity>
 
@@ -769,6 +770,7 @@ export default function JobPostingScreen() {
               borderRadius: 16,
             }}>
             <TextInput
+              editable={false}
               style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
               // multiline
               // onChangeText={setName}

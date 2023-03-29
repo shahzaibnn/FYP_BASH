@@ -106,10 +106,16 @@ export default function CreatePostScreen() {
 
   const uploadImage = async () => {
     setIndicator(false);
-    console.log(Docid);
+    console.log('yahan pe checking!!!');
     try {
       let counter = 0;
+
+      if (filePath.length === 0) {
+        setFlag(true);
+      }
+
       let mod = filePath.map(function (element, index) {
+        console.log('no image');
         // const url = .getDownloadURL();
         const reference = storage().ref('/myfiles/' + element.name);
         const task = reference.putFile(
@@ -121,24 +127,28 @@ export default function CreatePostScreen() {
           console.log('uploading');
         });
 
-        task.then(async () => {
-          console.log('Task complete');
-          console.log('Uploaded');
-          const url = await reference.getDownloadURL();
-          console.log('URLS ARE \n');
-          yourArray.push(url);
-          // console.log('Checking here!34443');
-          console.log(yourArray);
-          // addtoDB(yourArray);
-          setyourArray(yourArray);
-          // setfilePath({});
-          counter++;
-          console.log(counter);
-          console.log(filePath.length);
-          if (counter == filePath.length) {
-            setFlag(true);
-          }
-        });
+        task
+          .then(async () => {
+            console.log('Task complete');
+            console.log('Uploaded');
+            const url = await reference.getDownloadURL();
+            console.log('URLS ARE \n');
+            yourArray.push(url);
+            // console.log('Checking here!34443');
+            console.log(yourArray);
+            // addtoDB(yourArray);
+            setyourArray(yourArray);
+            // setfilePath({});
+            counter++;
+            console.log(counter);
+            console.log(filePath.length);
+            if (counter == filePath.length) {
+              setFlag(true);
+            }
+          })
+          .catch(() => {
+            console.log('no image');
+          });
       });
       console.log('abey bhai!!');
     } catch (error) {
@@ -173,6 +183,7 @@ export default function CreatePostScreen() {
       .then(() => {
         setIndicator(true);
         console.log('Post Added!');
+        alert('Post Uploaded!!!');
       });
   };
 
@@ -237,9 +248,9 @@ export default function CreatePostScreen() {
     console.log('clicked!!!');
   };
 
-  console.log(filePath);
+  // console.log(filePath);
   // console.log('outside to check!!!');
-  console.log('outside to check!!!' + yourArray);
+  // console.log('outside to check!!!' + yourArray);
 
   useEffect(() => {
     if (flag) {
@@ -251,7 +262,7 @@ export default function CreatePostScreen() {
       setyourArray([]);
       setFlag(false);
       // setIndicator(true);
-      alert('Post Uploaded!!!');
+      // alert('Post Uploaded!!!');
     }
   }, [flag]);
 
