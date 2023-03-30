@@ -425,39 +425,39 @@ export default function JobPostingScreen({navigation}) {
       Alert.alert('Invalid Email', 'Please enter a valid email.');
     } else if (!/^[0-9]*\.?[0-9]+$/.test(salary)) {
       Alert.alert('Invalid Salary Value', 'Please enter a valid salary value.');
-    } else if (description.length > 50) {
+    } else if (description.length > 150) {
       // Display an error message if the input is too long
       Alert.alert(
         'Exceeded Length',
-        'Message is too long. Maximum length is 50 characters.',
+        'Message is too long. Maximum length is 150 characters.',
       );
-      showToast('Message is too long. Maximum length is 50 characters.');
-    } else if (name.length > 15) {
+      showToast('Message is too long. Maximum length is 150 characters.');
+    } else if (salary.length > 30) {
       // Display an error message if the input is too long
       Alert.alert(
         'Exceeded Length',
-        'Name is too long. Maximum length is 15 characters.',
-      );
-      // showToast('Message is too long. Maximum length is 50 characters.');
-    } else if (city.length > 15) {
-      // Display an error message if the input is too long
-      Alert.alert(
-        'Exceeded Length',
-        'City is too long. Maximum length is 15 characters.',
+        'Salary out of range. Maximum length is 30 characters.',
       );
       // showToast('Message is too long. Maximum length is 50 characters.');
-    } else if (company.length > 15) {
+    } else if (city.length > 30) {
       // Display an error message if the input is too long
       Alert.alert(
         'Exceeded Length',
-        'Company is too long. Maximum length is 15 characters.',
+        'City is too long. Maximum length is 30 characters.',
       );
       // showToast('Message is too long. Maximum length is 50 characters.');
-    } else if (title.length > 15) {
+    } else if (company.length > 30) {
       // Display an error message if the input is too long
       Alert.alert(
         'Exceeded Length',
-        'Title is too long. Maximum length is 15 characters.',
+        'Company is too long. Maximum length is 30 characters.',
+      );
+      // showToast('Message is too long. Maximum length is 50 characters.');
+    } else if (title.length > 30) {
+      // Display an error message if the input is too long
+      Alert.alert(
+        'Exceeded Length',
+        'Title is too long. Maximum length is 30 characters.',
       );
       // showToast('Message is too long. Maximum length is 50 characters.');
     } else {
@@ -645,8 +645,8 @@ export default function JobPostingScreen({navigation}) {
               Job Title
             </Text>
             <Text
-              style={[styles.lengthText, titleLength >= 15 && {color: 'red'}]}>
-              {titleLength}/15
+              style={[styles.lengthText, titleLength >= 30 && {color: 'red'}]}>
+              {titleLength}/30
             </Text>
           </View>
 
@@ -718,8 +718,8 @@ export default function JobPostingScreen({navigation}) {
               City
             </Text>
             <Text
-              style={[styles.lengthText, cityLength >= 15 && {color: 'red'}]}>
-              {cityLength}/15
+              style={[styles.lengthText, cityLength >= 30 && {color: 'red'}]}>
+              {cityLength}/30
             </Text>
           </View>
 
@@ -755,10 +755,10 @@ export default function JobPostingScreen({navigation}) {
             <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
               Name
             </Text>
-            <Text
-              style={[styles.lengthText, nameLength >= 15 && {color: 'red'}]}>
-              {nameLength}/15
-            </Text>
+            {/* <Text
+              style={[styles.lengthText, nameLength >= 30 && {color: 'red'}]}>
+              {nameLength}/30
+            </Text> */}
           </View>
 
           <View
@@ -774,11 +774,11 @@ export default function JobPostingScreen({navigation}) {
               style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
               // multiline
               // onChangeText={setName}
-              onChangeText={name => {
-                setName(name);
-                setNameLength(name.length);
-                // setErrorMessage('');
-              }}
+              // onChangeText={name => {
+              //   setName(name);
+              //   setNameLength(name.length);
+              //   // setErrorMessage('');
+              // }}
               value={name}
               placeholder="Your name here..."
               placeholderTextColor={'#5BA199'}
@@ -823,9 +823,9 @@ export default function JobPostingScreen({navigation}) {
             <Text
               style={[
                 styles.lengthText,
-                companyNameLength >= 15 && {color: 'red'},
+                companyNameLength >= 30 && {color: 'red'},
               ]}>
-              {companyNameLength}/15
+              {companyNameLength}/30
             </Text>
           </View>
 
@@ -1068,8 +1068,8 @@ export default function JobPostingScreen({navigation}) {
               Salary
             </Text>
             <Text
-              style={[styles.lengthText, salaryLength >= 15 && {color: 'red'}]}>
-              {salaryLength}/15
+              style={[styles.lengthText, salaryLength >= 30 && {color: 'red'}]}>
+              {salaryLength}/30
             </Text>
           </View>
 
@@ -1107,9 +1107,9 @@ export default function JobPostingScreen({navigation}) {
             <Text
               style={[
                 styles.lengthText,
-                descriptionLength >= 50 && {color: 'red'},
+                descriptionLength >= 150 && {color: 'red'},
               ]}>
-              {descriptionLength}/50
+              {descriptionLength}/150
             </Text>
           </View>
 
