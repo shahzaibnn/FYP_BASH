@@ -36,6 +36,7 @@ import {
 } from '../store/action';
 import storage from '@react-native-firebase/storage';
 
+import {Chase} from 'react-native-animated-spinkit';
 import MonthPicker from 'react-native-month-year-picker';
 
 export default function EditProfileScreen({navigation}) {
@@ -188,6 +189,8 @@ export default function EditProfileScreen({navigation}) {
   };
   const updateArrayExp = async () => {
     // console.log(field);
+    setIndicator(false);
+
     console.log(experienceTitle);
     console.log(experienceCompany);
     console.log(experienceCountry);
@@ -214,37 +217,22 @@ export default function EditProfileScreen({navigation}) {
     const url = await storage().ref(filename).getDownloadURL();
     console.log('url is: ' + url);
     // var object = {};
-    dbFirestore()
-      .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
-      .where('userEmail', '==', storeData.userEmail)
-      // .where('userEmail', '==', 'bashfyp@gmail.com')
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
 
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(documentSnapshot.id);
-          let experience = [
-            {
-              title: experienceTitle,
-              period: experienceDateStart,
-              periodEnd: experienceDateEnd,
-              company: experienceCompany,
-              city: experienceLocation,
-              country: experienceCountry,
-              image: url,
-            },
-          ];
+    try {
+      dbFirestore()
+        .collection('Users')
+        // .doc('roles')
+        // .collection(value.toLowerCase())
+        .where('userEmail', '==', storeData.userEmail)
+        // .where('userEmail', '==', 'bashfyp@gmail.com')
+        .get()
+        .then(querySnapshot => {
+          console.log('Total Found users: ', querySnapshot.size);
 
-          dbFirestore()
-            .doc('Users/' + documentSnapshot.id)
-            .update({
-              experience: dbFirestore.FieldValue.arrayUnion(...experience),
-            })
-            .then(() => {
-              let experienceRedux = {
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.id);
+            let experience = [
+              {
                 title: experienceTitle,
                 period: experienceDateStart,
                 periodEnd: experienceDateEnd,
@@ -252,31 +240,53 @@ export default function EditProfileScreen({navigation}) {
                 city: experienceLocation,
                 country: experienceCountry,
                 image: url,
-              };
+              },
+            ];
 
-              dispatch(addExpRedux(experienceRedux));
-              // dispatch(
-              //   addExpRedux(
-              //     expTitle,
-              //     expTime,
-              //     expOrg,
-              //     expLoc,
-              //     expCountry,
-              //     expImage,
-              //   ),
-              // );
-              // alert('experience added!');
-              // setExtraData(new Date());
+            dbFirestore()
+              .doc('Users/' + documentSnapshot.id)
+              .update({
+                experience: dbFirestore.FieldValue.arrayUnion(...experience),
+              })
+              .then(() => {
+                let experienceRedux = {
+                  title: experienceTitle,
+                  period: experienceDateStart,
+                  periodEnd: experienceDateEnd,
+                  company: experienceCompany,
+                  city: experienceLocation,
+                  country: experienceCountry,
+                  image: url,
+                };
 
-              console.log('experience updated');
-            });
+                dispatch(addExpRedux(experienceRedux));
+                // dispatch(
+                //   addExpRedux(
+                //     expTitle,
+                //     expTime,
+                //     expOrg,
+                //     expLoc,
+                //     expCountry,
+                //     expImage,
+                //   ),
+                // );
+                // alert('experience added!');
+                // setExtraData(new Date());
+
+                console.log('experience updated');
+              });
+          });
+          setIndicator(true);
+          alert('experience updated');
+        })
+        .catch(error => {
+          alert(error);
+
+          // setFlag(true);
         });
-      })
-      .catch(error => {
-        alert(error);
-
-        // setFlag(true);
-      });
+    } catch {
+      setIndicator(true);
+    }
   };
 
   const updateArraySkill = value => {
@@ -284,36 +294,43 @@ export default function EditProfileScreen({navigation}) {
     console.log(value);
     console.log(storeData.userEmail);
     // var object = {};
-    dbFirestore()
-      .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
-      .where('userEmail', '==', storeData.userEmail)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
+    setIndicator(false);
 
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(documentSnapshot.id);
-          dbFirestore()
-            .doc('Users/' + documentSnapshot.id)
-            .update({
-              skills: dbFirestore.FieldValue.arrayUnion(value),
-            })
-            .then(() => {
-              dispatch(addSkillRedux(value));
-              alert('skill added!');
-              setExtraData(new Date());
+    try {
+      dbFirestore()
+        .collection('Users')
+        // .doc('roles')
+        // .collection(value.toLowerCase())
+        .where('userEmail', '==', storeData.userEmail)
+        .get()
+        .then(querySnapshot => {
+          console.log('Total Found users: ', querySnapshot.size);
 
-              console.log('skills updated');
-            });
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.id);
+            dbFirestore()
+              .doc('Users/' + documentSnapshot.id)
+              .update({
+                skills: dbFirestore.FieldValue.arrayUnion(value),
+              })
+              .then(() => {
+                dispatch(addSkillRedux(value));
+                alert('skill added!');
+                setExtraData(new Date());
+
+                console.log('skills updated');
+              });
+          });
+          setIndicator(true);
+        })
+        .catch(error => {
+          alert(error);
+
+          // setFlag(true);
         });
-      })
-      .catch(error => {
-        alert(error);
-
-        // setFlag(true);
-      });
+    } catch (error) {
+      setIndicator(true);
+    }
   };
 
   const removeFromArraySkill = value => {
@@ -358,36 +375,43 @@ export default function EditProfileScreen({navigation}) {
     console.log(value);
     console.log(storeData.userEmail);
     var object = {};
-    dbFirestore()
-      .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
-      .where('userEmail', '==', storeData.userEmail)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
+    setIndicator(false);
 
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(documentSnapshot.id);
-          dbFirestore()
-            .collection('Users')
-            .doc(documentSnapshot.id)
-            .update({
-              [field]: value,
-            })
-            .then(() => {
-              dispatch(changeUserProfile(field, value));
+    try {
+      dbFirestore()
+        .collection('Users')
+        // .doc('roles')
+        // .collection(value.toLowerCase())
+        .where('userEmail', '==', storeData.userEmail)
+        .get()
+        .then(querySnapshot => {
+          console.log('Total Found users: ', querySnapshot.size);
 
-              alert('User updated');
-              console.log('User updated!');
-            });
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.id);
+            dbFirestore()
+              .collection('Users')
+              .doc(documentSnapshot.id)
+              .update({
+                [field]: value,
+              })
+              .then(() => {
+                dispatch(changeUserProfile(field, value));
+
+                alert('User updated');
+                console.log('User updated!');
+              });
+          });
+          setIndicator(true);
+        })
+        .catch(error => {
+          alert(error);
+
+          // setFlag(true);
         });
-      })
-      .catch(error => {
-        alert(error);
-
-        // setFlag(true);
-      });
+    } catch (error) {
+      setIndicator(true);
+    }
   };
 
   // const selectFile = async () => {
@@ -437,10 +461,29 @@ export default function EditProfileScreen({navigation}) {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
+  const [pointerEvent, setPointerEvent] = useState('auto');
+  const [opacity, setOpacity] = useState(1);
+  const [indicator, setIndicator] = useState(true);
+  const [enabledScroll, setEnabledScroll] = useState(true);
+
   // const handleRemove = () => {
   //   removeArrayExp(expTitle, expTime, expOrg, expLoc, expCountry, expImage);
   // };
 
+  useEffect(() => {
+    if (indicator) {
+      setSpinnerLoader(false);
+      setPointerEvent('auto');
+      setOpacity(1);
+      setEnabledScroll(true);
+    } else {
+      setSpinnerLoader(true);
+      setPointerEvent('none');
+      setOpacity(0.8);
+      setEnabledScroll(false);
+    }
+  }, [indicator]);
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
       <View
@@ -1212,7 +1255,23 @@ export default function EditProfileScreen({navigation}) {
           </TouchableOpacity>
         </View>
       </Collapsible>
-
+      {spinnerLoader ? (
+        <Chase
+          style={{
+            position: 'absolute',
+            // top: Dimensions.get('window').height * 0.5,
+            left: Dimensions.get('window').width * 0.4,
+            bottom: Dimensions.get('window').height * 0.15,
+            alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          size={Dimensions.get('window').width * 0.2}
+          color="#5BA199"
+        />
+      ) : (
+        console.log('nto')
+      )}
       {/* Applied Jobs */}
 
       {/* <View
