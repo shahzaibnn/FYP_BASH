@@ -573,7 +573,9 @@ const ProfileScreen = ({navigation}) => {
         source={{
           uri: storeData.pic,
         }}>
-        <TouchableOpacity style={{position: 'absolute', left: '5%', top: '5%'}}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{position: 'absolute', left: '5%', top: '5%'}}>
           <Ionicons name="chevron-back-circle" size={50} color="#777777" />
         </TouchableOpacity>
 

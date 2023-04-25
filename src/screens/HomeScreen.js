@@ -194,7 +194,7 @@ export default function HomeScreen({navigation, route}) {
     dbFirestore()
       .collection('Posts')
       // .orderBy('createdAt', 'asc')
-      .limit(2)
+      .limit(10)
       .get()
       .then(querySnapshot => {
         console.log('Total posts: ', querySnapshot.size);
@@ -226,6 +226,7 @@ export default function HomeScreen({navigation, route}) {
         }
 
         setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        querySnapshot.size < 10 ? setLastPost(true) : setLastPost(false);
       });
   };
 
@@ -242,7 +243,7 @@ export default function HomeScreen({navigation, route}) {
       .collection('Posts')
       // .orderBy('id', 'desc')
       .startAfter(lastVisible)
-      .limit(2)
+      .limit(10)
       .get()
       .then(querySnapshot => {
         console.log('Total posts: ', querySnapshot.size);
@@ -275,7 +276,7 @@ export default function HomeScreen({navigation, route}) {
         }
 
         setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
-        querySnapshot.size == 0 ? setLastPost(true) : setLastPost(false);
+        querySnapshot.size < 10 ? setLastPost(true) : setLastPost(false);
       });
   };
 
@@ -289,7 +290,7 @@ export default function HomeScreen({navigation, route}) {
       // .where('skills', 'array-contains-any', storeData?.skills)
       .where('skills', 'array-contains-any', skillsParams)
       // .orderBy('createdAt', 'desc')
-      .limit(2)
+      .limit(5)
       .get()
 
       .then(querySnapshot => {
@@ -330,6 +331,7 @@ export default function HomeScreen({navigation, route}) {
         // dispatch(setJobs(documentSnapshot.data()));
 
         setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        querySnapshot.size <= 5 ? setLastJob(true) : setLastJob(false);
       });
     // dispatch(setJobs(jobs));
     // setJobLoading(false);
@@ -344,7 +346,7 @@ export default function HomeScreen({navigation, route}) {
       .where('skills', 'array-contains-any', storeData?.skills)
       // .orderBy('createdAt', 'desc')
       .startAfter(lastVisibleJobs)
-      .limit(1)
+      .limit(2)
       .get()
       .then(querySnapshot => {
         console.log('Total Jobs: ', querySnapshot.size);
@@ -503,7 +505,27 @@ export default function HomeScreen({navigation, route}) {
                 ListEmptyComponent={<JobSkeleton />}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-                ListFooterComponent={renderLoaderJobs}
+                ListFooterComponent={
+                  !lastJob ? (
+                    renderLoaderJobs
+                  ) : (
+                    <Text
+                      style={{
+                        // backgroundColor: 'orange',
+                        flex: 1,
+                        // alignSelf: 'center',
+                        fontSize: 70,
+                        color: '#777777',
+                        // verticalAlign: 'middle',
+                        // marginBottom: 90,
+                        // textAlign: 'center',
+                        // marginTop: 20,
+                        // justifyContent: 'center',
+                      }}>
+                      ...
+                    </Text>
+                  )
+                }
                 data={fetchedJobs}
                 keyExtractor={item => item.id}
                 onEndReachedThreshold={0.1}

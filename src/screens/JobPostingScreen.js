@@ -36,7 +36,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Chase} from 'react-native-animated-spinkit';
 import MultiSelect from 'react-native-multiple-select';
 
-export default function JobPostingScreen() {
+export default function JobPostingScreen({navigation}) {
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
   const [opacity, setOpacity] = useState(1);
@@ -615,7 +615,9 @@ export default function JobPostingScreen() {
             marginVertical: '3%',
             justifyContent: 'center',
           }}>
-          <TouchableOpacity style={{position: 'absolute', left: 0}}>
+          <TouchableOpacity
+            style={{position: 'absolute', left: 0}}
+            onPress={() => navigation.goBack()}>
             <Entypo name="circle-with-cross" size={25} color="#777777" />
           </TouchableOpacity>
 
