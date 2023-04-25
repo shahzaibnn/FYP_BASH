@@ -31,7 +31,7 @@ import {
 
 import {CommonActions} from '@react-navigation/native';
 import {Grid} from 'react-native-animated-spinkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {getAuth} from 'firebase/auth';
 
