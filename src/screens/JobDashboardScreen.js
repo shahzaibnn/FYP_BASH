@@ -106,7 +106,7 @@ export default function JobDashboardScreen({navigation, route}) {
     dbFirestore()
       .collection('Jobs')
 
-      .limit(5)
+      .limit(10)
       .get()
 
       .then(querySnapshot => {
@@ -138,6 +138,7 @@ export default function JobDashboardScreen({navigation, route}) {
         }
 
         setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        querySnapshot.size < 10 ? setLastJob(true) : setLastJob(false);
       });
   };
 
@@ -148,7 +149,7 @@ export default function JobDashboardScreen({navigation, route}) {
       .collection('Jobs')
 
       .startAfter(lastVisibleJobs)
-      .limit(5)
+      .limit(10)
       .get()
       .then(querySnapshot => {
         console.log('Total Jobs: ', querySnapshot.size);
@@ -175,7 +176,7 @@ export default function JobDashboardScreen({navigation, route}) {
           });
         }
         setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
-        querySnapshot.size == 0 ? setLastJob(true) : setLastJob(false);
+        querySnapshot.size < 10 ? setLastJob(true) : setLastJob(false);
       });
   };
   const handleEndReachedJobs = () => {

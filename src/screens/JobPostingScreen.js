@@ -700,7 +700,7 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               borderWidth: 0,
               marginTop: 10,
-              borderRadius: 30,
+              borderRadius: 16,
             }}
             //   labelStyle={{color: 'white'}}
             // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
@@ -877,7 +877,8 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               borderWidth: 0,
               marginTop: 10,
-              borderRadius: 30,
+              borderRadius: 16,
+              zIndex: 10000,
             }}
             //   labelStyle={{color: 'white'}}
             // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
@@ -923,7 +924,7 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               borderWidth: 0,
               marginTop: 10,
-              borderRadius: 30,
+              borderRadius: 16,
             }}
             //   labelStyle={{color: 'white'}}
             // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}

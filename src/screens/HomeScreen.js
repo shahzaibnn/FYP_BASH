@@ -121,9 +121,9 @@ export default function HomeScreen({navigation, route}) {
   const handleApply = job => {
     // Pass the job information as props to the Apply to Job screen
     console.log('checking jobs: ', job);
-    console.log('checking again: ', {job});
+    // console.log('checking again: ', {job});
 
-    navigation.navigate('ApplyToJob', {job});
+    navigation.navigate('ApplyToJob', {job: job});
   };
 
   const searchData = loggedInUser => {
@@ -432,6 +432,7 @@ export default function HomeScreen({navigation, route}) {
               <TouchableOpacity
                 onPress={() => {
                   console.log(route);
+                  navigation.openDrawer();
                 }}>
                 <Image
                   style={{height: 60, width: 60, borderRadius: 64}}
@@ -621,7 +622,7 @@ export default function HomeScreen({navigation, route}) {
                         }}
                         // onPress={() => handleApply({item})}
                         // onPress={() => handleApply(item)}
-                        onPress={() => handleApply(fetchedJobs)}
+                        onPress={() => handleApply(item)}
 
                         // onPress={navigation.navigate('ApplyToJob')}
                       >
