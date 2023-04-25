@@ -13,7 +13,9 @@ import {
   Dimensions,
 } from 'react-native';
 import Spinner from 'react-native-spinkit';
-
+// import CryptoJS from 'crypto-js';
+// import {randomBytes} from 'react-native-randombytes';
+import CryptoJS from 'react-native-crypto-js';
 import Toast from 'react-native-toast-message';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -41,7 +43,6 @@ import SettingsScreen from './SettingsScreen';
 import CreatePostScreen from './CreatePostScreen';
 import RNSmtpMailer from 'react-native-smtp-mailer';
 import {Grid} from 'react-native-animated-spinkit';
-
 const Tab = createMaterialTopTabNavigator();
 
 var moment = require('moment'); // require
@@ -152,7 +153,27 @@ export default function RegistrationScreenAlumni({navigation}) {
       // showToast('EVERYTHING GUD');
 
       setFlag(false);
+      // const valueToEncrypt = userPassword;
+      // // const encryptionKey = randomBytes(32).toString('hex');
+      // const encryptionKey = '64646465646';
 
+      // const encryptedValue = CryptoJS.AES.encrypt(
+      //   valueToEncrypt,
+      //   encryptionKey,
+      // ).toString();
+      // console.log('Encrypted value:', encryptedValue);
+
+      // encryption
+      let encryptedPassword = CryptoJS.AES.encrypt(
+        userPassword,
+        'secret key 123',
+      ).toString();
+
+      // to decrypt the password
+      let bytes = CryptoJS.AES.decrypt(encryptedPassword, 'secret key 123');
+      let originalText = bytes.toString(CryptoJS.enc.Utf8);
+
+      console.log('decrypted password: ', originalText); //decrypted password
       createUserWithEmailAndPassword(auth, userEmail, userPassword)
         .then(cred => {
           console.log(cred);
@@ -169,7 +190,7 @@ export default function RegistrationScreenAlumni({navigation}) {
               firstName: userName,
               lastName: lastName,
               userEmail: userEmail.toLowerCase(),
-              userPassword: userPassword,
+              userPassword: encryptedPassword,
               contactNo: contactNo,
               dateOfBirth: dateOfBirth,
               batch: batch,
