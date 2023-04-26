@@ -88,7 +88,7 @@ const ProfileScreen = ({navigation}) => {
 
   const [likedPeople, setLikedPeople] = useState([]);
 
-  let actionSheet = createRef();
+  let actionSheetRef = createRef();
   let actionSheetLike = createRef();
   const likeShow = itemLikes => {
     console.log('liked by here ', itemLikes);
@@ -167,7 +167,7 @@ const ProfileScreen = ({navigation}) => {
     // console.log(item);
     // setActionParameters(item);
     // console.log('acrtions is, ', actionParameters);
-    actionSheet.current.show();
+    actionSheetRef.current.show();
     // actionSheet.current.hide();
   };
 
@@ -175,7 +175,8 @@ const ProfileScreen = ({navigation}) => {
     // console.log(item);
     // setActionParameters(item);
     // console.log('acrtions is, ', actionParameters);
-    actionSheet.current.hide();
+    actionSheetRef.current.hide();
+    // actionSheetRef.current.alert('check!');
     // actionSheet.current.hide();
   };
 
@@ -215,7 +216,7 @@ const ProfileScreen = ({navigation}) => {
     } catch (err) {
       console.log('Some Error!!! is : ', err);
     } finally {
-      hide();
+      // hide();
     }
   };
 
@@ -364,10 +365,16 @@ const ProfileScreen = ({navigation}) => {
                     // dispatch(updateResumeUrl(url));
                     dispatch(updateProfilePicUrl(urlPicc));
                     setImagePath({});
+                    // hide();
 
-                    alert('FINALLY THE PIC IS ADDED');
+                    // alert('FINALLY THE PIC IS ADDED');
+                    // hide();
+                    // () => actionSheetRef.current.hide();
+                    // actionSheetRef.current.hide();
+                    // actionSheetLike.current.show();
                   })
                   .catch(err => {
+                    // alert('not');
                     console.log('Pic not changed: ' + err.message);
                   });
               });
@@ -382,6 +389,7 @@ const ProfileScreen = ({navigation}) => {
           //   console.log('CV Added!');
           // });
         } catch (e) {
+          alert('hhhhh');
           console.error(e);
         }
         // console.log('done, checking again: ', pdfUrl);
@@ -392,6 +400,7 @@ const ProfileScreen = ({navigation}) => {
       };
 
       addtoDB();
+      hide();
 
       setSelectedPic(false);
     }
@@ -409,13 +418,19 @@ const ProfileScreen = ({navigation}) => {
           dbFirestore()
             .doc('Users/' + documentSnapshot.id)
             .update({
-              pic: '',
+              pic: 'https://www.seekpng.com/png/full/18-188802_graduation-icon-png-image-icon-male-student.png',
             })
             .then(() => {
               console.log('Removed in firestore');
               setImagePath({});
-              dispatch(removePicUrl());
-              setPicUrl('');
+              dispatch(
+                updateProfilePicUrl(
+                  'https://www.seekpng.com/png/full/18-188802_graduation-icon-png-image-icon-male-student.png',
+                ),
+              );
+              setPicUrl(
+                'https://www.seekpng.com/png/full/18-188802_graduation-icon-png-image-icon-male-student.png',
+              );
               alert('FINALLY PIC IS REMOVED');
             })
             .catch(err => {
@@ -428,6 +443,8 @@ const ProfileScreen = ({navigation}) => {
 
         // setFlag(true);
       });
+
+    hide();
 
     console.log('clicked!!!');
   };
@@ -479,7 +496,7 @@ const ProfileScreen = ({navigation}) => {
       console.log('not working here');
     } finally {
       // actionSheet.current.hide();
-      hide();
+      // hide();
 
       console.log('work done here');
     }
@@ -529,9 +546,9 @@ const ProfileScreen = ({navigation}) => {
 
   // IMPORTANT
 
-  useEffect(() => {
-    findPosts();
-  }, []);
+  // useEffect(() => {
+  //   findPosts();
+  // }, []);
 
   // test start
   // const handlePreview = () => {
@@ -1119,7 +1136,7 @@ const ProfileScreen = ({navigation}) => {
           />
         </View>
         {/* </View> */}
-        <ActionSheet ref={actionSheet}>
+        <ActionSheet ref={actionSheetRef}>
           <View
             style={
               // {paddingLeft: '20%'}
@@ -1133,7 +1150,10 @@ const ProfileScreen = ({navigation}) => {
                 // marginBottom: '25%',
                 flexDirection: 'row',
               }}
-              onPress={() => selectImage()}>
+              onPress={() => {
+                selectImage();
+                // hide();
+              }}>
               <MaterialCommunityIcons
                 name="image-edit-outline"
                 size={25}

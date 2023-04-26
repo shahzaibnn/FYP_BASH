@@ -31,6 +31,7 @@ import {addition, setInititialLogin, subtraction} from '../store/action';
 import {dbFirestore} from '../Firebase/Config';
 
 import {Grid} from 'react-native-animated-spinkit';
+import {Chase} from 'react-native-animated-spinkit';
 
 const ApplyToJob = ({navigation, route}) => {
   const [name, setName] = useState('');
@@ -56,13 +57,14 @@ const ApplyToJob = ({navigation, route}) => {
   const [errorMessage, setErrorMessage] = useState('');
   const storeData = useSelector(state => state);
   const dispatch = useDispatch();
-  const {job} = route.params;
+  const [job, setJob] = useState(route.params.job);
 
   // for loader
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
   const [opacity, setOpacity] = useState(1);
-  const [flag, setFlag] = useState(true);
+  const [indicator, setIndicator] = useState(true);
+  const [enabledScroll, setEnabledScroll] = useState(true);
 
   const showToast = heading => {
     Toast.show({
@@ -96,64 +98,22 @@ const ApplyToJob = ({navigation, route}) => {
       sendEmail();
     }
   };
-  async function addJobToProfile() {
-    dbFirestore()
-      .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
-      .where('userEmail', '==', storeData.userEmail)
-      // .where('userEmail', '==', 'bashfyp@gmail.com')
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
-
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(documentSnapshot.id);
-          let appliedJobss = [
-            {
-              jobId: job.id,
-              jobTitle: job.jobTitle,
-              jobCompany: job.jobCompany,
-              jobMode: job.jobMode,
-              jobEmail: job.jobEmail,
-              jobSalary: job.jobSalary,
-              dateApplied: dbFirestore.Timestamp.now(),
-              // dateApplied: dbFirestore.Timestamp.now().toDate(),
-            },
-          ];
-
-          dbFirestore()
-            .doc('Users/' + documentSnapshot.id)
-            .update({
-              appliedJobId: dbFirestore.FieldValue.arrayUnion(...appliedJobss),
-            })
-            .then(() => {
-              console.log('Added in firestore');
-            })
-            .catch(err => {
-              console.log('not working');
-            });
-        });
-      })
-      .catch(error => {
-        alert(error);
-
-        // setFlag(true);
-      });
-  }
 
   useEffect(() => {
-    if (flag) {
+    if (indicator) {
       setSpinnerLoader(false);
       setPointerEvent('auto');
       setOpacity(1);
+      setEnabledScroll(true);
     } else {
       setSpinnerLoader(true);
       setPointerEvent('none');
       setOpacity(0.8);
+      setEnabledScroll(false);
     }
-  }, [flag]);
+  }, [indicator]);
   const sendEmail = async () => {
+    setIndicator(false);
     var path = RNFS.DownloadDirectoryPath + '/test.pdf';
     // write the file
 
@@ -226,13 +186,64 @@ const ApplyToJob = ({navigation, route}) => {
       attachmentPaths: [path],
       attachmentNames: ['CV.pdf'],
     })
-      .then(success => console.log(success))
-      // .then(setFlag(true))
-      .then(addJobToProfile())
-      // .then(setFlag(false))
-      .then(Alert.alert('Applied Successfully ', 'Best of luck'))
-      .catch(err => console.log('error heree', err));
+      .then(success => {
+        addJobToProfile();
+      })
+      .catch(error => {
+        setIndicator(true);
+        alert('Applying Failed!\nPlease Check Your Internet Connection');
+      });
   };
+
+  async function addJobToProfile() {
+    dbFirestore()
+      .collection('Users')
+      // .doc('roles')
+      // .collection(value.toLowerCase())
+      .where('userEmail', '==', storeData.userEmail)
+      // .where('userEmail', '==', 'bashfyp@gmail.com')
+      .get()
+      .then(querySnapshot => {
+        console.log('Total Found users: ', querySnapshot.size);
+
+        querySnapshot.forEach(documentSnapshot => {
+          console.log(documentSnapshot.id);
+          let appliedJobss = [
+            {
+              jobId: job.id,
+              jobTitle: job.jobTitle,
+              jobCompany: job.jobCompany,
+              jobMode: job.jobMode,
+              jobEmail: job.jobEmail,
+              jobSalary: job.jobSalary,
+              dateApplied: dbFirestore.Timestamp.now(),
+              // dateApplied: dbFirestore.Timestamp.now().toDate(),
+            },
+          ];
+
+          dbFirestore()
+            .doc('Users/' + documentSnapshot.id)
+            .update({
+              appliedJobId: dbFirestore.FieldValue.arrayUnion(...appliedJobss),
+            })
+            .then(() => {
+              alert('Applied Successfully');
+              console.log('Added in firestore');
+              setIndicator(true);
+              navigation.goBack();
+            })
+            .catch(err => {
+              console.log('not working');
+              setIndicator(true);
+            });
+        });
+      })
+      .catch(error => {
+        alert(error);
+
+        setIndicator(true);
+      });
+  }
 
   const selectFile = async () => {
     try {
@@ -254,12 +265,24 @@ const ApplyToJob = ({navigation, route}) => {
   return (
     // <View style={styles.bg}>
     <ScrollView
+      scrollEnabled={enabledScroll}
       showsVerticalScrollIndicator={false}
       style={styles.SectionStyle}>
-      <View style={styles.bg}>
+      <View
+        pointerEvents={pointerEvent}
+        style={{
+          backgroundColor: '#E5E3E4',
+          height: 1000,
+          borderRadius: 12,
+          marginTop: 15,
+          marginLeft: 25,
+          marginRight: 25,
+          margin: 10,
+          opacity: opacity,
+        }}>
         {/* Header */}
         <View style={styles.Header}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => console.log(job)}>
             <FontAwesome
               name="chevron-left"
               style={styles.back}
@@ -328,10 +351,10 @@ const ApplyToJob = ({navigation, route}) => {
             arrowColor="#707070"
             dropDownContainerStyle={{
               backgroundColor: 'white',
-              borderWidth: 0.5,
+              borderWidth: 0,
               borderColor: '#6A6A6A',
               // borderColor: 'red',
-              borderRadius: 30,
+              borderRadius: 16,
             }}
           />
           {value === null && (
@@ -426,8 +449,16 @@ const ApplyToJob = ({navigation, route}) => {
         {/* <Image source={{uri: source}} /> */}
       </View>
       {spinnerLoader ? (
-        <Grid
-          style={styles.gridStyle}
+        <Chase
+          style={{
+            position: 'absolute',
+            // top: Dimensions.get('window').height * 0.5,
+            left: Dimensions.get('window').width * 0.4,
+            bottom: Dimensions.get('window').height * 0.5,
+            alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
           size={Dimensions.get('window').width * 0.2}
           color="#5BA199"
         />
