@@ -310,10 +310,10 @@ const ExplorePage = ({navigation}) => {
               <Text key={result.id}>{result.firstName}</Text>
             ))} */}
           <View
-            style={{padding: 10, backgroundColor: '#5BA199', borderRadius: 16}}>
+            style={{backgroundColor: '#5BA199', borderRadius: 16, padding: 15}}>
             {/* <TouchableOpacity onPress={search}> */}
             <TouchableOpacity onPress={UpdatedSearch}>
-              <Ionicons name="search" size={40} color="#ffffff" style={{}} />
+              <Ionicons name="search" size={30} color="#ffffff" style={{}} />
             </TouchableOpacity>
           </View>
         </View>

@@ -52,6 +52,8 @@ import {
 // import {setJobs} from '../store/action';
 // import {db, dbFirestore} from './Config';
 
+import Entypo from 'react-native-vector-icons/Entypo';
+
 export default function HomeScreen({navigation, route}) {
   // const val = route.params;
   // console.log('LOGGED IN NAVIGATION IS : ', navigation);
@@ -510,21 +512,38 @@ export default function HomeScreen({navigation, route}) {
                   !lastJob ? (
                     renderLoaderJobs
                   ) : (
-                    <Text
+                    <Entypo
+                      color={'#777777'}
+                      name={'dots-three-horizontal'}
+                      size={30}
                       style={{
+                        marginHorizontal: 10,
+                        marginTop: 48,
+                        // alignItems: 'center',
+                        // alignContent: 'flex-end',
+                        // justifyContent: 'flex-end',
+                        // alignSelf: 'flex-end',
+                        // alignContent: 'flex-end',
                         // backgroundColor: 'orange',
-                        flex: 1,
-                        // alignSelf: 'center',
-                        fontSize: 70,
-                        color: '#777777',
-                        // verticalAlign: 'middle',
-                        // marginBottom: 90,
-                        // textAlign: 'center',
-                        // marginTop: 20,
-                        // justifyContent: 'center',
-                      }}>
-                      ...
-                    </Text>
+                        // flex: 1,
+                      }}
+                    />
+
+                    // <Text
+                    //   style={{
+                    //     // backgroundColor: 'orange',
+                    //     flex: 1,
+                    //     // alignSelf: 'center',
+                    //     fontSize: 50,
+                    //     color: '#777777',
+                    //     // verticalAlign: 'middle',
+                    //     // marginBottom: 90,
+                    //     // textAlign: 'center',
+                    //     // marginTop: 20,
+                    //     // justifyContent: 'center',
+                    //   }}>
+                    //   ...
+                    // </Text>
                   )
                 }
                 data={fetchedJobs}

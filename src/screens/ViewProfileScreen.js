@@ -26,6 +26,7 @@ import {db, dbFirestore} from '../Firebase/Config';
 import PostSkeleton from '../components/PostSkeleton';
 import ViewProfileSkeleton from '../components/ViewProfileSkeleton';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import ActionSheet from 'react-native-actions-sheet';
 
 const ViewProfileScreen = ({route, navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -42,6 +43,17 @@ const ViewProfileScreen = ({route, navigation}) => {
 
   const profileEmail = route.params.userEmail;
   const [extraData, setExtraData] = React.useState(new Date());
+
+  const [likedPeople, setLikedPeople] = useState([]);
+
+  let actionSheetLike = createRef();
+  const likeShow = itemLikes => {
+    console.log('liked by here ', itemLikes);
+    setLikedPeople(itemLikes);
+
+    // console.log('acrtions is, ', actionParameters);
+    actionSheetLike.current.show();
+  };
 
   const findPosts = () => {
     dbFirestore()
@@ -458,7 +470,7 @@ const ViewProfileScreen = ({route, navigation}) => {
                         marginVertical: Dimensions.get('window').height * 0.01,
                       }}>
                       <Image
-                        source={{uri: item.profilePic}}
+                        source={{uri: image}}
                         style={{
                           width: 60,
                           height: 60,
@@ -621,6 +633,120 @@ const ViewProfileScreen = ({route, navigation}) => {
             />
           </View>
           {/* </View> */}
+
+          <ActionSheet
+            // id={sheetId}
+            // data={fetchedPosts}
+            ref={actionSheetLike}
+            containerStyle={{
+              borderTopLeftRadius: 25,
+              borderTopRightRadius: 25,
+              backgroundColor: '#E5E3E4',
+            }}
+            indicatorStyle={{
+              width: 100,
+            }}
+            gestureEnabled={true}>
+            <View>
+              {/* action sheet */}
+              <ScrollView
+                style={{
+                  // flexDirection: 'row',
+                  backgroundColor: '#E5E3E4',
+                  // height: 500,
+
+                  // backgroundColor: 'white',
+                }}>
+                <View style={{flexDirection: 'column'}}>
+                  <Text
+                    style={{
+                      marginTop: '1%',
+                      marginBottom: '3%',
+                      marginHorizontal: '10%',
+                      color: '#000000',
+                      fontWeight: 'bold',
+                      fontSize: 25,
+                    }}>
+                    Likes
+                  </Text>
+                  {likedPeople.likedBy?.map((user, index) => (
+                    <View
+                      key={index}
+                      style={{
+                        flexDirection: 'row',
+                        // justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        // paddingHorizontal: '10%',
+                        // borderColor: 'black',
+                        // borderWidth: 1,
+                        marginBottom: Dimensions.get('window').height * 0.04,
+                        marginHorizontal: '10%',
+                      }}>
+                      <Image
+                        style={{
+                          height: 60,
+                          width: 60,
+                          borderRadius: 64,
+                          flex: 1,
+                        }}
+                        source={{
+                          uri: user.picUrl,
+                        }}
+                      />
+
+                      <View style={{flex: 3}}>
+                        <Text
+                          style={{
+                            marginHorizontal: '20%',
+                            backgroundColor: '#E5E3E4',
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                          }}>
+                          {user.name}
+                        </Text>
+
+                        <Text
+                          style={{
+                            marginHorizontal: '20%',
+
+                            backgroundColor: '#E5E3E4',
+                            fontStyle: 'italic',
+
+                            fontSize: 14,
+                          }}>
+                          {user.role}
+                        </Text>
+                      </View>
+
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('ViewProfile', {
+                            userEmail: user.email,
+                          })
+                        }
+                        style={{
+                          flex: 1,
+                          backgroundColor: '#5BA199',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderRadius: 8,
+                          paddingVertical: '2%',
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: '#ffffff',
+                            fontWeight: 'bold',
+                          }}>
+                          View
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              </ScrollView>
+            </View>
+          </ActionSheet>
         </View>
       </ScrollView>
     );

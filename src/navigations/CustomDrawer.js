@@ -139,7 +139,9 @@ export default function CustomDrawer({props, navigation}) {
           source={require('../assets/images/bash_icon.png')}
         />
       </View>
-      <Text style={styles.usernameStyle}>Bash Username</Text>
+      <Text style={styles.usernameStyle}>
+        {storeData.firstName} {storeData.lastName}
+      </Text>
       <View style={{marginBottom: '5%'}}>
         {/* <View style={{flexDirection: 'row', marginLeft: '-10%'}}> */}
         {/* <AntDesign name={iconName} size={25} /> */}

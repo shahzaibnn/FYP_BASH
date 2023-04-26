@@ -546,9 +546,9 @@ const ProfileScreen = ({navigation}) => {
 
   // IMPORTANT
 
-  // useEffect(() => {
-  //   findPosts();
-  // }, []);
+  useEffect(() => {
+    findPosts();
+  }, []);
 
   // test start
   // const handlePreview = () => {
@@ -936,7 +936,7 @@ const ProfileScreen = ({navigation}) => {
                     }}>
                     <View style={{flexDirection: 'row'}}>
                       <Image
-                        source={{uri: item.profilePic}}
+                        source={{uri: storeData.pic}}
                         style={{
                           // flex: 1,
                           width: 60,
@@ -1270,6 +1270,11 @@ const ProfileScreen = ({navigation}) => {
                     </View>
 
                     <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('ViewProfile', {
+                          userEmail: user.email,
+                        })
+                      }
                       style={{
                         flex: 1,
                         backgroundColor: '#5BA199',
