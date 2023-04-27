@@ -14,6 +14,7 @@ import Collapsible from 'react-native-collapsible';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CommonActions} from '@react-navigation/native';
+import CryptoJS from 'react-native-crypto-js';
 
 import Spinner from 'react-native-spinkit';
 import {useSelector, useDispatch} from 'react-redux';
@@ -42,6 +43,7 @@ export default function SettingsScreen({navigation}) {
   const [changePasswordDisplay, setChangePasswordDisplay] = useState(false);
 
   const [oldPassword, setOldPassword] = useState('');
+  const [originalPassword, setOriginalPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -95,6 +97,12 @@ export default function SettingsScreen({navigation}) {
 
     console.log('new', newPassword);
 
+    // // to decrypt the password
+    // let bytes = CryptoJS.AES.decrypt(user, 'secret key 123');
+    // let originalText = bytes.toString(CryptoJS.enc.Utf8);
+
+    // console.log('decrypted password: ', originalText); //decrypted password
+
     dbFirestore()
       .collection('Users')
       // .doc('roles')
@@ -112,24 +120,38 @@ export default function SettingsScreen({navigation}) {
             console.log(documentSnapshot.id);
             console.log(documentSnapshot.data().userPassword);
             setId(documentSnapshot.id);
-            setOldPassword(documentSnapshot.data().userPassword);
+            // to decrypt the password
+            let bytes = CryptoJS.AES.decrypt(
+              documentSnapshot.data().userPassword,
+              'secret key 123',
+            );
+            let originalText = bytes.toString(CryptoJS.enc.Utf8);
+            console.log('decrypted password here: ', originalText); //decrypted password
+            setOldPassword(originalText);
+            setOriginalPassword(documentSnapshot.data().userPassword);
+
             setFound(true);
           });
         }
       })
       .then(() => {
         if (found) {
+          let encryptedPassword = CryptoJS.AES.encrypt(
+            newPassword,
+            'secret key 123',
+          ).toString();
+          console.log('checking encrypted password', encryptedPassword);
           dbFirestore()
             .collection('Users')
             // .doc('roles')
             // .collection(value.toLowerCase())
             .doc(id)
             .update({
-              userPassword: newPassword.toString(),
+              userPassword: encryptedPassword,
             })
             .then(() => {
               console.log('----------------------------');
-
+              console.log('new encrypted password: ', encryptedPassword);
               RNSmtpMailer.sendMail({
                 mailhost: 'smtp.gmail.com',
                 port: '465',
@@ -149,6 +171,7 @@ export default function SettingsScreen({navigation}) {
                 .then(success => {
                   const auth = getAuth();
                   console.log('Email sent');
+                  console.log('old pw check', oldPassword);
 
                   signInWithEmailAndPassword(
                     auth,
