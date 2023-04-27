@@ -199,7 +199,7 @@ export default function RegistrationScreenAlumni({navigation}) {
               description: '',
               skills: [],
               cv: '',
-              experience: [{}],
+              experience: [],
               postsId: [],
               appliedJobId: [],
               accountApproved: 'pending',

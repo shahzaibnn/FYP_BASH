@@ -42,6 +42,8 @@ import CreatePostScreen from './CreatePostScreen';
 import RNSmtpMailer from 'react-native-smtp-mailer';
 import {Grid} from 'react-native-animated-spinkit';
 
+import CryptoJS from 'react-native-crypto-js';
+
 const Tab = createMaterialTopTabNavigator();
 
 var moment = require('moment'); // require
@@ -153,6 +155,17 @@ export default function RegistrationScreenStudent({navigation}) {
 
       setFlag(false);
 
+      let encryptedPassword = CryptoJS.AES.encrypt(
+        userPassword,
+        'secret key 123',
+      ).toString();
+
+      // to decrypt the password
+      let bytes = CryptoJS.AES.decrypt(encryptedPassword, 'secret key 123');
+      let originalText = bytes.toString(CryptoJS.enc.Utf8);
+
+      console.log('decrypted password: ', originalText); //decrypted password
+
       createUserWithEmailAndPassword(auth, userEmail, userPassword)
         .then(cred => {
           console.log(cred);
@@ -169,7 +182,7 @@ export default function RegistrationScreenStudent({navigation}) {
               firstName: userName,
               lastName: lastName,
               userEmail: userEmail.toLowerCase(),
-              userPassword: userPassword,
+              userPassword: encryptedPassword,
               contactNo: contactNo,
               dateOfBirth: dateOfBirth,
               batch: batch,
@@ -178,7 +191,7 @@ export default function RegistrationScreenStudent({navigation}) {
               description: '',
               skills: [],
               cv: '',
-              experience: [{}],
+              experience: [],
               postsId: [],
               appliedJobId: [],
               accountApproved: 'pending',
