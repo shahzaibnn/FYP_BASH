@@ -17,6 +17,8 @@ import {CommonActions} from '@react-navigation/native';
 import CryptoJS from 'react-native-crypto-js';
 
 import Spinner from 'react-native-spinkit';
+import {Chase} from 'react-native-animated-spinkit';
+
 import {useSelector, useDispatch} from 'react-redux';
 import {ToastAndroid, Platform, AlertIOS} from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -59,9 +61,23 @@ export default function SettingsScreen({navigation}) {
   const storeData = useSelector(state => state);
 
   // const [role, setRole] = useState('');
+  const [indicator, setIndicator] = useState(true);
+  const [enabledScroll, setEnabledScroll] = useState(true);
 
   const [found, setFound] = useState(false);
-
+  useEffect(() => {
+    if (indicator) {
+      setSpinnerLoader(false);
+      setPointerEvent('auto');
+      setOpacity(1);
+      setEnabledScroll(true);
+    } else {
+      setSpinnerLoader(true);
+      setPointerEvent('none');
+      setOpacity(0.8);
+      setEnabledScroll(false);
+    }
+  }, [indicator]);
   const showToast = heading => {
     Toast.show({
       type: 'error',
@@ -86,7 +102,7 @@ export default function SettingsScreen({navigation}) {
       changePassword();
     }
   };
-  const changePassword = () => {
+  const changePassword = async () => {
     // firebase
     // authorization()
 
@@ -103,133 +119,131 @@ export default function SettingsScreen({navigation}) {
 
     // console.log('decrypted password: ', originalText); //decrypted password
 
-    dbFirestore()
-      .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
-      .where('userEmail', '==', storeData.userEmail)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
+    setIndicator(false);
+    try {
+      const querySnapshot = await dbFirestore()
+        .collection('Users')
+        .where('userEmail', '==', storeData.userEmail)
+        .get();
+      console.log('Total Found users: ', querySnapshot.size);
 
-        if (querySnapshot.size == 0) {
-          setFlag(true);
-          notifyMessage('Email Address does not Exists');
-        } else {
-          querySnapshot.forEach(documentSnapshot => {
-            console.log(documentSnapshot.id);
-            console.log(documentSnapshot.data().userPassword);
-            setId(documentSnapshot.id);
-            // to decrypt the password
-            let bytes = CryptoJS.AES.decrypt(
-              documentSnapshot.data().userPassword,
-              'secret key 123',
-            );
-            let originalText = bytes.toString(CryptoJS.enc.Utf8);
-            console.log('decrypted password here: ', originalText); //decrypted password
-            setOldPassword(originalText);
-            setOriginalPassword(documentSnapshot.data().userPassword);
-
-            setFound(true);
-          });
-        }
-      })
-      .then(() => {
-        if (found) {
-          let encryptedPassword = CryptoJS.AES.encrypt(
-            newPassword,
-            'secret key 123',
-          ).toString();
-          console.log('checking encrypted password', encryptedPassword);
-          dbFirestore()
-            .collection('Users')
-            // .doc('roles')
-            // .collection(value.toLowerCase())
-            .doc(id)
-            .update({
-              userPassword: encryptedPassword,
-            })
-            .then(() => {
-              console.log('----------------------------');
-              console.log('new encrypted password: ', encryptedPassword);
-              RNSmtpMailer.sendMail({
-                mailhost: 'smtp.gmail.com',
-                port: '465',
-                ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
-                username: 'bashfyp@gmail.com',
-                password: 'ltdapqlallccrgss',
-                // fromName: 'Some Name', // optional
-                // replyTo: 'usernameEmail', // optional
-                recipients: storeData.userEmail,
-                // bcc: ['bccEmail1', 'bccEmail2'], // optional
-                // bcc: ['shahzaibnn@gmail.com'], // optional
-                subject: 'BASH Password Changed',
-                htmlBody: '<h1>New Password is:' + newPassword + '</h1>',
-                // attachmentPaths: [path],
-                // attachmentNames: ['anotherTest.pdf'],
-              })
-                .then(success => {
-                  const auth = getAuth();
-                  console.log('Email sent');
-                  console.log('old pw check', oldPassword);
-
-                  signInWithEmailAndPassword(
-                    auth,
-                    storeData.userEmail,
-                    oldPassword,
-                  )
-                    .then(userCredential => {
-                      console.log('old pw', oldPassword);
-
-                      // Signed in
-                      const user = userCredential.user;
-                      console.log('first : ', user);
-                      updatePassword(user, newPassword)
-                        .then(() =>
-                          signOut(auth).then(() => {
-                            console.log('pura done');
-                            console.log(success);
-                            console.log('Password Updated');
-
-                            setemailGenerated(true);
-                            // notifyMessage(
-                            //   'New Password Sent At ' + storeData.userEmail,
-                            // );
-                            setNewPassword('');
-
-                            console.log('toaster sent');
-                            setFound(false);
-                            setFlag(true);
-                            // navigation.navigate('Login');
-                          }),
-                        )
-                        .catch(error => {
-                          setFlag(true);
-
-                          console.log(error);
-                        });
-                      // ...
-                    })
-                    .catch(error => {
-                      console.log(error);
-                      setFlag(true);
-                    });
-                })
-                .catch(err => {
-                  console.log(err);
-                  setFound(false);
-                  setFlag(true);
-                });
-            });
-        }
-      })
-      .catch(error => {
-        alert(error);
-
+      if (querySnapshot.size == 0) {
         setFlag(true);
-      });
+        notifyMessage('Email Address does not Exists');
+      } else {
+        querySnapshot.forEach(documentSnapshot => {
+          setFound(true);
+          console.log(documentSnapshot.id);
+          console.log(documentSnapshot.data().userPassword);
+          setId(documentSnapshot.id);
+          // to decrypt the password
+          let bytes = CryptoJS.AES.decrypt(
+            documentSnapshot.data().userPassword,
+            'secret key 123',
+          );
+          let originalText = bytes.toString(CryptoJS.enc.Utf8);
+          console.log('decrypted password here: ', originalText); //decrypted password
+          setOldPassword(originalText);
+          setOriginalPassword(documentSnapshot.data().userPassword);
+          // setFound(true);
+        });
+        return changePasswordProcess();
+      }
+    } catch {
+      // alert(error);
+      setIndicator(true);
+      setFlag(true);
+    }
   };
 
+  const changePasswordProcess = () => {
+    if (found) {
+      let encryptedPassword = CryptoJS.AES.encrypt(
+        newPassword,
+        'secret key 123',
+      ).toString();
+      console.log('checking encrypted password', encryptedPassword);
+      dbFirestore()
+        .collection('Users')
+        // .doc('roles')
+        // .collection(value.toLowerCase())
+        .doc(id)
+        .update({
+          userPassword: encryptedPassword,
+        })
+        .then(() => {
+          console.log('----------------------------');
+          console.log('new encrypted password: ', encryptedPassword);
+          RNSmtpMailer.sendMail({
+            mailhost: 'smtp.gmail.com',
+            port: '465',
+            ssl: true, // optional. if false, then TLS is enabled. Its true by default in android. In iOS TLS/SSL is determined automatically, and this field doesn't affect anything
+            username: 'bashfyp@gmail.com',
+            password: 'ltdapqlallccrgss',
+            // fromName: 'Some Name', // optional
+            // replyTo: 'usernameEmail', // optional
+            recipients: storeData.userEmail,
+            // bcc: ['bccEmail1', 'bccEmail2'], // optional
+            // bcc: ['shahzaibnn@gmail.com'], // optional
+            subject: 'BASH Password Changed',
+            htmlBody: '<h1>New Password is:' + newPassword + '</h1>',
+            // attachmentPaths: [path],
+            // attachmentNames: ['anotherTest.pdf'],
+          })
+            .then(success => {
+              const auth = getAuth();
+              console.log('Email sent');
+              console.log('old pw check', oldPassword);
+
+              signInWithEmailAndPassword(auth, storeData.userEmail, oldPassword)
+                .then(userCredential => {
+                  console.log('old pw', oldPassword);
+
+                  // Signed in
+                  const user = userCredential.user;
+                  console.log('first : ', user);
+                  updatePassword(user, newPassword)
+                    .then(() =>
+                      signOut(auth).then(() => {
+                        console.log('pura done');
+                        console.log(success);
+                        console.log('Password Updated');
+
+                        setemailGenerated(true);
+                        // notifyMessage(
+                        //   'New Password Sent At ' + storeData.userEmail,
+                        // );
+                        setNewPassword('');
+
+                        console.log('toaster sent');
+                        setFound(false);
+                        setFlag(true);
+                        // navigation.navigate('Login');
+                      }),
+                    )
+                    .catch(error => {
+                      setFlag(true);
+
+                      console.log(error);
+                    });
+                  // ...
+                })
+                .catch(error => {
+                  console.log(error);
+                  setFlag(true);
+                });
+            })
+            .catch(err => {
+              console.log(err);
+              setFound(false);
+              setFlag(true);
+              setIndicator(true);
+            });
+        });
+    } else {
+      console.log('not found');
+    }
+  };
   return (
     <ScrollView style={{backgroundColor: '#E5E3E4'}}>
       <View pointerEvents={pointerEvent} style={{opacity: opacity}}>
@@ -614,20 +628,23 @@ export default function SettingsScreen({navigation}) {
           </View>
         </Collapsible>
 
-        <Spinner
-          style={{
-            position: 'absolute',
-            top: Dimensions.get('window').height * 0.4,
-            left: Dimensions.get('window').width * 0.4,
-            alignSelf: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          isVisible={spinnerLoader}
-          size={Dimensions.get('window').width * 0.2}
-          type={'9CubeGrid'}
-          color={'#5BA199'}
-        />
+        {spinnerLoader ? (
+          <Chase
+            style={{
+              position: 'absolute',
+              // top: Dimensions.get('window').height * 0.5,
+              left: Dimensions.get('window').width * 0.4,
+              bottom: Dimensions.get('window').height * 0.15,
+              alignSelf: 'center',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            size={Dimensions.get('window').width * 0.2}
+            color="#5BA199"
+          />
+        ) : (
+          console.log('nto')
+        )}
       </View>
     </ScrollView>
   );
