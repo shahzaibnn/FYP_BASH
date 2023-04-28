@@ -416,7 +416,7 @@ export default function EditProfileScreen({navigation}) {
               .then(() => {
                 dispatch(changeUserProfile(field, value));
 
-                alert('User updated');
+                alert('Updated Successfully!');
                 console.log('User updated!');
               });
           });
