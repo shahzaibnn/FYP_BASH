@@ -19,6 +19,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import storage from '@react-native-firebase/storage';
+import {Chase} from 'react-native-animated-spinkit';
 
 // import {SliderBox} from 'react-native-image-slider-box';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -48,9 +49,15 @@ const ProfileScreen = ({navigation}) => {
 
   const [deleteId, setDeleteId] = useState('');
 
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
+  const [pointerEvent, setPointerEvent] = useState('auto');
+  const [opacity, setOpacity] = useState(1);
+  const [indicator, setIndicator] = useState(true);
+
   const WarningCancelPressed = () => {
     setShowWarning(false);
   };
+
   const WarningConfirmPressed = () => {
     // console.log(item.id);
     dbFirestore()
@@ -87,6 +94,7 @@ const ProfileScreen = ({navigation}) => {
   const [setPicUrl, picUrl] = useState(storeData.pic);
 
   const [likedPeople, setLikedPeople] = useState([]);
+  const [enabledScroll, setEnabledScroll] = useState(true);
 
   let actionSheetRef = createRef();
   let actionSheetLike = createRef();
@@ -219,10 +227,23 @@ const ProfileScreen = ({navigation}) => {
       // hide();
     }
   };
-
+  useEffect(() => {
+    if (indicator) {
+      setSpinnerLoader(false);
+      setPointerEvent('auto');
+      setOpacity(1);
+      setEnabledScroll(true);
+    } else {
+      setSpinnerLoader(true);
+      setPointerEvent('none');
+      setOpacity(0.8);
+      setEnabledScroll(false);
+    }
+  }, [indicator]);
   useEffect(() => {
     if (selected) {
       console.log('filepath is /l : ', filePath);
+      setIndicator(false);
 
       const addtoDB = async () => {
         console.log('file copy uri checking: ', filePath);
@@ -274,15 +295,21 @@ const ProfileScreen = ({navigation}) => {
                     dispatch(updateResumeUrl(url));
                     setfilePath({});
 
-                    alert('FINALLY THE RESUME IS ADDED');
+                    Alert.alert(
+                      'Resume Update',
+                      'Resume Uploaded Successfully!',
+                    );
+                    setIndicator(true);
                   })
                   .catch(err => {
                     console.log('not working');
+                    setIndicator(true);
                   });
               });
             })
             .catch(error => {
-              alert(error);
+              console.log(error);
+              setIndicator(true);
 
               // setFlag(true);
             });
@@ -292,6 +319,7 @@ const ProfileScreen = ({navigation}) => {
           // });
         } catch (e) {
           console.error(e);
+          setIndicator(true);
         }
         // console.log('done, checking again: ', pdfUrl);
 
@@ -309,7 +337,7 @@ const ProfileScreen = ({navigation}) => {
   useEffect(() => {
     if (selectedPic) {
       console.log('Profile Pic is /l : ', imagePath);
-
+      setIndicator(false);
       const addtoDB = async () => {
         console.log('Profile Pic uri checking: ', imagePath);
         const filename = imagePath.fileCopyUri.substring(
@@ -372,15 +400,17 @@ const ProfileScreen = ({navigation}) => {
                     // () => actionSheetRef.current.hide();
                     // actionSheetRef.current.hide();
                     // actionSheetLike.current.show();
-                  })
-                  .catch(err => {
-                    // alert('not');
-                    console.log('Pic not changed: ' + err.message);
                   });
+                setIndicator(true).catch(err => {
+                  // alert('not');
+                  setIndicator(true);
+                  console.log('Pic not changed: ' + err.message);
+                });
               });
             })
             .catch(error => {
-              alert(error);
+              // alert(error);
+              setIndicator(true);
 
               // setFlag(true);
             });
@@ -391,6 +421,7 @@ const ProfileScreen = ({navigation}) => {
         } catch (e) {
           alert('hhhhh');
           console.error(e);
+          setIndicator(true);
         }
         // console.log('done, checking again: ', pdfUrl);
 
@@ -407,42 +438,48 @@ const ProfileScreen = ({navigation}) => {
   }, [selectedPic]);
 
   const removeProfilePic = () => {
-    dbFirestore()
-      .collection('Users')
-      .where('userEmail', '==', storeData.userEmail)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(documentSnapshot.id);
-          dbFirestore()
-            .doc('Users/' + documentSnapshot.id)
-            .update({
-              pic: 'https://www.seekpng.com/png/full/18-188802_graduation-icon-png-image-icon-male-student.png',
-            })
-            .then(() => {
-              console.log('Removed in firestore');
-              setImagePath({});
-              dispatch(
-                updateProfilePicUrl(
+    setIndicator(false);
+    try {
+      dbFirestore()
+        .collection('Users')
+        .where('userEmail', '==', storeData.userEmail)
+        .get()
+        .then(querySnapshot => {
+          console.log('Total Found users: ', querySnapshot.size);
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.id);
+            dbFirestore()
+              .doc('Users/' + documentSnapshot.id)
+              .update({
+                pic: 'https://www.seekpng.com/png/full/18-188802_graduation-icon-png-image-icon-male-student.png',
+              })
+              .then(() => {
+                console.log('Removed in firestore');
+                setImagePath({});
+                dispatch(
+                  updateProfilePicUrl(
+                    'https://www.seekpng.com/png/full/18-188802_graduation-icon-png-image-icon-male-student.png',
+                  ),
+                );
+                setPicUrl(
                   'https://www.seekpng.com/png/full/18-188802_graduation-icon-png-image-icon-male-student.png',
-                ),
-              );
-              setPicUrl(
-                'https://www.seekpng.com/png/full/18-188802_graduation-icon-png-image-icon-male-student.png',
-              );
-              alert('FINALLY PIC IS REMOVED');
-            })
-            .catch(err => {
+                );
+                alert('FINALLY PIC IS REMOVED');
+              });
+            setIndicator(true).catch(err => {
+              setIndicator(true);
               console.log('not working');
             });
+          });
+        })
+        .catch(error => {
+          // alert(error);
+          // setFlag(true);
+          setIndicator(true);
         });
-      })
-      .catch(error => {
-        alert(error);
-
-        // setFlag(true);
-      });
+    } catch {
+      setIndicator(true);
+    }
 
     hide();
 
@@ -452,6 +489,8 @@ const ProfileScreen = ({navigation}) => {
   const removeFile = () => {
     // setSingleFile(null);
     // setUploaded(false);
+    setIndicator(false);
+
     try {
       dbFirestore()
         .collection('Users')
@@ -480,20 +519,26 @@ const ProfileScreen = ({navigation}) => {
                 dispatch(removeResumeUrl());
                 setResumeUrl('');
 
-                alert('FINALLY THE RESUME IS REMOVED');
+                Alert.alert('Resume Update', 'Resume Removed Successfully!');
+
+                setIndicator(true);
               })
+
               .catch(err => {
                 console.log('not working');
+                setIndicator(true);
               });
           });
         })
         .catch(error => {
           alert(error);
+          setIndicator(true);
 
           // setFlag(true);
         });
     } catch {
       console.log('not working here');
+      setIndicator(true);
     } finally {
       // actionSheet.current.hide();
       // hide();
@@ -822,67 +867,72 @@ const ProfileScreen = ({navigation}) => {
                 <Ionicons name="chevron-forward" size={20} color="#ffffff" />
               </TouchableOpacity> */}
             </View>
+
+            {/* commented the following view to bring posts under the same container */}
             {/* </View> */}
 
             {/* posts */}
+            {/* </View> */}
           </View>
-        </View>
-        <View style={styles.ExpbodyContent}>
-          <FlatList
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            data={storeData.experience}
-            renderItem={({item}) => (
-              <View
-                style={{
-                  backgroundColor: 'rgba(187, 198, 200, 0.5)',
-                  borderRadius: 16,
-                  marginHorizontal: Dimensions.get('window').width * 0.02,
-
-                  // height: Dimensions.get('window').height * 0.12,
-                  // width: Dimensions.get('window').width * 0.9,
-                }}>
+          <View style={styles.ExpbodyContent}>
+            <FlatList
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              data={storeData.experience}
+              renderItem={({item}) => (
                 <View
                   style={{
-                    flexDirection: 'row',
-                    marginVertical: Dimensions.get('window').height * 0.015,
-                    marginHorizontal: Dimensions.get('window').width * 0.03,
-                  }}>
-                  <Image
-                    style={{
-                      height: 60,
-                      width: 60,
-                      borderRadius: 16,
-                      // marginTop: 15,
-                      // marginLeft: 10,
-                    }}
-                    source={{
-                      uri: item.image,
-                    }}
-                  />
+                    backgroundColor: 'rgba(187, 198, 200, 0.5)',
+                    borderRadius: 16,
+                    marginHorizontal: Dimensions.get('window').width * 0.02,
 
+                    // height: Dimensions.get('window').height * 0.12,
+                    // width: Dimensions.get('window').width * 0.9,
+                  }}>
                   <View
                     style={{
-                      marginLeft: Dimensions.get('window').width * 0.03,
+                      flexDirection: 'row',
+                      marginVertical: Dimensions.get('window').height * 0.015,
+                      marginHorizontal: Dimensions.get('window').width * 0.03,
                     }}>
-                    <Text style={styles.designationStyle}>{item.title}</Text>
-                    <Text style={{fontWeight: 'bold'}}>
-                      {item.period} To {item.periodEnd}
-                    </Text>
-                    <View style={styles.ExpBoxView}>
-                      <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
-                      <Text style={{fontWeight: 'bold'}}> - </Text>
-                      <Text style={{fontWeight: 'bold', fontStyle: 'italic'}}>
-                        {item.city + ', ' + item.country}
+                    <Image
+                      style={{
+                        height: 60,
+                        width: 60,
+                        borderRadius: 16,
+                        // marginTop: 15,
+                        // marginLeft: 10,
+                      }}
+                      source={{
+                        uri: item.image,
+                      }}
+                    />
+
+                    <View
+                      style={{
+                        marginLeft: Dimensions.get('window').width * 0.03,
+                      }}>
+                      <Text style={styles.designationStyle}>{item.title}</Text>
+                      <Text style={{fontWeight: 'bold'}}>
+                        {item.period} To {item.periodEnd}
                       </Text>
+                      <View style={styles.ExpBoxView}>
+                        <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
+                        <Text style={{fontWeight: 'bold'}}> - </Text>
+                        <Text style={{fontWeight: 'bold', fontStyle: 'italic'}}>
+                          {item.city + ', ' + item.country}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            )}
-            keyExtractor={item => item.id}
-          />
+              )}
+              keyExtractor={item => item.id}
+            />
+          </View>
+          {/* added the following view line to organize properly */}
         </View>
+
         {/* <View style={styles.ExpbodyContent}> */}
         {/* post content here */}
 
@@ -1307,6 +1357,23 @@ const ProfileScreen = ({navigation}) => {
           text={'Do You want to Delete this post?'}
         />
       </View>
+      {spinnerLoader ? (
+        <Chase
+          style={{
+            position: 'absolute',
+            // top: Dimensions.get('window').height * 0.5,
+            left: Dimensions.get('window').width * 0.4,
+            bottom: Dimensions.get('window').height * 0.15,
+            alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          size={Dimensions.get('window').width * 0.2}
+          color="#5BA199"
+        />
+      ) : (
+        console.log('nto')
+      )}
     </ScrollView>
   );
 };
@@ -1322,6 +1389,7 @@ const styles = StyleSheet.create({
     // borderWidth: 3,
     marginTop: -60,
     backgroundColor: '#E5E3E4',
+    height: Dimensions.get('window').height * 0.8,
   },
   resumeText: {
     fontSize: 14,
