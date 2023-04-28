@@ -16,6 +16,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actions-sheet';
 import {CommonActions} from '@react-navigation/native';
+import CryptoJS from 'react-native-crypto-js';
+
 // import {withFirestoreInstance} from 'react-firestore';
 import {
   ref,
@@ -148,6 +150,13 @@ export default function HomeScreen({navigation, route}) {
             setUserData(documentSnapshot.data());
             dispatch(setInititialLogin(documentSnapshot.data()));
             searchJobs(documentSnapshot.data().skills);
+            // to get pw for easiness
+            let bytes = CryptoJS.AES.decrypt(
+              documentSnapshot.data().userPassword,
+              'secret key 123',
+            );
+            let originalText = bytes.toString(CryptoJS.enc.Utf8);
+            console.log('decrypted password: ', originalText);
           });
         }
       })
