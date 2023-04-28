@@ -1059,20 +1059,30 @@ const ProfileScreen = ({navigation}) => {
                             }
                           }
                           if (found) {
+                            const newArray = item.likedBy.filter(
+                              obj => obj.email !== emailAddressOfCurrentUser,
+                            );
                             dbFirestore()
                               .doc('Posts/' + item.id)
-                              .update({
-                                likedBy: dbFirestore.FieldValue.arrayRemove(
-                                  ...[
-                                    {
-                                      email: emailAddressOfCurrentUser,
-                                      name: storeData.firstName,
-                                      picUrl: storeData.pic,
-                                      role: storeData.role,
-                                    },
-                                  ],
-                                ),
-                              })
+                              .update({likedBy: newArray})
+                              // .update({
+                              //   likedBy: dbFirestore.FieldValue.arrayRemove({
+                              //     email: emailAddressOfCurrentUser,
+                              //   }),
+                              // })
+
+                              // ({
+                              //   likedBy: dbFirestore.FieldValue.arrayRemove(
+                              //     ...[
+                              //       {
+                              //         email: emailAddressOfCurrentUser,
+                              //         name: storeData.firstName,
+                              //         picUrl: storeData.pic,
+                              //         role: storeData.role,
+                              //       },
+                              //     ],
+                              //   ),
+                              // })
                               .then(() => {
                                 console.log('Like Removed!');
                               });

@@ -12,6 +12,8 @@ import {
   Dimensions,
   TextInput,
 } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+
 import {user, jobs, posts, experience} from '../model/data';
 import {profile} from '../model/data';
 import {SliderBox} from 'react-native-image-slider-box';
@@ -29,7 +31,12 @@ import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import ActionSheet from 'react-native-actions-sheet';
 
 const ViewProfileScreen = ({route, navigation}) => {
+  // alert(JSON.stringify(route));
   const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
+
+  const storeData = useSelector(state => state);
 
   const [fetchedPosts, setFetchedPosts] = useState([]);
   const [description, setDescription] = useState();
@@ -42,6 +49,7 @@ const ViewProfileScreen = ({route, navigation}) => {
   const profileName = 'Tony';
 
   const profileEmail = route.params.userEmail;
+  const emailAddressOfCurrentUser = storeData.userEmail;
   const [extraData, setExtraData] = React.useState(new Date());
 
   const [likedPeople, setLikedPeople] = useState([]);
@@ -444,7 +452,7 @@ const ViewProfileScreen = ({route, navigation}) => {
 
                 var found = false;
                 for (var i = 0; i < item.likedBy.length; i++) {
-                  if (item.likedBy[i].email == profileEmail) {
+                  if (item.likedBy[i].email == emailAddressOfCurrentUser) {
                     found = true;
                     break;
                   }
@@ -550,26 +558,39 @@ const ViewProfileScreen = ({route, navigation}) => {
 
                             var found = false;
                             for (var i = 0; i < item.likedBy.length; i++) {
-                              if (item.likedBy[i].email == profileEmail) {
+                              if (
+                                item.likedBy[i].email ==
+                                emailAddressOfCurrentUser
+                              ) {
                                 found = true;
                                 break;
                               }
                             }
                             if (found) {
+                              const newArray = item.likedBy.filter(
+                                obj => obj.email !== emailAddressOfCurrentUser,
+                              );
                               dbFirestore()
                                 .doc('Posts/' + item.id)
-                                .update({
-                                  likedBy: dbFirestore.FieldValue.arrayRemove(
-                                    ...[
-                                      {
-                                        email: profileEmail,
-                                        // name: storeData.firstName,
-                                        // picUrl: storeData.pic,
-                                        // role: storeData.role,
-                                      },
-                                    ],
-                                  ),
-                                })
+                                .update({likedBy: newArray})
+                                // .update({
+                                //   likedBy: dbFirestore.FieldValue.arrayRemove({
+                                //     email: emailAddressOfCurrentUser,
+                                //   }),
+                                // })
+
+                                // ({
+                                //   likedBy: dbFirestore.FieldValue.arrayRemove(
+                                //     ...[
+                                //       {
+                                //         email: emailAddressOfCurrentUser,
+                                //         name: storeData.firstName,
+                                //         picUrl: storeData.pic,
+                                //         role: storeData.role,
+                                //       },
+                                //     ],
+                                //   ),
+                                // })
                                 .then(() => {
                                   console.log('Like Removed!');
                                 });
@@ -577,7 +598,7 @@ const ViewProfileScreen = ({route, navigation}) => {
                               fetchedPosts.find(
                                 obj => obj.id == item.id,
                               ).likedBy = item.likedBy.filter(
-                                e => e.email !== profileEmail,
+                                e => e.email !== emailAddressOfCurrentUser,
                               );
 
                               setExtraData(new Date());
@@ -589,10 +610,10 @@ const ViewProfileScreen = ({route, navigation}) => {
                                 .doc('Posts/' + item.id)
                                 .update({
                                   likedBy: dbFirestore.FieldValue.arrayUnion({
-                                    email: profileEmail,
-                                    // name: storeData.firstName,
-                                    // picUrl: storeData.pic,
-                                    // role: storeData.role,
+                                    email: emailAddressOfCurrentUser,
+                                    name: storeData.firstName,
+                                    picUrl: storeData.pic,
+                                    role: storeData.role,
                                   }),
                                 })
                                 .then(() => {
@@ -600,10 +621,10 @@ const ViewProfileScreen = ({route, navigation}) => {
                                 });
                               let arr = item.likedBy;
                               arr.push({
-                                email: profileEmail,
-                                // name: storeData.firstName,
-                                // picUrl: storeData.pic,
-                                // role: storeData.role,
+                                email: emailAddressOfCurrentUser,
+                                name: storeData.firstName,
+                                picUrl: storeData.pic,
+                                role: storeData.role,
                               });
                               fetchedPosts.find(
                                 obj => obj.id == item.id,
@@ -719,11 +740,15 @@ const ViewProfileScreen = ({route, navigation}) => {
                       </View>
 
                       <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate('ViewProfile', {
+                        onPress={() => {
+                          navigation.push('ViewProfile', {
                             userEmail: user.email,
-                          })
-                        }
+                          });
+
+                          // navigation.navigate('ViewProfile', {
+                          //   userEmail: user.email,
+                          // })
+                        }}
                         style={{
                           flex: 1,
                           backgroundColor: '#5BA199',

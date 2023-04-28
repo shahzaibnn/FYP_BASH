@@ -610,7 +610,12 @@ const ExplorePage = ({navigation}) => {
                         marginVertical: Dimensions.get('window').height * 0.01,
                       }}>
                       <Image
-                        source={{uri: item.profilePic}}
+                        source={{
+                          uri:
+                            item.postedBy === emailAddressOfCurrentUser
+                              ? storeData.pic
+                              : item.profilePic,
+                        }}
                         style={{
                           width: 60,
                           height: 60,
@@ -699,20 +704,30 @@ const ExplorePage = ({navigation}) => {
                               }
                             }
                             if (found) {
+                              const newArray = item.likedBy.filter(
+                                obj => obj.email !== emailAddressOfCurrentUser,
+                              );
                               dbFirestore()
                                 .doc('Posts/' + item.id)
-                                .update({
-                                  likedBy: dbFirestore.FieldValue.arrayRemove(
-                                    ...[
-                                      {
-                                        email: emailAddressOfCurrentUser,
-                                        name: storeData.firstName,
-                                        picUrl: storeData.pic,
-                                        role: storeData.role,
-                                      },
-                                    ],
-                                  ),
-                                })
+                                .update({likedBy: newArray})
+                                // .update({
+                                //   likedBy: dbFirestore.FieldValue.arrayRemove({
+                                //     email: emailAddressOfCurrentUser,
+                                //   }),
+                                // })
+
+                                // ({
+                                //   likedBy: dbFirestore.FieldValue.arrayRemove(
+                                //     ...[
+                                //       {
+                                //         email: emailAddressOfCurrentUser,
+                                //         name: storeData.firstName,
+                                //         picUrl: storeData.pic,
+                                //         role: storeData.role,
+                                //       },
+                                //     ],
+                                //   ),
+                                // })
                                 .then(() => {
                                   console.log('Like Removed!');
                                 });
@@ -1066,6 +1081,11 @@ const ExplorePage = ({navigation}) => {
                   </View>
 
                   <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('ViewProfile', {
+                        userEmail: user.email,
+                      })
+                    }
                     style={{
                       flex: 1,
                       backgroundColor: '#5BA199',

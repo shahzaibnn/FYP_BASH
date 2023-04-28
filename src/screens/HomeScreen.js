@@ -505,7 +505,27 @@ export default function HomeScreen({navigation, route}) {
             <View style={{marginHorizontal: '3%', marginVertical: '4%'}}>
               <FlatList
                 // nestedScrollEnabled
-                ListEmptyComponent={<JobSkeleton />}
+                ListEmptyComponent={
+                  // !lastJob ? (
+                  <JobSkeleton />
+                  // ) : (
+                  //   <Text
+                  //     style={{
+                  //       marginHorizontal: 10,
+                  //       marginTop: 38,
+                  //       fontSize: 20,
+                  //       // alignItems: 'center',
+                  //       // alignContent: 'flex-end',
+                  //       // justifyContent: 'flex-end',
+                  //       // alignSelf: 'flex-end',
+                  //       // alignContent: 'flex-end',
+                  //       // backgroundColor: 'orange',
+                  //       // flex: 1,
+                  //     }}>
+                  //     No Recommended Jobs Found
+                  //   </Text>
+                  // )
+                }
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 ListFooterComponent={
@@ -739,7 +759,12 @@ export default function HomeScreen({navigation, route}) {
                   marginVertical: Dimensions.get('window').height * 0.01,
                 }}>
                 <Image
-                  source={{uri: item.profilePic}}
+                  source={{
+                    uri:
+                      item.postedBy === emailAddressOfCurrentUser
+                        ? storeData.pic
+                        : item.profilePic,
+                  }}
                   style={{
                     width: 60,
                     height: 60,
