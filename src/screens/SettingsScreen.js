@@ -6,6 +6,7 @@ import {
   Dimensions,
   TextInput,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -78,6 +79,15 @@ export default function SettingsScreen({navigation}) {
       setEnabledScroll(false);
     }
   }, [indicator]);
+
+  // console.log('pw:', originalPassword);
+  useEffect(() => {
+    if (found) {
+      changePasswordProcess();
+    } else {
+      console.log('not found');
+    }
+  }, [found]);
   const showToast = heading => {
     Toast.show({
       type: 'error',
@@ -132,7 +142,7 @@ export default function SettingsScreen({navigation}) {
         notifyMessage('Email Address does not Exists');
       } else {
         querySnapshot.forEach(documentSnapshot => {
-          setFound(true);
+          // setFound(true);
           console.log(documentSnapshot.id);
           console.log(documentSnapshot.data().userPassword);
           setId(documentSnapshot.id);
@@ -145,9 +155,9 @@ export default function SettingsScreen({navigation}) {
           console.log('decrypted password here: ', originalText); //decrypted password
           setOldPassword(originalText);
           setOriginalPassword(documentSnapshot.data().userPassword);
-          // setFound(true);
+          setFound(true);
         });
-        return changePasswordProcess();
+        // return changePasswordProcess();
       }
     } catch {
       // alert(error);
@@ -213,16 +223,24 @@ export default function SettingsScreen({navigation}) {
                         // notifyMessage(
                         //   'New Password Sent At ' + storeData.userEmail,
                         // );
+                        setOldPassword('');
                         setNewPassword('');
-
+                        setConfirmPassword('');
+                        Alert.alert(
+                          'Password Changed',
+                          'Password changed successfully!',
+                        );
                         console.log('toaster sent');
                         setFound(false);
                         setFlag(true);
+                        setIndicator(true);
+
                         // navigation.navigate('Login');
                       }),
                     )
                     .catch(error => {
                       setFlag(true);
+                      setIndicator(true);
 
                       console.log(error);
                     });
@@ -231,6 +249,7 @@ export default function SettingsScreen({navigation}) {
                 .catch(error => {
                   console.log(error);
                   setFlag(true);
+                  setIndicator(true);
                 });
             })
             .catch(err => {
@@ -241,6 +260,8 @@ export default function SettingsScreen({navigation}) {
             });
         });
     } else {
+      setIndicator(true);
+
       console.log('not found');
     }
   };
