@@ -317,33 +317,45 @@ export default function CreatePostScreen() {
             alignItems: 'center',
           }}>
           <Image
-            source={{uri: profile[0].pic}}
+            source={{uri: storeData.pic}}
             style={{width: 60, height: 60, borderRadius: 64}}
           />
 
-          <View style={{marginLeft: '5%'}}>
-            <Text style={{color: '#000000', fontWeight: 'bold', fontSize: 20}}>
-              {profile[0].name}
-            </Text>
-            <Text style={{color: '#5BA199', marginVertical: '2%'}}>
-              {profile[0].title}
-            </Text>
-          </View>
-
-          <TouchableOpacity
+          <View
             style={{
-              backgroundColor: '#4CA6A8',
-              paddingVertical: '3%',
-              paddingHorizontal: '7%',
-              borderRadius: 16,
-              marginLeft: '30%',
-            }}
-            onPress={buttonClick}>
-            <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
-              Post
-            </Text>
-          </TouchableOpacity>
+              // marginLeft: '5%',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+            }}>
+            <View style={{marginLeft: '5%'}}>
+              <Text
+                style={{color: '#000000', fontWeight: 'bold', fontSize: 20}}>
+                {storeData.firstName} {storeData.lastName}
+              </Text>
+              <Text style={{color: '#5BA199', marginVertical: '2%'}}>
+                {storeData.title}
+              </Text>
+            </View>
 
+            <TouchableOpacity
+              style={{
+                backgroundColor: '#4CA6A8',
+                paddingVertical: '3%',
+                paddingHorizontal: '7%',
+                borderRadius: 16,
+                marginLeft: '24%',
+                // alignContent: 'flex-end',
+                // alignItems: 'flex-end',
+                // flexDirection: 'row',
+                alignSelf: 'baseline',
+              }}
+              onPress={buttonClick}>
+              <Text
+                style={{color: '#ffffff', fontWeight: 'bold', fontSize: 16}}>
+                Post
+              </Text>
+            </TouchableOpacity>
+          </View>
           {/* <TouchableOpacity
           style={{
             backgroundColor: '#4CA6A8',
@@ -400,7 +412,7 @@ export default function CreatePostScreen() {
             paddingVertical: '3%',
             borderRadius: 32,
           }}>
-          <FontAwesome name="paperclip" size={30} color="#ffffff" />
+          <FontAwesome name="paperclip" size={25} color="#ffffff" />
         </TouchableOpacity>
 
         <View
