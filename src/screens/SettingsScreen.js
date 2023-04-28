@@ -399,8 +399,7 @@ export default function SettingsScreen({navigation}) {
             </Text>
             <Text style={styles.answer}>
               A: If you come across any inappropriate content on Bash, you can
-              report it by clicking on the three dots next to the post or
-              message and selecting the "Report" option. The Bash team will
+              report it by emailing us at bashfyp@gmail.com. The Bash team will
               review the report and take appropriate action.
             </Text>
 
@@ -707,12 +706,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   question: {
-    fontSize: 18,
+    fontSize: 14,
     marginLeft: '3%',
     fontWeight: 'bold',
   },
   answer: {
-    fontSize: 16,
+    fontSize: 14,
     marginVertical: 5,
     marginLeft: '3%',
   },
