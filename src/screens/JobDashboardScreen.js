@@ -216,7 +216,7 @@ export default function JobDashboardScreen({navigation, route}) {
                 <Image
                   style={{height: 60, width: 60, borderRadius: 64}}
                   source={{
-                    uri: profile[0].pic,
+                    uri: storeData.pic,
                   }}
                 />
               </TouchableOpacity>
