@@ -131,6 +131,7 @@ export default function EditProfileScreen({navigation}) {
     expImage,
     index,
   ) => {
+    setIndicator(false);
     console.log(expTitle);
     console.log(
       'test',
@@ -159,33 +160,41 @@ export default function EditProfileScreen({navigation}) {
         image: expImage,
       },
     ];
-    dbFirestore()
-      .collection('Users')
-      .where('userEmail', '==', storeData.userEmail)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
 
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(documentSnapshot.id);
+    try {
+      dbFirestore()
+        .collection('Users')
+        .where('userEmail', '==', storeData.userEmail)
+        .get()
+        .then(querySnapshot => {
+          console.log('Total Found users: ', querySnapshot.size);
 
-          console.log('experience check!');
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.id);
 
-          dbFirestore()
-            .doc('Users/' + documentSnapshot.id)
-            .update({
-              experience: dbFirestore.FieldValue.arrayRemove(...experience),
-            })
-            .then(() => {
-              dispatch(removeExpRedux(index));
+            console.log('experience check!');
 
-              console.log('experience removed');
-            });
+            dbFirestore()
+              .doc('Users/' + documentSnapshot.id)
+              .update({
+                experience: dbFirestore.FieldValue.arrayRemove(...experience),
+              })
+              .then(() => {
+                dispatch(removeExpRedux(index));
+
+                console.log('experience removed');
+                setIndicator(true);
+              });
+          });
+        })
+        .catch(error => {
+          setIndicator(true);
+
+          alert(error);
         });
-      })
-      .catch(error => {
-        alert(error);
-      });
+    } catch (error) {
+      setIndicator(true);
+    }
   };
   const updateArrayExp = async () => {
     // console.log(field);
@@ -291,6 +300,7 @@ export default function EditProfileScreen({navigation}) {
 
   const updateArraySkill = value => {
     // console.log(field);
+
     console.log(value);
     console.log(storeData.userEmail);
     // var object = {};
@@ -338,36 +348,44 @@ export default function EditProfileScreen({navigation}) {
     console.log(value);
     console.log(storeData.userEmail);
     // var object = {};
-    dbFirestore()
-      .collection('Users')
-      // .doc('roles')
-      // .collection(value.toLowerCase())
-      .where('userEmail', '==', storeData.userEmail)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total Found users: ', querySnapshot.size);
+    setIndicator(false);
 
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(documentSnapshot.id);
-          dbFirestore()
-            .doc('Users/' + documentSnapshot.id)
-            .update({
-              skills: dbFirestore.FieldValue.arrayRemove(value),
-            })
-            .then(() => {
-              dispatch(removeSkillRedux(value));
-              alert('skill removed!');
-              setExtraData(new Date());
+    try {
+      dbFirestore()
+        .collection('Users')
+        // .doc('roles')
+        // .collection(value.toLowerCase())
+        .where('userEmail', '==', storeData.userEmail)
+        .get()
+        .then(querySnapshot => {
+          console.log('Total Found users: ', querySnapshot.size);
 
-              console.log('skills updated');
-            });
+          querySnapshot.forEach(documentSnapshot => {
+            console.log(documentSnapshot.id);
+            dbFirestore()
+              .doc('Users/' + documentSnapshot.id)
+              .update({
+                skills: dbFirestore.FieldValue.arrayRemove(value),
+              })
+              .then(() => {
+                dispatch(removeSkillRedux(value));
+                alert('skill removed!');
+                setExtraData(new Date());
+
+                console.log('skills updated');
+              });
+          });
+          setIndicator(true);
+        })
+        .catch(error => {
+          alert(error);
+          setIndicator(true);
+
+          // setFlag(true);
         });
-      })
-      .catch(error => {
-        alert(error);
-
-        // setFlag(true);
-      });
+    } catch (error) {
+      setIndicator(true);
+    }
   };
 
   const updateField = (field, value) => {

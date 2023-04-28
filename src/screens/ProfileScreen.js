@@ -869,69 +869,69 @@ const ProfileScreen = ({navigation}) => {
             </View>
 
             {/* commented the following view to bring posts under the same container */}
-            {/* </View> */}
-
-            {/* posts */}
-            {/* </View> */}
           </View>
-          <View style={styles.ExpbodyContent}>
-            <FlatList
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              data={storeData.experience}
-              renderItem={({item}) => (
+
+          {/* posts */}
+          {/* </View> */}
+        </View>
+        <View style={styles.ExpbodyContent}>
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={storeData.experience}
+            renderItem={({item}) => (
+              <View
+                style={{
+                  backgroundColor: 'rgba(187, 198, 200, 0.5)',
+                  borderRadius: 16,
+                  marginHorizontal: Dimensions.get('window').width * 0.02,
+
+                  // height: Dimensions.get('window').height * 0.12,
+                  // width: Dimensions.get('window').width * 0.9,
+                }}>
                 <View
                   style={{
-                    backgroundColor: 'rgba(187, 198, 200, 0.5)',
-                    borderRadius: 16,
-                    marginHorizontal: Dimensions.get('window').width * 0.02,
-
-                    // height: Dimensions.get('window').height * 0.12,
-                    // width: Dimensions.get('window').width * 0.9,
+                    flexDirection: 'row',
+                    marginVertical: Dimensions.get('window').height * 0.015,
+                    marginHorizontal: Dimensions.get('window').width * 0.03,
                   }}>
+                  <Image
+                    style={{
+                      height: 60,
+                      width: 60,
+                      borderRadius: 16,
+                      // marginTop: 15,
+                      // marginLeft: 10,
+                    }}
+                    source={{
+                      uri: item.image,
+                    }}
+                  />
+
                   <View
                     style={{
-                      flexDirection: 'row',
-                      marginVertical: Dimensions.get('window').height * 0.015,
-                      marginHorizontal: Dimensions.get('window').width * 0.03,
+                      marginLeft: Dimensions.get('window').width * 0.03,
                     }}>
-                    <Image
-                      style={{
-                        height: 60,
-                        width: 60,
-                        borderRadius: 16,
-                        // marginTop: 15,
-                        // marginLeft: 10,
-                      }}
-                      source={{
-                        uri: item.image,
-                      }}
-                    />
-
-                    <View
-                      style={{
-                        marginLeft: Dimensions.get('window').width * 0.03,
-                      }}>
-                      <Text style={styles.designationStyle}>{item.title}</Text>
-                      <Text style={{fontWeight: 'bold'}}>
-                        {item.period} To {item.periodEnd}
+                    <Text style={styles.designationStyle}>{item.title}</Text>
+                    <Text style={{fontWeight: 'bold'}}>
+                      {item.period} To {item.periodEnd}
+                    </Text>
+                    <View style={styles.ExpBoxView}>
+                      <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
+                      <Text style={{fontWeight: 'bold'}}> - </Text>
+                      <Text style={{fontWeight: 'bold', fontStyle: 'italic'}}>
+                        {item.city + ', ' + item.country}
                       </Text>
-                      <View style={styles.ExpBoxView}>
-                        <Text style={{fontWeight: 'bold'}}>{item.company}</Text>
-                        <Text style={{fontWeight: 'bold'}}> - </Text>
-                        <Text style={{fontWeight: 'bold', fontStyle: 'italic'}}>
-                          {item.city + ', ' + item.country}
-                        </Text>
-                      </View>
                     </View>
                   </View>
                 </View>
-              )}
-              keyExtractor={item => item.id}
-            />
-          </View>
-          {/* added the following view line to organize properly */}
+              </View>
+            )}
+            keyExtractor={item => item.id}
+          />
         </View>
+        {/* added the following view line to organize properly */}
+        {/* </View> */}
 
         {/* <View style={styles.ExpbodyContent}> */}
         {/* post content here */}
