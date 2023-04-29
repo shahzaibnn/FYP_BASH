@@ -393,7 +393,14 @@ export default function JobDashboardScreen({navigation, route}) {
                 </Text>
               </TouchableOpacity>
 
-              <Text style={{color: '#469597', fontSize: 16}}>
+              <Text
+                style={{
+                  color: '#469597',
+                  fontSize: 16,
+                  flex: 1,
+                  marginLeft: '15%',
+                  // justifyContent: 'flex-end',
+                }}>
                 {item.jobCity},{item.jobLocation}
               </Text>
             </View>
