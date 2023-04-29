@@ -660,6 +660,7 @@ export default function HomeScreen({navigation, route}) {
                         marginVertical: Dimensions.get('window').height * 0.02,
                       }}>
                       <TouchableOpacity
+                        disabled={storeData.role === 'Faculty' ? true : false}
                         style={{
                           backgroundColor: '#5BA199',
                           paddingHorizontal:
@@ -1018,6 +1019,7 @@ export default function HomeScreen({navigation, route}) {
             {/* apply now */}
             <View>
               <TouchableOpacity
+                disabled={storeData.role === 'Faculty' ? true : false}
                 style={styles.buttonStyle}
                 onPress={() => handleApply(actionParameters)}>
                 <Text

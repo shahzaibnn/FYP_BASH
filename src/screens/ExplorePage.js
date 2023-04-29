@@ -887,6 +887,7 @@ const ExplorePage = ({navigation}) => {
                       marginVertical: Dimensions.get('window').height * 0.02,
                     }}>
                     <TouchableOpacity
+                      disabled={storeData.role === 'Faculty' ? true : false}
                       onPress={() => handleApply(fetchedJobs)}
                       style={{
                         backgroundColor: '#5BA199',
@@ -990,6 +991,7 @@ const ExplorePage = ({navigation}) => {
             {/* apply now */}
             <View>
               <TouchableOpacity
+                disabled={storeData.role === 'Faculty' ? true : false}
                 style={styles.buttonStyle}
                 onPress={() => handleApply(fetchedJobs)}>
                 <Text style={styles.buttonTextStyle}>Apply</Text>

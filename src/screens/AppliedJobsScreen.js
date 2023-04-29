@@ -28,7 +28,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useSelector, useDispatch} from 'react-redux';
 import JobSkeleton from '../components/JobSkeleton';
 
-export default function JobDashboardScreen({navigation, route}) {
+export default function AppliedJobsScreen({navigation, route}) {
   const [fetchedJobs, setFetchedJobs] = useState([]);
   const [userData, setUserData] = useState(Object);
   const [jobLoading, setJobLoading] = useState(false);
