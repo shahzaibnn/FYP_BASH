@@ -506,25 +506,25 @@ export default function HomeScreen({navigation, route}) {
               <FlatList
                 // nestedScrollEnabled
                 ListEmptyComponent={
-                  // !lastJob ? (
-                  <JobSkeleton />
-                  // ) : (
-                  //   <Text
-                  //     style={{
-                  //       marginHorizontal: 10,
-                  //       marginTop: 38,
-                  //       fontSize: 20,
-                  //       // alignItems: 'center',
-                  //       // alignContent: 'flex-end',
-                  //       // justifyContent: 'flex-end',
-                  //       // alignSelf: 'flex-end',
-                  //       // alignContent: 'flex-end',
-                  //       // backgroundColor: 'orange',
-                  //       // flex: 1,
-                  //     }}>
-                  //     No Recommended Jobs Found
-                  //   </Text>
-                  // )
+                  !lastJob ? (
+                    <JobSkeleton />
+                  ) : (
+                    <Text
+                      style={{
+                        marginHorizontal: 10,
+                        marginTop: 20,
+                        fontSize: 20,
+                        // alignItems: 'center',
+                        // alignContent: 'flex-end',
+                        // justifyContent: 'flex-end',
+                        // alignSelf: 'flex-end',
+                        // alignContent: 'flex-end',
+                        // backgroundColor: 'orange',
+                        // flex: 1,
+                      }}>
+                      No Recommended Jobs Found
+                    </Text>
+                  )
                 }
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
@@ -538,7 +538,7 @@ export default function HomeScreen({navigation, route}) {
                       size={30}
                       style={{
                         marginHorizontal: 10,
-                        marginTop: 48,
+                        marginTop: 20,
                         // alignItems: 'center',
                         // alignContent: 'flex-end',
                         // justifyContent: 'flex-end',
