@@ -8,6 +8,7 @@ import {
   Dimensions,
   StyleSheet,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState, createRef} from 'react';
 import {db, dbFirestore} from '../Firebase/Config';
@@ -40,7 +41,8 @@ export default function JobDashboardScreen({navigation, route}) {
     setOnEndReachedCalledDuringMomentumJob,
   ] = useState(true);
   const [lastJob, setLastJob] = useState(false);
-
+  const [jobsPosted, setJobsPosted] = useState(true);
+  const [myJobs, setMyJobs] = useState(false);
   let actionSheet = createRef();
 
   const dispatch = useDispatch();
@@ -64,8 +66,11 @@ export default function JobDashboardScreen({navigation, route}) {
     // Pass the job information as props to the Apply to Job screen
     console.log('checking jobs: ', job);
     // console.log('checking again: ', {job});
-
-    navigation.navigate('ApplyToJob', {job: job});
+    if (storeData.role === 'Faculty') {
+      Alert.alert('Sorry', 'Faculty cannot apply to this job');
+    } else {
+      navigation.navigate('ApplyToJob', {job: job});
+    }
   };
 
   // const searchData = loggedInUser => {
@@ -96,10 +101,14 @@ export default function JobDashboardScreen({navigation, route}) {
   //     });
   // };
 
+  // test
+
+  // test end
   useEffect(() => {
     // searchData(emailAddressOfCurrentUser);
     searchJobs();
   }, []);
+
   const searchJobs = () => {
     // console.log('search jobs here', skillsParams);
     setJobLoading(true);
@@ -272,9 +281,78 @@ export default function JobDashboardScreen({navigation, route}) {
                 Job Dashboard
               </Text>
             </View>
+            {/* for another */}
+            <View
+              // onPress={() => setJobsPosted(true)}
+              style={{
+                // marginTop: '2%',
+                marginBottom: '5%',
+                marginHorizontal: '10%',
+
+                justifyContent: 'space-evenly',
+                // alignItems: 'center',
+                flexDirection: 'row',
+                // backgroundColor: 'red',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  setJobsPosted(true);
+                  setMyJobs(false);
+                }}
+                style={{
+                  // width: '5%',
+                  backgroundColor: jobsPosted ? '#4CA6A8' : '#E5E3E4',
+                  borderWidth: 1,
+                  borderColor: '#4CA6A8',
+                  borderRadius: 16,
+                  paddingHorizontal: '3%',
+                  paddingVertical: '1%',
+                }}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+
+                    color: jobsPosted ? '#ffffff' : '#000000',
+                    padding: '1%',
+                    fontWeight: 'bold',
+                  }}>
+                  Posted Jobs
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  setJobsPosted(false);
+                  setMyJobs(true);
+                  // navigation.navigate('AppliedJobs');
+                }}
+                style={{
+                  // width: '5%',
+                  backgroundColor: myJobs ? '#4CA6A8' : '#E5E3E4',
+                  borderWidth: 1,
+                  borderColor: '#4CA6A8',
+                  borderRadius: 16,
+                  paddingHorizontal: '1%',
+                  paddingVertical: '1%',
+                }}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+
+                    color: myJobs ? '#ffffff' : '#000000',
+                    padding: '1%',
+                    fontWeight: 'bold',
+                  }}>
+                  Applied Jobs
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {/* for another */}
           </View>
         }
-        data={fetchedJobs}
+        // {jobsPosted ? ():}
+
+        data={jobsPosted ? fetchedJobs : storeData.appliedJobId}
         // onEndReachedThreshold={0.1}
         scrollEventThrottle={150}
         onEndReachedThreshold={0.1}
@@ -382,9 +460,10 @@ export default function JobDashboardScreen({navigation, route}) {
                 marginVertical: Dimensions.get('window').height * 0.02,
               }}>
               <TouchableOpacity
-                disabled={storeData.role === 'Faculty' ? true : false}
+                // disabled={storeData.role === 'Faculty' ? true : false}
+                disabled={jobsPosted ? false : true}
                 style={{
-                  backgroundColor: '#5BA199',
+                  backgroundColor: jobsPosted ? '#5BA199' : '#777777',
                   paddingHorizontal: Dimensions.get('window').width * 0.15,
                   paddingVertical: Dimensions.get('window').height * 0.01,
                   borderRadius: 16,
@@ -671,7 +750,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   text: {fontSize: 20, fontWeight: 'bold', color: '#6A6A6A', paddingTop: 15},
-
+  titleStyle: {
+    color: '#000000',
+    marginTop: Dimensions.get('window').height * 0.005,
+    marginBottom: Dimensions.get('window').height * 0.01,
+    // marginHorizontal: Dimensions.get('window').height * 0.04,
+  },
   lastNameStyle: {
     textAlign: 'right',
     marginRight: 70,
