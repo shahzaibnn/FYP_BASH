@@ -323,11 +323,15 @@ export default function CreatePostScreen() {
 
           <View
             style={{
-              // marginLeft: '5%',
+              marginLeft: '5%',
               flexDirection: 'row',
-              justifyContent: 'space-evenly',
+              // justifyContent: 'space-evenly',
             }}>
-            <View style={{marginLeft: '5%'}}>
+            <View
+              style={{
+                // marginLeft: '5%',
+                flex: 1,
+              }}>
               <Text
                 style={{color: '#000000', fontWeight: 'bold', fontSize: 20}}>
                 {storeData.firstName} {storeData.lastName}
@@ -343,7 +347,7 @@ export default function CreatePostScreen() {
                 paddingVertical: '3%',
                 paddingHorizontal: '7%',
                 borderRadius: 16,
-                marginLeft: '24%',
+                marginRight: '20%',
                 // alignContent: 'flex-end',
                 // alignItems: 'flex-end',
                 // flexDirection: 'row',
