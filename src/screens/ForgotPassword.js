@@ -37,6 +37,7 @@ import {
 import {Toaster} from '../components/AlertBoxStyles/Toaster';
 import {dbFirestore} from '../Firebase/Config';
 import RNSmtpMailer from 'react-native-smtp-mailer';
+import CryptoJS from 'react-native-crypto-js';
 
 import RandExp from 'randexp';
 import Spinner from 'react-native-spinkit';
@@ -127,7 +128,15 @@ export default function ForgotPassword({navigation}) {
               console.log(documentSnapshot.id);
               console.log(documentSnapshot.data().userPassword);
               setId(documentSnapshot.id);
-              setOldPassword(documentSnapshot.data().userPassword);
+              // setOldPassword(documentSnapshot.data().userPassword);
+              let bytes = CryptoJS.AES.decrypt(
+                documentSnapshot.data().userPassword,
+                'secret key 123',
+              );
+              let originalText = bytes.toString(CryptoJS.enc.Utf8);
+              console.log('decrypted old password here: ', originalText);
+              setOldPassword(originalText);
+
               setFound(true);
             });
           }
@@ -150,13 +159,19 @@ export default function ForgotPassword({navigation}) {
 
   useEffect(() => {
     if (found) {
+      let encryptedPassword = CryptoJS.AES.encrypt(
+        newPassword,
+        'secret key 123',
+      ).toString();
+      console.log('checking encrypted password', encryptedPassword);
+
       dbFirestore()
         .collection('Users')
         // .doc('roles')
         // .collection(value.toLowerCase())
         .doc(id)
         .update({
-          userPassword: newPassword.toString(),
+          userPassword: encryptedPassword,
         })
         .then(() => {
           console.log('----------------------------');
