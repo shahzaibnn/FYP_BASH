@@ -114,7 +114,8 @@ const ApplyToJob = ({navigation, route}) => {
   }, [indicator]);
   const sendEmail = async () => {
     setIndicator(false);
-    var path = RNFS.DownloadDirectoryPath + '/test.pdf';
+    // var path = RNFS.DownloadDirectoryPath + '/test.pdf';
+    var path = RNFS.ExternalDirectoryPath + '/test.pdf';
     // write the file
 
     console.log('EMAIL ', job.jobEmail);
@@ -191,6 +192,7 @@ const ApplyToJob = ({navigation, route}) => {
       })
       .catch(error => {
         setIndicator(true);
+        console.error('error', error);
         alert('Applying Failed!\nPlease Check Your Internet Connection');
       });
   };

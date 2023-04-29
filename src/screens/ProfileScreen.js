@@ -1404,7 +1404,7 @@ const styles = StyleSheet.create({
     // borderWidth: 3,
     marginTop: -60,
     backgroundColor: '#E5E3E4',
-    height: Dimensions.get('window').height * 0.8,
+    // height: Dimensions.get('window').height * 0.8,
   },
   resumeText: {
     fontSize: 14,
@@ -1452,7 +1452,7 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
   },
   ExpbodyContent: {
-    // flex: 1,
+    flex: 1,
     alignItems: 'flex-start',
     padding: 10,
   },
