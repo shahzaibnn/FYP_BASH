@@ -48,6 +48,7 @@ const ProfileScreen = ({navigation}) => {
   const [showWarning, setShowWarning] = useState(false);
 
   const [deleteId, setDeleteId] = useState('');
+  const [experience, setExperience] = useState([]);
 
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
@@ -98,6 +99,7 @@ const ProfileScreen = ({navigation}) => {
 
   let actionSheetRef = createRef();
   let actionSheetLike = createRef();
+
   const likeShow = itemLikes => {
     console.log('liked by here ', itemLikes);
     setLikedPeople(itemLikes);
@@ -838,6 +840,7 @@ const ProfileScreen = ({navigation}) => {
             </View> */}
             {/* testing end */}
             {/* cv file display */}
+            {/* experience start */}
 
             {/* experience - edit experience */}
             {/* <View> */}
@@ -871,7 +874,6 @@ const ProfileScreen = ({navigation}) => {
             {/* commented the following view to bring posts under the same container */}
           </View>
 
-          {/* posts */}
           {/* </View> */}
         </View>
         <View style={styles.ExpbodyContent}>
@@ -879,6 +881,7 @@ const ProfileScreen = ({navigation}) => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             data={storeData.experience}
+            // data={experience}
             renderItem={({item}) => (
               <View
                 style={{
@@ -937,6 +940,7 @@ const ProfileScreen = ({navigation}) => {
         {/* post content here */}
 
         {/* THIS IS TO SEARCHED AS TO WHICH POSTS BELONG TO THIS USER */}
+        {/* test */}
         <View>
           <Text
             style={{
@@ -1195,6 +1199,7 @@ const ProfileScreen = ({navigation}) => {
             }}
           />
         </View>
+        {/* test */}
         {/* </View> */}
         <ActionSheet ref={actionSheetRef}>
           <View
@@ -1447,7 +1452,7 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
   },
   ExpbodyContent: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'flex-start',
     padding: 10,
   },
