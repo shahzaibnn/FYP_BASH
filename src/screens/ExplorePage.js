@@ -70,9 +70,9 @@ const ExplorePage = ({navigation}) => {
   const handleApply = job => {
     // Pass the job information as props to the Apply to Job screen
     console.log('checking jobs: ', job);
-    console.log('checking again: ', {job});
+    // console.log('checking again: ', {job});
 
-    navigation.navigate('ApplyToJob', {job});
+    navigation.navigate('ApplyToJob', {job: job});
   };
 
   // useEffect(() => {
@@ -888,14 +888,19 @@ const ExplorePage = ({navigation}) => {
                     }}>
                     <TouchableOpacity
                       disabled={storeData.role === 'Faculty' ? true : false}
-                      onPress={() => handleApply(fetchedJobs)}
                       style={{
                         backgroundColor: '#5BA199',
                         paddingHorizontal:
                           Dimensions.get('window').width * 0.15,
                         paddingVertical: Dimensions.get('window').height * 0.01,
                         borderRadius: 16,
-                      }}>
+                      }}
+                      // onPress={() => handleApply({item})}
+                      // onPress={() => handleApply(item)}
+                      onPress={() => handleApply(item)}
+
+                      // onPress={navigation.navigate('ApplyToJob')}
+                    >
                       <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
                         Apply
                       </Text>
@@ -993,8 +998,13 @@ const ExplorePage = ({navigation}) => {
               <TouchableOpacity
                 disabled={storeData.role === 'Faculty' ? true : false}
                 style={styles.buttonStyle}
-                onPress={() => handleApply(fetchedJobs)}>
-                <Text style={styles.buttonTextStyle}>Apply</Text>
+                onPress={() => handleApply(actionParameters)}>
+                <Text
+                  style={styles.buttonTextStyle}
+                  // onPress={navigation.navigate('ApplyToJob')}
+                >
+                  Apply
+                </Text>
               </TouchableOpacity>
             </View>
           </ScrollView>

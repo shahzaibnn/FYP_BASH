@@ -61,10 +61,11 @@ export default function JobDashboardScreen({navigation, route}) {
     actionSheet.current.show();
   };
   const handleApply = job => {
+    // Pass the job information as props to the Apply to Job screen
     console.log('checking jobs: ', job);
-    console.log('checking again: ', {job});
+    // console.log('checking again: ', {job});
 
-    navigation.navigate('ApplyToJob', {job});
+    navigation.navigate('ApplyToJob', {job: job});
   };
 
   // const searchData = loggedInUser => {
@@ -212,7 +213,8 @@ export default function JobDashboardScreen({navigation, route}) {
                 marginTop: '3%',
                 marginHorizontal: '5%',
               }}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('AppliedJobs')}>
                 <Image
                   style={{height: 60, width: 60, borderRadius: 64}}
                   source={{
@@ -387,7 +389,12 @@ export default function JobDashboardScreen({navigation, route}) {
                   paddingVertical: Dimensions.get('window').height * 0.01,
                   borderRadius: 16,
                 }}
-                onPress={() => handleApply(fetchedJobs)}>
+                // onPress={() => handleApply({item})}
+                // onPress={() => handleApply(item)}
+                onPress={() => handleApply(item)}
+
+                // onPress={navigation.navigate('ApplyToJob')}
+              >
                 <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
                   Apply
                 </Text>

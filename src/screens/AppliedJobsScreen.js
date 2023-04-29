@@ -189,24 +189,24 @@ export default function AppliedJobsScreen({navigation, route}) {
 
   return (
     // <ScrollView style={{}}>
-    <View>
+    <View style={{flex: 1}}>
       <FlatList
-        ListEmptyComponent={
-          <View
-            style={{marginHorizontal: Dimensions.get('screen').width * 0.1}}>
-            <JobSkeleton />
-            <JobSkeleton />
-            <JobSkeleton />
-            <JobSkeleton />
-          </View>
-        }
+        // ListEmptyComponent={
+        //   <View
+        //     style={{marginHorizontal: Dimensions.get('screen').width * 0.1}}>
+        //     <JobSkeleton />
+        //     <JobSkeleton />
+        //     <JobSkeleton />
+        //     <JobSkeleton />
+        //   </View>
+        // }
         style={{
           backgroundColor: '#E5E3E4',
           width: '100%',
         }}
         ListHeaderComponent={
           <View>
-            <View
+            {/* <View
               style={{
                 flexDirection: 'row',
                 marginTop: '3%',
@@ -250,7 +250,7 @@ export default function AppliedJobsScreen({navigation, route}) {
                   />
                 </View>
               </TouchableOpacity>
-            </View>
+            </View> */}
 
             <View
               style={{
@@ -258,59 +258,76 @@ export default function AppliedJobsScreen({navigation, route}) {
                 alignItems: 'center',
                 marginHorizontal: '5%',
                 marginVertical: '5%',
-                justifyContent: 'center',
+                //   justifyContent: 'center',
               }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                style={{flex: 1}}>
+                <Ionicons
+                  name="chevron-back-circle-sharp"
+                  size={35}
+                  color="#777777"
+                />
+              </TouchableOpacity>
               <Text
                 style={{
                   fontSize: 35,
                   color: '#000000',
                   fontWeight: 'bold',
                   textAlign: 'center',
+                  // marginLeft: '3%',
+                  flex: 4,
+                  // marginHorizontal: Dimensions.get('window').width / 5,
+                  // marginEnd: '30%',
+                  // marginHorizontal: '25%',  },
                 }}>
-                Job Dashboard
+                Applied Jobs
               </Text>
+              <View style={{flex: 1}} />
             </View>
           </View>
         }
-        data={fetchedJobs}
+        data={storeData.appliedJobId}
         // onEndReachedThreshold={0.1}
         scrollEventThrottle={150}
         onEndReachedThreshold={0.1}
         onMomentumScrollBegin={() => {
           setOnEndReachedCalledDuringMomentumJob(false);
         }}
-        ListFooterComponent={
-          !lastJob ? (
-            renderLoaderJobs
-          ) : (
-            <Text
-              style={{
-                alignSelf: 'center',
-                fontSize: 20,
-                color: '#000000',
-                marginBottom: 90,
-                textAlign: 'center',
-              }}>
-              You Are Up To Date / All Jobs Fetched And Displayed
-            </Text>
-          )
-        }
+        // ListFooterComponent={
+        //   !lastJob ? (
+        //     renderLoaderJobs
+        //   ) : (
+        //     <Text
+        //       style={{
+        //         alignSelf: 'center',
+        //         fontSize: 20,
+        //         color: '#000000',
+        //         marginBottom: 90,
+        //         textAlign: 'center',
+        //       }}>
+        //       You Are Up To Date / All Jobs Fetched And Displayed
+        //     </Text>
+        //   )
+        // }
         // horizontal={false}
-        onEndReached={() => {
-          console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
-          console.log('check last job value', lastJob);
-          console.log(
-            'check end moment job value',
-            onEndReachedCalledDuringMomentumJob,
-          );
-          if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
-            console.log(
-              'reaching towards end----------------------------------------',
-            );
-            handleEndReachedJobs(); // LOAD MORE DATA
-            setOnEndReachedCalledDuringMomentumJob(true);
-          }
-        }}
+        // onEndReached={() => {
+        //   console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
+        //   console.log('check last job value', lastJob);
+        //   console.log(
+        //     'check end moment job value',
+        //     onEndReachedCalledDuringMomentumJob,
+        //   );
+        //   if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
+        //     console.log(
+        //       'reaching towards end----------------------------------------',
+        //     );
+        //     handleEndReachedJobs(); // LOAD MORE DATA
+        //     setOnEndReachedCalledDuringMomentumJob(true);
+        //   }
+        // }}
         renderItem={({item}) => (
           <View
             style={{
@@ -380,9 +397,9 @@ export default function AppliedJobsScreen({navigation, route}) {
                 marginVertical: Dimensions.get('window').height * 0.02,
               }}>
               <TouchableOpacity
-                disabled={storeData.role === 'Faculty' ? true : false}
+                disabled={true}
                 style={{
-                  backgroundColor: '#5BA199',
+                  backgroundColor: '#777777',
                   paddingHorizontal: Dimensions.get('window').width * 0.15,
                   paddingVertical: Dimensions.get('window').height * 0.01,
                   borderRadius: 16,
@@ -478,8 +495,8 @@ export default function AppliedJobsScreen({navigation, route}) {
             {/* apply now */}
             <View>
               <TouchableOpacity
-                disabled={storeData.role === 'Faculty' ? true : false}
-                style={styles.buttonStyle}
+                disabled={true}
+                style={[styles.buttonStyle, {backgroundColor: '#777777'}]}
                 onPress={() => handleApply(actionParameters)}>
                 <Text
                   style={styles.buttonTextStyle}

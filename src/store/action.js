@@ -13,6 +13,7 @@ import {
   REMOVERESUMEURL,
   UPDATEPROFILEPICURL,
   REMOVEPICURL,
+  ADDAPPPLIEDJOB,
 } from './actionTypes';
 
 export const addition = () => ({
@@ -89,5 +90,12 @@ export const updateProfilePicUrl = url => {
 export const removePicUrl = () => {
   return {
     type: REMOVEPICURL,
+  };
+};
+
+export const addAppliedJob = data => {
+  return {
+    type: ADDAPPPLIEDJOB,
+    payload: data,
   };
 };

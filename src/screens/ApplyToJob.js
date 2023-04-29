@@ -25,9 +25,15 @@ import ImageModal from 'react-native-image-modal';
 import RNSmtpMailer from 'react-native-smtp-mailer';
 import RNFS from 'react-native-fs';
 import Toast from 'react-native-toast-message';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 import {useSelector, useDispatch} from 'react-redux';
-import {addition, setInititialLogin, subtraction} from '../store/action';
+import {
+  addAppliedJob,
+  addition,
+  setInititialLogin,
+  subtraction,
+} from '../store/action';
 import {dbFirestore} from '../Firebase/Config';
 
 import {Grid} from 'react-native-animated-spinkit';
@@ -42,9 +48,81 @@ const ApplyToJob = ({navigation, route}) => {
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
     {label: 'Pakistan', value: 'Pakistan'},
+    // {label: 'Karachi', value: 'Karachi, Pakistan', parent: 'pk'},
+    // {label: 'Lahore', value: 'Lahore, Pakistan', parent: 'pk'},
+    // {label: 'Islamabad', value: 'Islamabad, Pakistan', parent: 'pk'},
+    // {label: 'Rawalpindi', value: 'Rawalpindi, Pakistan', parent: 'pk'},
+    // {label: 'Faisalabad', value: 'Faisalabad, Pakistan', parent: 'pk'},
+
     {label: 'USA', value: 'USA'},
-    {label: 'India', value: 'INDIA'},
-    {label: 'China', value: 'CHINA'},
+    // {label: 'New York', value: 'New York, USA', parent: 'us'},
+    // {label: 'Los Angeles', value: 'Los Angeles, USA', parent: 'us'},
+    // {label: 'Chicago', value: 'Chicago, USA', parent: 'us'},
+    // {label: 'Houston', value: 'Houston, USA', parent: 'us'},
+    // {label: 'Phoenix', value: 'Phoenix, USA', parent: 'us'},
+
+    {label: 'Australia', value: 'Australia'},
+    // {label: 'Sydney', value: 'Sydney, Australia', parent: 'au'},
+    // {label: 'Melbourne', value: 'Melbourne, Australia', parent: 'au'},
+    // {label: 'Brisbane', value: 'Brisbane, Australia', parent: 'au'},
+    // {label: 'Perth', value: 'Perth, Australia', parent: 'au'},
+    // {label: 'Adelaide', value: 'Adelaide, Australia', parent: 'au'},
+
+    {label: 'United Kingdom', value: 'United Kingdom'},
+    // {label: 'London', value: 'London, UK', parent: 'uk'},
+    // {label: 'Manchester', value: 'Manchester, UK', parent: 'uk'},
+    // {label: 'Birmingham', value: 'Birmingham, UK', parent: 'uk'},
+    // {label: 'Liverpool', value: 'Liverpool, UK', parent: 'uk'},
+    // {label: 'Leeds', value: 'Leeds, UK', parent: 'uk'},
+
+    {label: 'Japan', value: 'Japan'},
+    // {label: 'Tokyo', value: 'Tokyo, Japan', parent: 'jp'},
+    // {label: 'Osaka', value: 'Osaka, Japan', parent: 'jp'},
+    // {label: 'Nagoya', value: 'Nagoya, Japan', parent: 'jp'},
+    // {label: 'Sapporo', value: 'Sapporo, Japan', parent: 'jp'},
+    // {label: 'Fukuoka', value: 'Fukuoka, Japan', parent: 'jp'},
+
+    {label: 'Canada', value: 'Canada'},
+    // {label: 'Toronto', value: 'Toronto, Canada', parent: 'ca'},
+    // {label: 'Montreal', value: 'Montreal, Canada', parent: 'ca'},
+    // {label: 'Vancouver', value: 'Vancouver, Canada', parent: 'ca'},
+    // {label: 'Calgary', value: 'Calgary, Canada', parent: 'ca'},
+    // {label: 'Ottawa', value: 'Ottawa, Canada', parent: 'ca'},
+
+    {label: 'India', value: 'India'},
+    // {label: 'Mumbai', value: 'Mumbai, India', parent: 'in'},
+    // {label: 'Delhi', value: 'Delhi, India', parent: 'in'},
+    // {label: 'Bangalore', value: 'Bangalore, India', parent: 'in'},
+    // {label: 'Hyderabad', value: 'Hyderabad, India', parent: 'in'},
+    // {label: 'Chennai', value: 'Chennai, India', parent: 'in'},
+
+    {label: 'France', value: 'France'},
+    // {label: 'Paris', value: 'Paris, France', parent: 'fr'},
+    // {label: 'Marseille', value: 'Marseille, France', parent: 'fr'},
+    // {label: 'Lyon', value: 'Lyon, France', parent: 'fr'},
+    // {label: 'Toulouse', value: 'Toulouse, France', parent: 'fr'},
+    // {label: 'Nice', value: 'Nice, France', parent: 'fr'},
+
+    {label: 'Brazil', value: 'Brazil'},
+    // {label: 'São Paulo', value: 'São Paulo, Brazil', parent: 'br'},
+    // {label: 'Rio de Janeiro', value: 'Rio de Janeiro, Brazil', parent: 'br'},
+    // {label: 'Brasília', value: 'Brasília, Brazil', parent: 'br'},
+    // {label: 'Salvador', value: 'Salvador, Brazil', parent: 'br'},
+    // {label: 'Fortaleza', value: 'Fortaleza, Brazil', parent: 'br'},
+
+    {label: 'Germany', value: 'Germany'},
+    // {label: 'Berlin', value: 'Berlin, Germany', parent: 'de'},
+    // {label: 'Hamburg', value: 'Hamburg, Germany', parent: 'de'},
+    // {label: 'Munich', value: 'Munich, Germany', parent: 'de'},
+    // {label: 'Cologne', value: 'Cologne, Germany', parent: 'de'},
+    // {label: 'Frankfurt', value: 'Frankfurt, Germany', parent: 'de'},
+
+    {label: 'Spain', value: 'Spain'},
+    // {label: 'Madrid', value: 'Madrid, Spain', parent: 'es'},
+    // {label: 'Barcelona', value: 'Barcelona, Spain', parent: 'es'},
+    // {label: 'Valencia', value: 'Valencia, Spain', parent: 'es'},
+    // {label: 'Seville', value: 'Seville, Spain', parent: 'es'},
+    // {label: 'Zaragoza', value: 'Zaragoza, Spain', parent: 'es'},
   ]);
   // const emailAddressOfCurrentUser = route.params.userEmail;
 
@@ -212,12 +290,13 @@ const ApplyToJob = ({navigation, route}) => {
           console.log(documentSnapshot.id);
           let appliedJobss = [
             {
-              jobId: job.id,
-              jobTitle: job.jobTitle,
-              jobCompany: job.jobCompany,
-              jobMode: job.jobMode,
-              jobEmail: job.jobEmail,
-              jobSalary: job.jobSalary,
+              ...job,
+              // jobId: job.id,
+              // jobTitle: job.jobTitle,
+              // jobCompany: job.jobCompany,
+              // jobMode: job.jobMode,
+              // jobEmail: job.jobEmail,
+              // jobSalary: job.jobSalary,
               dateApplied: dbFirestore.Timestamp.now(),
               // dateApplied: dbFirestore.Timestamp.now().toDate(),
             },
@@ -231,6 +310,7 @@ const ApplyToJob = ({navigation, route}) => {
             .then(() => {
               alert('Applied Successfully');
               console.log('Added in firestore');
+              dispatch(addAppliedJob(job));
               setIndicator(true);
               navigation.goBack();
             })
@@ -274,7 +354,8 @@ const ApplyToJob = ({navigation, route}) => {
         pointerEvents={pointerEvent}
         style={{
           backgroundColor: '#E5E3E4',
-          height: 1000,
+          flex: 1,
+          // height: 1000,
           borderRadius: 12,
           marginTop: 15,
           marginLeft: 25,
@@ -283,17 +364,36 @@ const ApplyToJob = ({navigation, route}) => {
           opacity: opacity,
         }}>
         {/* Header */}
-        <View style={styles.Header}>
-          <TouchableOpacity onPress={() => console.log(job)}>
-            <FontAwesome
-              name="chevron-left"
-              style={styles.back}
-              size={20}
-              color="blacks"
-            />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginHorizontal: '5%',
+            marginVertical: '2%',
+            // justifyContent: 'center',
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+            style={{flex: 1}}>
+            <Entypo name="circle-with-cross" size={26} color="#777777" />
           </TouchableOpacity>
-
-          <Text style={styles.titleText}>Apply to Job</Text>
+          <Text
+            style={{
+              fontSize: 35,
+              color: '#5BA199',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              // marginLeft: '3%',
+              flex: 4,
+              // marginHorizontal: Dimensions.get('window').width / 5,
+              // marginEnd: '30%',
+              // marginHorizontal: '25%',  },
+            }}>
+            Applied Jobs
+          </Text>
+          <View style={{flex: 1}} />
         </View>
         {/* Form */}
         <View style={styles.ExpBoxView}>
@@ -340,28 +440,45 @@ const ApplyToJob = ({navigation, route}) => {
           <View style={styles.ExpBoxView}>
             <Text style={styles.text}>Country</Text>
           </View>
+
           <DropDownPicker
+            listMode="SCROLLVIEW"
             open={open}
+            categorySelectable={true}
             value={value}
             items={items}
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
-            style={styles.dropdownContainer}
-            textStyle={styles.dropdownText}
-            containerStyle={styles.dropdownWrapper}
-            arrowColor="#707070"
-            dropDownContainerStyle={{
+            placeholder="Select country"
+            placeholderStyle={{color: '#777777'}}
+            searchable={true}
+            addCustomItem={true}
+            mode="BADGE"
+            badgeDotColors={['#469597']}
+            theme="LIGHT"
+            // containerStyle={{marginTop: 40}}
+
+            style={{
+              marginVertical: '5%',
               backgroundColor: 'white',
               borderWidth: 0,
-              borderColor: '#6A6A6A',
-              // borderColor: 'red',
               borderRadius: 16,
+              // zIndex: 1000,
             }}
+            textStyle={{color: '#5BA199', fontSize: 14}}
+            dropDownContainerStyle={{
+              // backgroundColor: '#469597',
+              backgroundColor: 'white',
+              borderWidth: 0,
+              marginTop: 10,
+              borderRadius: 16,
+              zIndex: 10000,
+            }}
+            //   labelStyle={{color: 'white'}}
+            // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
+            listItemLabelStyle={{color: '#6A6A6A'}}
           />
-          {value === null && (
-            <Text>{showToast('Please fill message body')}</Text>
-          )}
         </View>
         {/*  */}
         {/* Message Input Field */}
@@ -373,7 +490,7 @@ const ApplyToJob = ({navigation, route}) => {
             {messageLength}/50
           </Text>
         </View>
-        <View style={styles.messageBodyStyle}>
+        {/* <View style={styles.messageBodyStyle}>
           <TextInput
             // style={styles.messageStyle}
             // style={[styles.messageStyle, messageLength >= 50 && {color: 'red'}]}
@@ -387,54 +504,115 @@ const ApplyToJob = ({navigation, route}) => {
             value={message}
             // textAlignVertical={true}
             placeholder="What sets you different from others?"
-            placeholderTextColor="#6A6A6A"
+            placeholderTextColor="#777777"
             blurOnSubmit={false}
             // maxLength={50}
           />
+        </View> */}
+
+        <View
+          style={{
+            marginVertical: '5%',
+            height: Dimensions.get('window').height * 0.2,
+            backgroundColor: '#ffffff',
+            // marginLeft: 25,
+            // marginRight: 25,
+            // margin: 10,
+            borderRadius: 16,
+          }}>
+          <TextInput
+            style={{marginHorizontal: '5%', fontSize: 14, fontStyle: 'italic'}}
+            onChangeText={message => {
+              setMessage(message);
+              setMessageLength(message.length);
+              // setErrorMessage('');
+            }}
+            multiline={true}
+            value={message}
+            placeholder="What Sets You Different From Others?"
+            placeholderTextColor={'#777777'}
+          />
         </View>
-        {/* CV + Icon */}
-        <View style={styles.UploadCV}>
-          <TouchableOpacity style={styles.UploadBtn}>
-            <Text style={styles.text}>CV</Text>
-          </TouchableOpacity>
-          <View>
-            {uploaded ? (
-              <TouchableOpacity>
-                <Ionicons
-                  name="checkmark-done-circle-outline"
+
+        <Text style={styles.text}>CV</Text>
+
+        <View
+          style={{
+            alignSelf: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '5%',
+          }}>
+          {uploaded ? (
+            <View>
+              <TouchableOpacity
+              // onPress={() =>
+              //   navigation.navigate('PDFView', {
+              //     pdfUrl: storeData.resumeUrl,
+              //   })
+              // }
+              >
+                <MaterialCommunityIcons
+                  name="file-pdf-box"
                   size={60}
-                  color="green"
+                  color="red"
                   style={{
                     // alignItems: 'center',
                     justifyContent: 'center',
                     alignSelf: 'center',
                   }}
                 />
+
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: 'black',
+                    fontWeight: '600',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  {fileName}
+                </Text>
               </TouchableOpacity>
-            ) : (
-              <MaterialCommunityIcons
-                name="file-pdf-box"
-                size={60}
-                color="red"
-                style={{
-                  // alignItems: 'center',
-                  justifyContent: 'center',
-                  alignSelf: 'center',
+
+              <TouchableOpacity
+                onPress={() => {
+                  setUploaded(false);
                 }}
-              />
-            )}
-          </View>
-          <View style={styles.resumeText}>
-            {uploaded ? (
-              <TouchableOpacity onPress={() => console.log('Pressed!!')}>
-                <Text>Uploaded {fileName}</Text>
+                style={{alignSelf: 'center', marginTop: '2%'}}>
+                <Entypo name="circle-with-cross" color={'#777777'} size={20} />
               </TouchableOpacity>
-            ) : (
-              <TouchableOpacity style={styles.resumeText} onPress={selectFile}>
-                <Text>Upload Here</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+            </View>
+          ) : null}
+
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#469597',
+              borderRadius: 12,
+              marginTop: '3%',
+              height: 30,
+              width: 150,
+              // marginBottom: 25,
+            }}
+            onPress={() => selectFile()}>
+            <Text
+              style={{
+                color: '#FFFFFF',
+                fontSize: 15,
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontWeight: 'bold',
+              }}>
+              Upload CV
+            </Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity
+                style={styles.UploadBtn}
+                onPress={() => addtoDB()}>
+                <Text style={styles.UploadText}>Upload CV</Text>
+              </TouchableOpacity> */}
         </View>
 
         {/* Apply Now Button */}
@@ -514,8 +692,8 @@ const styles = StyleSheet.create({
   messageStyle: {
     flex: 1,
     backgroundColor: 'white',
-    color: '#6A6A6A',
-    paddingLeft: 40,
+    color: '#5BA199',
+    paddingLeft: 20,
     paddingRight: 20,
     borderRadius: 12,
     alignContent: 'center',
@@ -543,7 +721,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     flex: 1,
     backgroundColor: 'white',
-    color: '#6A6A6A',
+    color: '#5BA199',
     paddingLeft: 10,
     paddingRight: 20,
     borderRadius: 12,
@@ -551,7 +729,7 @@ const styles = StyleSheet.create({
   inputStyle2: {
     flex: 1,
     backgroundColor: 'white',
-    color: '#6A6A6A',
+    color: '#5BA199',
     paddingLeft: 30,
     paddingRight: 20,
     borderRadius: 12,

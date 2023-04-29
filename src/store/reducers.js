@@ -12,6 +12,7 @@ import {
   REMOVERESUMEURL,
   UPDATEPROFILEPICURL,
   REMOVEPICURL,
+  ADDAPPPLIEDJOB,
 } from './actionTypes';
 
 const initialState = Object;
@@ -77,6 +78,13 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         pic: '',
+      };
+    }
+
+    case ADDAPPPLIEDJOB: {
+      return {
+        ...state,
+        appliedJobId: [...state.appliedJobId, action.payload],
       };
     }
 

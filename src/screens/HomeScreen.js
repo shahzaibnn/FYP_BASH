@@ -1021,7 +1021,10 @@ export default function HomeScreen({navigation, route}) {
               <TouchableOpacity
                 disabled={storeData.role === 'Faculty' ? true : false}
                 style={styles.buttonStyle}
-                onPress={() => handleApply(actionParameters)}>
+                onPress={() => {
+                  actionSheet.current.hide();
+                  handleApply(actionParameters);
+                }}>
                 <Text
                   style={styles.buttonTextStyle}
                   // onPress={navigation.navigate('ApplyToJob')}
@@ -1110,11 +1113,12 @@ export default function HomeScreen({navigation, route}) {
                   </View>
 
                   <TouchableOpacity
-                    onPress={() =>
+                    onPress={() => {
+                      actionSheetLike.current.hide();
                       navigation.navigate('ViewProfile', {
                         userEmail: user.email,
-                      })
-                    }
+                      });
+                    }}
                     style={{
                       flex: 1,
                       backgroundColor: '#5BA199',
