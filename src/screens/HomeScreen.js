@@ -299,9 +299,15 @@ export default function HomeScreen({navigation, route}) {
       .collection('Jobs')
       // .where('skills', 'array-contains-any', ['Next'])
       // .where('skills', 'array-contains-any', storeData?.skills)
-      .where('skills', 'array-contains-any', skillsParams)
+      .where(
+        'skills',
+        'array-contains-any',
+        skillsParams.length !== 0
+          ? skillsParams
+          : ['Gibberish Skill to avoid the null array'],
+      )
       // .orderBy('createdAt', 'desc')
-      .limit(5)
+      .limit(2)
       .get()
 
       .then(querySnapshot => {
@@ -342,7 +348,7 @@ export default function HomeScreen({navigation, route}) {
         // dispatch(setJobs(documentSnapshot.data()));
 
         setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
-        querySnapshot.size <= 5 ? setLastJob(true) : setLastJob(false);
+        querySnapshot.size === 2 ? setLastJob(false) : setLastJob(true);
       });
     // dispatch(setJobs(jobs));
     // setJobLoading(false);

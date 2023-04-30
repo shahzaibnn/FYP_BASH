@@ -85,7 +85,7 @@ export default function SettingsScreen({navigation}) {
     if (found) {
       changePasswordProcess();
     } else {
-      console.log('not found');
+      // showToast('Password not Correct!!');
     }
   }, [found]);
   const showToast = heading => {
@@ -97,7 +97,9 @@ export default function SettingsScreen({navigation}) {
   };
 
   const changePasswordPressed = async () => {
-    if (
+    if (!oldPassword) {
+      showToast('Enter Old Password!');
+    } else if (
       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&//.])[A-Za-z\d@$!%*?&//.]{8,}$/.test(
         newPassword,
       )
@@ -106,6 +108,8 @@ export default function SettingsScreen({navigation}) {
         '(Password Criteria)\nMinimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character',
       );
       console.log('no pls');
+    } else if (newPassword !== confirmPassword) {
+      showToast('Passwords do not match!');
     } else {
       console.log('yes pls pls');
 
@@ -153,9 +157,16 @@ export default function SettingsScreen({navigation}) {
           );
           let originalText = bytes.toString(CryptoJS.enc.Utf8);
           console.log('decrypted password here: ', originalText); //decrypted password
-          setOldPassword(originalText);
-          setOriginalPassword(documentSnapshot.data().userPassword);
-          setFound(true);
+
+          if (oldPassword === originalText) {
+            setOldPassword(originalText);
+            setOriginalPassword(documentSnapshot.data().userPassword);
+            setFound(true);
+          } else {
+            setIndicator(true);
+            setFlag(true);
+            showToast('Password not Correct!!');
+          }
         });
         // return changePasswordProcess();
       }
@@ -666,6 +677,7 @@ export default function SettingsScreen({navigation}) {
           console.log('nto')
         )}
       </View>
+      <Toast topOffset={30} />
     </ScrollView>
   );
 }

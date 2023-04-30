@@ -334,6 +334,8 @@ export default function LoginScreen({navigation}) {
             flexDirection: 'row',
             alignItems: 'center',
             marginBottom: '7%',
+            borderWidth: 1.5,
+            borderColor: '#5BA199',
           }}>
           <FontAwesome
             name="user-circle-o"
@@ -357,6 +359,8 @@ export default function LoginScreen({navigation}) {
             borderRadius: 16,
             flexDirection: 'row',
             alignItems: 'center',
+            borderWidth: 1.5,
+            borderColor: '#5BA199',
           }}>
           <FontAwesome5
             name="lock"

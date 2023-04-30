@@ -344,7 +344,7 @@ export default function ForgotPassword({navigation}) {
         />
       </View> */}
 
-        <DropDownPicker
+        {/* <DropDownPicker
           listMode="SCROLLVIEW"
           open={open}
           value={value}
@@ -373,7 +373,7 @@ export default function ForgotPassword({navigation}) {
           }}
           //   labelStyle={{color: 'white'}}
           listItemLabelStyle={{color: '#000000', fontWeight: 'bold'}}
-        />
+        /> */}
 
         <View
           style={{
@@ -384,6 +384,8 @@ export default function ForgotPassword({navigation}) {
             flexDirection: 'row',
             alignItems: 'center',
             marginTop: '20%',
+            borderWidth: 1.5,
+            borderColor: '#5BA199',
           }}>
           <MaterialCommunityIcons
             name="email-outline"

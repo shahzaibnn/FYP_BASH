@@ -618,7 +618,7 @@ const ProfileScreen = ({navigation}) => {
   };
   // test end
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor: '#E5E3E4'}}>
       {/* back button with 3 dots button */}
       <ImageModal
         resizeMode="stretch"
@@ -1399,7 +1399,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   container: {
-    borderRadius: 48,
+    // borderRadius: 48,
+    borderTopLeftRadius: 48,
+    borderTopRightRadius: 48,
     // borderColor: 'black',
     // borderWidth: 3,
     marginTop: -60,
