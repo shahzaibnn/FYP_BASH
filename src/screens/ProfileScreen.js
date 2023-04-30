@@ -92,7 +92,7 @@ const ProfileScreen = ({navigation}) => {
   const [showPdf, setShowPdf] = useState('');
   const [selected, setSelected] = useState(false);
   const [selectedPic, setSelectedPic] = useState(false);
-  const [setPicUrl, picUrl] = useState(storeData.pic);
+  const [picUrl, setPicUrl] = useState(storeData.pic);
 
   const [likedPeople, setLikedPeople] = useState([]);
   const [enabledScroll, setEnabledScroll] = useState(true);
