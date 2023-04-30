@@ -298,6 +298,7 @@ export default function EditProfileScreen({navigation}) {
     }
   };
 
+  // firstly
   // const updateArraySkill = value => {
   //   // console.log(field);
 
@@ -344,59 +345,111 @@ export default function EditProfileScreen({navigation}) {
   //   }
   // };
 
+  // checking from firestore
+  // const updateArraySkill = value => {
+  //   console.log(value);
+  //   console.log(storeData.userEmail);
+  //   setIndicator(false);
+
+  //   try {
+  //     const userRef = dbFirestore()
+  //       .collection('Users')
+  //       .where('userEmail', '==', storeData.userEmail)
+  //       .get()
+  //       .then(querySnapshot => {
+  //         console.log('Total Found users: ', querySnapshot.size);
+
+  //         querySnapshot.forEach(documentSnapshot => {
+  //           console.log(documentSnapshot.id);
+  //           const userDocRef = dbFirestore().doc(
+  //             `Users/${documentSnapshot.id}`,
+  //           );
+
+  //           userDocRef.get().then(doc => {
+  //             const currentSkills = doc.data().skills || [];
+  //             if (!currentSkills.includes(value)) {
+  //               userDocRef
+  //                 .update({
+  //                   skills: dbFirestore.FieldValue.arrayUnion(value),
+  //                 })
+  //                 .then(() => {
+  //                   dispatch(addSkillRedux(value));
+  //                   alert('Skill added!');
+  //                   setExtraData(new Date());
+  //                   console.log('skills updated');
+  //                 })
+  //                 .catch(error => {
+  //                   console.error(
+  //                     `Failed to update skills array for document ${documentSnapshot.id}: `,
+  //                     error,
+  //                   );
+  //                 });
+  //             } else {
+  //               console.log(
+  //                 `Value ${value} already exists in skills array for document ${documentSnapshot.id}`,
+  //               );
+  //               alert('Skill already exists!');
+  //             }
+  //           });
+  //         });
+  //         setIndicator(true);
+  //       })
+  //       .catch(error => {
+  //         alert(error);
+  //       });
+  //   } catch (error) {
+  //     setIndicator(true);
+  //   }
+  // };
+
+  // checking from redux
   const updateArraySkill = value => {
     console.log(value);
     console.log(storeData.userEmail);
+    console.log('store skills', storeData.skills);
     setIndicator(false);
+    // Check if the skill is already present in the store
 
-    try {
-      const userRef = dbFirestore()
-        .collection('Users')
-        .where('userEmail', '==', storeData.userEmail)
-        .get()
-        .then(querySnapshot => {
-          console.log('Total Found users: ', querySnapshot.size);
-
-          querySnapshot.forEach(documentSnapshot => {
-            console.log(documentSnapshot.id);
-            const userDocRef = dbFirestore().doc(
-              `Users/${documentSnapshot.id}`,
-            );
-
-            userDocRef.get().then(doc => {
-              const currentSkills = doc.data().skills || [];
-              if (!currentSkills.includes(value)) {
-                userDocRef
-                  .update({
-                    skills: dbFirestore.FieldValue.arrayUnion(value),
-                  })
-                  .then(() => {
-                    dispatch(addSkillRedux(value));
-                    alert('Skill added!');
-                    setExtraData(new Date());
-                    console.log('skills updated');
-                  })
-                  .catch(error => {
-                    console.error(
-                      `Failed to update skills array for document ${documentSnapshot.id}: `,
-                      error,
-                    );
-                  });
-              } else {
-                console.log(
-                  `Value ${value} already exists in skills array for document ${documentSnapshot.id}`,
-                );
-                alert('Skill already exists!');
-              }
-            });
-          });
-          setIndicator(true);
-        })
-        .catch(error => {
-          alert(error);
-        });
-    } catch (error) {
+    if (storeData.skills.includes(value)) {
+      alert('Skill already present!');
       setIndicator(true);
+    } else {
+      try {
+        const userRef = dbFirestore()
+          .collection('Users')
+          // .doc('roles')
+          // .collection(value.toLowerCase())
+          .where('userEmail', '==', storeData.userEmail)
+          .get()
+          .then(querySnapshot => {
+            console.log('Total Found users: ', querySnapshot.size);
+
+            querySnapshot.forEach(documentSnapshot => {
+              console.log(documentSnapshot.id);
+
+              dbFirestore()
+                .doc('Users/' + documentSnapshot.id)
+                .update({
+                  skills: dbFirestore.FieldValue.arrayUnion(value),
+                })
+                .then(() => {
+                  dispatch(addSkillRedux(value));
+                  alert('skill added!');
+                  setExtraData(new Date());
+
+                  console.log('skills updated');
+                });
+            });
+            setIndicator(true);
+          })
+          .catch(error => {
+            alert(error);
+
+            // setFlag(true);
+          });
+      } catch (error) {
+        setIndicator(true);
+      }
     }
   };
 
