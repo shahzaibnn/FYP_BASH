@@ -624,6 +624,7 @@ const ProfileScreen = ({navigation}) => {
         resizeMode="stretch"
         modalImageResizeMode="contain"
         style={{
+          backgroundColor: '#ffffff',
           minHeight: Dimensions.get('window').height * 0.5,
           minWidth: Dimensions.get('window').width,
           // width: Dimensions.get('window').width,

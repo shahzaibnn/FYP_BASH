@@ -585,6 +585,8 @@ export default function SettingsScreen({navigation}) {
                 alignItems: 'center',
                 // marginBottom: '7%',
                 marginVertical: '3%',
+                borderColor: 'rgba(70,149,151,0.8)',
+                borderWidth: 1.5,
               }}>
               <FontAwesome
                 name="unlock-alt"
@@ -610,6 +612,8 @@ export default function SettingsScreen({navigation}) {
                 alignItems: 'center',
                 // marginBottom: '7%',
                 marginVertical: '3%',
+                borderColor: 'rgba(70,149,151,0.8)',
+                borderWidth: 1.5,
               }}>
               <FontAwesome
                 name="lock"
@@ -635,6 +639,8 @@ export default function SettingsScreen({navigation}) {
                 alignItems: 'center',
                 // marginBottom: '7%',
                 marginVertical: '3%',
+                borderColor: 'rgba(70,149,151,0.8)',
+                borderWidth: 1.5,
               }}>
               <FontAwesome
                 name="lock"
@@ -652,7 +658,7 @@ export default function SettingsScreen({navigation}) {
             <TouchableOpacity
               onPress={changePasswordPressed}
               style={styles.logoutStyle}>
-              <Text style={{color: 'white', fontSize: 18}}>
+              <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
                 Change Password
               </Text>
             </TouchableOpacity>
