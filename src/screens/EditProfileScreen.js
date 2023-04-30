@@ -599,11 +599,13 @@ export default function EditProfileScreen({navigation}) {
               backgroundColor: '#ffffff',
               // width: Dimensions.get('window').width * 0.8,
               marginHorizontal: '10%',
-              borderRadius: 22,
+              borderRadius: 16,
               // flexDirection: 'row',
               alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '3%',
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={{}}
@@ -705,6 +707,8 @@ export default function EditProfileScreen({navigation}) {
                     marginEnd: Dimensions.get('window').width * 0.03,
                     marginVertical: Dimensions.get('window').height * 0.02,
                     flexDirection: 'row',
+                    borderWidth: 1.5,
+                    borderColor: '#000000',
                   }}>
                   <Text
                     style={{
@@ -742,11 +746,13 @@ export default function EditProfileScreen({navigation}) {
               backgroundColor: '#ffffff',
               // width: Dimensions.get('window').width * 0.8,
               marginHorizontal: '10%',
-              borderRadius: 22,
+              borderRadius: 16,
               // flexDirection: 'row',
               alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '3%',
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={{}}
@@ -848,11 +854,13 @@ export default function EditProfileScreen({navigation}) {
                 backgroundColor: '#ffffff',
                 // width: Dimensions.get('window').width * 0.8,
                 marginHorizontal: '15%',
-                borderRadius: 22,
+                borderRadius: 16,
                 // flexDirection: 'row',
                 alignItems: 'center',
                 // marginBottom: '7%',
                 marginVertical: '3%',
+                borderWidth: 1.5,
+                borderColor: '#469597',
               }}>
               <TextInput
                 style={{
@@ -861,7 +869,7 @@ export default function EditProfileScreen({navigation}) {
                   // backgroundColor: '#BBC6C8',
                   backgroundColor: 'white',
                   color: '#5BA199',
-                  borderRadius: 22,
+                  borderRadius: 16,
                   // justifyContent: 'center',
                   // alignItems: 'center',
                   marginHorizontal: '3%',
@@ -961,6 +969,8 @@ export default function EditProfileScreen({navigation}) {
                   borderRadius: 16,
                   marginHorizontal: Dimensions.get('window').width * 0.02,
                   marginTop: 15,
+                  borderWidth: 1.5,
+                  borderColor: '#469597',
                   // height: Dimensions.get('window').height * 0.12,
                   // width: Dimensions.get('window').width * 0.9,
                 }}>
@@ -1052,6 +1062,8 @@ export default function EditProfileScreen({navigation}) {
               alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '5%',
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={{}}
@@ -1085,6 +1097,9 @@ export default function EditProfileScreen({navigation}) {
                   color: 'white',
                   borderRadius: 16,
                   paddingHorizontal: Dimensions.get('screen').width * 0.1,
+                  borderWidth: 1.5,
+                  borderColor: '#000000',
+                  fontWeight: 'bold',
                 }}
                 onChangeText={setExperienceDateStart}
                 value={experienceDateStart}
@@ -1108,10 +1123,12 @@ export default function EditProfileScreen({navigation}) {
                 style={{
                   // backgroundColor: '#469597',
                   backgroundColor: 'rgba(70,149,151,0.7)',
-
+                  fontWeight: 'bold',
                   borderRadius: 16,
                   paddingHorizontal: Dimensions.get('screen').width * 0.1,
                   color: 'white',
+                  borderWidth: 1.5,
+                  borderColor: '#000000',
                 }}
                 onChangeText={setExperienceDateEnd}
                 value={experienceDateEnd}
@@ -1140,6 +1157,8 @@ export default function EditProfileScreen({navigation}) {
               alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '3%',
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={{}}
@@ -1159,6 +1178,8 @@ export default function EditProfileScreen({navigation}) {
               alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '3%',
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={{}}
@@ -1178,6 +1199,8 @@ export default function EditProfileScreen({navigation}) {
               alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '3%',
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={

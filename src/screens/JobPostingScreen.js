@@ -650,6 +650,8 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               // marginHorizontal: '5%',
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
@@ -705,6 +707,9 @@ export default function JobPostingScreen({navigation}) {
           <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
             Job Location
           </Text>
+        </View>
+
+        <View style={{marginHorizontal: '5%'}}>
           <DropDownPicker
             listMode="SCROLLVIEW"
             // multiple={true}
@@ -730,8 +735,12 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               borderWidth: 0,
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
               // zIndex: 1000,
             }}
+            // searchContainerStyle={{borderWidth: 1.5, borderColor: '#469597'}}
+            searchTextInputStyle={{borderWidth: 1.5, borderColor: '#469597'}}
             textStyle={{color: '#5BA199', fontSize: 14}}
             dropDownContainerStyle={{
               // backgroundColor: '#469597',
@@ -740,6 +749,8 @@ export default function JobPostingScreen({navigation}) {
               marginTop: 10,
               borderRadius: 16,
               zIndex: 10000,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}
             //   labelStyle={{color: 'white'}}
             // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
@@ -751,6 +762,9 @@ export default function JobPostingScreen({navigation}) {
           <Text style={{fontWeight: 'bold', color: '#000000', fontSize: 18}}>
             City
           </Text>
+        </View>
+
+        <View style={{marginHorizontal: '5%'}}>
           <DropDownPicker
             listMode="SCROLLVIEW"
             // multiple={true}
@@ -776,6 +790,8 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               borderWidth: 0,
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}
             textStyle={{color: '#5BA199', fontSize: 14}}
             dropDownContainerStyle={{
@@ -784,7 +800,10 @@ export default function JobPostingScreen({navigation}) {
               borderWidth: 0,
               marginTop: 10,
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}
+            searchTextInputStyle={{borderWidth: 1.5, borderColor: '#469597'}}
             //   labelStyle={{color: 'white'}}
             // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
             listItemLabelStyle={{color: '#6A6A6A'}}
@@ -849,6 +868,8 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               // marginHorizontal: '5%',
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               editable={false}
@@ -879,6 +900,8 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               // marginHorizontal: '5%',
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
@@ -917,6 +940,8 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               // marginHorizontal: '5%',
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
@@ -951,6 +976,8 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               borderWidth: 0,
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}
             textStyle={{color: '#5BA199', fontSize: 14, marginHorizontal: '2%'}}
             dropDownContainerStyle={{
@@ -960,7 +987,10 @@ export default function JobPostingScreen({navigation}) {
               marginTop: 10,
               borderRadius: 16,
               zIndex: 10000,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}
+            searchTextInputProps={{borderWidth: 1.5, borderColor: '#469597'}}
             //   labelStyle={{color: 'white'}}
             // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
             listItemLabelStyle={{color: '#6A6A6A'}}
@@ -998,6 +1028,8 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               borderWidth: 0,
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}
             textStyle={{color: '#5BA199', fontSize: 14}}
             dropDownContainerStyle={{
@@ -1006,7 +1038,10 @@ export default function JobPostingScreen({navigation}) {
               borderWidth: 0,
               marginTop: 10,
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}
+            searchTextInputProps={{borderWidth: 1.5, borderColor: '#469597'}}
             //   labelStyle={{color: 'white'}}
             // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
             listItemLabelStyle={{color: '#6A6A6A'}}
@@ -1098,6 +1133,8 @@ export default function JobPostingScreen({navigation}) {
               // backgroundColor: '#BBC6C8',
               // marginHorizontal: '5%',
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={{marginHorizontal: '5%', fontSize: 14, color: '#5BA199'}}
@@ -1137,6 +1174,8 @@ export default function JobPostingScreen({navigation}) {
               backgroundColor: 'white',
               // marginHorizontal: '5%',
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
             <TextInput
               style={{marginHorizontal: '5%', fontSize: 14}}

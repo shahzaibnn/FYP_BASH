@@ -464,6 +464,8 @@ const ApplyToJob = ({navigation, route}) => {
               backgroundColor: 'white',
               borderWidth: 0,
               borderRadius: 16,
+              borderWidth: 1.5,
+              borderColor: '#469597',
               // zIndex: 1000,
             }}
             textStyle={{color: '#5BA199', fontSize: 14}}
@@ -474,7 +476,10 @@ const ApplyToJob = ({navigation, route}) => {
               marginTop: 10,
               borderRadius: 16,
               zIndex: 10000,
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}
+            searchTextInputStyle={{borderWidth: 1.5, borderColor: '#469597'}}
             //   labelStyle={{color: 'white'}}
             // listItemLabelStyle={{color: 'white', fontWeight: 'bold'}}
             listItemLabelStyle={{color: '#6A6A6A'}}
@@ -519,6 +524,8 @@ const ApplyToJob = ({navigation, route}) => {
             // marginRight: 25,
             // margin: 10,
             borderRadius: 16,
+            borderWidth: 1.5,
+            borderColor: '#469597',
           }}>
           <TextInput
             style={{marginHorizontal: '5%', fontSize: 14, fontStyle: 'italic'}}
@@ -725,6 +732,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 20,
     borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: '#469597',
   },
   inputStyle2: {
     flex: 1,

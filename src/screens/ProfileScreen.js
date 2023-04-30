@@ -1053,7 +1053,7 @@ const ProfileScreen = ({navigation}) => {
                         height: 30,
                         justifyContent: 'center',
                         alignItems: 'center',
-                        borderRadius: 16,
+                        borderRadius: 12,
                         marginLeft: Dimensions.get('window').width * 0.15,
                       }}>
                       <Text style={{fontWeight: 'bold', color: '#ffffff'}}>

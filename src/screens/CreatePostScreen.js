@@ -38,7 +38,7 @@ import {waitForPendingWrites} from 'firebase/firestore';
 import {Wave} from 'react-native-animated-spinkit';
 import {Chase} from 'react-native-animated-spinkit';
 
-export default function CreatePostScreen() {
+export default function CreatePostScreen({navigation}) {
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [pointerEvent, setPointerEvent] = useState('auto');
   const [opacity, setOpacity] = useState(1);
@@ -291,7 +291,7 @@ export default function CreatePostScreen() {
           }}>
           <TouchableOpacity
             style={{position: 'absolute', left: 0}}
-            onPress={() => console.log(storeData)}>
+            onPress={() => navigation.goBack()}>
             <Entypo name="circle-with-cross" size={25} color="#777777" />
           </TouchableOpacity>
 
