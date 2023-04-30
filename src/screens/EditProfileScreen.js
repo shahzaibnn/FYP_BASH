@@ -444,7 +444,6 @@ export default function EditProfileScreen({navigation}) {
           })
           .catch(error => {
             alert(error);
-
             // setFlag(true);
           });
       } catch (error) {
