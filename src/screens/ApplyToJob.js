@@ -391,7 +391,7 @@ const ApplyToJob = ({navigation, route}) => {
               // marginEnd: '30%',
               // marginHorizontal: '25%',  },
             }}>
-            Applied Jobs
+            Apply to Job
           </Text>
           <View style={{flex: 1}} />
         </View>
@@ -597,10 +597,11 @@ const ApplyToJob = ({navigation, route}) => {
               justifyContent: 'center',
               alignItems: 'center',
               backgroundColor: '#469597',
-              borderRadius: 12,
-              marginTop: '3%',
+              borderRadius: 18,
+              // marginTop: '2%',
+              marginBottom: '2%',
               height: 30,
-              width: 150,
+              width: 120,
               // marginBottom: 25,
             }}
             onPress={() => selectFile()}>
@@ -835,15 +836,16 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     borderRadius: 20,
-    marginLeft: 25,
-    marginRight: 25,
-    marginTop: 20,
-    marginBottom: 20,
+    // padding: 15,
+    marginLeft: '24%',
+    marginRight: '24%',
+    marginTop: '4%',
+    marginBottom: '4%',
   },
   buttonTextStyle: {
     color: '#FFFFFF',
     paddingVertical: 10,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
   },
 });

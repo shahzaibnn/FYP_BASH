@@ -720,7 +720,7 @@ export default function EditProfileScreen({navigation}) {
               style={{}}
               onChangeText={setTitle}
               value={title}
-              //   placeholder=""
+              placeholder="Add title to your profile"
             />
           </View>
 
@@ -864,10 +864,20 @@ export default function EditProfileScreen({navigation}) {
               borderColor: '#469597',
             }}>
             <TextInput
-              style={{}}
+              style={{
+                // marginHorizontal: '5%',
+                fontSize: 15,
+                // backgroundColor: '#BBC6C8',
+                backgroundColor: 'white',
+                color: '#5BA199',
+                borderRadius: 16,
+                // justifyContent: 'center',
+                // alignItems: 'center',
+                marginHorizontal: '3%',
+              }}
               onChangeText={setAddSkill}
               value={addSkill}
-              //   placeholder=""
+              placeholder="Add skill"
             />
           </View>
 
@@ -989,7 +999,7 @@ export default function EditProfileScreen({navigation}) {
                 onChangeText={setDescription}
                 value={description}
                 placeholder="Write Description here..."
-                placeholderTextColor={'#777777'}
+                // placeholderTextColor={'#777777'}
                 // placeholderTextColor={'white'}
               />
             </View>
