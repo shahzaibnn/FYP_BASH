@@ -906,7 +906,14 @@ const ExplorePage = ({navigation}) => {
                       </Text>
                     </TouchableOpacity>
 
-                    <Text style={{color: '#469597', fontSize: 16}}>
+                    <Text
+                      style={{
+                        color: '#469597',
+                        fontSize: 16,
+                        flex: 1,
+                        marginLeft: '15%',
+                        // justifyContent: 'flex-end',
+                      }}>
                       {item.jobCity},{item.jobLocation}
                     </Text>
                   </View>
@@ -969,7 +976,7 @@ const ExplorePage = ({navigation}) => {
               <Text style={styles.compTxt}>{actionParameters.jobMode}</Text>
               {/* <Text style={styles.compTxt}> - </Text> */}
               <Text style={styles.compTxt}>
-                {actionParameters.jobSalary}/Month
+                PKR{actionParameters.jobSalary} /Month
               </Text>
             </View>
             {/* Description title */}
@@ -1233,7 +1240,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
+  compTxt1: {
+    fontSize: 16,
+    color: 'black',
+    marginTop: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   titleText: {
     fontSize: 30,
     fontWeight: 'bold',
@@ -1309,8 +1322,9 @@ const styles = StyleSheet.create({
   },
   expView1: {
     flexDirection: 'row',
-
-    justifyContent: 'space-between',
+    flex: 1,
+    // justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     width: Dimensions.get('window').width * 0.5,
     alignSelf: 'center',
   },
