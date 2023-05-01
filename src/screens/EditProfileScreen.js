@@ -812,12 +812,12 @@ export default function EditProfileScreen({navigation}) {
                     // justifyContent: 'space-evenly',
                     borderRadius: 24,
                     paddingHorizontal: Dimensions.get('window').width * 0.03,
-                    paddingVertical: Dimensions.get('window').height * 0.02,
+                    paddingVertical: Dimensions.get('window').height * 0.01,
                     marginEnd: Dimensions.get('window').width * 0.03,
                     marginVertical: Dimensions.get('window').height * 0.02,
                     flexDirection: 'row',
-                    borderWidth: 1.5,
-                    borderColor: '#000000',
+                    // borderWidth: 1,
+                    // borderColor: '#000000',
                   }}>
                   <Text
                     style={{
@@ -951,58 +951,24 @@ export default function EditProfileScreen({navigation}) {
           }}>
           <View
             style={{
-              backgroundColor: '#BBC6C8',
+              backgroundColor: '#ffffff',
               // width: Dimensions.get('window').width * 0.8,
               marginHorizontal: '10%',
               borderRadius: 16,
-              flexDirection: 'row',
+              // flexDirection: 'row',
               alignItems: 'center',
               // marginBottom: '7%',
               marginVertical: '3%',
+              borderWidth: 1.5,
+              borderColor: '#469597',
             }}>
-            <View
-              style={{
-                // backgroundColor: '#BBC6C8',
-                // borderRadius: 16,
-                // marginVertical: '3%',
-
-                // alignSelf: 'center',
-                // width: Dimensions.get('window').width * 0.25,
-                // marginHorizontal: '5%',
-
-                backgroundColor: '#ffffff',
-                // width: Dimensions.get('window').width * 0.8,
-                marginHorizontal: '15%',
-                borderRadius: 16,
-                // flexDirection: 'row',
-                alignItems: 'center',
-                // marginBottom: '7%',
-                marginVertical: '3%',
-                borderWidth: 1.5,
-                borderColor: '#469597',
-              }}>
-              <TextInput
-                style={{
-                  // marginHorizontal: '5%',
-                  fontSize: 15,
-                  // backgroundColor: '#BBC6C8',
-                  backgroundColor: 'white',
-                  color: '#5BA199',
-                  borderRadius: 16,
-                  // justifyContent: 'center',
-                  // alignItems: 'center',
-                  marginHorizontal: '3%',
-
-                  // width: Dimensions.get('window').width * 0.25,
-                }}
-                multiline
-                onChangeText={setDescription}
-                value={description}
-                placeholder="Write Description here..."
-                // placeholderTextColor={'#777777'}
-                // placeholderTextColor={'white'}
-              />
-            </View>
+            <TextInput
+              style={{}}
+              onChangeText={setDescription}
+              value={description}
+              multiline
+              placeholder="Write Description Here..."
+            />
           </View>
 
           <TouchableOpacity

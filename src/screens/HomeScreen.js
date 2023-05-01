@@ -307,7 +307,7 @@ export default function HomeScreen({navigation, route}) {
           : ['Gibberish Skill to avoid the null array'],
       )
       // .orderBy('createdAt', 'desc')
-      .limit(2)
+      .limit(5)
       .get()
 
       .then(querySnapshot => {
@@ -348,7 +348,7 @@ export default function HomeScreen({navigation, route}) {
         // dispatch(setJobs(documentSnapshot.data()));
 
         setLastVisibleJobs(querySnapshot.docs[querySnapshot.docs.length - 1]);
-        querySnapshot.size === 2 ? setLastJob(false) : setLastJob(true);
+        querySnapshot.size === 5 ? setLastJob(false) : setLastJob(true);
       });
     // dispatch(setJobs(jobs));
     // setJobLoading(false);

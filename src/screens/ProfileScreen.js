@@ -714,7 +714,11 @@ const ProfileScreen = ({navigation}) => {
             data={storeData.skills}
             renderItem={({item}) => (
               <View style={{}}>
-                <View style={styles.skillsListBox}>
+                <View
+                  style={[
+                    styles.skillsListBox,
+                    // {borderWidth: 1, borderColor: '#000000'},
+                  ]}>
                   <Text style={styles.skillsText}>{item}</Text>
                 </View>
 
@@ -1497,7 +1501,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 24,
     paddingHorizontal: Dimensions.get('window').width * 0.05,
-    paddingVertical: Dimensions.get('window').height * 0.02,
+    paddingVertical: Dimensions.get('window').height * 0.01,
     marginEnd: Dimensions.get('window').width * 0.05,
     marginTop: Dimensions.get('window').height * 0.02,
   },
