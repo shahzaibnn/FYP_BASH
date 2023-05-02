@@ -726,6 +726,19 @@ const ProfileScreen = ({navigation}) => {
               </View>
             )}
             keyExtractor={item => item.id}
+            ListEmptyComponent={
+              <Text
+                style={{
+                  fontSize: 16,
+                  marginTop: '5%',
+                  fontStyle: 'italic',
+                  // alignContent: 'center',
+
+                  // color: '#000000',
+                }}>
+                Add skills to display
+              </Text>
+            }
           />
           <View style={{}}>
             <View
@@ -755,8 +768,11 @@ const ProfileScreen = ({navigation}) => {
               </TouchableOpacity> */}
             </View>
 
-            <Text style={{fontSize: 18, marginTop: '5%', fontStyle: 'italic'}}>
-              {storeData.description}
+            <Text style={{fontSize: 16, marginTop: '5%', fontStyle: 'italic'}}>
+              {/* {storeData.description} */}
+              {storeData.description
+                ? storeData.description
+                : 'Add description to your profile'}
             </Text>
 
             <View
@@ -886,6 +902,19 @@ const ProfileScreen = ({navigation}) => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             data={storeData.experience}
+            ListEmptyComponent={
+              <Text
+                style={{
+                  fontSize: 16,
+                  marginTop: '5%',
+                  fontStyle: 'italic',
+                  // alignSelf: 'center',
+
+                  // color: '#000000',
+                }}>
+                Add experience to display
+              </Text>
+            }
             // data={experience}
             renderItem={({item}) => (
               <View
@@ -961,6 +990,18 @@ const ProfileScreen = ({navigation}) => {
             showsVerticalScrollIndicator={false}
             data={fetchedPosts}
             keyExtractor={item => item.id}
+            ListEmptyComponent={
+              <Text
+                style={{
+                  fontSize: 16,
+                  marginTop: '5%',
+                  // alignSelf: 'center',
+                  fontStyle: 'italic',
+                  // color: '#000000',
+                }}>
+                Add posts to display
+              </Text>
+            }
             renderItem={({item}) => {
               // console.log('Id is : ', item);
               let likeColor = '';
