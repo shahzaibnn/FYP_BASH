@@ -903,10 +903,21 @@ const ProfileScreen = ({navigation}) => {
             showsHorizontalScrollIndicator={false}
             data={storeData.experience}
             ListEmptyComponent={
+              // <View
+              //   style={{
+              //     // marginLeft: '5%',
+              //     fontStyle: 'italic',
+              //     backgroundColor: 'green',
+              //     // alignSelf: 'center',
+              //     // paddingLeft: '15%',
+              //     // marginRight: 15,
+
+              //     // color: '#000000',
+              //   }}>
               <Text
                 style={{
                   fontSize: 16,
-                  marginTop: '5%',
+                  marginHorizontal: Dimensions.get('screen').width * 0.03,
                   fontStyle: 'italic',
                   // alignSelf: 'center',
 
@@ -914,6 +925,7 @@ const ProfileScreen = ({navigation}) => {
                 }}>
                 Add experience to display
               </Text>
+              // </View>
             }
             // data={experience}
             renderItem={({item}) => (
@@ -994,9 +1006,10 @@ const ProfileScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  marginTop: '5%',
-                  // alignSelf: 'center',
+                  marginHorizontal: Dimensions.get('screen').width * 0.05,
                   fontStyle: 'italic',
+                  // alignSelf: 'center',
+
                   // color: '#000000',
                 }}>
                 Add posts to display
