@@ -1006,7 +1006,8 @@ const ProfileScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  marginHorizontal: Dimensions.get('screen').width * 0.05,
+                  marginVertical: Dimensions.get('screen').height * 0.02,
+                  marginHorizontal: Dimensions.get('screen').width * 0.06,
                   fontStyle: 'italic',
                   // alignSelf: 'center',
 

@@ -296,6 +296,20 @@ export default function AppliedJobsScreen({navigation, route}) {
         onMomentumScrollBegin={() => {
           setOnEndReachedCalledDuringMomentumJob(false);
         }}
+        ListEmptyComponent={
+          <Text
+            style={{
+              fontSize: 16,
+              marginVertical: Dimensions.get('screen').height * 0.02,
+              marginHorizontal: Dimensions.get('screen').width * 0.06,
+              // fontStyle: 'italic',
+              alignSelf: 'center',
+
+              // color: '#000000',
+            }}>
+            You have not applied for any job yet.
+          </Text>
+        }
         // ListFooterComponent={
         //   !lastJob ? (
         //     renderLoaderJobs
