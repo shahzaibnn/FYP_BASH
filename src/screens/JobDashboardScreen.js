@@ -274,16 +274,17 @@ export default function JobDashboardScreen({navigation, route}) {
 
             <View
               style={{
-                marginHorizontal: '5%',
+                marginHorizontal: Dimensions.get('screen').width * 0.01,
                 flexDirection: 'row',
                 marginBottom: '5%',
+                // alignItems: 'center',
               }}>
               <TouchableOpacity
                 style={{
                   flex: 1,
                   borderWidth: 3,
                   borderRadius: 12,
-                  marginHorizontal: Dimensions.get('screen').width * 0.1,
+                  marginHorizontal: Dimensions.get('screen').width * 0.05,
                   paddingVertical: Dimensions.get('screen').height * 0.005,
                   borderColor: '#5BA199',
                   backgroundColor: '#5BA199',
@@ -295,7 +296,7 @@ export default function JobDashboardScreen({navigation, route}) {
                     fontWeight: 'bold',
                     fontSize: 14,
                   }}>
-                  Posted Jobs
+                  Jobs
                 </Text>
               </TouchableOpacity>
 
@@ -307,7 +308,7 @@ export default function JobDashboardScreen({navigation, route}) {
                   flex: 1,
                   borderWidth: 3,
                   borderRadius: 12,
-                  marginHorizontal: Dimensions.get('screen').width * 0.1,
+                  marginHorizontal: Dimensions.get('screen').width * 0.05,
                   paddingVertical: Dimensions.get('screen').height * 0.005,
                   borderColor: '#5BA199',
                 }}>
@@ -319,6 +320,29 @@ export default function JobDashboardScreen({navigation, route}) {
                     fontSize: 14,
                   }}>
                   Applied Jobs
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('AppliedJobs');
+                }}
+                style={{
+                  flex: 1,
+                  borderWidth: 3,
+                  borderRadius: 12,
+                  marginHorizontal: Dimensions.get('screen').width * 0.05,
+                  paddingVertical: Dimensions.get('screen').height * 0.005,
+                  borderColor: '#5BA199',
+                }}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    color: '#000000',
+                    fontWeight: 'bold',
+                    fontSize: 14,
+                  }}>
+                  Posted Jobs
                 </Text>
               </TouchableOpacity>
             </View>
