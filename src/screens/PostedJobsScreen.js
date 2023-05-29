@@ -28,6 +28,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useSelector, useDispatch} from 'react-redux';
 import JobSkeleton from '../components/JobSkeleton';
+import AlertBox from '../components/AlertBox';
 
 export default function PostedJobsScreen({navigation, route}) {
   const [fetchedJobs, setFetchedJobs] = useState([]);
@@ -41,6 +42,8 @@ export default function PostedJobsScreen({navigation, route}) {
     setOnEndReachedCalledDuringMomentumJob,
   ] = useState(true);
   const [lastJob, setLastJob] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
+  const [showWarning, setShowWarning] = useState(false);
 
   let actionSheet = createRef();
 
@@ -100,6 +103,24 @@ export default function PostedJobsScreen({navigation, route}) {
     // searchData(emailAddressOfCurrentUser);
     searchJobs();
   }, []);
+
+  const WarningCancelPressed = () => {
+    setShowWarning(false);
+  };
+
+  const WarningConfirmPressed = () => {
+    // console.log(item.id);
+    dbFirestore()
+      .collection('Jobs')
+      .doc(deleteId)
+      .delete()
+      .then(() => {
+        console.log('Job deleted!');
+        setFetchedJobs(current => current.filter(jobs => jobs.id !== deleteId));
+        setExtraData(new Date());
+        setShowWarning(false);
+      });
+  };
   const searchJobs = () => {
     // console.log('search jobs here', skillsParams);
     setJobLoading(true);
@@ -381,6 +402,7 @@ export default function PostedJobsScreen({navigation, route}) {
                 }}>
                 <Text style={{fontSize: 12}}>
                   {item.jobPostedBy} posted a new job
+                  {/* {item.id} */}
                 </Text>
                 <Text
                   style={{
@@ -397,7 +419,10 @@ export default function PostedJobsScreen({navigation, route}) {
               <TouchableOpacity
                 style={{flex: 1}}
                 //    onPress={() => show(item)}
-              >
+                onPress={() => {
+                  setShowWarning(true);
+                  setDeleteId(item.id);
+                }}>
                 <Entypo
                   name="circle-with-cross"
                   size={25}
@@ -438,6 +463,13 @@ export default function PostedJobsScreen({navigation, route}) {
           </View>
         )}
         keyExtractor={item => item.id}
+      />
+      <AlertBox
+        showWarning={showWarning}
+        CancelPressed={WarningCancelPressed}
+        ConfirmPressed={WarningConfirmPressed}
+        heading={'Confirmation'}
+        text={'Do you want to delete this job?'}
       />
     </View>
   );
