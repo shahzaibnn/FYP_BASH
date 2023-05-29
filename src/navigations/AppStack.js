@@ -50,6 +50,7 @@ import ApplyToJob from '../screens/ApplyToJob';
 import ViewProfileScreen from '../screens/ViewProfileScreen';
 import PdfViewScreen from '../screens/PDFViewScreen';
 import AppliedJobsScreen from '../screens/AppliedJobsScreen';
+import PostedJobsScreen from '../screens/PostedJobsScreen';
 
 // import MyTabs from '../screens/tabs';
 
@@ -78,6 +79,7 @@ export default function AppStack() {
       <Stack.Screen name="ViewProfile" component={ViewProfileScreen} />
       <Stack.Screen name="PDFView" component={PdfViewScreen} />
       <Stack.Screen name="AppliedJobs" component={AppliedJobsScreen} />
+      <Stack.Screen name="Jobs" component={PostedJobsScreen} />
     </Stack.Navigator>
     // </NavigationContainer>
   );

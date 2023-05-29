@@ -25,10 +25,11 @@ import {
 } from '../store/action';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {useSelector, useDispatch} from 'react-redux';
 import JobSkeleton from '../components/JobSkeleton';
 
-export default function JobDashboardScreen({navigation, route}) {
+export default function PostedJobsScreen({navigation, route}) {
   const [fetchedJobs, setFetchedJobs] = useState([]);
   const [userData, setUserData] = useState(Object);
   const [jobLoading, setJobLoading] = useState(false);
@@ -54,19 +55,18 @@ export default function JobDashboardScreen({navigation, route}) {
       </View>
     ) : null;
   };
-  const show = item => {
-    // console.log(item);
-    setActionParameters(item);
-    console.log('acrtions is, ', actionParameters);
-    actionSheet.current.show();
-  };
-  const handleApply = job => {
-    // Pass the job information as props to the Apply to Job screen
-    console.log('checking jobs: ', job);
-    // console.log('checking again: ', {job});
+  //   const show = item => {
+  //     // console.log(item);
+  //     setActionParameters(item);
+  //     console.log('acrtions is, ', actionParameters);
+  //     actionSheet.current.show();
+  //   };
+  //   const handleApply = job => {
+  //     console.log('checking jobs: ', job);
+  //     console.log('checking again: ', {job});
 
-    navigation.navigate('ApplyToJob', {job: job});
-  };
+  //     navigation.navigate('ApplyToJob', {job});
+  //   };
 
   // const searchData = loggedInUser => {
   //   console.log('LOGGED IN USER IS: ', loggedInUser);
@@ -106,7 +106,7 @@ export default function JobDashboardScreen({navigation, route}) {
 
     dbFirestore()
       .collection('Jobs')
-
+      //   .where('jobEmail', '==', storeData.userEmail)
       .limit(10)
       .get()
 
@@ -190,68 +190,68 @@ export default function JobDashboardScreen({navigation, route}) {
 
   return (
     // <ScrollView style={{}}>
-    <View>
+    <View style={{flex: 1}}>
       <FlatList
-        ListEmptyComponent={
-          <View
-            style={{marginHorizontal: Dimensions.get('screen').width * 0.1}}>
-            <JobSkeleton />
-            <JobSkeleton />
-            <JobSkeleton />
-            <JobSkeleton />
-          </View>
-        }
+        // ListEmptyComponent={
+        //   <View
+        //     style={{marginHorizontal: Dimensions.get('screen').width * 0.1}}>
+        //     <JobSkeleton />
+        //     <JobSkeleton />
+        //     <JobSkeleton />
+        //     <JobSkeleton />
+        //   </View>
+        // }
         style={{
           backgroundColor: '#E5E3E4',
           width: '100%',
         }}
         ListHeaderComponent={
           <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: '3%',
-                marginHorizontal: '5%',
-              }}>
-              <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                <Image
-                  style={{height: 60, width: 60, borderRadius: 64}}
-                  source={{
-                    uri: storeData.pic,
-                  }}
-                />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => navigation.jumpTo('Explore')}
+            {/* <View
                 style={{
-                  alignItems: 'center',
-                  marginLeft: '3%',
-                  // marginRight: '5%',
-                  justifyContent: 'space-between',
-
-                  height: 60,
-                  backgroundColor: '#ffffff',
-                  flex: 1,
-                  borderRadius: 16,
                   flexDirection: 'row',
+                  marginTop: '3%',
+                  marginHorizontal: '5%',
                 }}>
-                <Text style={{marginLeft: '5%'}}>Search here...</Text>
-                <View
-                  style={{
-                    padding: 10,
-                    backgroundColor: '#5BA199',
-                    borderRadius: 16,
-                  }}>
-                  <Ionicons
-                    name="options-outline"
-                    size={40}
-                    color="#ffffff"
-                    style={{}}
+                <TouchableOpacity>
+                  <Image
+                    style={{height: 60, width: 60, borderRadius: 64}}
+                    source={{
+                      uri: storeData.pic,
+                    }}
                   />
-                </View>
-              </TouchableOpacity>
-            </View>
+                </TouchableOpacity>
+  
+                <TouchableOpacity
+                  onPress={() => navigation.jumpTo('Explore')}
+                  style={{
+                    alignItems: 'center',
+                    marginLeft: '3%',
+                    // marginRight: '5%',
+                    justifyContent: 'space-between',
+  
+                    height: 60,
+                    backgroundColor: '#ffffff',
+                    flex: 1,
+                    borderRadius: 16,
+                    flexDirection: 'row',
+                  }}>
+                  <Text style={{marginLeft: '5%'}}>Search here...</Text>
+                  <View
+                    style={{
+                      padding: 10,
+                      backgroundColor: '#5BA199',
+                      borderRadius: 16,
+                    }}>
+                    <Ionicons
+                      name="options-outline"
+                      size={40}
+                      color="#ffffff"
+                      style={{}}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View> */}
 
             <View
               style={{
@@ -259,134 +259,90 @@ export default function JobDashboardScreen({navigation, route}) {
                 alignItems: 'center',
                 marginHorizontal: '5%',
                 marginVertical: '5%',
-                justifyContent: 'center',
+                //   justifyContent: 'center',
               }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                style={{flex: 1}}>
+                <Ionicons
+                  name="chevron-back-circle-sharp"
+                  size={35}
+                  color="#777777"
+                />
+              </TouchableOpacity>
               <Text
                 style={{
                   fontSize: 35,
                   color: '#000000',
                   fontWeight: 'bold',
                   textAlign: 'center',
+                  // marginLeft: '3%',
+                  flex: 4,
+                  // marginHorizontal: Dimensions.get('window').width / 5,
+                  // marginEnd: '30%',
+                  // marginHorizontal: '25%',  },
                 }}>
-                Job Dashboard
+                Posted Jobs
               </Text>
-            </View>
-
-            <View
-              style={{
-                marginHorizontal: Dimensions.get('screen').width * 0.01,
-                flexDirection: 'row',
-                marginBottom: '5%',
-                // alignItems: 'center',
-              }}>
-              <TouchableOpacity
-                style={{
-                  flex: 1,
-                  borderWidth: 3,
-                  borderRadius: 12,
-                  marginHorizontal: Dimensions.get('screen').width * 0.05,
-                  paddingVertical: Dimensions.get('screen').height * 0.005,
-                  borderColor: '#5BA199',
-                  backgroundColor: '#5BA199',
-                }}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: '#ffffff',
-                    fontWeight: 'bold',
-                    fontSize: 14,
-                  }}>
-                  Jobs
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('AppliedJobs');
-                }}
-                style={{
-                  flex: 1,
-                  borderWidth: 3,
-                  borderRadius: 12,
-                  marginHorizontal: Dimensions.get('screen').width * 0.05,
-                  paddingVertical: Dimensions.get('screen').height * 0.005,
-                  borderColor: '#5BA199',
-                }}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: '#000000',
-                    fontWeight: 'bold',
-                    fontSize: 14,
-                  }}>
-                  Applied Jobs
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('Jobs');
-                }}
-                style={{
-                  flex: 1,
-                  borderWidth: 3,
-                  borderRadius: 12,
-                  marginHorizontal: Dimensions.get('screen').width * 0.05,
-                  paddingVertical: Dimensions.get('screen').height * 0.005,
-                  borderColor: '#5BA199',
-                }}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: '#000000',
-                    fontWeight: 'bold',
-                    fontSize: 14,
-                  }}>
-                  Posted Jobs
-                </Text>
-              </TouchableOpacity>
+              <View style={{flex: 1}} />
             </View>
           </View>
         }
-        data={fetchedJobs}
+        data={storeData.appliedJobId}
         // onEndReachedThreshold={0.1}
         scrollEventThrottle={150}
         onEndReachedThreshold={0.1}
         onMomentumScrollBegin={() => {
           setOnEndReachedCalledDuringMomentumJob(false);
         }}
-        ListFooterComponent={
-          !lastJob ? (
-            renderLoaderJobs
-          ) : (
-            <Text
-              style={{
-                alignSelf: 'center',
-                fontSize: 20,
-                color: '#000000',
-                marginBottom: 90,
-                textAlign: 'center',
-              }}>
-              You Are Up To Date / All Jobs Fetched And Displayed
-            </Text>
-          )
+        ListEmptyComponent={
+          <Text
+            style={{
+              fontSize: 16,
+              marginVertical: Dimensions.get('screen').height * 0.02,
+              marginHorizontal: Dimensions.get('screen').width * 0.06,
+              // fontStyle: 'italic',
+              alignSelf: 'center',
+
+              // color: '#000000',
+            }}>
+            You have not applied for any job yet.
+          </Text>
         }
+        // ListFooterComponent={
+        //   !lastJob ? (
+        //     renderLoaderJobs
+        //   ) : (
+        //     <Text
+        //       style={{
+        //         alignSelf: 'center',
+        //         fontSize: 20,
+        //         color: '#000000',
+        //         marginBottom: 90,
+        //         textAlign: 'center',
+        //       }}>
+        //       You Are Up To Date / All Jobs Fetched And Displayed
+        //     </Text>
+        //   )
+        // }
         // horizontal={false}
-        onEndReached={() => {
-          console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
-          console.log('check last job value', lastJob);
-          console.log(
-            'check end moment job value',
-            onEndReachedCalledDuringMomentumJob,
-          );
-          if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
-            console.log(
-              'reaching towards end----------------------------------------',
-            );
-            handleEndReachedJobs(); // LOAD MORE DATA
-            setOnEndReachedCalledDuringMomentumJob(true);
-          }
-        }}
+        // onEndReached={() => {
+        //   console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
+        //   console.log('check last job value', lastJob);
+        //   console.log(
+        //     'check end moment job value',
+        //     onEndReachedCalledDuringMomentumJob,
+        //   );
+        //   if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
+        //     console.log(
+        //       'reaching towards end----------------------------------------',
+        //     );
+        //     handleEndReachedJobs(); // LOAD MORE DATA
+        //     setOnEndReachedCalledDuringMomentumJob(true);
+        //   }
+        // }}
         renderItem={({item}) => (
           <View
             style={{
@@ -435,9 +391,12 @@ export default function JobDashboardScreen({navigation, route}) {
                 <Text>{item.jobCompany}</Text>
               </View>
 
-              <TouchableOpacity style={{flex: 1}} onPress={() => show(item)}>
-                <MaterialCommunityIcons
-                  name="dots-vertical"
+              <TouchableOpacity
+                style={{flex: 1}}
+                //    onPress={() => show(item)}
+              >
+                <Entypo
+                  name="circle-with-cross"
                   size={25}
                   color="#000000"
                   style={{
@@ -449,39 +408,27 @@ export default function JobDashboardScreen({navigation, route}) {
 
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                // flexDirection: 'row',
+                // justifyContent: 'space-between',
+                alignItems: 'flex-end',
                 marginHorizontal: Dimensions.get('window').width * 0.05,
                 marginVertical: Dimensions.get('window').height * 0.02,
               }}>
-              <TouchableOpacity
-                disabled={storeData.role === 'Faculty' ? true : false}
+              {/* <TouchableOpacity
+                disabled={true}
                 style={{
-                  backgroundColor: '#5BA199',
+                  backgroundColor: '#777777',
                   paddingHorizontal: Dimensions.get('window').width * 0.15,
                   paddingVertical: Dimensions.get('window').height * 0.01,
                   borderRadius: 16,
                 }}
-                // onPress={() => handleApply({item})}
-                // onPress={() => handleApply(item)}
-                onPress={() => handleApply(item)}
-
-                // onPress={navigation.navigate('ApplyToJob')}
-              >
+                onPress={() => handleApply(fetchedJobs)}>
                 <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
                   Apply
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
-              <Text
-                style={{
-                  color: '#469597',
-                  fontSize: 16,
-                  flex: 1,
-                  marginLeft: '15%',
-                  // justifyContent: 'flex-end',
-                }}>
+              <Text style={{color: '#469597', fontSize: 16}}>
                 {item.jobCity},{item.jobLocation}
               </Text>
             </View>
@@ -489,97 +436,6 @@ export default function JobDashboardScreen({navigation, route}) {
         )}
         keyExtractor={item => item.id}
       />
-
-      <ActionSheet
-        // id={sheetId}
-        data={fetchedJobs}
-        ref={actionSheet}
-        containerStyle={{
-          borderTopLeftRadius: 25,
-          borderTopRightRadius: 25,
-          backgroundColor: '#E5E3E4',
-        }}
-        indicatorStyle={{
-          width: 100,
-        }}
-        gestureEnabled={true}>
-        <View>
-          {/* action sheet */}
-          <ScrollView style={styles.SectionStyle}>
-            {/* Company Logo */}
-            <View>
-              <Image
-                style={styles.header}
-                source={{
-                  uri: actionParameters.image,
-                }}
-              />
-            </View>
-            {/* Post */}
-            <View>
-              <Text style={styles.name}>{actionParameters.jobTitle}</Text>
-            </View>
-            {/* Company Name with location */}
-            <View style={styles.expView1}>
-              <Text style={styles.compTxt}>{actionParameters.jobCompany} </Text>
-              <Text style={styles.compTxt}>
-                {actionParameters.jobCity},{actionParameters.jobLocation}
-              </Text>
-            </View>
-            {/* Icons with text */}
-            <View style={styles.expView1}>
-              <MaterialCommunityIcons
-                name="clock"
-                size={25}
-                color="#000000"
-                style={{
-                  marginLeft: Dimensions.get('window').width * -0.05,
-                  marginTop: Dimensions.get('window').height * 0.003,
-                }}
-              />
-              <Text style={styles.compTxt}>{actionParameters.jobMode}</Text>
-              {/* <Text style={styles.compTxt}> - </Text> */}
-              <Text style={styles.compTxt}>
-                {actionParameters.jobSalary}/Month
-              </Text>
-            </View>
-            {/* Description title */}
-            <View>
-              <TouchableOpacity
-                style={styles.buttonStyleDesc}
-                // activeOpacity={0.5}
-                // onPress={handleSubmitButton}
-              >
-                <Text style={styles.buttonTextStyle}>Description</Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Job desc */}
-            <View style={styles.messageBodyStyle}>
-              <ScrollView>
-                <Text style={styles.messageStyle}>
-                  {actionParameters.jobDescription}
-                </Text>
-              </ScrollView>
-            </View>
-
-            {/* apply now */}
-            <View>
-              <TouchableOpacity
-                disabled={storeData.role === 'Faculty' ? true : false}
-                style={styles.buttonStyle}
-                onPress={() => handleApply(actionParameters)}>
-                <Text
-                  style={styles.buttonTextStyle}
-                  // onPress={navigation.navigate('ApplyToJob')}
-                >
-                  Apply
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </View>
-      </ActionSheet>
     </View>
   );
 }
