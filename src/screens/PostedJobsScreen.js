@@ -106,7 +106,8 @@ export default function PostedJobsScreen({navigation, route}) {
 
     dbFirestore()
       .collection('Jobs')
-      //   .where('jobEmail', '==', storeData.userEmail)
+      .where('jobEmail', '==', storeData.userEmail)
+      //   .where('jobEmail', '==', 'bashfyp@gmail.com')
       .limit(10)
       .get()
 
@@ -150,6 +151,8 @@ export default function PostedJobsScreen({navigation, route}) {
       .collection('Jobs')
 
       .startAfter(lastVisibleJobs)
+      .where('jobEmail', '==', storeData.userEmail)
+      //   .where('jobEmail', '==', 'bashfyp@gmail.com')
       .limit(10)
       .get()
       .then(querySnapshot => {
@@ -290,7 +293,7 @@ export default function PostedJobsScreen({navigation, route}) {
             </View>
           </View>
         }
-        data={storeData.appliedJobId}
+        data={fetchedJobs}
         // onEndReachedThreshold={0.1}
         scrollEventThrottle={150}
         onEndReachedThreshold={0.1}
@@ -308,7 +311,7 @@ export default function PostedJobsScreen({navigation, route}) {
 
               // color: '#000000',
             }}>
-            You have not applied for any job yet.
+            You have not posted any other job yet.
           </Text>
         }
         // ListFooterComponent={

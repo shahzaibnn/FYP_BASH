@@ -325,7 +325,7 @@ export default function JobDashboardScreen({navigation, route}) {
 
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('Jobs');
+                  navigation.navigate('PostedJobs');
                 }}
                 style={{
                   flex: 1,

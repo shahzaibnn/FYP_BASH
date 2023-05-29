@@ -79,7 +79,7 @@ export default function AppStack() {
       <Stack.Screen name="ViewProfile" component={ViewProfileScreen} />
       <Stack.Screen name="PDFView" component={PdfViewScreen} />
       <Stack.Screen name="AppliedJobs" component={AppliedJobsScreen} />
-      <Stack.Screen name="Jobs" component={PostedJobsScreen} />
+      <Stack.Screen name="PostedJobs" component={PostedJobsScreen} />
     </Stack.Navigator>
     // </NavigationContainer>
   );

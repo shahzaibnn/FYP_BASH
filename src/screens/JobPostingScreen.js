@@ -482,7 +482,7 @@ export default function JobPostingScreen({navigation}) {
         .collection('Jobs')
         .add({
           jobTitle: title,
-          jobEmail: email,
+          jobEmail: storeData.userEmail,
           jobCompany: company,
           jobSalary: salary,
           jobDescription: description,
@@ -498,7 +498,7 @@ export default function JobPostingScreen({navigation}) {
           console.log('Post Added!');
           let jobRedux = {
             jobTitle: title,
-            jobEmail: email,
+            jobEmail: storeData.userEmail,
             jobCompany: company,
             jobSalary: salary,
             jobDescription: description,
