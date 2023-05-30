@@ -117,7 +117,7 @@ export default function PostedJobsScreen({navigation, route}) {
       .then(() => {
         console.log('Job deleted!');
         setFetchedJobs(current => current.filter(jobs => jobs.id !== deleteId));
-        setExtraData(new Date());
+        // setExtraData(new Date());
         setShowWarning(false);
       });
   };
@@ -127,7 +127,7 @@ export default function PostedJobsScreen({navigation, route}) {
 
     dbFirestore()
       .collection('Jobs')
-      .where('jobEmail', '==', storeData.userEmail)
+      .where('jobPostedByEmail', '==', storeData.userEmail)
       //   .where('jobEmail', '==', 'bashfyp@gmail.com')
       .limit(10)
       .get()
@@ -149,6 +149,7 @@ export default function PostedJobsScreen({navigation, route}) {
 
             let v = documentSnapshot.data();
             v.id = documentSnapshot.id;
+            console.log(v);
 
             setFetchedJobs(fetchedJobs => [...fetchedJobs, v]);
 
@@ -172,7 +173,7 @@ export default function PostedJobsScreen({navigation, route}) {
       .collection('Jobs')
 
       .startAfter(lastVisibleJobs)
-      .where('jobEmail', '==', storeData.userEmail)
+      .where('jobPostedByEmail', '==', storeData.userEmail)
       //   .where('jobEmail', '==', 'bashfyp@gmail.com')
       .limit(10)
       .get()
@@ -321,52 +322,52 @@ export default function PostedJobsScreen({navigation, route}) {
         onMomentumScrollBegin={() => {
           setOnEndReachedCalledDuringMomentumJob(false);
         }}
-        ListEmptyComponent={
-          <Text
-            style={{
-              fontSize: 16,
-              marginVertical: Dimensions.get('screen').height * 0.02,
-              marginHorizontal: Dimensions.get('screen').width * 0.06,
-              // fontStyle: 'italic',
-              alignSelf: 'center',
+        // ListEmptyComponent={
+        //   <Text
+        //     style={{
+        //       fontSize: 16,
+        //       marginVertical: Dimensions.get('screen').height * 0.02,
+        //       marginHorizontal: Dimensions.get('screen').width * 0.06,
+        //       // fontStyle: 'italic',
+        //       alignSelf: 'center',
 
-              // color: '#000000',
-            }}>
-            You have not posted any other job yet.
-          </Text>
-        }
-        // ListFooterComponent={
-        //   !lastJob ? (
-        //     renderLoaderJobs
-        //   ) : (
-        //     <Text
-        //       style={{
-        //         alignSelf: 'center',
-        //         fontSize: 20,
-        //         color: '#000000',
-        //         marginBottom: 90,
-        //         textAlign: 'center',
-        //       }}>
-        //       You Are Up To Date / All Jobs Fetched And Displayed
-        //     </Text>
-        //   )
+        //       // color: '#000000',
+        //     }}>
+        //     You have not posted any other job yet.
+        //   </Text>
         // }
-        // horizontal={false}
-        // onEndReached={() => {
-        //   console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
-        //   console.log('check last job value', lastJob);
-        //   console.log(
-        //     'check end moment job value',
-        //     onEndReachedCalledDuringMomentumJob,
-        //   );
-        //   if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
-        //     console.log(
-        //       'reaching towards end----------------------------------------',
-        //     );
-        //     handleEndReachedJobs(); // LOAD MORE DATA
-        //     setOnEndReachedCalledDuringMomentumJob(true);
-        //   }
-        // }}
+        ListFooterComponent={
+          !lastJob ? (
+            renderLoaderJobs
+          ) : (
+            <Text
+              style={{
+                alignSelf: 'center',
+                fontSize: 20,
+                color: '#000000',
+                marginBottom: 90,
+                textAlign: 'center',
+              }}>
+              You Are Up To Date / All Jobs Fetched And Displayed
+            </Text>
+          )
+        }
+        horizontal={false}
+        onEndReached={() => {
+          console.log('ahsvshgadvhgsdvhgsdvhgsvfs');
+          console.log('check last job value', lastJob);
+          console.log(
+            'check end moment job value',
+            onEndReachedCalledDuringMomentumJob,
+          );
+          if (!onEndReachedCalledDuringMomentumJob && !lastJob) {
+            console.log(
+              'reaching towards end----------------------------------------',
+            );
+            handleEndReachedJobs(); // LOAD MORE DATA
+            setOnEndReachedCalledDuringMomentumJob(true);
+          }
+        }}
         renderItem={({item}) => (
           <View
             style={{
@@ -417,7 +418,7 @@ export default function PostedJobsScreen({navigation, route}) {
               </View>
 
               <TouchableOpacity
-                style={{flex: 1}}
+                // style={{flex: 1}}
                 //    onPress={() => show(item)}
                 onPress={() => {
                   setShowWarning(true);

@@ -612,8 +612,9 @@ export default function HomeScreen({navigation, route}) {
                         marginHorizontal: Dimensions.get('window').width * 0.05,
                       }}>
                       <Image
+                        resizeMode="contain"
                         style={{
-                          flex: 2,
+                          // flex: 0.5,
                           height: 60,
                           width: 60,
                           borderRadius: 16,
@@ -686,7 +687,13 @@ export default function HomeScreen({navigation, route}) {
                         </Text>
                       </TouchableOpacity>
 
-                      <Text style={{color: '#469597', fontSize: 16}}>
+                      <Text
+                        style={{
+                          color: '#469597',
+                          fontSize: 16,
+                          flex: 1,
+                          marginLeft: Dimensions.get('screen').width * 0.05,
+                        }}>
                         {item.jobCity},{item.jobLocation}
                       </Text>
                     </View>

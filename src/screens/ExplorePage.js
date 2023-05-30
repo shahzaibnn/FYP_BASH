@@ -833,6 +833,7 @@ const ExplorePage = ({navigation}) => {
                       marginHorizontal: Dimensions.get('window').width * 0.05,
                     }}>
                     <Image
+                      resizeMode="contain"
                       style={{
                         // flex: 2,
                         height: 60,
