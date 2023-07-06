@@ -259,6 +259,19 @@ const ViewProfileScreen = ({route, navigation}) => {
             <FlatList
               horizontal={true}
               showsHorizontalScrollIndicator={false}
+              ListEmptyComponent={
+                <Text
+                  style={{
+                    fontSize: 16,
+                    marginTop: '5%',
+                    fontStyle: 'italic',
+                    // alignContent: 'center',
+
+                    // color: '#000000',
+                  }}>
+                  No Skills Found
+                </Text>
+              }
               data={skills}
               renderItem={({item}) => (
                 <View style={{}}>
@@ -298,9 +311,9 @@ const ViewProfileScreen = ({route, navigation}) => {
               </View>
 
               <Text
-                style={{fontSize: 18, marginTop: '5%', fontStyle: 'italic'}}>
-                {/* {user[0].description} */}
-                {description}
+                style={{fontSize: 16, marginTop: '5%', fontStyle: 'italic'}}>
+                {/* {storeData.description} */}
+                {description ? description : 'No Description Found'}
               </Text>
               {/* add cv button here */}
               <View style={styles.UploadCV}>
@@ -379,6 +392,31 @@ const ViewProfileScreen = ({route, navigation}) => {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               data={experience}
+              ListEmptyComponent={
+                // <View
+                //   style={{
+                //     // marginLeft: '5%',
+                //     fontStyle: 'italic',
+                //     backgroundColor: 'green',
+                //     // alignSelf: 'center',
+                //     // paddingLeft: '15%',
+                //     // marginRight: 15,
+
+                //     // color: '#000000',
+                //   }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    marginHorizontal: Dimensions.get('screen').width * 0.03,
+                    fontStyle: 'italic',
+                    // alignSelf: 'center',
+
+                    // color: '#000000',
+                  }}>
+                  No Experience Found
+                </Text>
+                // </View>
+              }
               renderItem={({item}) => (
                 <View
                   style={{
@@ -446,6 +484,20 @@ const ViewProfileScreen = ({route, navigation}) => {
               showsVerticalScrollIndicator={false}
               data={fetchedPosts}
               keyExtractor={item => item.id}
+              ListEmptyComponent={
+                <Text
+                  style={{
+                    fontSize: 16,
+                    marginVertical: Dimensions.get('screen').height * 0.02,
+                    marginHorizontal: Dimensions.get('screen').width * 0.06,
+                    fontStyle: 'italic',
+                    // alignSelf: 'center',
+
+                    // color: '#000000',
+                  }}>
+                  No Post Found
+                </Text>
+              }
               renderItem={({item}) => {
                 // console.log('Id is : ', item);
                 let likeColor = '';

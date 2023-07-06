@@ -268,7 +268,7 @@ export default function LoginScreen({navigation}) {
         .catch(error => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          showToast(errorMessage);
+          showToast('Authentication Failed');
           setFlag(true);
 
           // ..
